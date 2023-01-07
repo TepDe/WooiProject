@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1093614007557",
+    "project_id": "wooi-c715e",
+    "storage_bucket": "wooi-c715e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1093614007557:android:9efb550fcadd369394f36c",
+        "android_client_info": {
+          "package_name": "com.example.wooiproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1093614007557-rbsrp98t0e3p47mv5qbmb4caarg0kk0u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0iIWHxmEJkY2qe-ADQXPpuq_4gNAUz7o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1093614007557-rbsrp98t0e3p47mv5qbmb4caarg0kk0u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
