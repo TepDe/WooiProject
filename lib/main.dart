@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:wooiproject/HomeScreen.dart';
 import 'package:wooiproject/MapScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -37,13 +38,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  Scaffold(
       // appBar: AppBar(
       //   title: const Text('Wooi'),
       // ),
-      body:
-
-      MapScreen(),
+      body: HomeScreen(),
     );
   }
 }
