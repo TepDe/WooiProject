@@ -6,14 +6,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
+import 'WidgetReUse/WidGetReUse.dart';
+
 class MapScreen extends StatelessWidget {
   MapScreen({Key? key}) : super(key: key);
 
-  final _controller = Completer();
-
-  void _onMapCreated(GoogleMapController controller) {
-    _controller.complete(controller);
-  }
+  final wr = WidgetReUse();
+  late GoogleMapController mapController;
 
   @override
   Widget build(BuildContext context) {
@@ -21,19 +20,30 @@ class MapScreen extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            GoogleMap(
-              buildingsEnabled: true,
-              compassEnabled: true,
-              myLocationButtonEnabled: true,
-              indoorViewEnabled: true,
-              myLocationEnabled: true,
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: LatLng(ft.currentPosition!.latitude,
-                    ft.currentPosition!.longitude),
-                zoom: 11.0,
-              ),
+            GetBuilder<MapScreenController>(
+              init: MapScreenController(),
+              builder: (value) => ft.protect.value == true
+                  ? GoogleMap(
+                      indoorViewEnabled: true,
+                      compassEnabled: true,
+                      buildingsEnabled: true,
+                      myLocationEnabled: true,
+                      onMapCreated: ft.onMapCreated,
+                      initialCameraPosition: CameraPosition(
+                        target: LatLng(ft.currentPosition!.latitude,
+                            ft.currentPosition!.longitude),
+                        zoom: 16.0,
+                      ),
+                    )
+                  : Container(
+                      color: Colors.blue,
+                      child: Text('no permission'),
+                    ),
             ),
+            wr.topButtonLeft(
+                function: 'home', icon: Icons.arrow_back_ios_rounded),
+            wr.topButtonRight(
+                function: 'crlocation', icon: Icons.location_on_sharp),
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
@@ -49,19 +59,46 @@ class MapScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-
                       Row(
                         children: [
                           Text('status request:'),
-                          Text('processing'),
+                          Obx(
+                            () => Text('${ft.readData.value}'),
+                          )
                         ],
                       ),
                       FlatButton(
                           minWidth: Get.width,
                           color: Colors.yellow,
-                          onPressed: () {},
+                          onPressed: () {
+                            ft.request();
+                          },
                           child: const Text(
-                            "Request",
+                            "ft.request",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          )),
+                      FlatButton(
+                          minWidth: Get.width,
+                          color: Colors.yellow,
+                          onPressed: () {
+                            ft.readDataBase();
+                          },
+                          child: const Text(
+                            " ft.readDataBase",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          )),
+                      FlatButton(
+                          minWidth: Get.width,
+                          color: Colors.yellow,
+                          onPressed: () {
+                            ft.onRequestLocation();
+                          },
+                          child: const Text(
+                            "read ",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold),
@@ -77,10 +114,10 @@ class MapScreen extends StatelessWidget {
     );
   }
 
-  final ft = Get.put(FirebaseText());
+  final ft = Get.put(MapScreenController());
 }
 
-class FirebaseText extends GetxController {
+class MapScreenController extends GetxController {
   FirebaseFirestore dsad = FirebaseFirestore.instance;
   var winner = false.obs;
   int age = 321324;
@@ -89,6 +126,15 @@ class FirebaseText extends GetxController {
   var currentAddress = '0'.obs;
   Position? currentPosition;
   var spin = false.obs;
+  CollectionReference users = FirebaseFirestore.instance.collection('user');
+  DatabaseReference ref = FirebaseDatabase.instance.ref("user");
+  final readStorage = FirebaseDatabase.instance;
+  var readData = ''.obs;
+  DatabaseReference refs = FirebaseDatabase.instance.ref("users/123");
+  Getter? gets = Getter();
+  LatLng center = const LatLng(45.521563, -122.677433);
+  late GoogleMapController mapController;
+  var protect = false.obs;
 
   @override
   void onInit() async {
@@ -96,9 +142,27 @@ class FirebaseText extends GetxController {
     super.onInit();
   }
 
-  CollectionReference users = FirebaseFirestore.instance.collection('user');
-  DatabaseReference ref = FirebaseDatabase.instance.ref("user");
-  final readStorage = FirebaseDatabase.instance;
+  var controllermap = Completer().obs;
+
+  onMapCreated(GoogleMapController controller) async {
+    mapController = controller;
+    update();
+    controllermap.value.complete(controller);
+    update();
+  }
+
+  readFireStore() {}
+
+  onRequestLocation() async {
+    await refs.set({"name": "John", "age": 18, "address": "100 Mountain View"});
+  }
+
+  findDriver() {
+    refs.onValue.listen((DatabaseEvent event) {
+      gets?.age = int.parse(event.snapshot.child('age').value.toString());
+      readData.value = (gets?.age).toString();
+    });
+  }
 
   Future<void> addUser() {
     // Call the user's CollectionReference to add a new user
@@ -114,12 +178,15 @@ class FirebaseText extends GetxController {
 
   readDataBase() {
     var send = readStorage.reference();
-    send
-        .child('location')
-        .push()
-        .child('User location')
-        .set("phnom pehn")
-        .asStream();
+    send.child('location').child('user location').set("phnom pehn").asStream();
+  }
+
+  moveCamera() {
+    CameraPosition(
+      target: LatLng(currentPosition!.latitude, currentPosition!.longitude),
+      zoom: 16.0,
+    );
+    update();
   }
 
   request() async {
@@ -129,9 +196,18 @@ class FirebaseText extends GetxController {
       print('$error' + "" + '$stackTrace');
       printError();
     });
-
-    return await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.best)
+    protect.value = true;
+    update();
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) => currentPosition = position);
+    protect.value = true;
+
+    update();
   }
+}
+
+class Getter {
+  String name = '';
+  int age = 0;
+  String note = '';
 }
