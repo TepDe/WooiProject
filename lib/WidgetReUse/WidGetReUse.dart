@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wooiproject/HomeScreen.dart';
 import 'package:wooiproject/MapScreen.dart';
+import 'package:wooiproject/ProfileScreen.dart';
+import 'package:wooiproject/WidgetReUse/SuperController.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
 class WidgetReUse extends GetxController {
@@ -19,15 +21,17 @@ class WidgetReUse extends GetxController {
             borderRadius: BorderRadius.circular(50),
             color: Colors.yellow,
           ),
-          child: IconButton(
-              splashColor: Colors.grey,
-              color: Colors.black,
-              onPressed: () {
-                if (function == 'home') {
-                  Get.to(HomeScreen());
-                }
-              },
-              icon: Icon(icon)),
+          child: Center(
+            child: IconButton(
+                splashColor: Colors.grey,
+                color: Colors.black,
+                onPressed: () {
+                  if (function == 'home') {
+                    Get.to(HomeScreen());
+                  }
+                },
+                icon: Icon(icon)),
+          ),
         ),
       ),
     );
@@ -77,7 +81,7 @@ class WidgetReUse extends GetxController {
                 icon: Center(
                   child: Icon(
                     Icons.menu,
-                    color: theme.yellow,
+                    color: theme.deepOrange,
                   ),
                 ))
           ],
@@ -86,7 +90,7 @@ class WidgetReUse extends GetxController {
     );
   }
 
-  unitOneHomeScreen() {
+  unitOneHomeScreen({function}) {
     return Padding(
       padding: EdgeInsets.only(left: 18.0, top: 20, right: 18),
       child: Row(
@@ -109,9 +113,16 @@ class WidgetReUse extends GetxController {
                       fontWeight: FontWeight.bold)),
             ],
           ),
-          Icon(
-            Icons.account_circle,
-            size: 60,
+          InkWell(
+            onTap: () {
+              if (function == 'profile') {
+                Get.to(ProfileScreen());
+              }
+            },
+            child: Icon(
+              Icons.account_circle,
+              size: 60,
+            ),
           )
         ],
       ),
@@ -146,14 +157,14 @@ class WidgetReUse extends GetxController {
                       flex: 1,
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: unitTwoText(),
+                        child: unitTwoText(label: "Total package", qty: '21'),
                       ),
                     ),
                     Flexible(
                       flex: 1,
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: unitTwoText(),
+                        child: unitTwoText(label: "In process", qty: '14'),
                       ),
                     ),
                   ],
@@ -176,7 +187,7 @@ class WidgetReUse extends GetxController {
                           Align(
                             alignment: Alignment.topLeft,
                             child: Text(
-                              'Total Package',
+                              'Total Shipped',
                               style: TextStyle(
                                   fontSize: 15,
                                   color: theme.black,
@@ -185,7 +196,7 @@ class WidgetReUse extends GetxController {
                           ),
                           Align(
                             alignment: Alignment.bottomRight,
-                            child: Text('31321',
+                            child: Text('102',
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     fontSize: 25,
@@ -205,7 +216,7 @@ class WidgetReUse extends GetxController {
     );
   }
 
-  unitTwoText() {
+  unitTwoText({label, qty}) {
     return Container(
       width: Get.width,
       decoration: BoxDecoration(
@@ -220,7 +231,7 @@ class WidgetReUse extends GetxController {
             Align(
               alignment: Alignment.topLeft,
               child: Text(
-                'Total Package',
+                '$label',
                 style: TextStyle(
                     fontSize: 15,
                     color: theme.black,
@@ -229,7 +240,7 @@ class WidgetReUse extends GetxController {
             ),
             Align(
               alignment: Alignment.bottomRight,
-              child: Text('31321',
+              child: Text('$qty',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       fontSize: 25,
@@ -242,17 +253,16 @@ class WidgetReUse extends GetxController {
     );
   }
 
-  unitThreeHomeScreen({icon, lable,price, funtion}) {
+  unitThreeHomeScreen({icon, lable, price, funtion}) {
     return Padding(
       padding: const EdgeInsets.only(top: 12.0, left: 18, right: 18),
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
         splashColor: Colors.transparent,
-        onTap: (){
+        onTap: () {
           Get.to(MapScreen());
         },
         child: Container(
-
           decoration: BoxDecoration(
             color: theme.orange,
             borderRadius: BorderRadius.circular(10),
@@ -263,7 +273,10 @@ class WidgetReUse extends GetxController {
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Icon(icon, size: 60,),
+                  child: Icon(
+                    icon,
+                    size: 60,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 18.0),
@@ -278,7 +291,8 @@ class WidgetReUse extends GetxController {
                                 fontSize: 15,
                                 color: theme.black,
                                 fontWeight: FontWeight.bold)),
-                      ),   Align(
+                      ),
+                      Align(
                         alignment: Alignment.bottomRight,
                         child: Text(price,
                             overflow: TextOverflow.ellipsis,
@@ -295,6 +309,102 @@ class WidgetReUse extends GetxController {
           ),
         ),
       ),
+    );
+  }
+
+  unitProfile() {
+    return const Padding(
+      padding: EdgeInsets.all(18.0),
+      child: ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
+        leading: Icon(
+          Icons.account_circle,
+          size: 80,
+        ),
+        title: Center(
+          child: Text(
+            '',
+          ),
+        ),
+        subtitle: Text(
+          'Name',
+        ),
+        trailing: Icon(
+          Icons.edit,
+        ),
+      ),
+    );
+  }
+
+  signInForm() {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            controller: nameControl,
+            decoration: InputDecoration(
+              fillColor: Colors.blue,
+              border: OutlineInputBorder(),
+              hintText: 'Name',
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            controller: phoneControl,
+            decoration: InputDecoration(
+              fillColor: Colors.blue,
+              border: OutlineInputBorder(),
+              hintText: 'Phone Number',
+            ),
+          ),
+        ),
+       // reuseTextField(label: 'Phone Number'),
+        reuseButton(label: 'Confirm', function: 'storeUserLogin')
+      ],
+    );
+  }
+
+  final nameControl = TextEditingController();
+  final phoneControl = TextEditingController();
+
+  reuseTextField({label}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        controller: nameControl,
+        decoration: InputDecoration(
+          fillColor: Colors.blue,
+          border: OutlineInputBorder(),
+          hintText: '$label',
+        ),
+      ),
+    );
+  }
+
+  final gsc = Get.put(GlbSuperController());
+
+  reuseButton({label, function}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: FlatButton(
+          padding: const EdgeInsets.all(8.0),
+          minWidth: Get.width,
+          color: theme.yellow,
+          onPressed: () {
+            if (function == 'storeUserLogin') {
+              print('${nameControl.text} ${phoneControl.text}');
+              gsc.storeUserLogin( name:nameControl.text, phone:phoneControl.text  );
+              // gsc.storeUserLogin(name: '',phone:'' );
+            }
+          },
+          child: Text(
+            "$label",
+            style: const TextStyle(
+                fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
+          )),
     );
   }
 }
