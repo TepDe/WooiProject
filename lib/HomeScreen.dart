@@ -9,12 +9,14 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
+    return SafeArea(
+
+      child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: Column(
           children: [
             wr.topBarHomeScreen(),
-            wr.unitOneHomeScreen(),
+            wr.unitOneHomeScreen(function: 'profile'),
             wr.unitTwoHomeScreen(),
             wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor'),
             wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: ''),
