@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -398,7 +400,16 @@ class WidgetReUse extends GetxController {
               print('${nameControl.text} ${phoneControl.text}');
               gsc.storeUserLogin( name:nameControl.text, phone:phoneControl.text  );
               // gsc.storeUserLogin(name: '',phone:'' );
+            }if(function == 'requestDriver'){
+              if(gsc.requestStatus == 'Request'){
+                gsc.onRequestLocation();
+                gsc.requestStatus.value = 'Cancel';
+              }
+              else if (gsc.requestStatus =='Cancel' ){
+                gsc.removeRequest();
+              }
             }
+
           },
           child: Text(
             "$label",
@@ -407,4 +418,5 @@ class WidgetReUse extends GetxController {
           )),
     );
   }
+
 }
