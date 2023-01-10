@@ -24,7 +24,9 @@ class GlbSuperController extends GetxController {
   }
 
   var requestId = 0.obs;
+  var atRemove= 0.obs;
   DatabaseReference refs = FirebaseDatabase.instance.ref("users");
+  DatabaseReference remove = FirebaseDatabase.instance.ref("users");
   Position? currentPosition;
 
   onRequestLocation() async {
@@ -32,7 +34,7 @@ class GlbSuperController extends GetxController {
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) => currentPosition = position);
     await refs.child(requestId.value.toString()).set({
-      "Phone Number": "078344511",
+      "Phone Number": 078344511,
       "latitude": currentPosition!.latitude,
       "longitude": currentPosition!.longitude
     });
@@ -40,11 +42,12 @@ class GlbSuperController extends GetxController {
 
   var requestStatus = 'Request'.obs;
 
-  removeRequest() async {
-    await refs
+  removeRequest()  {
+    requestStatus.value = 'Request';
+    remove
         .child(requestId.value.toString())
         .remove();
-    requestStatus.value = 'Request';
+
   }
 
   generateRequestId() {
@@ -52,5 +55,6 @@ class GlbSuperController extends GetxController {
     for (var i = 0; i < 10; i++) {
       requestId.value = rng.nextInt(100);
     }
+
   }
 }
