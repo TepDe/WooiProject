@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:get/get.dart';
+import 'package:wooiproject/HomeScreen.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 import 'package:wooiproject/WidgetReUse/WidGetReUse.dart';
 
@@ -9,6 +12,26 @@ class LogInScreen extends StatelessWidget {
   final wr = WidgetReUse();
   final textphone = TextEditingController();
   final theme = ThemesApp();
+
+  readUser() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        print('User is signed in!');
+      }
+    });
+  }
+
+  readToken() {
+    FirebaseAuth.instance.idTokenChanges().listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        print('User is signed in!');
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,25 +74,135 @@ class LogInScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 20,),
-              Container(
-                  width: Get.width,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius:1,
-                        blurRadius: 3,
-                        //offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                      color: theme.yellow,
-                      borderRadius: BorderRadius.circular(6)),
-                  child: FlatButton(onPressed: () {}, child: Text('Confirm')))
+              SizedBox(
+                height: 20,
+              ),
+              Obx(() => Text('lc.codeSent    ${lc.codeSent}')),
+              Obx(() => Text('lc.codeSent    ${lc.codeSent}')),
+              Obx(() => Text('lc.codeSent    ${lc.codeSent}')),
+              Material(
+
+                child: FlatButton(
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    height: 40,
+                    splashColor: Colors.yellowAccent,
+                    minWidth: Get.width,
+                    color: theme.yellow,
+                    onPressed: () async {
+                      Get.to(HomeScreen());
+                      // lc.test.value = true;
+                    },
+
+                    child: Text('Confirm')),
+              ),
+              // Obx(
+              //   () => AnimatedButton(
+              //     height: 70,
+              //     width: Get.width,
+              //     // borderColor: Colors.orange,
+              //     selectedBackgroundColor: Colors.yellowAccent,
+              //     text: 'SUBMIT',
+              //     textStyle: const TextStyle(color: Colors.black),
+              //     selectedTextColor: Colors.black,
+              //     isReverse: false,
+              //     transitionType: TransitionType.CENTER_LR_IN,
+              //     backgroundColor: Colors.yellow,
+              //     borderRadius: 0,
+              //     borderWidth: 2,
+              //     onPress: () {},
+              //     animatedOn: AnimatedOn.onTap,
+              //     isSelected: lc.test.value,
+              //   ),
+              // )
             ],
           ),
         ),
       ),
     );
+  }
+
+  final lc = Get.put(LoginController());
+
+
+  timeOut(context) {}
+}
+
+class LoginController extends GetxController {
+  var test = false.obs;
+  var codeSent = ''.obs;
+  var codeAutoRetrievalTimeout = ''.obs;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  var verificationId = ''.obs;
+
+  LogInScreen() {}
+
+  @override
+  void onInit() {
+    super.onInit();
+    auth = FirebaseAuth.instance;
+    changeColor();
+    update();
+  }
+  var bannerPosition = 0;
+  var moviePhotos = [
+    '1',
+    '1',
+  ];
+
+  changeColor() async{
+    while(true){
+      await new Future.delayed(const Duration(seconds : 1));
+      if (bannerPosition < moviePhotos.length){
+        print("Banner Position Pre");
+        print(bannerPosition);
+          bannerPosition = bannerPosition + 1;
+          if (test.value == true){
+            test.value = false;
+            update();
+          }else {
+            test.value =true;
+            update();
+          }
+          update();
+        print("Banner Position Post");
+        print(bannerPosition);
+      }
+      else{
+          bannerPosition = 0;
+          update();
+      }
+      update();
+    }
+  }
+
+  onLogin() async {
+    await auth.verifyPhoneNumber(
+      phoneNumber: '078344511',
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await auth.signInWithCredential(credential);
+        print('!!!!!!!!!!!The provided phone number is not valid.$credential');
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        if (e.code == 'invalid-phone-number') {
+          print('============The provided phone number is not valid.');
+          Get.snackbar('Error', 'valid $e');
+        } else {
+          Get.snackbar('Error', 'dasd $e');
+        }
+      },
+      codeSent: (String verificationId, int? resendToken) async {
+        codeSent.value = verificationId.toString();
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+
+    update();
+  }
+
+  Future<bool> otpVerify(smsCode) async {
+    var credential = await auth.signInWithCredential(
+        PhoneAuthProvider.credential(
+            verificationId: verificationId.value, smsCode: smsCode));
+    return credential.user != null ? true : false;
   }
 }
