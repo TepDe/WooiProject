@@ -5,14 +5,18 @@ import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:wooiproject/WidgetReUse/SuperController.dart';
 
 import 'WidgetReUse/WidGetReUse.dart';
 
 class MapScreen extends StatelessWidget {
-  MapScreen({Key? key}) : super(key: key);
 
   final wr = WidgetReUse();
   late GoogleMapController mapController;
+  final ft = Get.put(MapScreenController());
+
+  //final udl = Get.put(UpDateLocation());
+  final gsc = Get.put(GlbSuperController());
 
   @override
   Widget build(BuildContext context) {
@@ -58,51 +62,42 @@ class MapScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         children: [
-                          Text('status request:'),
+                          Obx(
+                            () => Text('status request:${gsc.requestId.value}'),
+                          ),
                           Obx(
                             () => Text('${ft.readData.value}'),
                           )
                         ],
                       ),
-                      FlatButton(
-                          minWidth: Get.width,
-                          color: Colors.yellow,
-                          onPressed: () {
-                            ft.request();
-                          },
-                          child: const Text(
-                            "ft.request",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
+                      Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Obx(
+                            () => wr.reuseButton(
+                                function: 'requestDriver',
+                                label: gsc.requestStatus),
                           )),
                       FlatButton(
-                          minWidth: Get.width,
-                          color: Colors.yellow,
                           onPressed: () {
-                            ft.readDataBase();
+                            //udl.getLocation();
                           },
-                          child: const Text(
-                            " ft.readDataBase",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          )),
-                      FlatButton(
-                          minWidth: Get.width,
-                          color: Colors.yellow,
-                          onPressed: () {
-                            ft.onRequestLocation();
-                          },
-                          child: const Text(
-                            "read ",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          )),
+                          child: Text('')),
+                      // FlatButton(
+                      //     minWidth: Get.width,
+                      //     color: Colors.yellow,
+                      //     onPressed: () {
+                      //       ft.onRequestLocation();
+                      //     },
+                      //     child: const Text(
+                      //       "read ",
+                      //       style: TextStyle(
+                      //           color: Colors.black,
+                      //           fontWeight: FontWeight.bold),
+                      //     )),
                     ],
                   ),
                 ),
@@ -113,8 +108,29 @@ class MapScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  final ft = Get.put(MapScreenController());
+class UpDateLocation extends GetxController {
+  DatabaseReference updateLocation = FirebaseDatabase.instance.ref('users');
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+  }
+
+  var latitude = 0.obs;
+  var longtitude = 0.obs;
+
+  getLocation() {
+    updateLocation.onValue.listen((DatabaseEvent event) {
+      latitude.value =
+          int.parse(event.snapshot.child('latitude').value.toString());
+      longtitude.value =
+          int.parse(event.snapshot.child('longitude').value.toString());
+      print('${latitude} ${longtitude}');
+    });
+  }
 }
 
 class MapScreenController extends GetxController {
@@ -148,7 +164,6 @@ class MapScreenController extends GetxController {
     mapController = controller;
     update();
     controllermap.value.complete(controller);
-    update();
   }
 
   readFireStore() {}
@@ -197,12 +212,9 @@ class MapScreenController extends GetxController {
       printError();
     });
     protect.value = true;
-    update();
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) => currentPosition = position);
     protect.value = true;
-
-    update();
   }
 }
 
