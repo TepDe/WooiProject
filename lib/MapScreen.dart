@@ -10,12 +10,11 @@ import 'package:wooiproject/WidgetReUse/SuperController.dart';
 import 'WidgetReUse/WidGetReUse.dart';
 
 class MapScreen extends StatelessWidget {
-
   final wr = WidgetReUse();
   late GoogleMapController mapController;
   final ft = Get.put(MapScreenController());
 
-  //final udl = Get.put(UpDateLocation());
+  final udl = Get.put(UpDateLocation());
   final gsc = Get.put(GlbSuperController());
 
   @override
@@ -74,6 +73,11 @@ class MapScreen extends StatelessWidget {
                           )
                         ],
                       ),
+                      FlatButton(
+                          onPressed: () {
+                            udl.getLocation();
+                          },
+                          child: Text('dad')),
                       Align(
                           alignment: Alignment.bottomCenter,
                           child: Obx(
@@ -81,11 +85,7 @@ class MapScreen extends StatelessWidget {
                                 function: 'requestDriver',
                                 label: gsc.requestStatus),
                           )),
-                      FlatButton(
-                          onPressed: () {
-                            //udl.getLocation();
-                          },
-                          child: Text('')),
+
                       // FlatButton(
                       //     minWidth: Get.width,
                       //     color: Colors.yellow,
@@ -111,25 +111,39 @@ class MapScreen extends StatelessWidget {
 }
 
 class UpDateLocation extends GetxController {
-  DatabaseReference updateLocation = FirebaseDatabase.instance.ref('users');
-
   @override
-  void onInit() {
+  void onInit() async {
     // TODO: implement onInit
     super.onInit();
   }
 
   var latitude = 0.obs;
   var longtitude = 0.obs;
+  var text;
 
-  getLocation() {
-    updateLocation.onValue.listen((DatabaseEvent event) {
-      latitude.value =
-          int.parse(event.snapshot.child('latitude').value.toString());
-      longtitude.value =
-          int.parse(event.snapshot.child('longitude').value.toString());
-      print('${latitude} ${longtitude}');
+  getLocation() async {
+    DatabaseReference updateLocation = FirebaseDatabase.instance.ref('users');
+    DatabaseEvent event = await updateLocation.once();
+    Stream<DatabaseEvent> stream = updateLocation.onValue;
+    update();
+    var t = event.snapshot.child('latitude').value.toString();
+    var y = event.snapshot.child('longitude').value.toString();
+
+    stream.listen((DatabaseEvent event) {
+      print('Event Type: ${event.type}'); // DatabaseEventType.value;
+      print('Snapshot: ${event.snapshot}'); // DataSnapshot
     });
+
+    // updateLocation.onValue.listen((DatabaseEvent event) {
+    //   var t =
+    //      event.snapshot.child('25').child('latitude').value.toString();
+    //   var y =
+    //      event.snapshot.child('25').child('longitude').value.toString();
+    //
+    //   print('+++++++++++++++++$event ${latitude} ${longtitude}');
+    // });
+    print('+++++++++++++++++$updateLocation');
+    update();
   }
 }
 
