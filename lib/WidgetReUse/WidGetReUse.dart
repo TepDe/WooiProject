@@ -405,6 +405,7 @@ class WidgetReUse extends GetxController {
                 gsc.onRequestLocation();
                 gsc.requestStatus.value = 'Cancel';
               }
+
               else if (gsc.requestStatus =='Cancel' ){
                 gsc.removeRequest();
               }

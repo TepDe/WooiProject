@@ -13,9 +13,10 @@ class MapScreen extends StatelessWidget {
   final wr = WidgetReUse();
   late GoogleMapController mapController;
   final ft = Get.put(MapScreenController());
-
   final udl = Get.put(UpDateLocation());
   final gsc = Get.put(GlbSuperController());
+
+  MapScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +26,12 @@ class MapScreen extends StatelessWidget {
           children: [
             GetBuilder<MapScreenController>(
               init: MapScreenController(),
-              builder: (value) => ft.protect.value == true
-                  ? GoogleMap(
+              builder: (value) => ft.currentPosition!.latitude == null
+                  ? Container(
+                      color: Colors.blue,
+                      child: Text('no permission'),
+                    )
+                  : GoogleMap(
                       indoorViewEnabled: true,
                       compassEnabled: true,
                       buildingsEnabled: true,
@@ -37,10 +42,6 @@ class MapScreen extends StatelessWidget {
                             ft.currentPosition!.longitude),
                         zoom: 16.0,
                       ),
-                    )
-                  : Container(
-                      color: Colors.blue,
-                      child: Text('no permission'),
                     ),
             ),
             wr.topButtonLeft(
@@ -51,7 +52,7 @@ class MapScreen extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               child: Container(
                 width: Get.width,
-                height: 200,
+                height: 300,
                 margin: const EdgeInsets.all(15.0),
                 padding: const EdgeInsets.all(3.0),
                 decoration: BoxDecoration(
@@ -78,6 +79,14 @@ class MapScreen extends StatelessWidget {
                             udl.getLocation();
                           },
                           child: Text('dad')),
+                      Flexible(
+                        child: ListView.builder(
+                            padding: const EdgeInsets.all(8),
+                            itemCount: 2,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Text('Entry');
+                            }),
+                      ),
                       Align(
                           alignment: Alignment.bottomCenter,
                           child: Obx(
@@ -85,19 +94,6 @@ class MapScreen extends StatelessWidget {
                                 function: 'requestDriver',
                                 label: gsc.requestStatus),
                           )),
-
-                      // FlatButton(
-                      //     minWidth: Get.width,
-                      //     color: Colors.yellow,
-                      //     onPressed: () {
-                      //       ft.onRequestLocation();
-                      //     },
-                      //     child: const Text(
-                      //       "read ",
-                      //       style: TextStyle(
-                      //           color: Colors.black,
-                      //           fontWeight: FontWeight.bold),
-                      //     )),
                     ],
                   ),
                 ),
@@ -110,44 +106,9 @@ class MapScreen extends StatelessWidget {
   }
 }
 
-class UpDateLocation extends GetxController {
-  @override
-  void onInit() async {
-    // TODO: implement onInit
-    super.onInit();
-  }
-
-  var latitude = 0.obs;
-  var longtitude = 0.obs;
-  var text;
-
-  getLocation() async {
-    DatabaseReference updateLocation = FirebaseDatabase.instance.ref('users');
-    DatabaseEvent event = await updateLocation.once();
-    Stream<DatabaseEvent> stream = updateLocation.onValue;
-    update();
-    var t = event.snapshot.child('latitude').value.toString();
-    var y = event.snapshot.child('longitude').value.toString();
-
-    stream.listen((DatabaseEvent event) {
-      print('Event Type: ${event.type}'); // DatabaseEventType.value;
-      print('Snapshot: ${event.snapshot}'); // DataSnapshot
-    });
-
-    // updateLocation.onValue.listen((DatabaseEvent event) {
-    //   var t =
-    //      event.snapshot.child('25').child('latitude').value.toString();
-    //   var y =
-    //      event.snapshot.child('25').child('longitude').value.toString();
-    //
-    //   print('+++++++++++++++++$event ${latitude} ${longtitude}');
-    // });
-    print('+++++++++++++++++$updateLocation');
-    update();
-  }
-}
-
 class MapScreenController extends GetxController {
+  final dbRef = FirebaseDatabase.instance.ref().child("users");
+
   FirebaseFirestore dsad = FirebaseFirestore.instance;
   var winner = false.obs;
   int age = 321324;
@@ -169,6 +130,7 @@ class MapScreenController extends GetxController {
   @override
   void onInit() async {
     request();
+    //protect.value= true;
     super.onInit();
   }
 
@@ -178,6 +140,7 @@ class MapScreenController extends GetxController {
     mapController = controller;
     update();
     controllermap.value.complete(controller);
+    update();
   }
 
   readFireStore() {}
