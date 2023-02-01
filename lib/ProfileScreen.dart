@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wooiproject/WidgetReUse/WidGetReUse.dart';
+import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({Key? key}) : super(key: key);
@@ -25,7 +25,7 @@ class ProfileScreen extends StatelessWidget {
   }
 
   final gettext = TextEditingController();
-  final wr = WidgetReUse();
+  final wr = ReUseWidget();
 
 
   wdTextField() {
