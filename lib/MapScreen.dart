@@ -1,22 +1,204 @@
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:wooiproject/WidgetReUse/SuperController.dart';
 
-import 'WidgetReUse/WidGetReUse.dart';
+import 'WidgetReUse/ReUseWidget.dart';
 
-class MapScreen extends StatelessWidget {
-  final wr = WidgetReUse();
+// class MapScreen extends StatelessWidget {
+//   final wr = ReUseWidget();
+//   late GoogleMapController mapController;
+//   final ft = Get.put(MapScreenController());
+//   final udl = Get.put(UpDateLocation());
+//   final gsc = Get.put(GlbSuperController());
+//
+//   MapScreen({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return
+//   }
+// }
+
+class MapScreen extends StatefulWidget {
+  const MapScreen({Key? key}) : super(key: key);
+
+  @override
+  State<MapScreen> createState() => _MapScreenState();
+}
+
+class _MapScreenState extends State<MapScreen> {
   late GoogleMapController mapController;
-  final ft = Get.put(MapScreenController());
-  final udl = Get.put(UpDateLocation());
-  final gsc = Get.put(GlbSuperController());
+  final wr = ReUseWidget();
 
-  MapScreen({Key? key}) : super(key: key);
+  final gsc = GlbSuperController();
+
+  @override
+  void initState() {
+    super.initState();
+    getUserLocation();
+    // displayDriver();
+    listingDriver();
+  }
+
+  late Position position;
+  double latitude = 0.0;
+  double longitude = 0.0;
+  late LatLng currentPostion;
+  late LatLng driverPostion = const LatLng(11.568553, 104.893228);
+
+  void getUserLocation() async {
+    position = await GeolocatorPlatform.instance.getCurrentPosition();
+    setState(() {
+      currentPostion = LatLng(position.latitude, position.longitude);
+      latitude = position.latitude;
+      longitude = position.longitude;
+    });
+  }
+
+  static const LatLng showLocation =
+      LatLng(27.7089427, 85.3086209); //location to show in map
+  final Set<Marker> markerList = Set();
+  Set<Marker> driverList = {};
+  List laList = [];
+  List longList = [];
+
+
+
+  Set<Marker> onFeatchDriver() {
+    setState(() {
+      for (var i = 0; i < latitudeList.length; i++) {
+        markerList.add(Marker(
+          //add first marker
+          markerId: MarkerId(showLocation.toString()),
+          position:
+              LatLng(latitudeList[i]['latitude'], latitudeList[i]['longitude']),
+          //position of marker
+          infoWindow: const InfoWindow(
+            //popup info
+            title: 'Marker Title First ',
+            snippet: 'My Custom Subtitle',
+          ),
+          icon: BitmapDescriptor.defaultMarker, //Icon for Marker
+        ));
+      }
+    });
+    return markerList;
+  }
+
+  displayDriver() {
+    DatabaseReference refs = FirebaseDatabase.instance.ref('Driver');
+    refs.onValue.listen((event) {
+      DataSnapshot latitude = event.snapshot;
+      Map la = latitude.value as Map;
+      la.forEach((key, value) {
+        setState(() {
+          latitudeList.add(value);
+          for (var i = 0; i < latitudeList.length; i++) {
+            onFeatchDriver();
+          }
+        });
+      });
+    });
+    setState(() {});
+  }
+
+  List<LatLng> latLen = [
+    // LatLng(19.0759837, 72.8776559),
+    // LatLng(28.679079, 77.069710),
+    // LatLng(26.850000, 80.949997),
+    // LatLng(24.879999, 74.629997),
+    // LatLng(16.166700, 74.833298),
+    // LatLng(12.971599, 77.594563),
+  ];
+  List latitudeList = [];
+  final Set<Marker> _markers = {};
+
+  listingDriver() {
+    DatabaseReference refs = FirebaseDatabase.instance.ref('Driver');
+    refs.onValue.listen((event) {
+      DataSnapshot latitude = event.snapshot;
+      Map la = latitude.value as Map;
+      la.forEach((key, value) {
+          latitudeList.add(value);
+          print(latitudeList);
+          // latLen.add(LatLng(latitudeList[i]['latitude'], latitudeList[i]['longitude']));
+          for (var i = 0; i < latitudeList.length; i++) {
+            latLen.add(LatLng(latitudeList[i]['latitude'], latitudeList[i]['longitude']));
+              // driverList.add(Marker(
+              //   //add first marker
+              //   markerId: MarkerId(showLocation.toString()),
+              //   position: LatLng(
+              //       latitudeList[i]['latitude'], latitudeList[i]['longitude']),
+              //   //position of marker
+              //   infoWindow: const InfoWindow(
+              //     //popup info
+              //     title: 'Marker Title First ',
+              //     snippet: 'My Custom Subtitle',
+              //   ),
+              //   icon: BitmapDescriptor.defaultMarker, //Icon for Marker
+              // ));
+              _markers.add(
+                // added markers
+                  Marker(
+                    markerId: MarkerId(i.toString()),
+                    position: latLen[i],
+                    infoWindow: InfoWindow(
+                      title: 'HOTEL',
+                      snippet: '5 Star Hotel',
+                    ),
+                    icon: BitmapDescriptor.defaultMarker,
+                  )
+              );
+              setState(() {
+
+              });
+
+          }
+
+      });
+    });
+  }
+
+  Set<Marker> onGetDriver() {
+    setState(() {
+      markerList.add(Marker(
+        //add first marker
+        markerId: MarkerId(showLocation.toString()),
+        position: currentPostion, //position of marker
+        infoWindow: const InfoWindow(
+          //popup info
+          title: 'Marker Title First ',
+          snippet: 'My Custom Subtitle',
+        ),
+        icon: BitmapDescriptor.defaultMarker, //Icon for Marker
+      ));
+      markerList.add(Marker(
+        //add first marker
+        markerId: MarkerId(showLocation.toString()),
+        position: currentPostion, //position of marker
+        infoWindow: const InfoWindow(
+          //popup info
+          title: 'Marker Title First ',
+          snippet: 'My Custom Subtitle',
+        ),
+        icon: BitmapDescriptor.defaultMarker, //Icon for Marker
+      ));
+    });
+
+    return markerList;
+  }
+
+  final Completer<GoogleMapController> _controller = Completer();
+
+  void onMapCreated(GoogleMapController controller) {
+    _controller.complete(controller);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,25 +206,18 @@ class MapScreen extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            GetBuilder<MapScreenController>(
-              init: MapScreenController(),
-              builder: (value) => ft.currentPosition!.latitude == null
-                  ? Container(
-                      color: Colors.blue,
-                      child: Text('no permission'),
-                    )
-                  : GoogleMap(
-                      indoorViewEnabled: true,
-                      compassEnabled: true,
-                      buildingsEnabled: true,
-                      myLocationEnabled: true,
-                      onMapCreated: ft.onMapCreated,
-                      initialCameraPosition: CameraPosition(
-                        target: LatLng(ft.currentPosition!.latitude,
-                            ft.currentPosition!.longitude),
-                        zoom: 16.0,
-                      ),
-                    ),
+            GoogleMap(
+              indoorViewEnabled: true,
+              compassEnabled: true,
+              buildingsEnabled: true,
+              myLocationEnabled: true,
+              markers: _markers,
+              // markers: Set<Marker>.of(driverList),
+              onMapCreated: onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: currentPostion,
+                zoom: 16,
+              ),
             ),
             wr.topButtonLeft(
                 function: 'home', icon: Icons.arrow_back_ios_rounded),
@@ -51,8 +226,7 @@ class MapScreen extends StatelessWidget {
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                width: Get.width,
-                height: 300,
+                height: 250,
                 margin: const EdgeInsets.all(15.0),
                 padding: const EdgeInsets.all(3.0),
                 decoration: BoxDecoration(
@@ -66,34 +240,36 @@ class MapScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Obx(
-                            () => Text('status request:${gsc.requestId.value}'),
-                          ),
-                          Obx(
-                            () => Text('${ft.readData.value}'),
-                          )
+                          Text('status request: '),
+                          Text(' '),
                         ],
                       ),
-                      FlatButton(
+                      ElevatedButton(
                           onPressed: () {
-                            udl.getLocation();
+                            // udl.getLocation();
                           },
                           child: Text('dad')),
                       Flexible(
                         child: ListView.builder(
                             padding: const EdgeInsets.all(8),
-                            itemCount: 2,
+                            itemCount: latitudeList.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return Text('Entry');
+                              return Column(
+                                children: [
+                                  Text(
+                                      'Entry ${latitudeList[index]['latitude']}'),
+                                  Text(
+                                      'Entry ${latitudeList[index]['longitude']}'),
+                                ],
+                              );
                             }),
                       ),
                       Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Obx(
-                            () => wr.reuseButton(
-                                function: 'requestDriver',
-                                label: gsc.requestStatus),
-                          )),
+                        alignment: Alignment.bottomCenter,
+                        child: wr.reuseButton(
+                            function: 'requestDriver',
+                            label: gsc.requestStatus),
+                      ),
                     ],
                   ),
                 ),
@@ -106,42 +282,28 @@ class MapScreen extends StatelessWidget {
   }
 }
 
-class MapScreenController extends GetxController {
-  final dbRef = FirebaseDatabase.instance.ref().child("users");
+class driverData {
+  double latitude = 0;
+  double longitude = 0;
+}
 
+class MapScreenController {
+  final dbRef = FirebaseDatabase.instance.ref().child("users");
   FirebaseFirestore dsad = FirebaseFirestore.instance;
-  var winner = false.obs;
-  int age = 321324;
-  var name = 'dasdasd'.obs;
-  var note = 'dasdasd'.obs;
-  var currentAddress = '0'.obs;
   Position? currentPosition;
-  var spin = false.obs;
-  CollectionReference users = FirebaseFirestore.instance.collection('user');
+  CollectionReference users = FirebaseFirestore.instance.collection('User');
   DatabaseReference ref = FirebaseDatabase.instance.ref("user");
   final readStorage = FirebaseDatabase.instance;
-  var readData = ''.obs;
+  var readData = '';
   DatabaseReference refs = FirebaseDatabase.instance.ref("users/123");
   Getter? gets = Getter();
   LatLng center = const LatLng(45.521563, -122.677433);
   late GoogleMapController mapController;
-  var protect = false.obs;
+  var protect = false;
 
-  @override
-  void onInit() async {
-    request();
-    //protect.value= true;
-    super.onInit();
-  }
+  final gsc = Get.put(GlbSuperController());
 
-  var controllermap = Completer().obs;
-
-  onMapCreated(GoogleMapController controller) async {
-    mapController = controller;
-    update();
-    controllermap.value.complete(controller);
-    update();
-  }
+  var controllermap = Completer();
 
   readFireStore() {}
 
@@ -152,7 +314,7 @@ class MapScreenController extends GetxController {
   findDriver() {
     refs.onValue.listen((DatabaseEvent event) {
       gets?.age = int.parse(event.snapshot.child('age').value.toString());
-      readData.value = (gets?.age).toString();
+      readData = (gets?.age).toString();
     });
   }
 
@@ -161,7 +323,7 @@ class MapScreenController extends GetxController {
     return users
         .add({
           'name': 'dasdasd', // John Doe
-          'age': 3213, // Stokes and Sons
+          'age': '3213', // Stokes and Sons
           'note': 'age' // 42
         })
         .then((value) => print("User Added"))
@@ -178,7 +340,6 @@ class MapScreenController extends GetxController {
       target: LatLng(currentPosition!.latitude, currentPosition!.longitude),
       zoom: 16.0,
     );
-    update();
   }
 
   request() async {
@@ -186,13 +347,14 @@ class MapScreenController extends GetxController {
         .then((value) {})
         .onError((error, stackTrace) {
       print('$error' + "" + '$stackTrace');
-      printError();
     });
-    protect.value = true;
+    protect = true;
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) => currentPosition = position);
-    protect.value = true;
+    protect = true;
   }
+
+  test() {}
 }
 
 class Getter {
