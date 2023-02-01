@@ -1,120 +1,147 @@
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_button/flutter_animated_button.dart';
+import 'package:flutter/services.dart';
+
+// import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:get/get.dart';
+import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/HomeScreen.dart';
+import 'package:wooiproject/ViewScreen.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
-import 'package:wooiproject/WidgetReUse/WidGetReUse.dart';
+import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 
 class LogInScreen extends StatelessWidget {
   LogInScreen({Key? key}) : super(key: key);
 
-  final wr = WidgetReUse();
-  final textphone = TextEditingController();
   final theme = ThemesApp();
-
-  readUser() {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null) {
-        print('User is currently signed out!');
-      } else {
-        print('User is signed in!');
-      }
-    });
-  }
-
-  readToken() {
-    FirebaseAuth.instance.idTokenChanges().listen((User? user) {
-      if (user == null) {
-        print('User is currently signed out!');
-      } else {
-        print('User is signed in!');
-      }
-    });
-  }
+  final rw = ReUseWidget();
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 100,
-              ),
-              Text('Log In',
-                  style: TextStyle(
-                      fontSize: 24,
-                      color: theme.black,
-                      fontWeight: FontWeight.bold)),
-              SizedBox(
-                height: 30,
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
-                decoration: BoxDecoration(
-                    color: theme.liteGrey,
-                    borderRadius: BorderRadius.circular(6)),
-                child: TextField(
-                  controller: textphone,
-                  decoration: InputDecoration(
-                    filled: true,
-                    //<-- SEE HERE
-                    fillColor: theme.liteGrey,
-                    //iconColor: theme.grey,
-                    //enabled: true,
-                    //focusColor: Colors.grey,
-                    //prefix: Icon(Icons.phone),
-                    border: InputBorder.none,
-                    icon: Icon(Icons.phone),
-                    hintText: 'Enter your phone number',
+    return WillPopScope(
+      onWillPop: () async=> false,
+      child: SafeArea(
+        child: Scaffold(
+
+          resizeToAvoidBottomInset: false,
+          backgroundColor: theme.white,
+          body: Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 30,
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: SizedBox(
+                    height: 83,
+                    width: 83,
+                    child: Text('MACAW'),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Obx(() => Text('lc.codeSent    ${lc.codeSent}')),
-              Obx(() => Text('lc.codeSent    ${lc.codeSent}')),
-              Obx(() => Text('lc.codeSent    ${lc.codeSent}')),
-              Material(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {},
+                      child: Text('Register',
+                          style: TextStyle(
+                            // decoration: TextDecoration.underline,
+                            fontSize: 18,
+                            color: theme.deepOrange,
+                          )),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text('Sign In',
+                          style: TextStyle(
+                            // decoration: TextDecoration.underline,
+                            fontSize: 18,
+                            color: theme.grey,
+                          )),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Column(
+                  children: [
+                    rw.ruTextBox(
+                        icon: Icon(Icons.email),
+                        controller: lc.userEmail.value,
+                        hind: 'Email',
+                        obscureText: false),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    rw.ruTextBox(
+                        icon: Icon(Icons.password),
+                        controller: lc.userPassword.value,
+                        hind: 'Password',
+                        obscureText: true),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                SizedBox(
+                  width: Get.width,
+                  height: 50,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor: theme.deepOrange,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
+                      onPressed: () async {
+                        lc.onUserSignIn(
+                            email: lc.userEmail.value.text.trim(),
+                            password: lc.userPassword.value.text.trim(),
+                            context: context);
 
-                child: FlatButton(
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    height: 40,
-                    splashColor: Colors.yellowAccent,
-                    minWidth: Get.width,
-                    color: theme.yellow,
-                    onPressed: () async {
-                      Get.to(HomeScreen());
-                      // lc.test.value = true;
-                    },
-
-                    child: Text('Confirm')),
-              ),
-              // Obx(
-              //   () => AnimatedButton(
-              //     height: 70,
-              //     width: Get.width,
-              //     // borderColor: Colors.orange,
-              //     selectedBackgroundColor: Colors.yellowAccent,
-              //     text: 'SUBMIT',
-              //     textStyle: const TextStyle(color: Colors.black),
-              //     selectedTextColor: Colors.black,
-              //     isReverse: false,
-              //     transitionType: TransitionType.CENTER_LR_IN,
-              //     backgroundColor: Colors.yellow,
-              //     borderRadius: 0,
-              //     borderWidth: 2,
-              //     onPress: () {},
-              //     animatedOn: AnimatedOn.onTap,
-              //     isSelected: lc.test.value,
-              //   ),
-              // )
-            ],
+                        // lc._phoneVerify(context);
+                      },
+                      child: Text(
+                        'Sign in',
+                        style: TextStyle(color: theme.white),
+                      )),
+                ),
+                // Row(
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: const [
+                //     Flexible(
+                //       child: Divider(
+                //         color: Colors.black,
+                //       ),
+                //     ),
+                //     Padding(
+                //       padding: EdgeInsets.all(8.0),
+                //       child: Text("Already have Account?"),
+                //     ),
+                //     Flexible(
+                //       child: Divider(
+                //         color: Colors.black,
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // const Align(
+                //     alignment: Alignment.topCenter,
+                //     child: Text(
+                //       "Sign in",
+                //       style: TextStyle(color: Colors.blue),
+                //     )),
+              ],
+            ),
           ),
         ),
       ),
@@ -123,7 +150,6 @@ class LogInScreen extends StatelessWidget {
 
   final lc = Get.put(LoginController());
 
-
   timeOut(context) {}
 }
 
@@ -131,78 +157,173 @@ class LoginController extends GetxController {
   var test = false.obs;
   var codeSent = ''.obs;
   var codeAutoRetrievalTimeout = ''.obs;
-  FirebaseAuth auth = FirebaseAuth.instance;
   var verificationId = ''.obs;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  var receivedID = '';
+  final textphone = TextEditingController().obs;
+  var userEmail = TextEditingController().obs;
+  var userPassword = TextEditingController().obs;
 
-  LogInScreen() {}
+  final glb = Get.put(GlobalController());
+
+
+  onUserSignIn({email, password, context}) async {
+    try {
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      if (userCredential.isNull) {
+
+
+      } else {
+        glb.UID.value = (userCredential.user?.uid).toString();
+        userEmail.value.clear();
+        userPassword.value.clear();
+        Get.to(const ViewScreen());
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+      } else if (e.code == 'email-already-in-use') {
+        // onDialog(context: context);
+      } else if (e.code == 'wrong-password') {
+        onDialogOK(
+            context: context,
+            title: 'Wrong Password',
+            content: 'Please check your password and again!');
+      } else if (e.code == 'wrong-email') {
+        onDialogOK(
+            context: context,
+            title: 'Wrong Email',
+            content: 'Please check your password and again!');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    update();
+  }
+  onDialogOK({context, title, content}) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Expanded(
+          child: AlertDialog(
+            title: Text('$title'),
+            content: Text('$content'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  final _codeController = TextEditingController();
+  var smsCode;
+  var _credential;
+  var credential = PhoneAuthProvider.credential(
+      verificationId: 'dasd', smsCode: 'dasjdasdasd');
+
+  Future registerUser(BuildContext context) async {
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    _auth.verifyPhoneNumber(
+        phoneNumber: '+85578344511',
+        timeout: Duration(seconds: 25),
+        verificationCompleted: (AuthCredential authCredential) {
+          _auth.signInWithCredential(credential).then((UserCredential result) {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => HomeScreen()));
+          }).catchError((e) {
+            print(e);
+          });
+        },
+        verificationFailed: (FirebaseAuthException authException) {
+          print(authException.message);
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => AlertDialog(
+                    title: Text("Enter SMS Code"),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        TextField(
+                          controller: _codeController,
+                        ),
+                      ],
+                    ),
+                    actions: <Widget>[
+                      ElevatedButton(
+                        child: Text("Done"),
+                        onPressed: () {
+                          FirebaseAuth auth = FirebaseAuth.instance;
+
+                          smsCode = _codeController.text.trim();
+
+                          _credential = PhoneAuthProvider.credential(
+                              verificationId: verificationId, smsCode: smsCode);
+                          auth
+                              .signInWithCredential(_credential)
+                              .then((UserCredential result) {
+                            Get.to(HomeScreen());
+                          }).catchError((e) {
+                            print(e);
+                          });
+                        },
+                      )
+                    ],
+                  ));
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          verificationId = verificationId;
+          print(verificationId);
+          print("Timout");
+        });
+  }
 
   @override
   void onInit() {
     super.onInit();
-    auth = FirebaseAuth.instance;
-    changeColor();
+    changeColorButton();
     update();
   }
+
   var bannerPosition = 0;
   var moviePhotos = [
     '1',
     '1',
   ];
 
-  changeColor() async{
-    while(true){
-      await new Future.delayed(const Duration(seconds : 1));
-      if (bannerPosition < moviePhotos.length){
-        print("Banner Position Pre");
-        print(bannerPosition);
-          bannerPosition = bannerPosition + 1;
-          if (test.value == true){
-            test.value = false;
-            update();
-          }else {
-            test.value =true;
-            update();
-          }
-          update();
-        print("Banner Position Post");
-        print(bannerPosition);
-      }
-      else{
-          bannerPosition = 0;
-          update();
-      }
-      update();
-    }
-  }
-
-  onLogin() async {
-    await auth.verifyPhoneNumber(
-      phoneNumber: '078344511',
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        await auth.signInWithCredential(credential);
-        print('!!!!!!!!!!!The provided phone number is not valid.$credential');
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        if (e.code == 'invalid-phone-number') {
-          print('============The provided phone number is not valid.');
-          Get.snackbar('Error', 'valid $e');
-        } else {
-          Get.snackbar('Error', 'dasd $e');
-        }
-      },
-      codeSent: (String verificationId, int? resendToken) async {
-        codeSent.value = verificationId.toString();
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {},
-    );
-
-    update();
-  }
-
-  Future<bool> otpVerify(smsCode) async {
-    var credential = await auth.signInWithCredential(
-        PhoneAuthProvider.credential(
-            verificationId: verificationId.value, smsCode: smsCode));
-    return credential.user != null ? true : false;
+  changeColorButton() async {
+    // while (true) {
+    //   await new Future.delayed(const Duration(seconds: 1));
+    //   if (bannerPosition < moviePhotos.length) {
+    //     print("Banner Position Pre");
+    //     print(bannerPosition);
+    //     bannerPosition = bannerPosition + 1;
+    //     if (test.value == true) {
+    //       test.value = false;
+    //       update();
+    //     } else {
+    //       test.value = true;
+    //       update();
+    //     }
+    //     update();
+    //     print("Banner Position Post");
+    //     print(bannerPosition);
+    //   } else {
+    //     bannerPosition = 0;
+    //     update();
+    //   }
+    //   update();
+    // }
   }
 }
