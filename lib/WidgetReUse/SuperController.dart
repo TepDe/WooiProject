@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
@@ -25,15 +26,15 @@ class GlbSuperController extends GetxController {
 
   var requestId = 0.obs;
   var atRemove= 0.obs;
-  DatabaseReference refs = FirebaseDatabase.instance.ref("users");
-  DatabaseReference remove = FirebaseDatabase.instance.ref("users");
+  DatabaseReference refs = FirebaseDatabase.instance.ref("Users");
+  DatabaseReference remove = FirebaseDatabase.instance.ref("Users");
   Position? currentPosition;
 
   onRequestLocation() async {
     generateRequestId();
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) => currentPosition = position);
-    await refs.child(requestId.value.toString()).set({
+    await refs.child(auth.currentUser!.uid).set({
       "Phone Number": 078344511,
       "latitude": currentPosition!.latitude,
       "longitude": currentPosition!.longitude
@@ -58,7 +59,7 @@ class GlbSuperController extends GetxController {
 
   removeRequest() {
     requestStatus.value = 'Request';
-    remove.child(requestId.value.toString()).remove();
+    remove.child(auth.currentUser!.uid).remove();
   }
 
   generateRequestId() {
@@ -71,6 +72,21 @@ class GlbSuperController extends GetxController {
   final firestore = FirebaseFirestore.instance;
   fireStore() {
     return ;
+  }
+  var protect = false.obs;
+  FirebaseAuth auth = FirebaseAuth.instance;
+
+  requestLocationPermission() async {
+    await Geolocator.requestPermission()
+        .then((value) {})
+        .onError((error, stackTrace) {
+      print('$error' + "" + '$stackTrace');
+      printError();
+    });
+    protect.value = true;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) => currentPosition = position);
+    protect.value = true;
   }
 }
 
