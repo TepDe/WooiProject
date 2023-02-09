@@ -7,6 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:wooiproject/WidgetReUse/SuperController.dart';
+import 'dart:math' show cos, sqrt, asin;
 
 import 'WidgetReUse/ReUseWidget.dart';
 
@@ -26,24 +27,31 @@ import 'WidgetReUse/ReUseWidget.dart';
 // }
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({Key? key}) : super(key: key);
+  MapScreen({Key? key, this.las, this.longs}) : super(key: key);
+  var las;
+  var longs;
 
   @override
-  State<MapScreen> createState() => _MapScreenState();
+  State<MapScreen> createState() => _MapScreenState(las, longs);
 }
 
 class _MapScreenState extends State<MapScreen> {
+  var las;
+  var longs;
+
+  _MapScreenState(this.las, this.longs);
+
   late GoogleMapController mapController;
   final wr = ReUseWidget();
 
-  final gsc = GlbSuperController();
+  final gsc = Get.put(GlbSuperController());
 
   @override
   void initState() {
     super.initState();
-    getUserLocation();
-    // displayDriver();
-    listingDriver();
+    diaplayDriverDistance();
+    getLocation();
+    onDisplayDriver();
   }
 
   late Position position;
@@ -59,16 +67,15 @@ class _MapScreenState extends State<MapScreen> {
       latitude = position.latitude;
       longitude = position.longitude;
     });
+    await onDisplayDriver();
   }
 
   static const LatLng showLocation =
       LatLng(27.7089427, 85.3086209); //location to show in map
-  final Set<Marker> markerList = Set();
+  final Set<Marker> markerList = {};
   Set<Marker> driverList = {};
   List laList = [];
   List longList = [];
-
-
 
   Set<Marker> onFeatchDriver() {
     setState(() {
@@ -116,54 +123,57 @@ class _MapScreenState extends State<MapScreen> {
     // LatLng(16.166700, 74.833298),
     // LatLng(12.971599, 77.594563),
   ];
+
+  var dasdasd;
   List latitudeList = [];
   final Set<Marker> _markers = {};
 
-  listingDriver() {
+  onDisplayDriver() async {
     DatabaseReference refs = FirebaseDatabase.instance.ref('Driver');
-    refs.onValue.listen((event) {
+    // latLen.add(currentPostion);
+    refs.onValue.listen((event) async {
       DataSnapshot latitude = event.snapshot;
       Map la = latitude.value as Map;
       la.forEach((key, value) {
+        setState(() async {
           latitudeList.add(value);
           print(latitudeList);
+
           // latLen.add(LatLng(latitudeList[i]['latitude'], latitudeList[i]['longitude']));
           for (var i = 0; i < latitudeList.length; i++) {
-            latLen.add(LatLng(latitudeList[i]['latitude'], latitudeList[i]['longitude']));
-              // driverList.add(Marker(
-              //   //add first marker
-              //   markerId: MarkerId(showLocation.toString()),
-              //   position: LatLng(
-              //       latitudeList[i]['latitude'], latitudeList[i]['longitude']),
-              //   //position of marker
-              //   infoWindow: const InfoWindow(
-              //     //popup info
-              //     title: 'Marker Title First ',
-              //     snippet: 'My Custom Subtitle',
-              //   ),
-              //   icon: BitmapDescriptor.defaultMarker, //Icon for Marker
-              // ));
-              _markers.add(
-                // added markers
-                  Marker(
-                    markerId: MarkerId(i.toString()),
-                    position: latLen[i],
-                    infoWindow: InfoWindow(
-                      title: 'HOTEL',
-                      snippet: '5 Star Hotel',
-                    ),
-                    icon: BitmapDescriptor.defaultMarker,
-                  )
-              );
-              setState(() {
-
-              });
-
+            latLen.add(LatLng(
+                latitudeList[i]['latitude'], latitudeList[i]['longitude']));
+            // driverList.add(Marker(
+            //   //add first marker
+            //   markerId: MarkerId(showLocation.toString()),
+            //   position: LatLng(
+            //       latitudeList[i]['latitude'], latitudeList[i]['longitude']),
+            //   //position of marker
+            //   infoWindow: const InfoWindow(
+            //     //popup info
+            //     title: 'Marker Title First ',
+            //     snippet: 'My Custom Subtitle',
+            //   ),
+            //   icon: BitmapDescriptor.defaultMarker, //Icon for Marker
+            // ));
+            _markers.add(
+              // added markers
+              Marker(
+                markerId: MarkerId(i.toString()),
+                position: latLen[i],
+                infoWindow: InfoWindow(
+                  title: 'HOTEL',
+                  snippet: '5 Star Hotel',
+                ),
+                icon: BitmapDescriptor.defaultMarker,
+              ),
+            );
+            setState(() {});
           }
-
+        });
       });
     });
-  }
+   }
 
   Set<Marker> onGetDriver() {
     setState(() {
@@ -195,9 +205,29 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   final Completer<GoogleMapController> _controller = Completer();
+  bool isloading = false;
 
   void onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
+  }
+
+  LocationPermission? permission;
+  LatLng? _currentPosition;
+  bool _isLoading = true;
+
+  getLocation() async {
+    permission = await Geolocator.requestPermission();
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    double lat = position.latitude;
+    double long = position.longitude;
+
+    LatLng location = LatLng(lat, long);
+
+    setState(() {
+      _currentPosition = location;
+      _isLoading = false;
+    });
   }
 
   @override
@@ -206,19 +236,21 @@ class _MapScreenState extends State<MapScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            GoogleMap(
-              indoorViewEnabled: true,
-              compassEnabled: true,
-              buildingsEnabled: true,
-              myLocationEnabled: true,
-              markers: _markers,
-              // markers: Set<Marker>.of(driverList),
-              onMapCreated: onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: currentPostion,
-                zoom: 16,
-              ),
-            ),
+            _isLoading == true
+                ? Container()
+                : GoogleMap(
+                    indoorViewEnabled: true,
+                    compassEnabled: true,
+                    buildingsEnabled: true,
+                    myLocationEnabled: true,
+                    markers: _markers,
+                    // markers: Set<Marker>.of(driverList),
+                    onMapCreated: onMapCreated,
+                    initialCameraPosition: CameraPosition(
+                      target: _currentPosition!,
+                      zoom: 16,
+                    ),
+                  ),
             wr.topButtonLeft(
                 function: 'home', icon: Icons.arrow_back_ios_rounded),
             wr.topButtonRight(
@@ -280,6 +312,36 @@ class _MapScreenState extends State<MapScreen> {
       ),
     );
   }
+
+  diaplayDriverDistance() {
+    double calculateDistance(lat1, lon1, lat2, lon2) {
+      var p = 0.017453292519943295;
+      var c = cos;
+      var a = 0.5 -
+          c((lat2 - lat1) * p) / 2 +
+          c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+      return 12742 * asin(sqrt(a));
+    }
+
+    List<dynamic> data = [
+      {"lat": 44.968046, "lng": -94.420307},
+      {"lat": 44.33328, "lng": -89.132008},
+      {"lat": 33.755787, "lng": -116.359998},
+      {"lat": 33.844843, "lng": -116.54911},
+      {"lat": 44.92057, "lng": -93.44786},
+      {"lat": 44.240309, "lng": -91.493619},
+      {"lat": 44.968041, "lng": -94.419696},
+      {"lat": 44.333304, "lng": -89.132027},
+      {"lat": 33.755783, "lng": -116.360066},
+      {"lat": 33.844847, "lng": -116.549069},
+    ];
+    double totalDistance = 0;
+    for (var i = 0; i < data.length - 1; i++) {
+      totalDistance += calculateDistance(data[i]["lat"], data[i]["lng"],
+          data[i + 1]["lat"], data[i + 1]["lng"]);
+    }
+    print(totalDistance);
+  }
 }
 
 class driverData {
@@ -316,6 +378,7 @@ class MapScreenController {
       gets?.age = int.parse(event.snapshot.child('age').value.toString());
       readData = (gets?.age).toString();
     });
+    addderewfg(readData);
   }
 
   Future<void> addUser() {
@@ -328,6 +391,13 @@ class MapScreenController {
         })
         .then((value) => print("User Added"))
         .catchError((error) => print("Failed to add user: $error"));
+  }
+
+  addderewfg(we) {
+    var s = we;
+    var a = 09;
+    var total;
+    total = s + a;
   }
 
   readDataBase() {
