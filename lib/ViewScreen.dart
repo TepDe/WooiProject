@@ -66,7 +66,7 @@ class _ViewScreenState extends State<ViewScreen> {
               });
             },
           ),
-          body: viewScreen[selectedIndex],
+          body:viewScreen[selectedIndex]
         ),
       ),
     );
