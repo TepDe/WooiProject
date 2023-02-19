@@ -38,6 +38,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
+
     getLocation();
     onDisplayDriver();
   }
@@ -86,6 +87,8 @@ class _MapScreenState extends State<MapScreen> {
       setState(() {});
     }
   }
+
+  onMoveCameraAtLocation() {}
 
   @override
   Widget build(BuildContext context) {
@@ -139,6 +142,17 @@ class _MapScreenState extends State<MapScreen> {
                             // udl.getLocation();
                           },
                           child: Text('Refesh')),
+                      ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              mapController.animateCamera(
+                                  CameraUpdate.newLatLngZoom(
+                                      LatLng(_currentPosition!.latitude,
+                                          _currentPosition!.longitude),
+                                      14));
+                            });
+                          },
+                          child: Text('My Location')),
                       Text('status request: (${_latLen.length})'),
                       Flexible(
                         child: ListView.builder(
