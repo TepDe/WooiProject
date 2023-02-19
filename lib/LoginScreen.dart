@@ -21,10 +21,9 @@ class LogInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async=> false,
+      onWillPop: () async => false,
       child: SafeArea(
         child: Scaffold(
-
           resizeToAvoidBottomInset: false,
           backgroundColor: theme.white,
           body: Padding(
@@ -102,11 +101,23 @@ class LogInScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () async {
+                        // lc.onDialogWaiting();
+
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return SizedBox(
+                                height: 60,
+                                width: 60,
+                                child: Align(
+                                    alignment: Alignment.center,
+                                    child: CircularProgressIndicator()));
+                          },
+                        );
                         lc.onUserSignIn(
                             email: lc.userEmail.value.text.trim(),
                             password: lc.userPassword.value.text.trim(),
                             context: context);
-
                         // lc._phoneVerify(context);
                       },
                       child: Text(
@@ -149,8 +160,6 @@ class LogInScreen extends StatelessWidget {
   }
 
   final lc = Get.put(LoginController());
-
-  timeOut(context) {}
 }
 
 class LoginController extends GetxController {
@@ -166,14 +175,13 @@ class LoginController extends GetxController {
 
   final glb = Get.put(GlobalController());
 
+  bool showDialogWiating = false;
 
   onUserSignIn({email, password, context}) async {
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
       if (userCredential.isNull) {
-
-
       } else {
         glb.UID.value = (userCredential.user?.uid).toString();
         userEmail.value.clear();
@@ -202,6 +210,7 @@ class LoginController extends GetxController {
     }
     update();
   }
+
   onDialogOK({context, title, content}) {
     return showDialog(
       context: context,
@@ -219,6 +228,26 @@ class LoginController extends GetxController {
               ),
             ],
           ),
+        );
+      },
+    );
+  }
+
+  onDialogWaiting({context, title, content}) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title: Text('wait'),
+          // content: Text('wait'),
+          actions: const [
+            SizedBox(
+                height: 60,
+                width: 60,
+                child: Align(
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator()))
+          ],
         );
       },
     );
