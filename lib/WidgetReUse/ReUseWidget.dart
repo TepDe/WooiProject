@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wooiproject/HomeScreen.dart';
@@ -294,7 +295,8 @@ class ReUseWidget extends GetxController {
     );
   }
 
-  unitThreeHomeScreen({icon, lable, price, funtion, context}) {
+
+  unitThreeHomeScreen({icon, lable, price, funtion, context,latitude,longitude}) {
     return Padding(
       padding: const EdgeInsets.only(top: 12.0, left: 18, right: 18),
       child: InkWell(
