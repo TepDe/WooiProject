@@ -35,7 +35,7 @@ class GlbSuperController extends GetxController {
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) => currentPosition = position);
     await refs.child(auth.currentUser!.uid).set({
-      "Phone Number": 078344511,
+      "phonenumber": 078344511,
       "latitude": currentPosition!.latitude,
       "longitude": currentPosition!.longitude
     });
