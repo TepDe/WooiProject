@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wooiproject/HomeScreen.dart';
 import 'package:wooiproject/MapScreen.dart';
 import 'package:wooiproject/ProfileScreen.dart';
+import 'package:wooiproject/ViewScreen.dart';
 import 'package:wooiproject/WidgetReUse/SuperController.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
@@ -28,7 +29,7 @@ class ReUseWidget extends GetxController {
                 color: Colors.black,
                 onPressed: () {
                   if (function == 'home') {
-                    Get.to(HomeScreen());
+                    Get.to(ViewScreen());
                   }
                 },
                 icon: Icon(icon)),
