@@ -1,4 +1,6 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
@@ -12,6 +14,12 @@ class ActivityScreen extends StatefulWidget {
 class _ActivityScreenState extends State<ActivityScreen> {
   final themes = ThemesApp();
   final ru = ReUseWidget();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    onDisplayDriver();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +34,27 @@ class _ActivityScreenState extends State<ActivityScreen> {
     );
   }
 
+  final List<LatLng> _latLen = <LatLng>[];
+  List itemQty=[];
+
+  onDisplayDriver() async {
+    DatabaseReference refs = FirebaseDatabase.instance.ref('Driver');
+    refs.onValue.listen((event) async {
+      _latLen.clear();
+      DataSnapshot location = event.snapshot;
+      Map drvData = location.value as Map;
+      drvData.forEach((key, value) async {
+        _latLen.add(LatLng(value['latitude'], value['longitude']));
+        //loadData(_latLen);
+      });
+    });
+  }
+
   renderListView() {
     return Flexible(
       child: ListView.builder(
           padding: const EdgeInsets.all(8),
-          itemCount: 12,
+          itemCount: _latLen.length,
           itemBuilder: (BuildContext context, int index) {
             return Padding(
               padding: EdgeInsets.all(8.0),
@@ -46,7 +70,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                   children: [
                     reuseText(),
                     reuseText(),
-                    reuseText(),
+                    reuseText(content: itemQty[index]),
                     reuseText(),
                   ],
                 ),
@@ -56,9 +80,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
     );
   }
 
-  reuseText() {
+  reuseText({label,content}) {
     return Text(
-      'data : ',
+      '$label : $content',
       style: TextStyle(color: themes.black, fontSize: 16),
     );
   }
