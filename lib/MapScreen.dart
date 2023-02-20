@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -60,6 +61,20 @@ class _MapScreenState extends State<MapScreen> {
     _controller.complete(controller);
   }
 
+  internetListner(context) async {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+      }
+    } on SocketException catch (_) {
+      print('not connected');
+      setState(() {
+        _showDialog('String title', 'String content',context);
+      });
+    }
+  }
+
   getLocation() async {
     permission = await Geolocator.requestPermission();
     Position position = await Geolocator.getCurrentPosition(
@@ -90,8 +105,28 @@ class _MapScreenState extends State<MapScreen> {
 
   onMoveCameraAtLocation() {}
 
+  void _showDialog(String title, String content, BuildContext context) {
+    setState(() {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+                title: Text('err'),
+                content: Text(content),
+                actions: <Widget>[
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: new Text("Close"))
+                ]);
+          });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    internetListner(context);
     return Scaffold(
       body: SafeArea(
         child: Stack(
