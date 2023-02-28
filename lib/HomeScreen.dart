@@ -44,16 +44,19 @@ class HomeScreen extends StatelessWidget {
       child: SafeArea(
 
         child: Scaffold(
+          backgroundColor: Colors.white,
             resizeToAvoidBottomInset: false,
-            body: Column(
-            children: [
-              wr.topBarHomeScreen(),
-              wr.unitOneHomeScreen(function: 'profile'),
-              wr.unitTwoHomeScreen(),
-              wr.unitThreeHomeScreen(latitude:hsc.latitude.value ,longitude:hsc.longitude ,icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
-              wr.unitThreeHomeScreen(latitude:hsc.latitude.value ,longitude:hsc.longitude ,icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
-            ],
+            body: SingleChildScrollView(
+              child: Column(
+              children: [
+                wr.topBarHomeScreen(),
+                wr.unitOneHomeScreen(function: 'profile'),
+                wr.unitTwoHomeScreen(),
+                wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
+                // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
+              ],
           ),
+            ),
         ),
       ),
     );
