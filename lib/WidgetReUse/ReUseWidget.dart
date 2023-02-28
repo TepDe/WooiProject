@@ -165,95 +165,60 @@ class ReUseWidget extends GetxController {
                   fontWeight: FontWeight.bold),
             ),
           ),
-
-          Divider(color: theme.deepOrange,)
+          Divider(
+            color: theme.deepOrange,
+          )
         ],
       ),
     );
   }
 
   unitTwoHomeScreen() {
-    return Padding(
-      padding: EdgeInsets.only(left: 18.0, top: 30, right: 18),
-      child: Container(
-        width: Get.width,
-        height: 220,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey,
-              blurRadius: 2,
-              //offset: Offset(4, 8), // Shadow position
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Flexible(
-                child: Row(
-                  children: [
-                    Flexible(
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: unitTwoText(label: "Total package", qty: '21'),
-                      ),
+    return Container(
+      width: Get.width,
+      height: 220,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.grey,
+        //     blurRadius: 2,
+        //     //offset: Offset(4, 8), // Shadow position
+        //   ),
+        // ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Flexible(
+              child: Row(
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: unitTwoText(label: "Total package", qty: '21'),
                     ),
-                    Flexible(
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: unitTwoText(label: "In process", qty: '14'),
-                      ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: unitTwoText(label: "In process", qty: '14'),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Flexible(
+            ),
+            Flexible(
                 flex: 1,
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: theme.orange,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              'Total Shipped',
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: theme.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: Text('102',
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    color: theme.grey,
-                                    fontWeight: FontWeight.bold)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
+                  child: unitTwoText(label: "Total Shipped", qty: '14'),
+                ))
+          ],
         ),
       ),
     );
@@ -263,7 +228,7 @@ class ReUseWidget extends GetxController {
     return Container(
       width: Get.width,
       decoration: BoxDecoration(
-        color: theme.orange,
+        color: theme.midGrey,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
@@ -287,7 +252,7 @@ class ReUseWidget extends GetxController {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       fontSize: 25,
-                      color: theme.grey,
+                      color: theme.black,
                       fontWeight: FontWeight.bold)),
             ),
           ],
@@ -296,8 +261,8 @@ class ReUseWidget extends GetxController {
     );
   }
 
-
-  unitThreeHomeScreen({icon, lable, price, funtion, context,latitude,longitude}) {
+  unitThreeHomeScreen(
+      {icon, lable, price, funtion, context, latitude, longitude}) {
     return Padding(
       padding: const EdgeInsets.only(top: 12.0, left: 18, right: 18),
       child: InkWell(
@@ -484,5 +449,68 @@ class ReUseWidget extends GetxController {
     );
   }
 
-
+  renderListView() {
+    return Expanded(
+      child: ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: 12,
+          itemBuilder: (BuildContext context, int index) {
+            return LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(8.0),
+                      height: constraints.maxWidth / 3.9,
+                      width: constraints.maxWidth / 3.9,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle, color: theme.litestOrange),
+                      child: Align(
+                          alignment: Alignment.center,
+                          child: FittedBox(
+                            fit: BoxFit.fill,
+                            child: Text(
+                              "Done",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: theme.liteGreen,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            'Lipsum generator',
+                            style: TextStyle(
+                                fontSize: constraints.maxWidth / 25,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        SizedBox(
+                          ///color: Colors.red,
+                          width: constraints.maxWidth / 1.45,
+                          child: Text(
+                            'Lorem ipsum គ្រាន់តែជាអត្ថបទអត់ចេះសោះនៃឧស្សាហកម្មបោះពុម្ពនិងកំណត់ប្រភេទ។ Lorem Ipsum គឺជាអត្ថបទថុមស',
+                            style: TextStyle(
+                              fontSize: constraints.maxWidth / 30,
+                            ),
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                );
+              },
+            );
+          }),
+    );
+  }
 }
