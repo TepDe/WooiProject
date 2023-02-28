@@ -391,10 +391,8 @@ class WidgetReUse extends GetxController {
   reuseButton({label, function}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: FlatButton(
-          padding: const EdgeInsets.all(8.0),
-          minWidth: Get.width,
-          color: theme.yellow,
+      child: ElevatedButton(
+
           onPressed: () {
             if (function == 'storeUserLogin') {
               print('${nameControl.text} ${phoneControl.text}');
