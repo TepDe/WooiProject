@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -10,13 +11,14 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationScreenState extends State<NotificationScreen> {
   final themes = ThemesApp();
+  final reUse =ReUseWidget();
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: Column(
-          children: [Text('NotificationScreen'), renderListView()],
+          children: [Text('NotificationScreen'), reUse.renderListView()],
         ),
       ),
     );
