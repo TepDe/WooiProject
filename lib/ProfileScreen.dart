@@ -13,10 +13,9 @@ class ProfileScreen extends StatelessWidget {
             // wdTextField(),
             // wdTextField(),
             // wdTextField(),
-            wr.topButtonLeft(icon: Icons.arrow_back_ios_sharp),
-            wr.unitProfile(),
-            wr.signInForm(),
-
+            // wr.topButtonLeft(icon: Icons.arrow_back_ios_sharp),
+            // wr.unitProfile(),
+            // wr.signInForm(),
           ],
 
         ),
