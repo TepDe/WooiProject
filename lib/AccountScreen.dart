@@ -51,21 +51,19 @@ class _AccountScreenState extends State<AccountScreen> {
             //       }),
             // ),
             Text('${driverList.length}'),
-            CircularProgressIndicator(),
 
-            Flexible(
-              child: ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: driverList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Column(
-                      children: [
-                        Text('Entry ${driverList[index]['longitude']}'),
-                        Text('Entry ${driverList[index]['latitude']}'),
-                      ],
-                    );
-                  }),
-            ),
+            LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                return Text(
+                  'This is some text that may overflowThis is some text that may overflowThis is some text that may overflowThis is some text that may overflowThis is some text that may overflowThis is some text that may overflowThis is some text that may overflowThis is some text that may overflow',
+                  style: TextStyle(
+                    fontSize: constraints.maxWidth / 20,
+                  ),
+                  softWrap: true,
+                  overflow: TextOverflow.fade,
+                );
+              },
+            )
           ],
         ),
       ),
