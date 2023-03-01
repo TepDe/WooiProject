@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wooiproject/HomeScreen.dart';
 import 'package:wooiproject/MapScreen.dart';
 import 'package:wooiproject/ProfileScreen.dart';
+import 'package:wooiproject/RenderListDetail.dart';
 import 'package:wooiproject/ViewScreen.dart';
 import 'package:wooiproject/WidgetReUse/SuperController.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
@@ -75,17 +76,17 @@ class ReUseWidget extends GetxController {
       padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-              iconSize: 40,
-              splashRadius: 30,
-              onPressed: () {},
-              icon: Center(
-                child: Icon(
-                  Icons.menu,
-                  color: theme.deepOrange,
-                ),
-              )),
+        children: const [
+          // IconButton(
+          //     iconSize: 40,
+          //     splashRadius: 30,
+          //     onPressed: () {},
+          //     icon: Center(
+          //       child: Icon(
+          //         Icons.menu,
+          //         color: theme.deepOrange,
+          //       ),
+          //     )),
           // Align(
           //     alignment: Alignment.topCenter,
           //     child: Image.asset(
@@ -176,6 +177,7 @@ class ReUseWidget extends GetxController {
   unitTwoHomeScreen() {
     return Container(
       width: Get.width,
+      margin: EdgeInsets.only(top: 30),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -185,17 +187,51 @@ class ReUseWidget extends GetxController {
           Row(
             children: [
               Flexible(
-                child: unitTwoText(label: "Total package", qty: '21'),
+                child: InkWell(
+                  onTap: () {
+                    Get.to(
+                      RenderListDetail(),
+                      arguments: 0,
+                    );
+                  },
+                  child: unitTwoText(label: "Total package", qty: '21'),
+                ),
               ),
               Flexible(
-                child: unitTwoText(label: "In process", qty: '14'),
+                child: InkWell(
+                  onTap: () {
+                    Get.to(
+                      RenderListDetail(),
+                      arguments: 1,
+                    );
+                  },
+                  child: unitTwoText(label: "In process", qty: '14'),
+                ),
               ),
             ],
           ),
           Row(
             children: [
-              Flexible(child: unitTwoText(label: "Total Shipped", qty: '14')),
-              Flexible(child: unitTwoText(label: "Total Shipped", qty: '14')),
+              Flexible(
+                  child: InkWell(
+                onTap: () {
+                  Get.to(
+                    RenderListDetail(),
+                    arguments: 2,
+                  );
+                },
+                child: unitTwoText(label: "Complete", qty: '14'),
+              )),
+              Flexible(
+                  child: InkWell(
+                onTap: () {
+                  Get.to(
+                    RenderListDetail(),
+                    arguments: 3,
+                  );
+                },
+                child: unitTwoText(label: "Return Ship", qty: '14'),
+              )),
             ],
           )
         ],
@@ -210,7 +246,7 @@ class ReUseWidget extends GetxController {
       padding: EdgeInsets.all(9),
       margin: EdgeInsets.all(9),
       decoration: BoxDecoration(
-        color: theme.midGrey,
+        color: theme.white,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
@@ -227,20 +263,18 @@ class ReUseWidget extends GetxController {
           Text(
             '$label',
             style: TextStyle(
-                fontSize: 15,
-                color: theme.black,
-                fontWeight: FontWeight.bold),
+                fontSize: 12, color: theme.grey, fontWeight: FontWeight.bold),
           ),
-          Row(  
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Image.asset(
                 'assets/images/box.png',
                 height: 30,
                 width: 30,
+                color: theme.orange,
               ),
               Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text('$qty',
                       overflow: TextOverflow.ellipsis,
@@ -251,8 +285,8 @@ class ReUseWidget extends GetxController {
                   Text('pc',
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                          fontSize: 12,
-                          color: theme.black,
+                          fontSize: 10,
+                          color: theme.minGrey,
                           fontWeight: FontWeight.bold)),
                 ],
               ),
@@ -388,16 +422,97 @@ class ReUseWidget extends GetxController {
   final nameControl = TextEditingController();
   final phoneControl = TextEditingController();
 
-  reuseTextField({label}) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        controller: nameControl,
-        decoration: InputDecoration(
-          fillColor: Colors.blue,
-          border: OutlineInputBorder(),
-          hintText: '$label',
-        ),
+  reUseSearchBox({label}) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+          //color: theme.liteOrange,
+          //borderRadius: BorderRadius.circular(6),
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: theme.grey,
+          //     blurRadius: 4,
+          //     offset: Offset(0, 1), // Shadow position
+          //   ),
+          // ],
+          ),
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                  splashRadius: 25,
+                  onPressed: () {
+                    Get.back();
+                  },
+                  icon: Icon(Icons.arrow_back)),
+              const Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  'Total Package',
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.search,
+                    color: Colors.transparent,
+                  )),
+            ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            children: [
+              Flexible(
+                flex: 8,
+                child: TextField(
+                  controller: nameControl,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: theme.minGrey,
+                    hintText: 'Search',
+
+                    // contentPadding:
+                    // EdgeInsets.only(left: 14.0, bottom: 12.0, top: 12.0),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(25.7),
+                    ),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(25.7),
+                    ),
+                  ),
+                ),
+              ),
+              Flexible(
+                  child: IconButton(onPressed: () {}, icon: Icon(Icons.search)))
+            ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            children: [
+              Flexible(
+                  child: Container(
+                color: theme.grey,
+                width: Get.width,
+                height: 1,
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+              )),
+              const Text('Total: 12')
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -520,6 +635,65 @@ class ReUseWidget extends GetxController {
               },
             );
           }),
+    );
+  }
+
+  reUseCustomizeButton() {
+    return Container(
+      width: Get.width,
+      height: 50,
+      margin: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: theme.liteOrange,
+        borderRadius: BorderRadius.circular(6),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: theme.grey,
+        //     blurRadius: 4,
+        //     offset: Offset(0, 1), // Shadow position
+        //   ),
+        // ],
+      ),
+      child: TextButton.icon(
+        // style: ButtonStyle(
+        //   // overlayColor:
+        //   //     MaterialStateColor.resolveWith((states) => Colors.white70),
+        //
+        // ),
+        onPressed: () {},
+        icon: Image.asset(
+          'assets/images/box.png',
+          height: 20,
+          width: 20,
+          color: theme.orange,
+        ),
+        label: Text(
+          'Create',
+          style: TextStyle(
+            color: theme.orange,
+          ),
+        ),
+      ),
+    );
+  }
+
+  reuseTextField({label}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        controller: nameControl,
+        decoration: InputDecoration(
+          fillColor: Colors.blue,
+          border: OutlineInputBorder(),
+          hintText: '$label',
+        ),
+      ),
+    );
+  }
+
+  reUseListTotalPackage() {
+    return Column(
+      children: [reUseSearchBox(label: 'Search')],
     );
   }
 }
