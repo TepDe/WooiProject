@@ -52,7 +52,7 @@ class HomeScreen extends StatelessWidget {
                 wr.topBarHomeScreen(),
                 wr.unitOneHomeScreen(function: 'profile'),
                 wr.unitTwoHomeScreen(),
-                wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
+                //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
                 // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
               ],
           ),
