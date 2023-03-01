@@ -32,7 +32,13 @@ class _ViewScreenState extends State<ViewScreen> {
             bottomNavigationBar: BottomNavigationBar(
               items: [
                 BottomNavigationBarItem(
-                  icon: reUseIcon(icons: Icons.home),
+                  icon: Image.asset(
+                    'assets/images/home_icon.png',
+                    width:  30,
+                    height: 30,
+                    //alignment: Alignment.topRight,
+                   color: changeColor ?? themes.deepOrange,
+                  ),
                   label: 'Home',
                 ),
                 // BottomNavigationBarItem(
@@ -42,19 +48,20 @@ class _ViewScreenState extends State<ViewScreen> {
                 BottomNavigationBarItem(
                   icon: Stack(
                     children: <Widget>[
-                      Image.asset(
-                        'assets/images/box.png',
-                        scale: 16,
-                        alignment: Alignment.topRight,
-                        color: changeColor ?? themes.grey,
-                      ),
+                      // Image.asset(
+                      //   'assets/images/box.png',
+                      //   scale: 16,
+                      //   alignment: Alignment.topRight,
+                      //   color: changeColor ?? themes.grey,
+                      // ),
+                      Icon(Icons.notifications,size:40 ,),
                       Positioned(
                         right: 0,
                         child: Container(
                           padding: EdgeInsets.all(3),
                           decoration: BoxDecoration(
                             color: themes.red,
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius: BorderRadius.circular(60),
                           ),
                           child: const Text(
                             '+9',
@@ -90,7 +97,7 @@ class _ViewScreenState extends State<ViewScreen> {
               onTap: (index) {
                 setState(() {
                   selectedIndex = index;
-                  if (index == 1) {
+                  if (index == 0) {
                     changeColor = themes.deepOrange;
                   } else {
                     changeColor = themes.grey;
