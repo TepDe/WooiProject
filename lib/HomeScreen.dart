@@ -21,42 +21,44 @@ import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 //   }
 // }
 
-
 class HomeScreen extends StatelessWidget {
-  final wr = ReUseWidget();
+  final reUse = ReUseWidget();
   final theme = ThemesApp();
   final hsc = Get.put(HomeScreenController());
   var _controller;
+
   @override
   void dispose() {
-
     _controller.dispose();
-
   }
-  exitApp(){
+
+  exitApp() {
     SystemNavigator.pop();
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () =>exitApp(),
+      onWillPop: () => exitApp(),
       child: SafeArea(
-
         child: Scaffold(
           backgroundColor: Colors.white,
-            resizeToAvoidBottomInset: false,
-            body: SingleChildScrollView(
-              child: Column(
-              children: [
-                wr.topBarHomeScreen(),
-                wr.unitOneHomeScreen(function: 'profile'),
-                wr.unitTwoHomeScreen(),
-                //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
-                // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
-              ],
+          resizeToAvoidBottomInset: false,
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  reUse.topBarHomeScreen(),
+                  reUse.unitOneHomeScreen(function: 'profile'),
+                  reUse.unitTwoHomeScreen(),
+                ],
+              ),
+              reUse.reUseCustomizeButton(),
+              //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
+              // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
+            ],
           ),
-            ),
         ),
       ),
     );
@@ -70,19 +72,18 @@ class HomeScreenController extends GetxController {
     super.onInit();
     getUserLocation();
   }
+
   late Position position;
   late LatLng currentPostion;
   var latitude = 0.0.obs;
-  var longitude = 0.0.obs ;
+  var longitude = 0.0.obs;
+
   void getUserLocation() async {
     position = await GeolocatorPlatform.instance.getCurrentPosition();
     update();
     currentPostion = LatLng(position.latitude, position.longitude);
-    latitude .value= position.latitude;
+    latitude.value = position.latitude;
     longitude.value = position.longitude;
     update();
   }
-
 }
-
-
