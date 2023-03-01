@@ -86,13 +86,13 @@ class ReUseWidget extends GetxController {
                   color: theme.deepOrange,
                 ),
               )),
-          Align(
-              alignment: Alignment.topCenter,
-              child: Image.asset(
-                'assets/images/WooiIcon.png',
-                height: 100,
-                width: 100,
-              )),
+          // Align(
+          //     alignment: Alignment.topCenter,
+          //     child: Image.asset(
+          //       'assets/images/WooiIcon.png',
+          //       height: 100,
+          //       width: 100,
+          //     )),
           SizedBox(
             height: 0,
             width: 0,
@@ -115,13 +115,13 @@ class ReUseWidget extends GetxController {
             children: [
               Text(
                 'Good Morning',
-                style:
-                    TextStyle(color: theme.black, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: theme.darkGrey, fontWeight: FontWeight.bold),
               ),
               Text('ID 003121',
                   style: TextStyle(
                       fontSize: 20,
-                      color: theme.grey,
+                      color: theme.black,
                       fontWeight: FontWeight.bold)),
             ],
           ),
@@ -176,50 +176,29 @@ class ReUseWidget extends GetxController {
   unitTwoHomeScreen() {
     return Container(
       width: Get.width,
-      height: 220,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: Colors.grey,
-        //     blurRadius: 2,
-        //     //offset: Offset(4, 8), // Shadow position
-        //   ),
-        // ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Flexible(
-              child: Row(
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: unitTwoText(label: "Total package", qty: '21'),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: unitTwoText(label: "In process", qty: '14'),
-                    ),
-                  ),
-                ],
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Flexible(
+                child: unitTwoText(label: "Total package", qty: '21'),
               ),
-            ),
-            Flexible(
-                flex: 1,
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: unitTwoText(label: "Total Shipped", qty: '14'),
-                ))
-          ],
-        ),
+              Flexible(
+                child: unitTwoText(label: "In process", qty: '14'),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Flexible(child: unitTwoText(label: "Total Shipped", qty: '14')),
+              Flexible(child: unitTwoText(label: "Total Shipped", qty: '14')),
+            ],
+          )
+        ],
       ),
     );
   }
@@ -227,36 +206,59 @@ class ReUseWidget extends GetxController {
   unitTwoText({label, qty}) {
     return Container(
       width: Get.width,
+      height: 100,
+      padding: EdgeInsets.all(9),
+      margin: EdgeInsets.all(9),
       decoration: BoxDecoration(
         color: theme.midGrey,
         borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            blurRadius: 2,
+            //offset: Offset(4, 8), // Shadow position
+          ),
+        ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                '$label',
-                style: TextStyle(
-                    fontSize: 15,
-                    color: theme.black,
-                    fontWeight: FontWeight.bold),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            '$label',
+            style: TextStyle(
+                fontSize: 15,
+                color: theme.black,
+                fontWeight: FontWeight.bold),
+          ),
+          Row(  
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image.asset(
+                'assets/images/box.png',
+                height: 30,
+                width: 30,
               ),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Text('$qty',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      fontSize: 25,
-                      color: theme.black,
-                      fontWeight: FontWeight.bold)),
-            ),
-          ],
-        ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text('$qty',
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 25,
+                          color: theme.black,
+                          fontWeight: FontWeight.bold)),
+                  Text('pc',
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: theme.black,
+                          fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -273,8 +275,15 @@ class ReUseWidget extends GetxController {
         },
         child: Container(
           decoration: BoxDecoration(
-            color: theme.orange,
+            color: theme.midGrey,
             borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey,
+                blurRadius: 2,
+                //offset: Offset(4, 8), // Shadow position
+              ),
+            ],
           ),
           child: Padding(
             padding: const EdgeInsets.all(12.0),
