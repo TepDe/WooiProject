@@ -18,15 +18,21 @@ class _RenderListDetailState extends State<RenderListDetail> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    if(argumentData == 0){
+      renderList =  reUse.reUseListPackage();
+    }else{
+      renderList =  reUse.ruTextBox();
+    }
+
 
   }
+  var renderList ;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: reUse.reUseListTotalPackage(),
-      ),
+          body: renderList),
     );
   }
 }
