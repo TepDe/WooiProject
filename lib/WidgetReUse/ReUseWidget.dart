@@ -422,7 +422,7 @@ class ReUseWidget extends GetxController {
   final nameControl = TextEditingController();
   final phoneControl = TextEditingController();
 
-  reUseSearchBox({label}) {
+  reUseHeader({title, label}) {
     return Container(
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -448,10 +448,10 @@ class ReUseWidget extends GetxController {
                     Get.back();
                   },
                   icon: Icon(Icons.arrow_back)),
-              const Align(
+              Align(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  'Total Package',
+                  title?? '',
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black,
@@ -512,7 +512,129 @@ class ReUseWidget extends GetxController {
               const Text('Total: 12')
             ],
           ),
+          // reUseListview()
         ],
+      ),
+    );
+  }
+
+  reTotalPackageListview() {
+    return Flexible(
+      child: ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: 6,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              width: Get.width,
+              margin: EdgeInsets.all(6),
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: theme.liteGrey,
+                borderRadius: BorderRadius.circular(6),
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.grey,
+                    blurRadius: 4,
+                    offset: Offset(0, 1), // Shadow position
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUseText(
+                          weight: FontWeight.w400,
+                          size: 12.0,
+                          color: theme.grey,
+                          content: 'SHIPPING ID :    '),
+                      reUseText(
+                          weight: FontWeight.bold,
+                          size: 16.0,
+                          color: theme.Blue,
+                          content: '000214'),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUseText(
+                          weight: FontWeight.bold,
+                          size: 12.0,
+                          color: theme.grey,
+                          content: 'Location'),
+                      reUseText(
+                          size: 12.0,
+                          weight: FontWeight.bold,
+                          color: theme.grey,
+                          content: 'Phone number'),
+                      reUseText(
+                          size: 12.0,
+                          weight: FontWeight.bold,
+                          color: theme.grey,
+                          content: 'Qty'),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUseText(
+                          size: 14.0,
+                          color: theme.black,
+                          content: 'Phnom penh000000000000000000',
+                          weight: FontWeight.w500),
+                      reUseText(
+                          size: 14.0,
+                          color: theme.black,
+                          weight: FontWeight.w500,
+                          content: '0215489621'),
+                      reUseText(
+                          size: 14.0,
+                          color: theme.black,
+                          content: '10',
+                          weight: FontWeight.w500),
+                    ],
+                  ),
+                  Divider(
+                    color: theme.grey,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUseText(
+                          size: 12.0,
+                          weight: FontWeight.bold,
+                          color: theme.grey,
+                          content: 'Status'),
+                      reUseText(
+                          size: 12.0,
+                          color: theme.liteGreen,
+                          content: 'PENDING',
+                          weight: FontWeight.w900),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          }),
+    );
+  }
+
+  reUseText({content, size, weight, color}) {
+    return Flexible(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 3),
+        child: Text(
+          content,
+          maxLines: 2,
+          style: TextStyle(
+              fontSize: size ?? 12,
+              color: color ?? theme.black,
+              fontWeight: weight ?? FontWeight.normal),
+        ),
       ),
     );
   }
@@ -691,9 +813,9 @@ class ReUseWidget extends GetxController {
     );
   }
 
-  reUseListTotalPackage() {
+  reUseListPackage() {
     return Column(
-      children: [reUseSearchBox(label: 'Search')],
+      children: [reUseHeader(title: 'Total Package',label: 'Search'), reTotalPackageListview()],
     );
   }
 }
