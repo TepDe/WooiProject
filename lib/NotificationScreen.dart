@@ -11,14 +11,14 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationScreenState extends State<NotificationScreen> {
   final themes = ThemesApp();
-  final reUse =ReUseWidget();
+  final reUse = ReUseWidget();
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: Column(
-          children: [Text('NotificationScreen'), reUse.renderListView()],
+          children: [reUse.reUseTopBar(name: 'Notification'), reUse.renderListView()],
         ),
       ),
     );
