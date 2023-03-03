@@ -126,17 +126,17 @@ class ReUseWidget extends GetxController {
                       fontWeight: FontWeight.bold)),
             ],
           ),
-          InkWell(
-            onTap: () {
-              if (function == 'profile') {
-                Get.to(ProfileScreen());
-              }
-            },
-            child: Icon(
-              Icons.account_circle,
-              size: 60,
-            ),
-          )
+          // InkWell(
+          //   onTap: () {
+          //     if (function == 'profile') {
+          //       Get.to(ProfileScreen());
+          //     }
+          //   },
+          //   child: Icon(
+          //     Icons.account_circle,
+          //     size: 60,
+          //   ),
+          // )
         ],
       ),
     );
@@ -177,10 +177,17 @@ class ReUseWidget extends GetxController {
   unitTwoHomeScreen() {
     return Container(
       width: Get.width,
-      margin: EdgeInsets.only(top: 30),
+      margin: EdgeInsets.only(top: 30, right: 10, left: 10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            blurRadius: 1,
+            //offset: Offset(4, 8), // Shadow position
+          ),
+        ],
       ),
       child: Column(
         children: [
@@ -194,7 +201,11 @@ class ReUseWidget extends GetxController {
                       arguments: 0,
                     );
                   },
-                  child: unitTwoText(label: "Total package", qty: '21'),
+                  child: unitTwoText(
+                    label: "Total package",
+                    qty: '21',
+                    assetsIcon: 'assets/images/box.png',
+                  ),
                 ),
               ),
               Flexible(
@@ -205,7 +216,11 @@ class ReUseWidget extends GetxController {
                       arguments: 1,
                     );
                   },
-                  child: unitTwoText(label: "In process", qty: '14'),
+                  child: unitTwoText(
+                    label: "In process",
+                    qty: '14',
+                    assetsIcon: 'assets/images/process.png',
+                  ),
                 ),
               ),
             ],
@@ -220,7 +235,11 @@ class ReUseWidget extends GetxController {
                     arguments: 2,
                   );
                 },
-                child: unitTwoText(label: "Complete", qty: '14'),
+                child: unitTwoText(
+                    label: "Complete",
+                    qty: '14',
+                    assetsIcon: 'assets/images/check.png',
+                    assetsIconColor: theme.liteGreen),
               )),
               Flexible(
                   child: InkWell(
@@ -230,7 +249,11 @@ class ReUseWidget extends GetxController {
                     arguments: 3,
                   );
                 },
-                child: unitTwoText(label: "Return Ship", qty: '14'),
+                child: unitTwoText(
+                    label: "Return Ship",
+                    qty: '14',
+                    assetsIcon: 'assets/images/return-box.png',
+                    assetsIconColor: theme.red),
               )),
             ],
           )
@@ -239,7 +262,7 @@ class ReUseWidget extends GetxController {
     );
   }
 
-  unitTwoText({label, qty}) {
+  unitTwoText({label, qty, assetsIcon, assetsIconColor}) {
     return Container(
       width: Get.width,
       height: 100,
@@ -248,13 +271,13 @@ class ReUseWidget extends GetxController {
       decoration: BoxDecoration(
         color: theme.white,
         borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey,
-            blurRadius: 2,
-            //offset: Offset(4, 8), // Shadow position
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.grey,
+        //     blurRadius: 1,
+        //     //offset: Offset(4, 8), // Shadow position
+        //   ),
+        // ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -269,19 +292,25 @@ class ReUseWidget extends GetxController {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Image.asset(
-                'assets/images/box.png',
+                assetsIcon ?? null,
                 height: 30,
                 width: 30,
-                color: theme.orange,
+                color: assetsIconColor ?? theme.orange,
               ),
               Row(
                 children: [
-                  Text('$qty',
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 25,
-                          color: theme.black,
-                          fontWeight: FontWeight.bold)),
+                  // Text('$qty',
+                  //     overflow: TextOverflow.ellipsis,
+                  //     style: TextStyle(
+                  //         fontSize: 25,
+                  //         color: theme.black,
+                  //         fontWeight: FontWeight.bold)
+                  // ),
+                  reUseText(
+                      content: '$qty',
+                      size: 32.0,
+                      weight: FontWeight.bold,
+                      color: theme.darkGrey),
                   Text('pc',
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -421,6 +450,7 @@ class ReUseWidget extends GetxController {
 
   final nameControl = TextEditingController();
   final phoneControl = TextEditingController();
+  final dialogPhoneNum = TextEditingController();
 
   reUseHeader({title, label}) {
     return Container(
@@ -451,7 +481,7 @@ class ReUseWidget extends GetxController {
               Align(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  title?? '',
+                  title ?? '',
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black,
@@ -472,29 +502,46 @@ class ReUseWidget extends GetxController {
           Row(
             children: [
               Flexible(
-                flex: 8,
-                child: TextField(
-                  controller: nameControl,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: theme.minGrey,
-                    hintText: 'Search',
-
-                    // contentPadding:
-                    // EdgeInsets.only(left: 14.0, bottom: 12.0, top: 12.0),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.circular(25.7),
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.circular(25.7),
+                flex: 5,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 12.0),
+                  child: TextField(
+                    controller: nameControl,
+                    decoration: InputDecoration(
+                      filled: true,
+                      hintStyle: TextStyle(fontSize: 12),
+                      fillColor: theme.midGrey,
+                      hintText: 'Search ID or Phone number',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide.none),
+                      // contentPadding:
+                      // EdgeInsets.only(left: 14.0, bottom: 12.0, top: 12.0),
+                      // focusedBorder: OutlineInputBorder(
+                      //   borderSide: BorderSide(color: Colors.white),
+                      //   borderRadius: BorderRadius.circular(25.7),
+                      // ),
+                      // enabledBorder: UnderlineInputBorder(
+                      //   borderSide: BorderSide(color: Colors.white),
+                      //   borderRadius: BorderRadius.circular(25.7),
+                      // ),
                     ),
                   ),
                 ),
               ),
               Flexible(
-                  child: IconButton(onPressed: () {}, icon: Icon(Icons.search)))
+                  flex: 1,
+                  child: CircleAvatar(
+                    backgroundColor: theme.litestOrange,
+                    radius: 25,
+                    child: IconButton(
+                        splashRadius: 20,
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.search,
+                          color: theme.orange,
+                        )),
+                  ))
             ],
           ),
           SizedBox(
@@ -542,7 +589,6 @@ class ReUseWidget extends GetxController {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -584,7 +630,7 @@ class ReUseWidget extends GetxController {
                       reUseText(
                           size: 14.0,
                           color: theme.black,
-                          content: 'Phnom penh000000000000000000',
+                          content: 'ខណ្ឌ ចំការមន',
                           weight: FontWeight.w500),
                       reUseText(
                           size: 14.0,
@@ -624,17 +670,15 @@ class ReUseWidget extends GetxController {
   }
 
   reUseText({content, size, weight, color}) {
-    return Flexible(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 3),
-        child: Text(
-          content,
-          maxLines: 2,
-          style: TextStyle(
-              fontSize: size ?? 12,
-              color: color ?? theme.black,
-              fontWeight: weight ?? FontWeight.normal),
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: Text(
+        content,
+        maxLines: 2,
+        style: TextStyle(
+            fontSize: size ?? 12,
+            color: color ?? theme.black,
+            fontWeight: weight ?? FontWeight.normal),
       ),
     );
   }
@@ -760,13 +804,13 @@ class ReUseWidget extends GetxController {
     );
   }
 
-  reUseCustomizeButton() {
+  reUseCustomizeButton(context) {
     return Container(
       width: Get.width,
       height: 50,
       margin: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: theme.liteOrange,
+        color: theme.litestOrange,
         borderRadius: BorderRadius.circular(6),
         // boxShadow: [
         //   BoxShadow(
@@ -782,7 +826,62 @@ class ReUseWidget extends GetxController {
         //   //     MaterialStateColor.resolveWith((states) => Colors.white70),
         //
         // ),
-        onPressed: () {},
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: reUseText(
+                  content: 'Create Package',
+                  weight: FontWeight.bold,
+                  size: 18.0),
+              // content: Text('Result is'),
+              actions: [
+                reuseTextField(textIcon: Icons.phone, label: 'Phone Number'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    IconButton(
+                        onPressed: () {}, icon: Icon(Icons.navigate_before)),
+                    const SizedBox(
+                      width: 60,
+                      child: TextField(
+                        //controller: dialogPhoneNum,
+                        decoration: InputDecoration(
+                          //icon: Icon(textIcon ?? null),
+                          // fillColor: theme.liteGrey,
+                          border: OutlineInputBorder(),
+                          //border: InputBorder.none,
+                          hintStyle: TextStyle(fontSize: 12),
+                          //filled: true,
+                          hintText: 'Qty',
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                        onPressed: () {}, icon: Icon(Icons.navigate_next)),
+                  ],
+                ),
+                reuseTextField(label: 'Location', textIcon: Icons.location_on),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Cancel')),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('OK')),
+                  ],
+                )
+              ],
+            ),
+          );
+        },
         icon: Image.asset(
           'assets/images/box.png',
           height: 20,
@@ -799,14 +898,19 @@ class ReUseWidget extends GetxController {
     );
   }
 
-  reuseTextField({label}) {
+  reuseTextField({label, controller, textIcon}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
-        controller: nameControl,
+        controller: controller ?? dialogPhoneNum,
         decoration: InputDecoration(
-          fillColor: Colors.blue,
+          icon: Icon(textIcon ?? null),
+          // fillColor: theme.liteGrey,
           border: OutlineInputBorder(),
+          //border: InputBorder.none,
+
+          hintStyle: TextStyle(fontSize: 12),
+          //filled: true,
           hintText: '$label',
         ),
       ),
@@ -815,7 +919,10 @@ class ReUseWidget extends GetxController {
 
   reUseListPackage() {
     return Column(
-      children: [reUseHeader(title: 'Total Package',label: 'Search'), reTotalPackageListview()],
+      children: [
+        reUseHeader(title: 'Total Package', label: 'Search'),
+        reTotalPackageListview()
+      ],
     );
   }
 }
