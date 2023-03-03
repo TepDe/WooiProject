@@ -153,22 +153,37 @@ class ReUseWidget extends GetxController {
             name,
             style: TextStyle(
                 color: theme.deepOrange,
-                fontSize: 20,
+                fontSize: 28,
                 fontWeight: FontWeight.bold),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              name,
-              style: TextStyle(
-                  color: theme.deepOrange,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Your activity will record down here",
+                  style: TextStyle(
+                      color: theme.grey,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "15",
+                  style: TextStyle(
+                      color: theme.grey,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
           ),
           Divider(
-            color: theme.deepOrange,
-          )
+            color: theme.grey,
+          ),
         ],
       ),
     );
@@ -178,9 +193,11 @@ class ReUseWidget extends GetxController {
     return Container(
       width: Get.width,
       margin: EdgeInsets.only(top: 30, right: 10, left: 10),
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
+
         boxShadow: [
           BoxShadow(
             color: Colors.grey,
@@ -204,7 +221,10 @@ class ReUseWidget extends GetxController {
                   child: unitTwoText(
                     label: "Total package",
                     qty: '21',
+                    assetsIconColor: theme.dirt,
                     assetsIcon: 'assets/images/box.png',
+                    borderbottom: BorderSide(width:1, color:theme.liteGrey),
+                    borderright: BorderSide(width:1, color:theme.liteGrey)
                   ),
                 ),
               ),
@@ -220,6 +240,8 @@ class ReUseWidget extends GetxController {
                     label: "In process",
                     qty: '14',
                     assetsIcon: 'assets/images/process.png',
+                    borderbottom:BorderSide(width:1, color:theme.liteGrey),
+                    borderleft:BorderSide(width:1, color:theme.liteGrey)
                   ),
                 ),
               ),
@@ -239,6 +261,8 @@ class ReUseWidget extends GetxController {
                     label: "Complete",
                     qty: '14',
                     assetsIcon: 'assets/images/check.png',
+                    borderright: BorderSide(width:1, color:theme.liteGrey),
+                    bordertop: BorderSide(width:1, color:theme.liteGrey),
                     assetsIconColor: theme.liteGreen),
               )),
               Flexible(
@@ -253,7 +277,9 @@ class ReUseWidget extends GetxController {
                     label: "Return Ship",
                     qty: '14',
                     assetsIcon: 'assets/images/return-box.png',
-                    assetsIconColor: theme.red),
+                    bordertop: BorderSide(width:1, color:theme.liteGrey),
+                    borderleft: BorderSide(width:1, color:theme.liteGrey),
+                    assetsIconColor: theme.liteRed),
               )),
             ],
           )
@@ -262,15 +288,32 @@ class ReUseWidget extends GetxController {
     );
   }
 
-  unitTwoText({label, qty, assetsIcon, assetsIconColor}) {
+  unitTwoText({
+    label,
+    qty,
+    assetsIcon,
+    assetsIconColor,
+    borderbottom,
+    borderright,
+    borderleft,
+    bordertop,
+  }) {
     return Container(
       width: Get.width,
       height: 100,
       padding: EdgeInsets.all(9),
-      margin: EdgeInsets.all(9),
+      //margin: EdgeInsets.all(9),
       decoration: BoxDecoration(
-        color: theme.white,
-        borderRadius: BorderRadius.circular(10),
+        border: Border(
+          bottom:
+              borderbottom ?? BorderSide(width: 1.5, color: Colors.transparent),
+          right:
+              borderright ?? BorderSide(width: 1.5, color: Colors.transparent),
+          left: borderleft ?? BorderSide(width: 1.5, color: Colors.transparent),
+          top: bordertop ?? BorderSide(width: 1.5, color: Colors.transparent),
+        ),
+        // color: theme.white,
+        // borderRadius: BorderRadius.circular(10),
         // boxShadow: [
         //   BoxShadow(
         //     color: Colors.grey,
@@ -308,15 +351,15 @@ class ReUseWidget extends GetxController {
                   // ),
                   reUseText(
                       content: '$qty',
-                      size: 32.0,
+                      size: 24.0,
                       weight: FontWeight.bold,
                       color: theme.darkGrey),
-                  Text('pc',
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 10,
-                          color: theme.minGrey,
-                          fontWeight: FontWeight.bold)),
+                  // Text('pc',
+                  //     overflow: TextOverflow.ellipsis,
+                  //     style: TextStyle(
+                  //         fontSize: 10,
+                  //         color: theme.minGrey,
+                  //         fontWeight: FontWeight.bold)),
                 ],
               ),
             ],
@@ -752,8 +795,8 @@ class ReUseWidget extends GetxController {
                   children: [
                     Container(
                       margin: const EdgeInsets.all(8.0),
-                      height: constraints.maxWidth / 3.9,
-                      width: constraints.maxWidth / 3.9,
+                      height: constraints.maxWidth / 5,
+                      width: constraints.maxWidth /  5,
                       decoration: BoxDecoration(
                           shape: BoxShape.circle, color: theme.litestOrange),
                       child: Align(
@@ -789,7 +832,7 @@ class ReUseWidget extends GetxController {
                             style: TextStyle(
                               fontSize: constraints.maxWidth / 30,
                             ),
-                            maxLines: 3,
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             softWrap: true,
                           ),
@@ -864,8 +907,8 @@ class ReUseWidget extends GetxController {
                 ),
                 reuseTextField(label: 'Location', textIcon: Icons.location_on),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+                  mainAxisAlignment: MainAxisAlignment.end,
+                   children: [
                     TextButton(
                         onPressed: () {
                           Navigator.pop(context);
