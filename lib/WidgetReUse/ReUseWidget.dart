@@ -142,7 +142,7 @@ class ReUseWidget extends GetxController {
     );
   }
 
-  reUseTopBar({name}) {
+  reUseTopBar({name, context}) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Column(
@@ -179,6 +179,7 @@ class ReUseWidget extends GetxController {
                       fontWeight: FontWeight.bold),
                 ),
               ),
+              reUseSquareButton(icon: Icons.filter_alt_rounded),
             ],
           ),
           Divider(
@@ -186,6 +187,61 @@ class ReUseWidget extends GetxController {
           ),
         ],
       ),
+    );
+  }
+
+  // reUseSquareButton({icon}) {
+  //   return Material(
+  //     color: Colors.transparent,
+  //     child: InkWell(
+  //       onTap: () {},
+  //       splashColor: Colors.red,
+  //       child: Container(
+  //         height: 50,
+  //         width: 50,
+  //         decoration: BoxDecoration(
+  //           color: theme.litestOrange,
+  //           borderRadius: BorderRadius.circular(10),
+  //           // boxShadow: [
+  //           //   BoxShadow(
+  //           //     color: Colors.grey,
+  //           //     blurRadius: 1,
+  //           //     //offset: Offset(4, 8), // Shadow position
+  //           //   ),
+  //           // ],
+  //         ),
+  //         child: InkWell(
+  //           onTap: () {},
+  //           child: Icon(
+  //             icon ?? null,
+  //             color: theme.orange,
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  reUseSquareButton({icon}) {
+    return Container(
+      width: 40,
+      height: 40,
+      alignment: Alignment.center,
+
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(100),
+        child: InkWell(
+          onTap: () {
+            print("tapped");
+          },
+          child: Icon(
+            icon ?? null,
+            color: theme.orange,
+          ),
+        ),
+      ),
+      color: theme.litestOrange,
     );
   }
 
@@ -197,7 +253,6 @@ class ReUseWidget extends GetxController {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
-
         boxShadow: [
           BoxShadow(
             color: Colors.grey,
@@ -219,13 +274,12 @@ class ReUseWidget extends GetxController {
                     );
                   },
                   child: unitTwoText(
-                    label: "Total package",
-                    qty: '21',
-                    assetsIconColor: theme.dirt,
-                    assetsIcon: 'assets/images/box.png',
-                    borderbottom: BorderSide(width:1, color:theme.liteGrey),
-                    borderright: BorderSide(width:1, color:theme.liteGrey)
-                  ),
+                      label: "Total package",
+                      qty: '21',
+                      assetsIconColor: theme.dirt,
+                      assetsIcon: 'assets/images/box.png',
+                      borderbottom: BorderSide(width: 1, color: theme.liteGrey),
+                      borderright: BorderSide(width: 1, color: theme.liteGrey)),
                 ),
               ),
               Flexible(
@@ -237,12 +291,11 @@ class ReUseWidget extends GetxController {
                     );
                   },
                   child: unitTwoText(
-                    label: "In process",
-                    qty: '14',
-                    assetsIcon: 'assets/images/process.png',
-                    borderbottom:BorderSide(width:1, color:theme.liteGrey),
-                    borderleft:BorderSide(width:1, color:theme.liteGrey)
-                  ),
+                      label: "In process",
+                      qty: '14',
+                      assetsIcon: 'assets/images/process.png',
+                      borderbottom: BorderSide(width: 1, color: theme.liteGrey),
+                      borderleft: BorderSide(width: 1, color: theme.liteGrey)),
                 ),
               ),
             ],
@@ -261,8 +314,8 @@ class ReUseWidget extends GetxController {
                     label: "Complete",
                     qty: '14',
                     assetsIcon: 'assets/images/check.png',
-                    borderright: BorderSide(width:1, color:theme.liteGrey),
-                    bordertop: BorderSide(width:1, color:theme.liteGrey),
+                    borderright: BorderSide(width: 1, color: theme.liteGrey),
+                    bordertop: BorderSide(width: 1, color: theme.liteGrey),
                     assetsIconColor: theme.liteGreen),
               )),
               Flexible(
@@ -277,8 +330,8 @@ class ReUseWidget extends GetxController {
                     label: "Return Ship",
                     qty: '14',
                     assetsIcon: 'assets/images/return-box.png',
-                    bordertop: BorderSide(width:1, color:theme.liteGrey),
-                    borderleft: BorderSide(width:1, color:theme.liteGrey),
+                    bordertop: BorderSide(width: 1, color: theme.liteGrey),
+                    borderleft: BorderSide(width: 1, color: theme.liteGrey),
                     assetsIconColor: theme.liteRed),
               )),
             ],
@@ -796,7 +849,7 @@ class ReUseWidget extends GetxController {
                     Container(
                       margin: const EdgeInsets.all(8.0),
                       height: constraints.maxWidth / 5,
-                      width: constraints.maxWidth /  5,
+                      width: constraints.maxWidth / 5,
                       decoration: BoxDecoration(
                           shape: BoxShape.circle, color: theme.litestOrange),
                       child: Align(
@@ -884,10 +937,10 @@ class ReUseWidget extends GetxController {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    IconButton(
-                        onPressed: () {}, icon: Icon(Icons.navigate_before)),
-                    const SizedBox(
+                    IconButton(onPressed: () {}, icon: Icon(Icons.remove)),
+                    Container(
                       width: 60,
+                      margin: const EdgeInsets.symmetric(horizontal: 30),
                       child: TextField(
                         //controller: dialogPhoneNum,
                         decoration: InputDecoration(
@@ -901,14 +954,13 @@ class ReUseWidget extends GetxController {
                         ),
                       ),
                     ),
-                    IconButton(
-                        onPressed: () {}, icon: Icon(Icons.navigate_next)),
+                    IconButton(onPressed: () {}, icon: Icon(Icons.add)),
                   ],
                 ),
                 reuseTextField(label: 'Location', textIcon: Icons.location_on),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                   children: [
+                  children: [
                     TextButton(
                         onPressed: () {
                           Navigator.pop(context);
