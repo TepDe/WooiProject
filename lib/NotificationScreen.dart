@@ -18,7 +18,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return SafeArea(
       child: Scaffold(
         body: Column(
-          children: [reUse.reUseTopBar(name: 'Notification'), reUse.renderListView()],
+          children: [reUse.reUseTopBar(name: 'Notification',context: context), reUse.renderListView()],
         ),
       ),
     );
