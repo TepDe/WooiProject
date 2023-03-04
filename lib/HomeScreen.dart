@@ -38,33 +38,43 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var  viewHeight = MediaQuery.of(context).size.height *0.3;
+
     return WillPopScope(
       onWillPop: () => exitApp(),
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.white,
           resizeToAvoidBottomInset: false,
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          body: Stack(
             children: [
+              Container(
+                height: viewHeight,
+                decoration: new BoxDecoration(
+                  color: theme.liteOrange,
+                  borderRadius: BorderRadius.vertical(
+                      bottom: Radius.elliptical(
+                          MediaQuery.of(context).size.width, 100.0)),
+                ),
+              ),
               Column(
                 children: [
                   reUse.topBarHomeScreen(),
                   reUse.unitOneHomeScreen(function: 'profile'),
                   reUse.unitTwoHomeScreen(),
+
+                  //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
+                  // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
                 ],
               ),
-              reUse.reUseCustomizeButton(context),
-              //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
-              // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
+              Align(alignment: Alignment.bottomCenter,
+                  child: reUse.reUseCustomizeButton(context),)
             ],
           ),
         ),
       ),
     );
   }
-
-
 }
 
 class HomeScreenController extends GetxController {
