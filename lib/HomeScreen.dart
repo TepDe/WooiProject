@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var  viewHeight = MediaQuery.of(context).size.height *0.3;
+    var viewHeight = MediaQuery.of(context).size.height * 0.3;
 
     return WillPopScope(
       onWillPop: () => exitApp(),
@@ -62,13 +62,13 @@ class HomeScreen extends StatelessWidget {
                   reUse.topBarHomeScreen(),
                   reUse.unitOneHomeScreen(function: 'profile'),
                   reUse.unitTwoHomeScreen(),
-
                   //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
                   // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
+                  reUse.renderListView(),
+                  reUse.reUseCustomizeButton(context)
                 ],
               ),
-              Align(alignment: Alignment.bottomCenter,
-                  child: reUse.reUseCustomizeButton(context),)
+
             ],
           ),
         ),
