@@ -126,17 +126,17 @@ class ReUseWidget extends GetxController {
                       fontWeight: FontWeight.bold)),
             ],
           ),
-          // InkWell(
-          //   onTap: () {
-          //     if (function == 'profile') {
-          //       Get.to(ProfileScreen());
-          //     }
-          //   },
-          //   child: Icon(
-          //     Icons.account_circle,
-          //     size: 60,
-          //   ),
-          // )
+          InkWell(
+            onTap: () {
+              if (function == 'profile') {
+                Get.to(ProfileScreen());
+              }
+            },
+            child: Icon(
+              Icons.account_circle,
+              size: 60,
+            ),
+          )
         ],
       ),
     );
@@ -227,7 +227,6 @@ class ReUseWidget extends GetxController {
       width: 40,
       height: 40,
       alignment: Alignment.center,
-
       child: Material(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(100),
@@ -291,7 +290,7 @@ class ReUseWidget extends GetxController {
                     );
                   },
                   child: unitTwoText(
-                      label: "In process",
+                      label: "Pending",
                       qty: '14',
                       assetsIcon: 'assets/images/process.png',
                       borderbottom: BorderSide(width: 1, color: theme.liteGrey),
@@ -548,52 +547,52 @@ class ReUseWidget extends GetxController {
   final phoneControl = TextEditingController();
   final dialogPhoneNum = TextEditingController();
 
-  reUseHeader({title, label}) {
+  reUseHeader({headercolor, title, label}) {
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
-          //color: theme.liteOrange,
-          //borderRadius: BorderRadius.circular(6),
-          // boxShadow: [
-          //   BoxShadow(
-          //     color: theme.grey,
-          //     blurRadius: 4,
-          //     offset: Offset(0, 1), // Shadow position
-          //   ),
-          // ],
-          ),
+        color: headercolor,
+        //borderRadius: BorderRadius.circular(6),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: theme.grey,
+        //     blurRadius: 4,
+        //     offset: Offset(0, 1), // Shadow position
+        //   ),
+        // ],
+      ),
       child: Column(
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                  splashRadius: 25,
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: Icon(Icons.arrow_back)),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  title ?? '',
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                    splashRadius: 25,
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: Icon(Icons.arrow_back)),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    title ?? '',
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.search,
-                    color: Colors.transparent,
-                  )),
-            ],
-          ),
-          SizedBox(
-            height: 20,
+                IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.search,
+                      color: Colors.transparent,
+                    )),
+              ],
+            ),
           ),
           Row(
             children: [
@@ -606,9 +605,11 @@ class ReUseWidget extends GetxController {
                     decoration: InputDecoration(
                       filled: true,
                       hintStyle: TextStyle(fontSize: 12),
-                      fillColor: theme.midGrey,
+                      fillColor: theme.white,
                       hintText: 'Search ID or Phone number',
                       border: OutlineInputBorder(
+                          // borderSide:
+                          //      BorderSide(color:theme.minGrey ,width: 0.0),
                           borderRadius: BorderRadius.circular(10.0),
                           borderSide: BorderSide.none),
                       // contentPadding:
@@ -618,7 +619,7 @@ class ReUseWidget extends GetxController {
                       //   borderRadius: BorderRadius.circular(25.7),
                       // ),
                       // enabledBorder: UnderlineInputBorder(
-                      //   borderSide: BorderSide(color: Colors.white),
+                      //   borderSide: BorderSide(color: Colors.red),
                       //   borderRadius: BorderRadius.circular(25.7),
                       // ),
                     ),
@@ -639,29 +640,14 @@ class ReUseWidget extends GetxController {
                         )),
                   ))
             ],
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Row(
-            children: [
-              Flexible(
-                  child: Container(
-                color: theme.grey,
-                width: Get.width,
-                height: 1,
-                margin: const EdgeInsets.symmetric(horizontal: 10),
-              )),
-              const Text('Total: 12')
-            ],
-          ),
+          )
           // reUseListview()
         ],
       ),
     );
   }
 
-  reTotalPackageListview() {
+  reTotalPackageListview({removeStatus}) {
     return Flexible(
       child: ListView.builder(
           padding: const EdgeInsets.all(8),
@@ -670,7 +656,7 @@ class ReUseWidget extends GetxController {
             return Container(
               width: Get.width,
               margin: EdgeInsets.all(6),
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: theme.liteGrey,
                 borderRadius: BorderRadius.circular(6),
@@ -692,7 +678,7 @@ class ReUseWidget extends GetxController {
                           weight: FontWeight.w400,
                           size: 12.0,
                           color: theme.grey,
-                          content: 'SHIPPING ID :    '),
+                          content: 'SHIPPING ID :'),
                       reUseText(
                           weight: FontWeight.bold,
                           size: 16.0,
@@ -740,24 +726,28 @@ class ReUseWidget extends GetxController {
                           weight: FontWeight.w500),
                     ],
                   ),
-                  Divider(
-                    color: theme.grey,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      reUseText(
-                          size: 12.0,
-                          weight: FontWeight.bold,
+                  removeStatus == true
+                      ? Container()
+                      : Divider(
                           color: theme.grey,
-                          content: 'Status'),
-                      reUseText(
-                          size: 12.0,
-                          color: theme.liteGreen,
-                          content: 'PENDING',
-                          weight: FontWeight.w900),
-                    ],
-                  ),
+                        ),
+                  removeStatus == true
+                      ? Container()
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            reUseText(
+                                size: 12.0,
+                                weight: FontWeight.bold,
+                                color: theme.grey,
+                                content: 'Status'),
+                            reUseText(
+                                size: 12.0,
+                                color: theme.liteGreen,
+                                content: 'PENDING',
+                                weight: FontWeight.w900),
+                          ],
+                        ),
                 ],
               ),
             );
@@ -841,61 +831,7 @@ class ReUseWidget extends GetxController {
           padding: const EdgeInsets.all(8),
           itemCount: 12,
           itemBuilder: (BuildContext context, int index) {
-            return LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.all(8.0),
-                      height: constraints.maxWidth / 5,
-                      width: constraints.maxWidth / 5,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: theme.litestOrange),
-                      child: Align(
-                          alignment: Alignment.center,
-                          child: FittedBox(
-                            fit: BoxFit.fill,
-                            child: Text(
-                              "Done",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: theme.liteGreen,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          )),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            'Lipsum generator',
-                            style: TextStyle(
-                                fontSize: constraints.maxWidth / 25,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        SizedBox(
-                          ///color: Colors.red,
-                          width: constraints.maxWidth / 1.45,
-                          child: Text(
-                            'Lorem ipsum គ្រាន់តែជាអត្ថបទអត់ចេះសោះនៃឧស្សាហកម្មបោះពុម្ពនិងកំណត់ប្រភេទ។ Lorem Ipsum គឺជាអត្ថបទថុមស',
-                            style: TextStyle(
-                              fontSize: constraints.maxWidth / 30,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            softWrap: true,
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                );
-              },
-            );
+            return reUseNotificationBox();
           }),
     );
   }
@@ -1012,12 +948,90 @@ class ReUseWidget extends GetxController {
     );
   }
 
-  reUseListPackage() {
+  reUseListPackage({Title, headerColor, removeFoot}) {
     return Column(
       children: [
-        reUseHeader(title: 'Total Package', label: 'Search'),
-        reTotalPackageListview()
+        reUseHeader(title: Title, label: 'Search', headercolor: headerColor),
+        reTotalPackageListview(removeStatus: removeFoot)
       ],
+    );
+  }
+
+  reUseNotificationBox() {
+    return Container(
+      margin: EdgeInsets.all(6),
+      padding: EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        color: theme.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: theme.grey,
+            blurRadius: 1,
+            //offset: Offset(4, 8), // Shadow position
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                margin: EdgeInsets.only(left: 6, right: 16),
+                height: 60,
+                width: 3,
+                color: theme.liteGreen,
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 0, right: 16),
+                child: Image.asset(
+                  'assets/images/check.png',
+                  height: 30,
+                  width: 30,
+                  color: theme.liteGreen,
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      reUseText(
+                        content: 'Your package ID',
+                      ),
+                      reUseText(content: ' 000123', weight: FontWeight.bold),
+                    ],
+                  ),
+                  reUseText(content: '24/05/2023 03:36 PM'),
+                ],
+              ),
+            ],
+          ),
+          reUseStatusBox()
+        ],
+      ),
+    );
+  }
+
+  reUseStatusBox({accentcolor}) {
+    return Container(
+      margin: EdgeInsets.all(6),
+      padding: EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        color: theme.liteGreen,
+        borderRadius: BorderRadius.circular(10),
+        // boxShadow: [
+        //   BoxShadow(
+        //
+        //     color: theme.liteGreen,
+        //     blurRadius: 1,
+        //     //offset: Offset(4, 8), // Shadow position
+        //   ),
+        // ],
+      ),
+      child: reUseText(
+          content: 'Complete', color: theme.white, weight: FontWeight.w500),
     );
   }
 }
