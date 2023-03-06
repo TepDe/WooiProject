@@ -1,4 +1,6 @@
 // import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -46,15 +48,15 @@ class LogInScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    TextButton(
-                      onPressed: () {},
-                      child: Text('Register',
-                          style: TextStyle(
-                            // decoration: TextDecoration.underline,
-                            fontSize: 18,
-                            color: theme.deepOrange,
-                          )),
-                    ),
+                    // TextButton(
+                    //   onPressed: () {},
+                    //   child: Text('Register',
+                    //       style: TextStyle(
+                    //         // decoration: TextDecoration.underline,
+                    //         fontSize: 18,
+                    //         color: theme.deepOrange,
+                    //       )),
+                    // ),
                     TextButton(
                       onPressed: () {},
                       child: Text('Sign In',
@@ -115,8 +117,9 @@ class LogInScreen extends StatelessWidget {
                           },
                         );
                         lc.onUserSignIn(
-                            email: lc.userEmail.value.text.trim(),
-                            password: lc.userPassword.value.text.trim(),
+                            // email: lc.userEmail.value.text.trim(),
+                            email: 'user@gmail.com',
+                            password: '111111',
                             context: context);
                         // lc._phoneVerify(context);
                       },
@@ -173,9 +176,10 @@ class LoginController extends GetxController {
   var userEmail = TextEditingController().obs;
   var userPassword = TextEditingController().obs;
 
-  final glb = Get.put(GlobalController());
+  final glb = GlobalController();
 
   bool showDialogWiating = false;
+  int userID =0;
 
   onUserSignIn({email, password, context}) async {
     try {
@@ -183,10 +187,15 @@ class LoginController extends GetxController {
           email: email, password: password);
       if (userCredential.isNull) {
       } else {
+        glb.checkUserID(auth.currentUser?.uid);
         glb.UID.value = (userCredential.user?.uid).toString();
+        glb.storeUser(
+            uid: auth.currentUser!.uid,
+            email:email,
+            password: password,);
         userEmail.value.clear();
         userPassword.value.clear();
-        Get.to(const ViewScreen());
+        //Get.to(const ViewScreen());
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
