@@ -1,20 +1,34 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/LoginScreen.dart';
 
 class GlobalController {
-  var UID = ''.obs;
-  var userEmail = ''.obs;
+  var UID = '';
+  var userEmail = '';
 
   late Position position;
   late LatLng currentPostion;
-  var latitude = 0.0.obs;
-  var longitude = 0.0.obs;
+  var latitude = 0.0;
+  var longitude = 0.0;
+
+  var getLatitude;
+  var getLongitude;
+  var getIsGoOnline;
+  var getPhoneNumber;
+  var getEmail;
+  var getPassword;
+  var getUserName;
+  var getUserID;
+  var getUid;
 
   Future<Position> requestUserPermissionLocation() async {
     await Geolocator.requestPermission()
@@ -29,22 +43,22 @@ class GlobalController {
   getUserLocation() async {
     position = await GeolocatorPlatform.instance.getCurrentPosition();
     currentPostion = LatLng(position.latitude, position.longitude);
-    latitude.value = position.latitude;
-    longitude.value = position.longitude;
-    uploadLocation(la: latitude.value, long: longitude.value);
+    latitude = position.latitude;
+    longitude = position.longitude;
+    uploadLocation(la: latitude, long: longitude);
   }
 
   DatabaseReference goOnline = FirebaseDatabase.instance.ref("Driver");
   CollectionReference userSign =
-  FirebaseFirestore.instance.collection('UserSign');
+      FirebaseFirestore.instance.collection('UserSign');
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   reInsert() {
     firebaseAuth = FirebaseAuth.instance;
-    userSign.doc(UID.value).set({
-      "latitude": latitude.value.toString(),
-      "longitude": longitude.value.toString(),
+    userSign.doc(UID).set({
+      "latitude": latitude.toString(),
+      "longitude": longitude.toString(),
       "email": firebaseAuth.currentUser?.email.toString(),
       "uid": firebaseAuth.currentUser?.uid,
     });
@@ -52,17 +66,17 @@ class GlobalController {
 
   uploadLocation({la, long}) async {
     await userSign
-        .doc(UID.value)
+        .doc(UID)
         .update({"latitude": la.toString(), "longitude": long.toString()});
   }
 
   fetchUserData() async {
     DocumentSnapshot documentSnapshot =
-    await firestore.collection('UserSign').doc(UID.value.toString()).get();
-    userEmail.value = documentSnapshot.get('email');
-    longitude.value = documentSnapshot.get('longitude');
-    latitude.value = documentSnapshot.get('latitude');
-    UID.value = documentSnapshot.get('uid');
+        await firestore.collection('UserSign').doc(UID.toString()).get();
+    userEmail = documentSnapshot.get('email');
+    longitude = documentSnapshot.get('longitude');
+    latitude = documentSnapshot.get('latitude');
+    UID = documentSnapshot.get('uid');
   }
 
   userLogOut() async {
@@ -70,32 +84,121 @@ class GlobalController {
   }
 
   onCreatePackage() {}
+  final str = StorageKey();
 
   Future<void> storeUser({email, password, uid}) async {
     // CollectionReference collectionReference =
     //     FirebaseFirestore.instance.collection('Users').doc(uid);
+    position = await GeolocatorPlatform.instance.getCurrentPosition();
+    latitude = position.latitude;
+    longitude = position.longitude;
     var documentStream =
-    FirebaseFirestore.instance.collection('Users').doc(uid);
-    return documentStream
-        .set({'email': email, 'password': password, 'uid': uid})
+        FirebaseFirestore.instance.collection('Users').doc(uid);
+
+    int? userID;
+
+    var rng = Random();
+    userID = rng.nextInt(999999);
+
+    documentStream
+        .set({
+          'email': email,
+          'password': password,
+          'uid': uid,
+          'longitude': longitude,
+          'latitude': latitude,
+          'userID': userID!,
+        })
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+    onSaveLocalStorage(
+        latitude: latitude,
+        longitude: longitude,
+        email: email,
+        uid: uid,
+        userID: userID!,
+        password: password);
+  }
+
+  globalSetData({email, password, uid}) {
+    var documentStream =
+        FirebaseFirestore.instance.collection('Users').doc(uid);
+    documentStream
+        .set({
+          'email': email,
+          'password': password,
+          'uid': uid,
+          'longitude': longitude,
+          'latitude': latitude
+        })
         .then((value) => print("User Added"))
         .catchError((error) => print("Failed to add user: $error"));
   }
 
-  Future<void> checkUserID(uid) async {
+  ///Working
+  // Future<void> checkUserID(uid) async {
+  //   // CollectionReference collectionReference =
+  //   //     FirebaseFirestores.instance.collection('Users').doc(uid);
+  //   var documentStream =
+  //       FirebaseFirestore.instance.collection('Users').doc(uid);
+  //   await documentStream.get().then((DocumentSnapshot documentSnapshot) {
+  //     var a = documentSnapshot['email'];
+  //     var asdd = documentSnapshot['password'];
+  //     var dsaa = documentSnapshot['uid'];
+  //     print('$a, $asdd, $dsaa');
+  //     print('$a, $asdd, $dsaa');
+  //   });
+  // }
+
+  Future<int?> checkUserID(uid) async {
     // CollectionReference collectionReference =
     //     FirebaseFirestores.instance.collection('Users').doc(uid);
     var documentStream =
-    FirebaseFirestore.instance.collection('Users').doc(uid);
-    await documentStream.get()
-        .then((DocumentSnapshot documentSnapshot) {
-          var a = documentSnapshot['email'];
-          var asdd = documentSnapshot['password'];
-          var dsaa = documentSnapshot['uid'];
-          print('$a, $asdd, $dsaa');
-          print('$a, $asdd, $dsaa');
+        FirebaseFirestore.instance.collection('Users').doc(uid);
+    int? have;
+    await documentStream.get().then((DocumentSnapshot documentSnapshot) {
+      var notHave = documentSnapshot['userID'];
+      if (notHave == null) {
+        have = null;
+      } else {
+        have = notHave;
       }
-    );
+    });
+    return have;
   }
 
+  onSaveLocalStorage(
+      {latitude,
+      longitude,
+      isGoOnline,
+      phoneNumber,
+      email,
+      password,
+      userID,
+      userName,
+      uid}) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(str.latitude, latitude ?? 0.0);
+    await prefs.setDouble(str.longitude, longitude ?? 0.0);
+    await prefs.setBool(str.isGoOnline, isGoOnline ?? false);
+    await prefs.setInt(str.phoneNumber, phoneNumber ?? 0);
+    await prefs.setString(str.email, email ?? '');
+    await prefs.setString(str.userID, userID ?? '');
+    await prefs.setString(str.uid, uid ?? '');
+    await prefs.setString(str.password, password ?? '');
+    await prefs.setString(str.userName, userName ?? '');
+  }
+
+  onGetLocalStorage() async {
+    final prefs = await SharedPreferences.getInstance();
+    getLatitude = prefs.getDouble(str.latitude);
+    getLongitude = prefs.getDouble(str.longitude);
+    getIsGoOnline = prefs.getBool(str.isGoOnline);
+    getPhoneNumber = prefs.getInt(str.phoneNumber);
+    getEmail = prefs.getString(str.email);
+    getUserID = prefs.getString(str.userID);
+    getUid = prefs.getString(str.uid);
+    getPassword = prefs.getString(str.password);
+    getUserName = prefs.getString(str.userName);
+  }
 }
