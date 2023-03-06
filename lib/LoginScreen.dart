@@ -118,7 +118,8 @@ class LogInScreen extends StatelessWidget {
                         );
                         lc.onUserSignIn(
                             // email: lc.userEmail.value.text.trim(),
-                            email: 'user@gmail.com',
+                            email: 'd@gmail.com',
+                            // password: lc.userPassword.value.text.trim(),
                             password: '111111',
                             context: context);
                         // lc._phoneVerify(context);
@@ -179,7 +180,7 @@ class LoginController extends GetxController {
   final glb = GlobalController();
 
   bool showDialogWiating = false;
-  int userID =0;
+  int userID = 0;
 
   onUserSignIn({email, password, context}) async {
     try {
@@ -188,14 +189,15 @@ class LoginController extends GetxController {
       if (userCredential.isNull) {
       } else {
         glb.checkUserID(auth.currentUser?.uid);
-        glb.UID.value = (userCredential.user?.uid).toString();
-        glb.storeUser(
-            uid: auth.currentUser!.uid,
-            email:email,
-            password: password,);
+        glb.UID = (userCredential.user?.uid).toString();
+        await glb.storeUser(
+          uid: auth.currentUser!.uid,
+          email: email,
+          password: password,
+        );
         userEmail.value.clear();
         userPassword.value.clear();
-        //Get.to(const ViewScreen());
+        Get.to(const ViewScreen());
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
