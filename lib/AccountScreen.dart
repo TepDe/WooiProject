@@ -3,6 +3,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:wooiproject/GlobalControl/GlobalController.dart';
+import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/LoginScreen.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -18,17 +20,19 @@ class _AccountScreenState extends State<AccountScreen> {
       FirebaseDatabase.instance.reference().child("Driver").child("PlantData");
 
   List lists = [];
+  final str = StorageKey();
+  var getStr = GlobalController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
     driverMarkerList();
   }
 
   @override
   Widget build(BuildContext context) {
+    getStr.onGetLocalStorage();
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -51,19 +55,11 @@ class _AccountScreenState extends State<AccountScreen> {
             //       }),
             // ),
             Text('${driverList.length}'),
-
-            LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                return Text(
-                  'This is some text that may overflowThis is some text that may overflowThis is some text that may overflowThis is some text that may overflowThis is some text that may overflowThis is some text that may overflowThis is some text that may overflowThis is some text that may overflow',
-                  style: TextStyle(
-                    fontSize: constraints.maxWidth / 20,
-                  ),
-                  softWrap: true,
-                  overflow: TextOverflow.fade,
-                );
-              },
-            )
+            Text('${getStr.getLatitude}'),
+            Text('${getStr.getLongitude}'),
+            Text('${getStr.getUid}'),
+            Text('${getStr.getEmail}'),
+            Text('${getStr.getPassword}'),
           ],
         ),
       ),
