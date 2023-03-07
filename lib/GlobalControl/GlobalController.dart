@@ -14,12 +14,10 @@ import 'package:wooiproject/LoginScreen.dart';
 class GlobalController {
   var UID = '';
   var userEmail = '';
-
   late Position position;
   late LatLng currentPostion;
   var latitude = 0.0;
   var longitude = 0.0;
-
   var getLatitude;
   var getLongitude;
   var getIsGoOnline;
@@ -107,7 +105,7 @@ class GlobalController {
           'uid': uid,
           'longitude': longitude,
           'latitude': latitude,
-          'userID': userID!,
+          'userID': userID,
         })
         .then((value) => print("User Added"))
         .catchError((error) => print("Failed to add user: $error"));
@@ -116,7 +114,7 @@ class GlobalController {
         longitude: longitude,
         email: email,
         uid: uid,
-        userID: userID!,
+        userID: userID,
         password: password);
   }
 
@@ -183,22 +181,33 @@ class GlobalController {
     await prefs.setBool(str.isGoOnline, isGoOnline ?? false);
     await prefs.setInt(str.phoneNumber, phoneNumber ?? 0);
     await prefs.setString(str.email, email ?? '');
-    await prefs.setString(str.userID, userID ?? '');
     await prefs.setString(str.uid, uid ?? '');
     await prefs.setString(str.password, password ?? '');
     await prefs.setString(str.userName, userName ?? '');
   }
 
-  onGetLocalStorage() async {
+  Future<SharedPreferences> onGetLocalStorage() async {
     final prefs = await SharedPreferences.getInstance();
     getLatitude = prefs.getDouble(str.latitude);
     getLongitude = prefs.getDouble(str.longitude);
     getIsGoOnline = prefs.getBool(str.isGoOnline);
     getPhoneNumber = prefs.getInt(str.phoneNumber);
     getEmail = prefs.getString(str.email);
-    getUserID = prefs.getString(str.userID);
     getUid = prefs.getString(str.uid);
     getPassword = prefs.getString(str.password);
     getUserName = prefs.getString(str.userName);
+    return prefs;
+  }
+
+  Future<void> requestPackage(
+      {uid, latitude, longitude, phoneNumber, location}) async {
+    DatabaseReference packageRequest =
+        await FirebaseDatabase.instance.ref("PackageRequest");
+    await onGetLocalStorage();
+    await packageRequest.child(getUid).set({
+      "latitude": getLatitude,
+      "longitude": getLongitude,
+      "phoneNumber": phoneNumber,
+    });
   }
 }
