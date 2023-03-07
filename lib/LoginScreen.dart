@@ -191,9 +191,9 @@ class LoginController extends GetxController {
         glb.checkUserID(auth.currentUser?.uid);
         glb.UID = (userCredential.user?.uid).toString();
         await glb.storeUser(
-          uid: auth.currentUser!.uid,
-          email: email,
-          password: password,
+          uid: auth.currentUser!.uid.toString(),
+          email: email.toString(),
+          password: password.toString(),
         );
         userEmail.value.clear();
         userPassword.value.clear();
