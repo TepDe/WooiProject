@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/HomeScreen.dart';
 import 'package:wooiproject/MapScreen.dart';
 import 'package:wooiproject/ProfileScreen.dart';
@@ -836,6 +838,11 @@ class ReUseWidget extends GetxController {
     );
   }
 
+  final phoneBox = TextEditingController();
+  final locationBox = TextEditingController();
+  final qtyBox = TextEditingController();
+  final glb = GlobalController();
+
   reUseCustomizeButton(context) {
     return Container(
       width: Get.width,
@@ -868,7 +875,10 @@ class ReUseWidget extends GetxController {
                   size: 18.0),
               // content: Text('Result is'),
               actions: [
-                reuseTextField(textIcon: Icons.phone, label: 'Phone Number'),
+                reuseTextField(
+                    textIcon: Icons.phone,
+                    label: 'Phone Number',
+                    controller: phoneBox),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -878,7 +888,7 @@ class ReUseWidget extends GetxController {
                       width: 60,
                       margin: const EdgeInsets.symmetric(horizontal: 30),
                       child: TextField(
-                        //controller: dialogPhoneNum,
+                        controller: qtyBox,
                         decoration: InputDecoration(
                           //icon: Icon(textIcon ?? null),
                           // fillColor: theme.liteGrey,
@@ -893,7 +903,7 @@ class ReUseWidget extends GetxController {
                     IconButton(onPressed: () {}, icon: Icon(Icons.add)),
                   ],
                 ),
-                reuseTextField(label: 'Location', textIcon: Icons.location_on),
+                reuseTextField(controller: locationBox,label: 'Location', textIcon: Icons.location_on),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -904,8 +914,10 @@ class ReUseWidget extends GetxController {
                         child: Text('Cancel')),
                     ElevatedButton(
                         onPressed: () {
-                          Navigator.pop(context);
-                        },
+                          glb.requestPackage(
+                            location: locationBox.text.trim().toString()
+                             );
+                         },
                         child: Text('OK')),
                   ],
                 )
