@@ -1,39 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wooiproject/GlobalControl/GlobalController.dart';
+import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 
-// class HomeScreenFull extends StatefulWidget {
-//   const HomeScreenFull({Key? key}) : super(key: key);
-//
-//   @override
-//   State<HomeScreenFull> createState() => _HomeScreenFullState();
-// }
-//
-// class _HomeScreenFullState extends State<HomeScreenFull> {
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return WillPopScope( onWillPop: ()=>  _controller, child: const Placeholder());
-//   }
-// }
-
-class HomeScreen extends StatelessWidget {
-  final reUse = ReUseWidget();
-  final theme = ThemesApp();
-  final hsc = Get.put(HomeScreenController());
-  var _controller;
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  void dispose() {
-    _controller.dispose();
-  }
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final reUse = ReUseWidget();
+  final theme = ThemesApp();
+  final glb = GlobalController();
 
   exitApp() {
     SystemNavigator.pop();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userid();
+  }
+
+  String getUserID = '';
+  final str = StorageKey();
+
+  userid() async {
+    final prefs = await SharedPreferences.getInstance();
+    getUserID = prefs.getString(str.userID).toString();
+    setState(() {
+
+    });
   }
 
   @override
@@ -41,61 +45,36 @@ class HomeScreen extends StatelessWidget {
     var viewHeight = MediaQuery.of(context).size.height * 0.3;
 
     return WillPopScope(
-      onWillPop: () => exitApp(),
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          resizeToAvoidBottomInset: false,
-          body: Stack(
-            children: [
-              Container(
-                height: viewHeight,
-                decoration: new BoxDecoration(
-                  color: theme.liteOrange,
-                  borderRadius: BorderRadius.vertical(
-                      bottom: Radius.elliptical(
-                          MediaQuery.of(context).size.width, 100.0)),
+        onWillPop: () => exitApp(),
+        child: SafeArea(
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            resizeToAvoidBottomInset: false,
+            body: Stack(
+              children: [
+                Container(
+                  height: viewHeight,
+                  decoration: BoxDecoration(
+                    color: theme.liteOrange,
+                    borderRadius: BorderRadius.vertical(
+                        bottom: Radius.elliptical(
+                            MediaQuery.of(context).size.width, 100.0)),
+                  ),
                 ),
-              ),
-              Column(
-                children: [
-                  reUse.topBarHomeScreen(),
-                  reUse.unitOneHomeScreen(function: 'profile'),
-                  reUse.unitTwoHomeScreen(),
-                  //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
-                  // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
-                  //reUse.renderListView(),
-                  reUse.reUseCustomizeButton(context)
-                ],
-              ),
-
-            ],
+                Column(
+                  children: [
+                    reUse.topBarHomeScreen(),
+                    reUse.unitOneHomeScreen(userID: 'ID $getUserID'),
+                    reUse.unitTwoHomeScreen(),
+                    //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
+                    // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
+                    //reUse.renderListView(),
+                    reUse.reUseCustomizeButton(context)
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class HomeScreenController extends GetxController {
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-    getUserLocation();
-  }
-
-  late Position position;
-  late LatLng currentPostion;
-  var latitude = 0.0.obs;
-  var longitude = 0.0.obs;
-
-  void getUserLocation() async {
-    position = await GeolocatorPlatform.instance.getCurrentPosition();
-    update();
-    currentPostion = LatLng(position.latitude, position.longitude);
-    latitude.value = position.latitude;
-    longitude.value = position.longitude;
-    update();
+        ));
   }
 }
