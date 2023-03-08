@@ -30,6 +30,8 @@ class _AccountScreenState extends State<AccountScreen> {
     driverMarkerList();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     getStr.onGetLocalStorage();
@@ -55,11 +57,12 @@ class _AccountScreenState extends State<AccountScreen> {
             //       }),
             // ),
             Text('${driverList.length}'),
-            Text('${getStr.getLatitude}'),
-            Text('${getStr.getLongitude}'),
-            Text('${getStr.getUid}'),
-            Text('${getStr.getEmail}'),
-            Text('${getStr.getPassword}'),
+            Text('${getStr.getLatitude?? 'loading...'}'),
+            Text('${getStr.getLongitude?? 'loading...'}'),
+            Text('${getStr.getUid?? 'loading...'}'),
+            Text('${getStr.getEmail?? 'loading...'}'),
+            Text('${getStr.getPassword?? 'loading...'}'),
+            Text('${getStr.getUserID?? 'loading...'}'),
           ],
         ),
       ),
