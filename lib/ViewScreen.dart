@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wooiproject/AccountScreen.dart';
-import 'package:wooiproject/ActivityScreen.dart';
 import 'package:wooiproject/HomeScreen.dart';
 import 'package:wooiproject/NotificationScreen.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
