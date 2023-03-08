@@ -13,7 +13,7 @@ import 'package:wooiproject/ViewScreen.dart';
 import 'package:wooiproject/WidgetReUse/SuperController.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
-class ReUseWidget extends GetxController {
+class ReUseWidget {
   topButtonLeft({function, icon}) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
@@ -105,7 +105,7 @@ class ReUseWidget extends GetxController {
     );
   }
 
-  unitOneHomeScreen({function}) {
+  unitOneHomeScreen({function, userID}) {
     return Padding(
       padding: const EdgeInsets.only(left: 18.0, top: 20, right: 18),
       child: Row(
@@ -121,18 +121,18 @@ class ReUseWidget extends GetxController {
                 style: TextStyle(
                     color: theme.darkGrey, fontWeight: FontWeight.bold),
               ),
-              Text('ID 003121',
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: theme.black,
-                      fontWeight: FontWeight.bold)),
+              reUseText(
+                  size: 20.0,
+                  color: theme.black,
+                  weight: FontWeight.bold,
+                  content: userID ?? 'no ID'),
             ],
           ),
           InkWell(
             onTap: () {
-              if (function == 'profile') {
-                Get.to(ProfileScreen());
-              }
+              // if (function == 'profile') {
+              //   Get.to(ProfileScreen());
+              // }
             },
             child: Icon(
               Icons.account_circle,
@@ -276,7 +276,7 @@ class ReUseWidget extends GetxController {
                   },
                   child: unitTwoText(
                       label: "Total package",
-                      qty: '21',
+                      qty: '0',
                       assetsIconColor: theme.dirt,
                       assetsIcon: 'assets/images/box.png',
                       borderbottom: BorderSide(width: 1, color: theme.liteGrey),
@@ -293,7 +293,7 @@ class ReUseWidget extends GetxController {
                   },
                   child: unitTwoText(
                       label: "Pending",
-                      qty: '14',
+                      qty: '0',
                       assetsIcon: 'assets/images/process.png',
                       borderbottom: BorderSide(width: 1, color: theme.liteGrey),
                       borderleft: BorderSide(width: 1, color: theme.liteGrey)),
@@ -313,7 +313,7 @@ class ReUseWidget extends GetxController {
                 },
                 child: unitTwoText(
                     label: "Complete",
-                    qty: '14',
+                    qty: '0',
                     assetsIcon: 'assets/images/check.png',
                     borderright: BorderSide(width: 1, color: theme.liteGrey),
                     bordertop: BorderSide(width: 1, color: theme.liteGrey),
@@ -329,7 +329,7 @@ class ReUseWidget extends GetxController {
                 },
                 child: unitTwoText(
                     label: "Return Ship",
-                    qty: '14',
+                    qty: '0',
                     assetsIcon: 'assets/images/return-box.png',
                     bordertop: BorderSide(width: 1, color: theme.liteGrey),
                     borderleft: BorderSide(width: 1, color: theme.liteGrey),
@@ -649,113 +649,6 @@ class ReUseWidget extends GetxController {
     );
   }
 
-  reTotalPackageListview({removeStatus}) {
-    return Flexible(
-      child: ListView.builder(
-          padding: const EdgeInsets.all(8),
-          itemCount: 6,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              width: Get.width,
-              margin: EdgeInsets.all(6),
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: theme.liteGrey,
-                borderRadius: BorderRadius.circular(6),
-                boxShadow: [
-                  BoxShadow(
-                    color: theme.grey,
-                    blurRadius: 4,
-                    offset: Offset(0, 1), // Shadow position
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      reUseText(
-                          weight: FontWeight.w400,
-                          size: 12.0,
-                          color: theme.grey,
-                          content: 'SHIPPING ID :'),
-                      reUseText(
-                          weight: FontWeight.bold,
-                          size: 16.0,
-                          color: theme.Blue,
-                          content: '000214'),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      reUseText(
-                          weight: FontWeight.bold,
-                          size: 12.0,
-                          color: theme.grey,
-                          content: 'Location'),
-                      reUseText(
-                          size: 12.0,
-                          weight: FontWeight.bold,
-                          color: theme.grey,
-                          content: 'Phone number'),
-                      reUseText(
-                          size: 12.0,
-                          weight: FontWeight.bold,
-                          color: theme.grey,
-                          content: 'Qty'),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      reUseText(
-                          size: 14.0,
-                          color: theme.black,
-                          content: 'ខណ្ឌ ចំការមន',
-                          weight: FontWeight.w500),
-                      reUseText(
-                          size: 14.0,
-                          color: theme.black,
-                          weight: FontWeight.w500,
-                          content: '0215489621'),
-                      reUseText(
-                          size: 14.0,
-                          color: theme.black,
-                          content: '10',
-                          weight: FontWeight.w500),
-                    ],
-                  ),
-                  removeStatus == true
-                      ? Container()
-                      : Divider(
-                          color: theme.grey,
-                        ),
-                  removeStatus == true
-                      ? Container()
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            reUseText(
-                                size: 12.0,
-                                weight: FontWeight.bold,
-                                color: theme.grey,
-                                content: 'Status'),
-                            reUseText(
-                                size: 12.0,
-                                color: theme.liteGreen,
-                                content: 'PENDING',
-                                weight: FontWeight.w900),
-                          ],
-                        ),
-                ],
-              ),
-            );
-          }),
-    );
-  }
 
   reUseText({content, size, weight, color}) {
     return Padding(
@@ -889,7 +782,7 @@ class ReUseWidget extends GetxController {
                       margin: const EdgeInsets.symmetric(horizontal: 30),
                       child: TextField(
                         controller: qtyBox,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           //icon: Icon(textIcon ?? null),
                           // fillColor: theme.liteGrey,
                           border: OutlineInputBorder(),
@@ -903,7 +796,10 @@ class ReUseWidget extends GetxController {
                     IconButton(onPressed: () {}, icon: Icon(Icons.add)),
                   ],
                 ),
-                reuseTextField(controller: locationBox,label: 'Location', textIcon: Icons.location_on),
+                reuseTextField(
+                    controller: locationBox,
+                    label: 'Location',
+                    textIcon: Icons.location_on),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -914,10 +810,13 @@ class ReUseWidget extends GetxController {
                         child: Text('Cancel')),
                     ElevatedButton(
                         onPressed: () {
+                          glb.onGetLocalStorage();
                           glb.requestPackage(
-                            location: locationBox.text.trim().toString()
-                             );
-                         },
+                              qty: qtyBox.text.trim().toString(),
+                              phoneNumber: phoneBox.text.trim().toString(),
+                              location: locationBox.text.trim().toString());
+                          Navigator.pop(context);
+                        },
                         child: Text('OK')),
                   ],
                 )
@@ -966,6 +865,113 @@ class ReUseWidget extends GetxController {
         reUseHeader(title: Title, label: 'Search', headercolor: headerColor),
         reTotalPackageListview(removeStatus: removeFoot)
       ],
+    );
+  }
+  reTotalPackageListview({removeStatus}) {
+    return Flexible(
+      child: ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: 6,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              width: Get.width,
+              margin: EdgeInsets.all(6),
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: theme.liteGrey,
+                borderRadius: BorderRadius.circular(6),
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.grey,
+                    blurRadius: 4,
+                    offset: Offset(0, 1), // Shadow position
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUseText(
+                          weight: FontWeight.w400,
+                          size: 12.0,
+                          color: theme.grey,
+                          content: 'SHIPPING ID :'),
+                      reUseText(
+                          weight: FontWeight.bold,
+                          size: 16.0,
+                          color: theme.Blue,
+                          content: '000214'),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUseText(
+                          weight: FontWeight.bold,
+                          size: 12.0,
+                          color: theme.grey,
+                          content: 'Location'),
+                      reUseText(
+                          size: 12.0,
+                          weight: FontWeight.bold,
+                          color: theme.grey,
+                          content: 'Phone number'),
+                      reUseText(
+                          size: 12.0,
+                          weight: FontWeight.bold,
+                          color: theme.grey,
+                          content: 'Qty'),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUseText(
+                          size: 14.0,
+                          color: theme.black,
+                          content: 'ខណ្ឌ ចំការមន',
+                          weight: FontWeight.w500),
+                      reUseText(
+                          size: 14.0,
+                          color: theme.black,
+                          weight: FontWeight.w500,
+                          content: '0215489621'),
+                      reUseText(
+                          size: 14.0,
+                          color: theme.black,
+                          content: '10',
+                          weight: FontWeight.w500),
+                    ],
+                  ),
+                  removeStatus == true
+                      ? Container()
+                      : Divider(
+                    color: theme.grey,
+                  ),
+                  removeStatus == true
+                      ? Container()
+                      : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUseText(
+                          size: 12.0,
+                          weight: FontWeight.bold,
+                          color: theme.grey,
+                          content: 'Status'),
+                      reUseText(
+                          size: 12.0,
+                          color: theme.liteGreen,
+                          content: 'PENDING',
+                          weight: FontWeight.w900),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          }),
     );
   }
 
