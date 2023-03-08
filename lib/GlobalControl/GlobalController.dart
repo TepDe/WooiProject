@@ -105,16 +105,16 @@ class GlobalController {
           'uid': uid,
           'longitude': longitude,
           'latitude': latitude,
-          'userID': userID,
+          'userID': userID.toString(),
         })
         .then((value) => print("User Added"))
         .catchError((error) => print("Failed to add user: $error"));
-    onSaveLocalStorage(
+    await onSaveLocalStorage(
         latitude: latitude,
         longitude: longitude,
         email: email,
         uid: uid,
-        userID: userID,
+        userID: userID.toString(),
         password: password);
   }
 
@@ -165,7 +165,7 @@ class GlobalController {
     return have;
   }
 
-  onSaveLocalStorage(
+  Future<SharedPreferences> onSaveLocalStorage(
       {latitude,
       longitude,
       isGoOnline,
@@ -182,8 +182,10 @@ class GlobalController {
     await prefs.setInt(str.phoneNumber, phoneNumber ?? 0);
     await prefs.setString(str.email, email ?? '');
     await prefs.setString(str.uid, uid ?? '');
+    await prefs.setString(str.userID, userID ?? '');
     await prefs.setString(str.password, password ?? '');
     await prefs.setString(str.userName, userName ?? '');
+    return prefs;
   }
 
   Future<SharedPreferences> onGetLocalStorage() async {
@@ -194,20 +196,39 @@ class GlobalController {
     getPhoneNumber = prefs.getInt(str.phoneNumber);
     getEmail = prefs.getString(str.email);
     getUid = prefs.getString(str.uid);
+    getUserID = prefs.getString(str.userID);
     getPassword = prefs.getString(str.password);
     getUserName = prefs.getString(str.userName);
     return prefs;
   }
 
   Future<void> requestPackage(
-      {uid, latitude, longitude, phoneNumber, location}) async {
+      {qty, uid, latitude, longitude, phoneNumber, location}) async {
     DatabaseReference packageRequest =
-        await FirebaseDatabase.instance.ref("PackageRequest");
+        FirebaseDatabase.instance.ref("PackageRequest");
     await onGetLocalStorage();
-    await packageRequest.child(getUid).set({
-      "latitude": getLatitude,
-      "longitude": getLongitude,
-      "phoneNumber": phoneNumber,
+    await packageRequest.child(getUid).child(getUserID).push().set({
+      "package": {
+        "latitude": getLatitude,
+        "longitude": getLongitude,
+        "phoneNumber": phoneNumber,
+        "location": location,
+        "qty": qty,
+      }
+    });
+
+    packageRequest.onChildAdded.listen((event) {
+      // A new comment has been added, so add it to the displayed list.
+      print('New message added: ${event.snapshot.value}');
+      print('New message added: ${event.snapshot.value}');
     });
   }
+}
+
+class PackageData {
+  String latitude = '';
+  String longitude = '';
+  String phoneNumber = '';
+  String location = '';
+  String qty = '';
 }
