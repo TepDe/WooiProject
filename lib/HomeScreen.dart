@@ -30,11 +30,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   String getUserID = '';
+  String package = '';
   final str = StorageKey();
 
   userid() async {
     final prefs = await SharedPreferences.getInstance();
     getUserID = prefs.getString(str.userID).toString();
+    package = prefs.getString(str.totalPackage).toString();
     setState(() {
 
     });
@@ -65,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     reUse.topBarHomeScreen(),
                     reUse.unitOneHomeScreen(userID: 'ID $getUserID'),
-                    reUse.unitTwoHomeScreen(),
+                    reUse.unitTwoHomeScreen(package),
                     //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
                     // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
                     //reUse.renderListView(),
