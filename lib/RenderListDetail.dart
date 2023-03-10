@@ -37,6 +37,7 @@ class _RenderListDetailState extends State<RenderListDetail> {
     // TODO: implement initState
     super.initState();
     totalPackageData();
+    setState(() {});
   }
 
   onGetLocalStorage() async {
@@ -50,20 +51,24 @@ class _RenderListDetailState extends State<RenderListDetail> {
   var totalList = '';
 
   totalPackageData() async {
-    DatabaseReference packageRequest =
-        FirebaseDatabase.instance.ref("PackageRequest");
     await glb.onGetLocalStorage();
-    setState(() async {
-      packageRequest.onValue.listen((DatabaseEvent event) async {
-        final data = event.snapshot.value;
-        String? eventKey = packageRequest.push().key;
-        Map mapdata = data as Map;
-        mapdata.forEach((key, value) async {
-          pRequest.add(value[glb.getUserID]);
-          pRequest.add(value);
+    DatabaseReference packageRequest =
+        FirebaseDatabase.instance.ref("PackageRequest").child(glb.getUid);
+
+
+    packageRequest.once().then((DatabaseEvent event) async {
+      final data = event.snapshot.value;
+      Map test = data as Map;
+      test.forEach((key, value) async {
+        Map package = await value as Map;
+        package.forEach((key, value) async {
+          var a = value['package'];
+          pRequest.add(value['package']);
+          print(pRequest);
+          await returnData(pRequest);
+          setState(() {});
         });
       });
-      fetching();
     });
   }
 
@@ -72,10 +77,13 @@ class _RenderListDetailState extends State<RenderListDetail> {
     pRequest.map((e) => e['package']["phoneNumber"]);
   }
 
-  returnData() async {
+  returnData(List? pck) async {
     if (argumentData == 0) {
       renderList = await reUse.reUseListPackage(
-          removeFoot: true, Title: 'Total Package', headerColor: theme.dirt);
+          pakageTotal: pck,
+          removeFoot: true,
+          Title: 'Total Package',
+          headerColor: theme.dirt);
     } else if (argumentData == 1) {
       renderList = await reUse.reUseListPackage(
           Title: 'Pending', headerColor: theme.orange);
@@ -91,7 +99,6 @@ class _RenderListDetailState extends State<RenderListDetail> {
 
   @override
   Widget build(BuildContext context) {
-    returnData();
     return SafeArea(
       child: Scaffold(body: renderList),
     );
@@ -111,14 +118,4 @@ class User {
       required this.phoneNumber,
       required this.location,
       required this.qty});
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      latitude: json['latitude'],
-      longitude: json['longitude'],
-      phoneNumber: json['phoneNumber'],
-      location: json['location'],
-      qty: json['qty'],
-    );
-  }
 }
