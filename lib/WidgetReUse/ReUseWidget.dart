@@ -246,7 +246,7 @@ class ReUseWidget {
     );
   }
 
-  unitTwoHomeScreen() {
+  unitTwoHomeScreen(totalPk) {
     return Container(
       width: Get.width,
       margin: EdgeInsets.only(top: 30, right: 10, left: 10),
@@ -276,7 +276,7 @@ class ReUseWidget {
                   },
                   child: unitTwoText(
                       label: "Total package",
-                      qty: '0',
+                      qty: totalPk.toString()??'0',
                       assetsIconColor: theme.dirt,
                       assetsIcon: 'assets/images/box.png',
                       borderbottom: BorderSide(width: 1, color: theme.liteGrey),
