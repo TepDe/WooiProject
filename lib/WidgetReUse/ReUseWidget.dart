@@ -649,7 +649,6 @@ class ReUseWidget {
     );
   }
 
-
   reUseText({content, size, weight, color}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3),
@@ -859,19 +858,20 @@ class ReUseWidget {
     );
   }
 
-  reUseListPackage({Title, headerColor, removeFoot}) {
+  reUseListPackage({Title, headerColor, removeFoot, List? pakageTotal}) {
     return Column(
       children: [
         reUseHeader(title: Title, label: 'Search', headercolor: headerColor),
-        reTotalPackageListview(removeStatus: removeFoot)
+        reTotalPackageListview(removeStatus: removeFoot, pkc: pakageTotal)
       ],
     );
   }
-  reTotalPackageListview({removeStatus}) {
+
+  reTotalPackageListview({removeStatus, List? pkc}) {
     return Flexible(
       child: ListView.builder(
           padding: const EdgeInsets.all(8),
-          itemCount: 6,
+          itemCount: pkc!.length,
           itemBuilder: (BuildContext context, int index) {
             return Container(
               width: Get.width,
@@ -932,42 +932,42 @@ class ReUseWidget {
                       reUseText(
                           size: 14.0,
                           color: theme.black,
-                          content: 'ខណ្ឌ ចំការមន',
+                          content:  pkc[index]['location'],
                           weight: FontWeight.w500),
                       reUseText(
                           size: 14.0,
                           color: theme.black,
                           weight: FontWeight.w500,
-                          content: '0215489621'),
+                          content:  pkc[index]['phoneNumber']),
                       reUseText(
                           size: 14.0,
                           color: theme.black,
-                          content: '10',
+                          content:  pkc[index]['qty'],
                           weight: FontWeight.w500),
                     ],
                   ),
                   removeStatus == true
                       ? Container()
                       : Divider(
-                    color: theme.grey,
-                  ),
+                          color: theme.grey,
+                        ),
                   removeStatus == true
                       ? Container()
                       : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      reUseText(
-                          size: 12.0,
-                          weight: FontWeight.bold,
-                          color: theme.grey,
-                          content: 'Status'),
-                      reUseText(
-                          size: 12.0,
-                          color: theme.liteGreen,
-                          content: 'PENDING',
-                          weight: FontWeight.w900),
-                    ],
-                  ),
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            reUseText(
+                                size: 12.0,
+                                weight: FontWeight.bold,
+                                color: theme.grey,
+                                content: 'Status'),
+                            reUseText(
+                                size: 12.0,
+                                color: theme.liteGreen,
+                                content: 'PENDING',
+                                weight: FontWeight.w900),
+                          ],
+                        ),
                 ],
               ),
             );
