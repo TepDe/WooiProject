@@ -54,8 +54,6 @@ class _RenderListDetailState extends State<RenderListDetail> {
     await glb.onGetLocalStorage();
     DatabaseReference packageRequest =
         FirebaseDatabase.instance.ref("PackageRequest").child(glb.getUid);
-
-
     packageRequest.once().then((DatabaseEvent event) async {
       final data = event.snapshot.value;
       Map test = data as Map;
@@ -66,11 +64,17 @@ class _RenderListDetailState extends State<RenderListDetail> {
           pRequest.add(value['package']);
           print(pRequest);
           await returnData(pRequest);
-          setState(() {});
+          setState(() async{
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setString(str.userName, pRequest.length.toString() ?? '');
+            isLoading = false;
+          });
         });
       });
     });
   }
+
+  bool isLoading = true;
 
   fetching() {
     print("------------------------my data ${pRequest}");
@@ -100,7 +104,12 @@ class _RenderListDetailState extends State<RenderListDetail> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(body: renderList),
+      child: Scaffold(
+          body: isLoading
+              ? const Align(
+                  alignment: Alignment.center,
+                  child: CircularProgressIndicator())
+              : renderList),
     );
   }
 }
