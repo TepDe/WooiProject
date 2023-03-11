@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/LoginScreen.dart';
@@ -21,20 +23,55 @@ class _AccountScreenState extends State<AccountScreen> {
 
   List lists = [];
   final str = StorageKey();
-  var getStr = GlobalController();
+  var glb = GlobalController();
+  var getLatitude;
+  var getLongitude;
+  var getIsGoOnline;
+  var getPhoneNumber;
+  var getEmail;
+  var getPassword;
+  var getUserName;
+  var getUserID;
+  var getUid;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     driverMarkerList();
+    //fetchLocalStorage();
+    fetchUserData();
   }
 
+  fetchLocalStorage() async {
+    final prefs = await SharedPreferences.getInstance();
+    getLatitude = prefs.getString(str.latitude) ?? '';
+    getLongitude = prefs.getString(str.longitude) ?? '';
+    getUid = prefs.getString(str.uid) ?? '';
+    getEmail = prefs.getString(str.email) ?? '';
+    getPassword = prefs.getString(str.password) ?? '';
+    getUserID = prefs.getString(str.userID) ?? '';
 
+    setState(() {});
+  }
+
+  fetchUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    getUid = prefs.getString(str.uid);
+    print(getUid);
+    print(getUid);
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(getUid.toString())
+        .get()
+        .then((DocumentSnapshot documentSnapshot) async {
+      getUserID = await documentSnapshot['userID'];
+    });
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
-    getStr.onGetLocalStorage();
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -48,28 +85,19 @@ class _AccountScreenState extends State<AccountScreen> {
                   });
                 },
                 child: Text('Sign Out')),
-            // Flexible(
-            //   child: ListView.builder(
-            //       padding: const EdgeInsets.all(8),
-            //       itemCount: lists.length,
-            //       itemBuilder: (BuildContext context, int index) {
-            //         return Center(child: Text('Entry '));
-            //       }),
-            // ),
             Text('${driverList.length}'),
-            Text('${getStr.getLatitude?? 'loading...'}'),
-            Text('${getStr.getLongitude?? 'loading...'}'),
-            Text('${getStr.getUid?? 'loading...'}'),
-            Text('${getStr.getEmail?? 'loading...'}'),
-            Text('${getStr.getPassword?? 'loading...'}'),
-            Text('${getStr.getUserID?? 'loading...'}'),
+            // Text('${getLatitude ?? 'loading...'}'),
+            // Text('${getLongitude ?? 'loading...'}'),
+            // Text('${getUid ?? 'loading...'}'),
+            // Text('${getEmail ?? 'loading...'}'),
+            // Text('${getPassword ?? 'loading...'}'),
+            Text('${getUserID ?? 'loading...'}'),
           ],
         ),
       ),
     );
   }
 
-  Query query = FirebaseDatabase.instance.ref().child('Driver');
   List driverList = [];
 
   driverMarkerList() {
@@ -110,25 +138,6 @@ class _AccountScreenState extends State<AccountScreen> {
       //   icon: BitmapDescriptor.defaultMarker, //Icon for Marker
       // ));
     });
-  }
-
-  shotData() {
-    return Flexible(
-        child: FirebaseAnimatedList(
-            query: query,
-            padding: const EdgeInsets.all(8.0),
-            reverse: false,
-            itemBuilder: (BuildContext context, DataSnapshot snapshot,
-                Animation<double> animation, int x) {
-              // Map lati = snapshot.value as Map;
-              // lati[auth.currentUser!.uid];
-              return Column(
-                children: [
-                  Text('longitude=> ${snapshot.child('longitude').value}'),
-                  Text('latitude=> ${snapshot.child('latitude').value}'),
-                ],
-              );
-            }));
   }
 }
 
