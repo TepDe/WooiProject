@@ -92,30 +92,45 @@ class GlobalController {
     longitude = position.longitude;
     var documentStream =
         FirebaseFirestore.instance.collection('Users').doc(uid);
-
-    int? userID;
-
-    var rng = Random();
-    userID = rng.nextInt(999999);
-
-    documentStream
-        .set({
-          'email': email,
-          'password': password,
-          'uid': uid,
-          'longitude': longitude,
-          'latitude': latitude,
-          'userID': userID.toString(),
-        })
-        .then((value) => print("User Added"))
-        .catchError((error) => print("Failed to add user: $error"));
-    await onSaveLocalStorage(
-        latitude: latitude,
-        longitude: longitude,
-        email: email,
-        uid: uid,
-        userID: userID.toString(),
-        password: password);
+    final prefs = await SharedPreferences.getInstance();
+    getUid = prefs.getString(str.uid);
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(getUid.toString())
+        .get()
+        .then((DocumentSnapshot documentSnapshot) async {
+      var checkUserID = await documentSnapshot['userID'];
+      print(checkUserID);
+      print(checkUserID);
+      if (checkUserID != null) {
+        documentStream
+            .update({
+              'email': email,
+              'password': password,
+              'uid': uid,
+              'longitude': longitude,
+              'latitude': latitude,
+              'userID': checkUserID,
+            })
+            .then((value) => print("User Added"))
+            .catchError((error) => print("Failed to add user: $error"));
+      } else {
+        int? userID;
+        var rng = Random();
+        userID = rng.nextInt(999999);
+        documentStream
+            .update({
+              'email': email,
+              'password': password,
+              'uid': uid,
+              'longitude': longitude,
+              'latitude': latitude,
+              'userID': userID.toString(),
+            })
+            .then((value) => print("User Added"))
+            .catchError((error) => print("Failed to add user: $error"));
+      }
+    });
   }
 
   globalSetData({email, password, uid}) {
@@ -148,21 +163,18 @@ class GlobalController {
   //   });
   // }
 
-  Future<int?> checkUserID(uid) async {
+  checkUserID(uid) async {
     // CollectionReference collectionReference =
     //     FirebaseFirestores.instance.collection('Users').doc(uid);
-    var documentStream =
-        FirebaseFirestore.instance.collection('Users').doc(uid);
-    int? have;
-    await documentStream.get().then((DocumentSnapshot documentSnapshot) {
-      var notHave = documentSnapshot['userID'];
-      if (notHave == null) {
-        have = null;
-      } else {
-        have = notHave;
-      }
+    final prefs = await SharedPreferences.getInstance();
+    getUid = prefs.getString(str.uid);
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(getUid.toString())
+        .get()
+        .then((DocumentSnapshot documentSnapshot) async {
+      getUserID = await documentSnapshot['userID'];
     });
-    return have;
   }
 
   Future<SharedPreferences> onSaveLocalStorage(
