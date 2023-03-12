@@ -117,10 +117,10 @@ class LogInScreen extends StatelessWidget {
                           },
                         );
                         lc.onUserSignIn(
-                            // email: lc.userEmail.value.text.trim(),
-                            email: 'u@gmail.com',
-                            // password: lc.userPassword.value.text.trim(),
-                            password: '111111',
+                            email: lc.userEmail.value.text.trim(),
+                            // email: 'u@gmail.com',
+                            password: lc.userPassword.value.text.trim(),
+                            // password: '111111',
                             context: context);
                         // lc._phoneVerify(context);
                       },
