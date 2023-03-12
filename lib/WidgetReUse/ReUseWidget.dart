@@ -946,7 +946,7 @@ class ReUseWidget {
                       reUseText(
                           size: 14.0,
                           color: theme.black,
-                          content: pkc[index]['qty'],
+                          content: '1',
                           weight: FontWeight.w500),
                     ],
                   ),
