@@ -33,6 +33,8 @@ class _AccountScreenState extends State<AccountScreen> {
   var getUserName;
   var getUserID;
   var getUid;
+  var getLocation;
+  var getQty;
 
   @override
   void initState() {
@@ -41,6 +43,17 @@ class _AccountScreenState extends State<AccountScreen> {
     driverMarkerList();
     //fetchLocalStorage();
     fetchUserData();
+  }
+
+  getDatsa(getUid) async {
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc(getUid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      getUserID = documentSnapshot['qty'];
+
+    });
   }
 
   fetchLocalStorage() async {
@@ -52,19 +65,23 @@ class _AccountScreenState extends State<AccountScreen> {
     getPassword = prefs.getString(str.password) ?? '';
     getUserID = prefs.getString(str.userID) ?? '';
 
-    setState(() {});
+    setState(() {
+    });
   }
 
+
   fetchUserData() async {
-    final prefs = await SharedPreferences.getInstance();
-    getUid = prefs.getString(str.uid);
-    print(getUid);
-    print(getUid);
+    FirebaseAuth auth = FirebaseAuth.instance;
     await FirebaseFirestore.instance
         .collection('Users')
-        .doc(getUid.toString())
+        .doc(auth.currentUser!.uid.toString())
         .get()
         .then((DocumentSnapshot documentSnapshot) async {
+      getLatitude = await documentSnapshot['latitude'];
+      getLongitude = await documentSnapshot['longitude'];
+      getUid = await documentSnapshot['uid'];
+      getEmail = await documentSnapshot['email'];
+      getPassword = await documentSnapshot['password'];
       getUserID = await documentSnapshot['userID'];
     });
     setState(() {});
@@ -79,18 +96,18 @@ class _AccountScreenState extends State<AccountScreen> {
             Text('AccountScreen'),
             ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                    auth.signOut();
+                  setState(() async{
+                    await auth.signOut();
                     Get.to(LogInScreen());
                   });
                 },
                 child: Text('Sign Out')),
             Text('${driverList.length}'),
-            // Text('${getLatitude ?? 'loading...'}'),
-            // Text('${getLongitude ?? 'loading...'}'),
-            // Text('${getUid ?? 'loading...'}'),
-            // Text('${getEmail ?? 'loading...'}'),
-            // Text('${getPassword ?? 'loading...'}'),
+            Text('${getLatitude ?? 'loading...'}'),
+            Text('${getLongitude ?? 'loading...'}'),
+            Text('${getUid ?? 'loading...'}'),
+            Text('${getEmail ?? 'loading...'}'),
+            Text('${getPassword ?? 'loading...'}'),
             Text('${getUserID ?? 'loading...'}'),
           ],
         ),
