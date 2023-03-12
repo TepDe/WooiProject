@@ -118,7 +118,7 @@ class LogInScreen extends StatelessWidget {
                         );
                         lc.onUserSignIn(
                             // email: lc.userEmail.value.text.trim(),
-                            email: 'd@gmail.com',
+                            email: 'u@gmail.com',
                             // password: lc.userPassword.value.text.trim(),
                             password: '111111',
                             context: context);
@@ -189,14 +189,13 @@ class LoginController extends GetxController {
       if (userCredential.isNull) {
       } else {
         glb.UID = (userCredential.user?.uid).toString();
+        userEmail.value.clear();
+        userPassword.value.clear();
         await glb.storeUser(
           uid: auth.currentUser!.uid,
           email: email.toString(),
           password: password.toString(),
         );
-        userEmail.value.clear();
-        userPassword.value.clear();
-        Get.to(const ViewScreen());
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
