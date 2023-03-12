@@ -259,7 +259,7 @@ class GlobalController {
   }
 
   Future<void> requestPackage(
-      {qty, uid, latitude, longitude, phoneNumber, location}) async {
+      {uid, latitude, longitude, phoneNumber, location}) async {
     final prefs = await SharedPreferences.getInstance();
     getUserID = prefs.getString(str.userID);
     DatabaseReference packageRequest =
@@ -274,7 +274,7 @@ class GlobalController {
         "longitude": getLongitude,
         "phoneNumber": phoneNumber,
         "location": location,
-        "qty": qty,
+        //"qty": qty,
       }
     });
   }
