@@ -24,6 +24,7 @@ class _RenderListDetailState extends State<RenderListDetail> {
   var argumentData = Get.arguments;
   final theme = ThemesApp();
   var renderList;
+
   //final glb = GlobalController();
   List totalPackage = [];
   List pendingPackage = [];
@@ -63,7 +64,73 @@ class _RenderListDetailState extends State<RenderListDetail> {
         package.forEach((key, value) async {
           pRequest.add(value['package']);
           print(pRequest);
-          await returnData(pRequest);
+          await returnData(totalpackage: pRequest);
+          setState(() async {
+            isLoading = false;
+          });
+        });
+      });
+    });
+  }
+
+  pendingPackageData() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    DatabaseReference packageRequest = FirebaseDatabase.instance
+        .ref("PackageRequest")
+        .child(auth.currentUser!.uid);
+    packageRequest.once().then((DatabaseEvent event) async {
+      final data = event.snapshot.value;
+      Map test = data as Map;
+      test.forEach((key, value) async {
+        Map package = await value as Map;
+        package.forEach((key, value) async {
+          pRequest.add(value['package']);
+          print(pRequest);
+          await returnData();
+          setState(() async {
+            isLoading = false;
+          });
+        });
+      });
+    });
+  }
+
+  completePackageData() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    DatabaseReference packageRequest = FirebaseDatabase.instance
+        .ref("PackageRequest")
+        .child(auth.currentUser!.uid);
+    packageRequest.once().then((DatabaseEvent event) async {
+      final data = event.snapshot.value;
+      Map test = data as Map;
+      test.forEach((key, value) async {
+        Map package = await value as Map;
+        package.forEach((key, value) async {
+          pRequest.add(value['package']);
+          print(pRequest);
+          await returnData();
+          setState(() async {
+            isLoading = false;
+          });
+        });
+      });
+    });
+  }
+
+  returnPackageData() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    DatabaseReference packageRequest = FirebaseDatabase.instance
+        .ref("PackageRequest")
+        .child(auth.currentUser!.uid);
+    packageRequest.once().then((DatabaseEvent event) async {
+      final data = event.snapshot.value;
+      Map test = data as Map;
+      test.forEach((key, value) async {
+        Map package = await value as Map;
+        package.forEach((key, value) async {
+          pRequest.add(value['package']);
+          print(pRequest);
+          await returnData();
           setState(() async {
             isLoading = false;
           });
@@ -79,10 +146,10 @@ class _RenderListDetailState extends State<RenderListDetail> {
     pRequest.map((e) => e['package']["phoneNumber"]);
   }
 
-  returnData(List? pck) async {
+  returnData({List? totalpackage}) async {
     if (argumentData == 0) {
       renderList = await reUse.reUseListPackage(
-          pakageTotal: pck,
+          pakageTotal: totalpackage,
           removeFoot: true,
           Title: 'Total Package',
           headerColor: theme.dirt);
