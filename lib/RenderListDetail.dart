@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,7 +24,7 @@ class _RenderListDetailState extends State<RenderListDetail> {
   var argumentData = Get.arguments;
   final theme = ThemesApp();
   var renderList;
-  final glb = GlobalController();
+  //final glb = GlobalController();
   List totalPackage = [];
   List pendingPackage = [];
   List completePackage = [];
@@ -37,7 +38,6 @@ class _RenderListDetailState extends State<RenderListDetail> {
     // TODO: implement initState
     super.initState();
     totalPackageData();
-    setState(() {});
   }
 
   onGetLocalStorage() async {
@@ -51,22 +51,20 @@ class _RenderListDetailState extends State<RenderListDetail> {
   var totalList = '';
 
   totalPackageData() async {
-    await glb.onGetLocalStorage();
-    DatabaseReference packageRequest =
-        FirebaseDatabase.instance.ref("PackageRequest").child(glb.getUid);
+    FirebaseAuth auth = FirebaseAuth.instance;
+    DatabaseReference packageRequest = FirebaseDatabase.instance
+        .ref("PackageRequest")
+        .child(auth.currentUser!.uid);
     packageRequest.once().then((DatabaseEvent event) async {
       final data = event.snapshot.value;
       Map test = data as Map;
       test.forEach((key, value) async {
         Map package = await value as Map;
         package.forEach((key, value) async {
-          var a = value['package'];
           pRequest.add(value['package']);
           print(pRequest);
           await returnData(pRequest);
-          setState(() async{
-            final prefs = await SharedPreferences.getInstance();
-            await prefs.setString(str.userName, pRequest.length.toString() ?? '');
+          setState(() async {
             isLoading = false;
           });
         });
