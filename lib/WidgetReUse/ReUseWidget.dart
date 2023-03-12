@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -129,11 +131,7 @@ class ReUseWidget {
             ],
           ),
           InkWell(
-            onTap: () {
-              // if (function == 'profile') {
-              //   Get.to(ProfileScreen());
-              // }
-            },
+            onTap: () async {},
             child: Icon(
               Icons.account_circle,
               size: 60,
@@ -246,7 +244,7 @@ class ReUseWidget {
     );
   }
 
-  unitTwoHomeScreen(totalPk) {
+  unitTwoHomeScreen({int? totalLength}) {
     return Container(
       width: Get.width,
       margin: EdgeInsets.only(top: 30, right: 10, left: 10),
@@ -276,7 +274,7 @@ class ReUseWidget {
                   },
                   child: unitTwoText(
                       label: "Total package",
-                      qty: totalPk.toString()??'0',
+                      qty: totalLength.toString() ?? '0',
                       assetsIconColor: theme.dirt,
                       assetsIcon: 'assets/images/box.png',
                       borderbottom: BorderSide(width: 1, color: theme.liteGrey),
@@ -808,12 +806,18 @@ class ReUseWidget {
                         },
                         child: Text('Cancel')),
                     ElevatedButton(
-                        onPressed: () {
-                          glb.onGetLocalStorage();
-                          glb.requestPackage(
-                              qty: qtyBox.text.trim().toString(),
-                              phoneNumber: phoneBox.text.trim().toString(),
-                              location: locationBox.text.trim().toString());
+                        onPressed: () async {
+                          await glb
+                              .requestPackage(
+                                  qty: qtyBox.text.trim().toString(),
+                                  phoneNumber: phoneBox.text.trim().toString(),
+                                  location: locationBox.text.trim().toString())
+                              .then((value) {
+                            qtyBox.clear();
+                            phoneBox.clear();
+                            locationBox.clear();
+                          });
+
                           Navigator.pop(context);
                         },
                         child: Text('OK')),
@@ -932,17 +936,17 @@ class ReUseWidget {
                       reUseText(
                           size: 14.0,
                           color: theme.black,
-                          content:  pkc[index]['location'],
+                          content: pkc[index]['location'],
                           weight: FontWeight.w500),
                       reUseText(
                           size: 14.0,
                           color: theme.black,
                           weight: FontWeight.w500,
-                          content:  pkc[index]['phoneNumber']),
+                          content: pkc[index]['phoneNumber']),
                       reUseText(
                           size: 14.0,
                           color: theme.black,
-                          content:  pkc[index]['qty'],
+                          content: pkc[index]['qty'],
                           weight: FontWeight.w500),
                     ],
                   ),
