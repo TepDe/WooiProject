@@ -11,6 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/LoginScreen.dart';
 
+import '../ViewScreen.dart';
+
 class GlobalController {
   var UID = '';
   var userEmail = '';
@@ -19,6 +21,7 @@ class GlobalController {
   var latitude = 0.0;
   var longitude = 0.0;
   var getLatitude;
+  var getLocation;
   var getLongitude;
   var getIsGoOnline;
   var getPhoneNumber;
@@ -50,15 +53,14 @@ class GlobalController {
   CollectionReference userSign =
       FirebaseFirestore.instance.collection('UserSign');
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   reInsert() {
-    firebaseAuth = FirebaseAuth.instance;
     userSign.doc(UID).set({
       "latitude": latitude.toString(),
       "longitude": longitude.toString(),
-      "email": firebaseAuth.currentUser?.email.toString(),
-      "uid": firebaseAuth.currentUser?.uid,
+      "email": auth.currentUser?.email.toString(),
+      "uid": auth.currentUser?.uid,
     });
   }
 
@@ -69,16 +71,22 @@ class GlobalController {
   }
 
   fetchUserData() async {
-    DocumentSnapshot documentSnapshot =
-        await firestore.collection('UserSign').doc(UID.toString()).get();
-    userEmail = documentSnapshot.get('email');
-    longitude = documentSnapshot.get('longitude');
-    latitude = documentSnapshot.get('latitude');
-    UID = documentSnapshot.get('uid');
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(auth.currentUser!.uid.toString())
+        .get()
+        .then((DocumentSnapshot documentSnapshot) async {
+      getLatitude = await documentSnapshot['latitude'];
+      getLongitude = await documentSnapshot['longitude'];
+      getUid = await documentSnapshot['uid'];
+      getEmail = await documentSnapshot['email'];
+      getPassword = await documentSnapshot['password'];
+      getUserID = await documentSnapshot['userID'];
+    });
   }
 
   userLogOut() async {
-    await firebaseAuth.signOut().then((value) => Get.to(LogInScreen()));
+    await auth.signOut().then((value) => Get.to(LogInScreen()));
   }
 
   onCreatePackage() {}
@@ -92,45 +100,63 @@ class GlobalController {
     longitude = position.longitude;
     var documentStream =
         FirebaseFirestore.instance.collection('Users').doc(uid);
-    final prefs = await SharedPreferences.getInstance();
-    getUid = prefs.getString(str.uid);
-    await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(getUid.toString())
-        .get()
-        .then((DocumentSnapshot documentSnapshot) async {
-      var checkUserID = await documentSnapshot['userID'];
-      print(checkUserID);
-      print(checkUserID);
-      if (checkUserID != null) {
-        documentStream
-            .update({
-              'email': email,
-              'password': password,
-              'uid': uid,
-              'longitude': longitude,
-              'latitude': latitude,
-              'userID': checkUserID,
-            })
-            .then((value) => print("User Added"))
-            .catchError((error) => print("Failed to add user: $error"));
-      } else {
-        int? userID;
-        var rng = Random();
-        userID = rng.nextInt(999999);
-        documentStream
-            .update({
-              'email': email,
-              'password': password,
-              'uid': uid,
-              'longitude': longitude,
-              'latitude': latitude,
-              'userID': userID.toString(),
-            })
-            .then((value) => print("User Added"))
-            .catchError((error) => print("Failed to add user: $error"));
-      }
-    });
+    try {
+      FirebaseFirestore.instance
+          .collection('Users')
+          .doc(uid)
+          .get()
+          .then((doc) async {
+        print('User name: ${doc.exists}');
+        print('User name: ${doc.exists}');
+        if (doc.exists == false) {
+          await documentStream
+              .set({
+                'email': email,
+                'password': password,
+                'uid': uid,
+                'longitude': longitude,
+                'latitude': latitude,
+              })
+              .then((value) => Get.to(const ViewScreen()))
+              .catchError((error) => print("Failed to add user: $error"));
+          print('User name: ${doc.exists}');
+        } else {
+          await documentStream
+              .update({
+                'email': email,
+                'password': password,
+                'uid': uid,
+                'longitude': longitude,
+                'latitude': latitude,
+              })
+              .then((value) => Get.to(const ViewScreen()))
+              .catchError((error) => print("Failed to add user: $error"));
+          print('Name field does not exist in document${doc.exists}');
+        }
+      });
+    } catch (e) {
+      print('login screen error $e');
+    }
+
+    // if (getUserID != null) {
+    //
+    // } else {
+    //   int? userID;
+    //   var rng = Random();
+    //   userID = rng.nextInt(999999);
+    //
+    //   documentStream
+    //       .update({
+    //         'email': email,
+    //         'password': password,
+    //         'uid': uid,
+    //         'longitude': longitude,
+    //         'latitude': latitude,
+    //         'userID': userID,
+    //       })
+    //       .then((value) => print("User Added"))
+    //       .catchError((error) => print("Failed to add user: $error"));
+    // }
   }
 
   globalSetData({email, password, uid}) {
@@ -164,17 +190,23 @@ class GlobalController {
   // }
 
   checkUserID(uid) async {
-    // CollectionReference collectionReference =
-    //     FirebaseFirestores.instance.collection('Users').doc(uid);
-    final prefs = await SharedPreferences.getInstance();
-    getUid = prefs.getString(str.uid);
     await FirebaseFirestore.instance
         .collection('Users')
-        .doc(getUid.toString())
+        .doc(uid)
         .get()
-        .then((DocumentSnapshot documentSnapshot) async {
-      getUserID = await documentSnapshot['userID'];
-    });
+        .then((DocumentSnapshot documentSnapshot) async {});
+    // FirebaseFirestore.instance
+    //     .collection('Users')
+    //     .doc(uid)
+    //     .get()
+    //     .then((DocumentSnapshot documentSnapshot) async {
+    //   Map data = documentSnapshot as Map;
+    //   print(data);
+    //   print(data);
+    //   data.forEach((key, value) {});
+    // });
+    print(getUserID);
+    print(getUserID);
   }
 
   Future<SharedPreferences> onSaveLocalStorage(
@@ -214,12 +246,29 @@ class GlobalController {
     return prefs;
   }
 
+  Future<String> fetchUserID() async {
+    String UserID = '';
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(auth.currentUser!.uid.toString())
+        .get()
+        .then((DocumentSnapshot documentSnapshot) async {
+      UserID = await documentSnapshot['userID'];
+    });
+    return UserID;
+  }
+
   Future<void> requestPackage(
       {qty, uid, latitude, longitude, phoneNumber, location}) async {
+    final prefs = await SharedPreferences.getInstance();
+    getUserID = prefs.getString(str.userID);
     DatabaseReference packageRequest =
         FirebaseDatabase.instance.ref("PackageRequest");
-    await onGetLocalStorage();
-    await packageRequest.child(getUid).child(getUserID).push().set({
+    await packageRequest
+        .child(auth.currentUser!.uid)
+        .child(getUserID.toString())
+        .push()
+        .set({
       "package": {
         "latitude": getLatitude,
         "longitude": getLongitude,
@@ -227,12 +276,6 @@ class GlobalController {
         "location": location,
         "qty": qty,
       }
-    });
-
-    packageRequest.onChildAdded.listen((event) {
-      // A new comment has been added, so add it to the displayed list.
-      print('New message added: ${event.snapshot.value}');
-      print('New message added: ${event.snapshot.value}');
     });
   }
 }
