@@ -730,7 +730,7 @@ class ReUseWidget {
 
   final phoneBox = TextEditingController();
   final locationBox = TextEditingController();
-  final qtyBox = TextEditingController();
+  // final qtyBox = TextEditingController();
   final glb = GlobalController();
 
   reUseCustomizeButton(context) {
@@ -774,22 +774,22 @@ class ReUseWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     IconButton(onPressed: () {}, icon: Icon(Icons.remove)),
-                    Container(
-                      width: 60,
-                      margin: const EdgeInsets.symmetric(horizontal: 30),
-                      child: TextField(
-                        controller: qtyBox,
-                        decoration: const InputDecoration(
-                          //icon: Icon(textIcon ?? null),
-                          // fillColor: theme.liteGrey,
-                          border: OutlineInputBorder(),
-                          //border: InputBorder.none,
-                          hintStyle: TextStyle(fontSize: 12),
-                          //filled: true,
-                          hintText: 'Qty',
-                        ),
-                      ),
-                    ),
+                    // Container(
+                    //   width: 60,
+                    //   margin: const EdgeInsets.symmetric(horizontal: 30),
+                    //   child: TextField(
+                    //     controller: qtyBox,
+                    //     decoration: const InputDecoration(
+                    //       //icon: Icon(textIcon ?? null),
+                    //       // fillColor: theme.liteGrey,
+                    //       border: OutlineInputBorder(),
+                    //       //border: InputBorder.none,
+                    //       hintStyle: TextStyle(fontSize: 12),
+                    //       //filled: true,
+                    //       hintText: 'Qty',
+                    //     ),
+                    //   ),
+                    // ),
                     IconButton(onPressed: () {}, icon: Icon(Icons.add)),
                   ],
                 ),
@@ -809,11 +809,11 @@ class ReUseWidget {
                         onPressed: () async {
                           await glb
                               .requestPackage(
-                                  qty: qtyBox.text.trim().toString(),
+                                  //qty: qtyBox.text.trim().toString(),
                                   phoneNumber: phoneBox.text.trim().toString(),
                                   location: locationBox.text.trim().toString())
                               .then((value) {
-                            qtyBox.clear();
+                            //qtyBox.clear();
                             phoneBox.clear();
                             locationBox.clear();
                           });
