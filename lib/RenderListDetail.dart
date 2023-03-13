@@ -56,21 +56,39 @@ class _RenderListDetailState extends State<RenderListDetail> {
     DatabaseReference packageRequest = FirebaseDatabase.instance
         .ref("PackageRequest")
         .child(auth.currentUser!.uid);
-    packageRequest.once().then((DatabaseEvent event) async {
+    await packageRequest.once().then((DatabaseEvent event) async {
       final data = event.snapshot.value;
       Map test = data as Map;
-      test.forEach((key, value) async {
-        Map package = await value as Map;
-        package.forEach((key, value) async {
-          pRequest.add(value['package']);
-          print(pRequest);
-          await returnData(totalpackage: pRequest);
-          setState(() async {
-            isLoading = false;
-          });
-        });
+      //var datadas = test['package'];
+      setState(() {
+        extractData(test['package']);
       });
+      // test.forEach((key, value) {
+      //   setState(() {
+      //     package.add(value['package']);
+      //   });
+      // });
+
+      // package.add(test['package']);
+      // package.map((element) {
+      //   print(element);
+      //   print(element);
+      // });
     });
+  }
+
+  extractData(data) async {
+    try {
+      Map getData = data as Map;
+      getData.forEach((key, value) {
+        pRequest.add(value);
+        returnData(totalpackage: pRequest);
+        print(pRequest);
+        print(pRequest);
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   pendingPackageData() async {
@@ -146,22 +164,34 @@ class _RenderListDetailState extends State<RenderListDetail> {
     pRequest.map((e) => e['package']["phoneNumber"]);
   }
 
-  returnData({List? totalpackage}) async {
+  returnData({
+    List? totalpackage,
+    List? returnPackageData,
+    List? completePackageData,
+    List? pendingPackageData,
+  }) async {
     if (argumentData == 0) {
       renderList = await reUse.reUseListPackage(
+          showList: isLoading,
           pakageTotal: totalpackage,
           removeFoot: true,
           Title: 'Total Package',
           headerColor: theme.dirt);
     } else if (argumentData == 1) {
       renderList = await reUse.reUseListPackage(
-          Title: 'Pending', headerColor: theme.orange);
+          pakageTotal: pendingPackageData,
+          Title: 'Pending',
+          headerColor: theme.orange);
     } else if (argumentData == 2) {
       renderList = await reUse.reUseListPackage(
-          Title: 'Complete', headerColor: theme.liteGreen);
+          pakageTotal: completePackageData,
+          Title: 'Complete',
+          headerColor: theme.liteGreen);
     } else if (argumentData == 3) {
       renderList = await reUse.reUseListPackage(
-          Title: 'Return', headerColor: theme.liteRed);
+          pakageTotal: returnPackageData,
+          Title: 'Return',
+          headerColor: theme.liteRed);
     }
     setState(() {});
   }
@@ -169,12 +199,7 @@ class _RenderListDetailState extends State<RenderListDetail> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-          body: isLoading
-              ? const Align(
-                  alignment: Alignment.center,
-                  child: CircularProgressIndicator())
-              : renderList),
+      child: Scaffold(body: renderList),
     );
   }
 }
