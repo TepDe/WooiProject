@@ -730,6 +730,7 @@ class ReUseWidget {
 
   final phoneBox = TextEditingController();
   final locationBox = TextEditingController();
+
   // final qtyBox = TextEditingController();
   final glb = GlobalController();
 
@@ -862,11 +863,17 @@ class ReUseWidget {
     );
   }
 
-  reUseListPackage({Title, headerColor, removeFoot, List? pakageTotal}) {
+  reUseListPackage(
+      {Title, headerColor, removeFoot, List? pakageTotal, showList}) {
     return Column(
       children: [
         reUseHeader(title: Title, label: 'Search', headercolor: headerColor),
-        reTotalPackageListview(removeStatus: removeFoot, pkc: pakageTotal)
+        if (pakageTotal == null)
+          const Flexible(child: Center(child: Text('No Package')))
+        else if (showList == false)
+          const Flexible(child: Center(child: CircularProgressIndicator()))
+        else
+          reTotalPackageListview(removeStatus: removeFoot, pkc: pakageTotal)
       ],
     );
   }
