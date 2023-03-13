@@ -258,25 +258,46 @@ class GlobalController {
     return UserID;
   }
 
-  Future<void> requestPackage(
-      {uid, latitude, longitude, phoneNumber, location}) async {
-    final prefs = await SharedPreferences.getInstance();
-    getUserID = prefs.getString(str.userID);
+  // Future<void> requestPackage({uid, phoneNumber, location}) async {
+  //   position = await GeolocatorPlatform.instance.getCurrentPosition();
+  //   latitude = position.latitude;
+  //   longitude = position.longitude;
+  //   DatabaseReference packageRequest =
+  //       FirebaseDatabase.instance.ref("PackageRequest");
+  //   await packageRequest
+  //       .child(auth.currentUser!.uid)
+  //       //.child(getUserID.toString())
+  //       .push()
+  //       .set({
+  //     "userName": 'Tep',
+  //     "uLatitude": latitude,
+  //     "uLongitude": longitude,
+  //     "package": {
+  //       "latitude": latitude,
+  //       "longitude": longitude,
+  //       "phoneNumber": phoneNumber,
+  //       "location": location,
+  //       //"qty": qty,
+  //     }
+  //   });
+  // }
+  Future<void> requestPackage({uid, phoneNumber, location}) async {
+    position = await GeolocatorPlatform.instance.getCurrentPosition();
+    latitude = position.latitude;
+    longitude = position.longitude;
     DatabaseReference packageRequest =
         FirebaseDatabase.instance.ref("PackageRequest");
-    await packageRequest
-        .child(auth.currentUser!.uid)
-        .child(getUserID.toString())
-        .push()
-        .set({
-      "package": {
-        "latitude": getLatitude,
-        "longitude": getLongitude,
-        "phoneNumber": phoneNumber,
-        "location": location,
-        //"qty": qty,
-      }
-    });
+    await packageRequest.child(auth.currentUser!.uid)
+        //.child(getUserID.toString())
+        .update({
+      "userName": 'Tep',
+      "uLatitude": latitude,
+      "uLongitude": longitude,
+    }).then((value) =>
+            packageRequest.child(auth.currentUser!.uid).child('package').push().update({
+              'location': location,
+              'phoneNumber': phoneNumber,
+            }));
   }
 }
 
