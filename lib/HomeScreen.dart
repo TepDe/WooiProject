@@ -101,16 +101,17 @@ class _HomeScreenState extends State<HomeScreen> {
       DataSnapshot driver = event.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, values) async {
+        print(values);
+        print(values);
         Map data = values as Map;
-        data.forEach((key, value) async {
-          print(key);
-          print(value);
-          print(value);
-          driverList.add(value);
+        data.forEach((key, value) {
+          setState(() {
+            driverList.add(value);
+          });
         });
+
       });
     });
-    setState(() {});
   }
 
   @override
