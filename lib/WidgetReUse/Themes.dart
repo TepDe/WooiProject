@@ -22,6 +22,6 @@ class ThemesApp{
   var dirt = const Color(0xffe6bf83);
   var white = const Color(0xffffffff);
   var liteBlue = const Color(0xffaed6f1);
-  var Blue = const Color(0xff1974d2);
+  var blue = const Color(0xff1974d2);
 
 }
