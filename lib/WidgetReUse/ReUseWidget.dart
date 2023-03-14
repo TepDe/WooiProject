@@ -734,7 +734,7 @@ class ReUseWidget {
   // final qtyBox = TextEditingController();
   final glb = GlobalController();
 
-  reUseCustomizeButton(context) {
+  reUseDialog({context}) {
     return Container(
       width: Get.width,
       height: 50,
@@ -843,6 +843,47 @@ class ReUseWidget {
       ),
     );
   }
+  reUseOKCancelDialog(context){
+    return   showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: reUseText(
+            content: 'Create Package',
+            weight: FontWeight.bold,
+            size: 18.0),
+        // content: Text('Result is'),
+        actions: [
+          reUseText(content: 'Are you sure you want to delete this package'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Cancel')),
+              ElevatedButton(
+                  onPressed: () async {
+                    await glb
+                        .requestPackage(
+                      //qty: qtyBox.text.trim().toString(),
+                        phoneNumber: phoneBox.text.trim().toString(),
+                        location: locationBox.text.trim().toString())
+                        .then((value) {
+                      //qtyBox.clear();
+                      phoneBox.clear();
+                      locationBox.clear();
+                    });
+
+                    Navigator.pop(context);
+                  },
+                  child: Text('OK')),
+            ],
+          )
+        ],
+      ),
+    );
+  }
 
   reuseTextField({label, controller, textIcon}) {
     return Padding(
@@ -913,8 +954,8 @@ class ReUseWidget {
                       reUseText(
                           weight: FontWeight.bold,
                           size: 16.0,
-                          color: theme.Blue,
-                          content: '000214'),
+                          color: theme.blue,
+                          content: 'PK000214'),
                     ],
                   ),
                   Row(
@@ -955,6 +996,59 @@ class ReUseWidget {
                           color: theme.black,
                           content: '1',
                           weight: FontWeight.w500),
+                    ],
+                  ),
+                  Divider(height: 1, color: theme.grey,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: Container(
+                          width: Get.width,
+                          // decoration: BoxDecoration(
+                          //   color: theme.liteRed,
+                          //   borderRadius: BorderRadius.circular(10),
+                          //   boxShadow: [
+                          //     BoxShadow(
+                          //       color: Colors.grey,
+                          //       blurRadius: 1,
+                          //       //offset: Offset(4, 8), // Shadow position
+                          //     ),
+                          //   ],
+                          // ),
+                          child: TextButton.icon(
+                              onPressed: () {
+                                reUseOKCancelDialog(context);
+
+
+                              },
+                              icon: Icon(
+                                Icons.delete_forever,
+                                color: theme.red,
+                              ),
+                              label: Text(
+                                "Delete",
+                                style: TextStyle(color: theme.red),
+                              )),
+                        ),
+                      ),
+                      Flexible(
+                        child: Container(
+                          width: Get.width,
+                          child: TextButton.icon(
+                              onPressed: () {
+                                reUseOKCancelDialog(context);
+                              },
+                              icon: Icon(
+                                Icons.edit,
+                                color: theme.blue,
+                              ),
+                              label: Text(
+                                "Edit",
+                                style: TextStyle(color: theme.blue),
+                              )),
+                        ),
+                      ),
                     ],
                   ),
                   removeStatus == true
