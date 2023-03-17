@@ -297,6 +297,8 @@ class GlobalController {
             packageRequest.child(auth.currentUser!.uid).child('package').push().update({
               'location': location,
               'phoneNumber': phoneNumber,
+              "latitude": latitude.toString(),
+              "longitude": longitude.toString(),
             }));
   }
 }
