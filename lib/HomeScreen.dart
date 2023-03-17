@@ -97,6 +97,9 @@ class _HomeScreenState extends State<HomeScreen> {
         .ref('PackageRequest')
         .child(auth.currentUser!.uid);
     refs.onValue.listen((event) async {
+      setState(() {
+
+      });
       driverList.clear();
       DataSnapshot driver = event.snapshot;
       Map values = driver.value as Map;
@@ -111,6 +114,9 @@ class _HomeScreenState extends State<HomeScreen> {
         });
 
       });
+    });
+    setState(() {
+
     });
   }
 
