@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:intl/intl.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -282,6 +283,8 @@ class GlobalController {
   //   });
   // }
   Future<void> requestPackage({uid, phoneNumber, location}) async {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat(' dd-MM-yyyy HH:mm ').format(now);
     position = await GeolocatorPlatform.instance.getCurrentPosition();
     latitude = position.latitude;
     longitude = position.longitude;
@@ -293,12 +296,17 @@ class GlobalController {
       "userName": 'Tep',
       "uLatitude": latitude,
       "uLongitude": longitude,
-    }).then((value) =>
-            packageRequest.child(auth.currentUser!.uid).child('package').push().update({
+    }).then((value) => packageRequest
+                .child(auth.currentUser!.uid)
+                .child('package')
+                .push()
+                .update({
+              'uid': auth.currentUser!.uid,
               'location': location,
               'phoneNumber': phoneNumber,
               "latitude": latitude.toString(),
               "longitude": longitude.toString(),
+              'date': formattedDate.toString()
             }));
   }
 }
