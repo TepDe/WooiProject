@@ -34,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     //getCheckUserID();
     checkid();
     totalListLength();
+    pendingListLength();
   }
 
   String getUserID = '';
@@ -97,9 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .ref('PackageRequest')
         .child(auth.currentUser!.uid);
     refs.onValue.listen((event) async {
-      setState(() {
-
-      });
+      setState(() {});
       driverList.clear();
       DataSnapshot driver = event.snapshot;
       Map values = driver.value as Map;
@@ -112,12 +111,74 @@ class _HomeScreenState extends State<HomeScreen> {
             driverList.add(value);
           });
         });
-
       });
     });
-    setState(() {
+    setState(() {});
+  }
 
+  List pendingList = [];
+
+  pendingListLength() async {
+    DatabaseReference refs = FirebaseDatabase.instance.ref('Pending');
+    refs.onValue.listen((event) async {
+      pendingList.clear();
+      DataSnapshot driver = event.snapshot;
+      Map values = driver.value as Map;
+      values.forEach((key, value) async {
+        Map data = value[auth.currentUser!.uid] as Map;
+        data.forEach((key, value) {
+          setState(() {
+            pendingList.add(value);
+          });
+        });
+      });
     });
+  }
+
+  completeListLength() async {
+    DatabaseReference refs = FirebaseDatabase.instance
+        .ref('PackageRequest')
+        .child(auth.currentUser!.uid);
+    refs.onValue.listen((event) async {
+      setState(() {});
+      driverList.clear();
+      DataSnapshot driver = event.snapshot;
+      Map values = driver.value as Map;
+      values.forEach((key, values) async {
+        print(values);
+        print(values);
+        Map data = values as Map;
+        data.forEach((key, value) {
+          setState(() {
+            driverList.add(value);
+          });
+        });
+      });
+    });
+    setState(() {});
+  }
+
+  returnListLength() async {
+    DatabaseReference refs = FirebaseDatabase.instance
+        .ref('PackageRequest')
+        .child(auth.currentUser!.uid);
+    refs.onValue.listen((event) async {
+      setState(() {});
+      driverList.clear();
+      DataSnapshot driver = event.snapshot;
+      Map values = driver.value as Map;
+      values.forEach((key, values) async {
+        print(values);
+        print(values);
+        Map data = values as Map;
+        data.forEach((key, value) {
+          setState(() {
+            driverList.add(value);
+          });
+        });
+      });
+    });
+    setState(() {});
   }
 
   @override
@@ -144,7 +205,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     reUse.topBarHomeScreen(),
                     reUse.unitOneHomeScreen(userID: 'ID $getUserID'),
-                    reUse.unitTwoHomeScreen(totalLength: driverList.length),
+                    reUse.unitTwoHomeScreen(
+                        pendingData: pendingList,
+                        totalLength: driverList.length,
+                        pendingLength: pendingList.length),
                     //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
                     // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
                     //reUse.renderListView(),
