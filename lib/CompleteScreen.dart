@@ -22,16 +22,29 @@ class _CompleteScreenState extends State<CompleteScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(argumentData);
+    print(argumentData);
+    completeList = argumentData;
+  }
+
+
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          body: Column(
-            children: [
-              reUse.reUseHeader(
-                  label: 'Complete', title: 'Complete', headercolor: theme.liteGreen),
-             // reUse.reTotalPackageListview(pkc: completeList)
-            ],
-          ),
-        ));
+      body: Column(
+        children: [
+          reUse.reUseHeader(
+              title: 'Complete',
+              headercolor: theme.liteGreen,
+              titleColor: theme.green),
+          reUse.reTotalPackageListview(pkc: completeList)
+        ],
+      ),
+    ));
   }
 }

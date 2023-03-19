@@ -35,6 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
     checkid();
     totalListLength();
     pendingListLength();
+    completeListLength();
+    returnListLength();
   }
 
   String getUserID = '';
@@ -92,6 +94,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List driverList = [];
+  List completeList = [];
+  List returnData = [];
 
   totalListLength() async {
     DatabaseReference refs = FirebaseDatabase.instance
@@ -137,21 +141,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   completeListLength() async {
     DatabaseReference refs = FirebaseDatabase.instance
-        .ref('PackageRequest')
+        .ref('Complete')
         .child(auth.currentUser!.uid);
     refs.onValue.listen((event) async {
       setState(() {});
-      driverList.clear();
+      completeList.clear();
       DataSnapshot driver = event.snapshot;
       Map values = driver.value as Map;
-      values.forEach((key, values) async {
-        print(values);
-        print(values);
-        Map data = values as Map;
-        data.forEach((key, value) {
-          setState(() {
-            driverList.add(value);
-          });
+      values.forEach((key, value) async {
+        setState(() {
+          completeList.add(value);
         });
       });
     });
@@ -160,21 +159,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   returnListLength() async {
     DatabaseReference refs = FirebaseDatabase.instance
-        .ref('PackageRequest')
+        .ref('Return')
         .child(auth.currentUser!.uid);
     refs.onValue.listen((event) async {
       setState(() {});
-      driverList.clear();
+      returnData.clear();
       DataSnapshot driver = event.snapshot;
       Map values = driver.value as Map;
-      values.forEach((key, values) async {
-        print(values);
-        print(values);
-        Map data = values as Map;
-        data.forEach((key, value) {
-          setState(() {
-            driverList.add(value);
-          });
+      values.forEach((key, value) async {
+        setState(() {
+          returnData.add(value);
         });
       });
     });
@@ -183,14 +177,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var viewHeight = MediaQuery.of(context).size.height * 0.3;
+    var viewHeight = MediaQuery
+        .of(context)
+        .size
+        .height * 0.3;
     return WillPopScope(
-        onWillPop: () => exitApp(),
-        child: SafeArea(
-          child: Scaffold(
-            backgroundColor: Colors.white,
-            resizeToAvoidBottomInset: false,
-            body: Stack(
+      onWillPop: () => exitApp(),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Stack(
               children: [
                 Container(
                   height: viewHeight,
@@ -198,27 +194,39 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: theme.liteOrange,
                     borderRadius: BorderRadius.vertical(
                         bottom: Radius.elliptical(
-                            MediaQuery.of(context).size.width, 100.0)),
+                            MediaQuery
+                                .of(context)
+                                .size
+                                .width, 100.0)),
                   ),
                 ),
-                Column(
-                  children: [
-                    reUse.topBarHomeScreen(),
-                    reUse.unitOneHomeScreen(userID: 'ID $getUserID'),
-                    reUse.unitTwoHomeScreen(
-                        pendingData: pendingList,
-                        totalLength: driverList.length,
-                        pendingLength: pendingList.length),
-                    //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
-                    // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
-                    //reUse.renderListView(),
-                    reUse.reUseDialog(context: context)
-                  ],
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      reUse.topBarHomeScreen(),
+                      reUse.unitOneHomeScreen(userID: 'ID $getUserID'),
+                      reUse.unitTwoHomeScreen(
+                          returnData:returnData,
+                          completeData: completeList,
+                          returnLength: returnData.length,
+                          completeLength: completeList.length,
+                          pendingData: pendingList,
+                          totalLength: driverList.length,
+                          pendingLength: pendingList.length),
+                      //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
+                      // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
+                      //reUse.renderListView(),
+                      reUse.reUseDialog(context: context),
+
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
-        ));
+          ],
+        ),
+      ),
+    );
   }
 
   FirebaseAuth auth = FirebaseAuth.instance;

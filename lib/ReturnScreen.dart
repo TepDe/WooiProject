@@ -18,8 +18,15 @@ class _ReturnScreenState extends State<ReturnScreen> {
   final theme = ThemesApp();
   final glb = GlobalController();
   var argumentData = Get.arguments;
-  List completeList = ['dasdasd'];
+  List returnList = [];
   FirebaseAuth auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    returnList = argumentData;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +36,7 @@ class _ReturnScreenState extends State<ReturnScreen> {
             children: [
               reUse.reUseHeader(
                   label: 'Return', title: 'Return', headercolor: theme.liteRed),
-              // reUse.reTotalPackageListview(pkc: completeList)
+              reUse.reTotalPackageListview(pkc: returnList)
             ],
           ),
         ));

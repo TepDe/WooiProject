@@ -253,7 +253,9 @@ class ReUseWidget {
     int? totalLength,
     int? pendingLength,
     int? completeLength,
+    List? completeData,
     int? returnLength,
+    List? returnData,
   }) {
     return Container(
       width: Get.width,
@@ -315,12 +317,12 @@ class ReUseWidget {
                 onTap: () {
                   Get.to(
                     CompleteScreen(),
-                    arguments: 2,
+                    arguments: completeData,
                   );
                 },
                 child: unitTwoText(
-                    label: "Complete",
-                    qty: '0',
+                    label: 'Complete',
+                    qty: completeLength.toString(),
                     assetsIcon: 'assets/images/check.png',
                     borderright: BorderSide(width: 1, color: theme.liteGrey),
                     bordertop: BorderSide(width: 1, color: theme.liteGrey),
@@ -331,12 +333,12 @@ class ReUseWidget {
                 onTap: () {
                   Get.to(
                     ReturnScreen(),
-                    arguments: 3,
+                    arguments: returnData,
                   );
                 },
                 child: unitTwoText(
                     label: "Return Ship",
-                    qty: '0',
+                    qty: returnLength.toString(),
                     assetsIcon: 'assets/images/return-box.png',
                     bordertop: BorderSide(width: 1, color: theme.liteGrey),
                     borderleft: BorderSide(width: 1, color: theme.liteGrey),
@@ -556,7 +558,7 @@ class ReUseWidget {
   final phoneControl = TextEditingController();
   final dialogPhoneNum = TextEditingController();
 
-  reUseHeader({headercolor, title, label}) {
+  reUseHeader({headercolor, title, label,titleColor}) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
@@ -590,7 +592,7 @@ class ReUseWidget {
                     title ?? '',
                     style: TextStyle(
                         fontSize: 18,
-                        color: Colors.black,
+                        color: titleColor,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -1008,60 +1010,6 @@ class ReUseWidget {
                           weight: FontWeight.w500),
                     ],
                   ),
-                  Divider(
-                    height: 1,
-                    color: theme.grey,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        child: Container(
-                          width: Get.width,
-                          // decoration: BoxDecoration(
-                          //   color: theme.liteRed,
-                          //   borderRadius: BorderRadius.circular(10),
-                          //   boxShadow: [
-                          //     BoxShadow(
-                          //       color: Colors.grey,
-                          //       blurRadius: 1,
-                          //       //offset: Offset(4, 8), // Shadow position
-                          //     ),
-                          //   ],
-                          // ),
-                          child: TextButton.icon(
-                              onPressed: () {
-                                reUseOKCancelDialog(context);
-                              },
-                              icon: Icon(
-                                Icons.delete_forever,
-                                color: theme.red,
-                              ),
-                              label: Text(
-                                "Delete",
-                                style: TextStyle(color: theme.red),
-                              )),
-                        ),
-                      ),
-                      Flexible(
-                        child: Container(
-                          width: Get.width,
-                          child: TextButton.icon(
-                              onPressed: () {
-                                reUseOKCancelDialog(context);
-                              },
-                              icon: Icon(
-                                Icons.edit,
-                                color: theme.blue,
-                              ),
-                              label: Text(
-                                "Edit",
-                                style: TextStyle(color: theme.blue),
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
                   removeStatus == true
                       ? Container()
                       : Divider(
@@ -1080,7 +1028,7 @@ class ReUseWidget {
                             reUseText(
                                 size: 12.0,
                                 color: theme.liteGreen,
-                                content: 'PENDING',
+                                content: 'COMPLETE',
                                 weight: FontWeight.w900),
                           ],
                         ),
@@ -1352,6 +1300,7 @@ class ReUseWidget {
           }),
     );
   }
+
   reUseTotalPackageList({removeStatus, List? pkc}) {
     return Flexible(
       child: ListView.builder(
@@ -1453,7 +1402,18 @@ class ReUseWidget {
     );
   }
 
-  reUseNotificationBox() {
+  reUseUpdateStatusList({ List? data}) {
+    return Flexible(
+      child: ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: data!.length,
+          itemBuilder: (BuildContext context, int index) {
+            return reUseNotificationBox(value: data[index]);
+          }),
+    );
+  }
+
+  reUseNotificationBox({value}) {
     return Container(
       margin: EdgeInsets.all(6),
       padding: EdgeInsets.all(6),
@@ -1496,7 +1456,7 @@ class ReUseWidget {
                       reUseText(
                         content: 'Your package ID',
                       ),
-                      reUseText(content: ' 000123', weight: FontWeight.bold),
+                      reUseText(content: '$value', weight: FontWeight.bold),
                     ],
                   ),
                   reUseText(content: '24/05/2023 03:36 PM'),
