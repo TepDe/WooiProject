@@ -6,11 +6,15 @@ import 'package:flutter/rendering.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:wooiproject/CompleteScreen.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/HomeScreen.dart';
 import 'package:wooiproject/MapScreen.dart';
+import 'package:wooiproject/PendingScreen.dart';
 import 'package:wooiproject/ProfileScreen.dart';
 import 'package:wooiproject/RenderListDetail.dart';
+import 'package:wooiproject/ReturnScreen.dart';
+import 'package:wooiproject/TotalPackageScreen.dart';
 import 'package:wooiproject/ViewScreen.dart';
 import 'package:wooiproject/WidgetReUse/SuperController.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
@@ -244,7 +248,13 @@ class ReUseWidget {
     );
   }
 
-  unitTwoHomeScreen({int? totalLength}) {
+  unitTwoHomeScreen({
+    pendingData,
+    int? totalLength,
+    int? pendingLength,
+    int? completeLength,
+    int? returnLength,
+  }) {
     return Container(
       width: Get.width,
       margin: EdgeInsets.only(top: 30, right: 10, left: 10),
@@ -268,13 +278,13 @@ class ReUseWidget {
                 child: InkWell(
                   onTap: () {
                     Get.to(
-                      RenderListDetail(),
-                      arguments: 0,
+                      TotalPackageScreen(),
+
                     );
                   },
                   child: unitTwoText(
                       label: "Total package",
-                      qty: totalLength.toString() ?? '0',
+                      qty: totalLength.toString(),
                       assetsIconColor: theme.dirt,
                       assetsIcon: 'assets/images/box.png',
                       borderbottom: BorderSide(width: 1, color: theme.liteGrey),
@@ -284,14 +294,13 @@ class ReUseWidget {
               Flexible(
                 child: InkWell(
                   onTap: () {
-                    Get.to(
-                      RenderListDetail(),
-                      arguments: 1,
-                    );
+                    print(pendingData);
+                    print(pendingData);
+                    Get.to(PendingScreen(), arguments: pendingData);
                   },
                   child: unitTwoText(
                       label: "Pending",
-                      qty: '0',
+                      qty: pendingLength.toString(),
                       assetsIcon: 'assets/images/process.png',
                       borderbottom: BorderSide(width: 1, color: theme.liteGrey),
                       borderleft: BorderSide(width: 1, color: theme.liteGrey)),
@@ -305,7 +314,7 @@ class ReUseWidget {
                   child: InkWell(
                 onTap: () {
                   Get.to(
-                    RenderListDetail(),
+                    CompleteScreen(),
                     arguments: 2,
                   );
                 },
@@ -321,7 +330,7 @@ class ReUseWidget {
                   child: InkWell(
                 onTap: () {
                   Get.to(
-                    RenderListDetail(),
+                    ReturnScreen(),
                     arguments: 3,
                   );
                 },
@@ -843,14 +852,13 @@ class ReUseWidget {
       ),
     );
   }
-  reUseOKCancelDialog(context){
-    return   showDialog(
+
+  reUseOKCancelDialog(context) {
+    return showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: reUseText(
-            content: 'Create Package',
-            weight: FontWeight.bold,
-            size: 18.0),
+            content: 'Create Package', weight: FontWeight.bold, size: 18.0),
         // content: Text('Result is'),
         actions: [
           reUseText(content: 'Are you sure you want to delete this package'),
@@ -866,9 +874,9 @@ class ReUseWidget {
                   onPressed: () async {
                     await glb
                         .requestPackage(
-                      //qty: qtyBox.text.trim().toString(),
-                        phoneNumber: phoneBox.text.trim().toString(),
-                        location: locationBox.text.trim().toString())
+                            //qty: qtyBox.text.trim().toString(),
+                            phoneNumber: phoneBox.text.trim().toString(),
+                            location: locationBox.text.trim().toString())
                         .then((value) {
                       //qtyBox.clear();
                       phoneBox.clear();
@@ -906,6 +914,8 @@ class ReUseWidget {
 
   reUseListPackage(
       {Title, headerColor, removeFoot, List? pakageTotal, showList}) {
+    print(pakageTotal);
+    print(pakageTotal);
     return Column(
       children: [
         reUseHeader(title: Title, label: 'Search', headercolor: headerColor),
@@ -998,7 +1008,10 @@ class ReUseWidget {
                           weight: FontWeight.w500),
                     ],
                   ),
-                  Divider(height: 1, color: theme.grey,),
+                  Divider(
+                    height: 1,
+                    color: theme.grey,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -1019,8 +1032,6 @@ class ReUseWidget {
                           child: TextButton.icon(
                               onPressed: () {
                                 reUseOKCancelDialog(context);
-
-
                               },
                               icon: Icon(
                                 Icons.delete_forever,
@@ -1073,6 +1084,368 @@ class ReUseWidget {
                                 weight: FontWeight.w900),
                           ],
                         ),
+                ],
+              ),
+            );
+          }),
+    );
+  }
+  reCompletePackageListview({removeStatus, List? pkc}) {
+    return Flexible(
+      child: ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: pkc!.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              width: Get.width,
+              margin: EdgeInsets.all(6),
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: theme.liteGrey,
+                borderRadius: BorderRadius.circular(6),
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.grey,
+                    blurRadius: 4,
+                    offset: Offset(0, 1), // Shadow position
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUseText(
+                          weight: FontWeight.w400,
+                          size: 12.0,
+                          color: theme.grey,
+                          content: 'SHIPPING ID :'),
+                      reUseText(
+                          weight: FontWeight.bold,
+                          size: 16.0,
+                          color: theme.blue,
+                          content: 'PK000214'),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUseText(
+                          weight: FontWeight.bold,
+                          size: 12.0,
+                          color: theme.grey,
+                          content: 'Location'),
+                      reUseText(
+                          size: 12.0,
+                          weight: FontWeight.bold,
+                          color: theme.grey,
+                          content: 'Phone number'),
+                      reUseText(
+                          size: 12.0,
+                          weight: FontWeight.bold,
+                          color: theme.grey,
+                          content: 'Qty'),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUseText(
+                          size: 14.0,
+                          color: theme.black,
+                          content: pkc[index]['location'],
+                          weight: FontWeight.w500),
+                      reUseText(
+                          size: 14.0,
+                          color: theme.black,
+                          weight: FontWeight.w500,
+                          content: pkc[index]['phoneNumber']),
+                      reUseText(
+                          size: 14.0,
+                          color: theme.black,
+                          content: '1',
+                          weight: FontWeight.w500),
+                    ],
+                  ),
+                  Divider(
+                    height: 1,
+                    color: theme.grey,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: Container(
+                          width: Get.width,
+                          // decoration: BoxDecoration(
+                          //   color: theme.liteRed,
+                          //   borderRadius: BorderRadius.circular(10),
+                          //   boxShadow: [
+                          //     BoxShadow(
+                          //       color: Colors.grey,
+                          //       blurRadius: 1,
+                          //       //offset: Offset(4, 8), // Shadow position
+                          //     ),
+                          //   ],
+                          // ),
+                          child: TextButton.icon(
+                              onPressed: () {
+                                reUseOKCancelDialog(context);
+                              },
+                              icon: Icon(
+                                Icons.delete_forever,
+                                color: theme.red,
+                              ),
+                              label: Text(
+                                "Delete",
+                                style: TextStyle(color: theme.red),
+                              )),
+                        ),
+                      ),
+                      Flexible(
+                        child: Container(
+                          width: Get.width,
+                          child: TextButton.icon(
+                              onPressed: () {
+                                reUseOKCancelDialog(context);
+                              },
+                              icon: Icon(
+                                Icons.edit,
+                                color: theme.blue,
+                              ),
+                              label: Text(
+                                "Edit",
+                                style: TextStyle(color: theme.blue),
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                  removeStatus == true
+                      ? Container()
+                      : Divider(
+                          color: theme.grey,
+                        ),
+                  removeStatus == true
+                      ? Container()
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            reUseText(
+                                size: 12.0,
+                                weight: FontWeight.bold,
+                                color: theme.grey,
+                                content: 'Status'),
+                            reUseText(
+                                size: 12.0,
+                                color: theme.liteGreen,
+                                content: 'PENDING',
+                                weight: FontWeight.w900),
+                          ],
+                        ),
+                ],
+              ),
+            );
+          }),
+    );
+  }
+
+  reUsePendingList({removeStatus, List? pkc}) {
+    return Flexible(
+      child: ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: pkc!.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              width: Get.width,
+              margin: EdgeInsets.all(6),
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: theme.liteGrey,
+                borderRadius: BorderRadius.circular(6),
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.grey,
+                    blurRadius: 4,
+                    offset: Offset(0, 1), // Shadow position
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUseText(
+                          weight: FontWeight.w400,
+                          size: 12.0,
+                          color: theme.grey,
+                          content: 'SHIPPING ID :'),
+                      reUseText(
+                          weight: FontWeight.bold,
+                          size: 16.0,
+                          color: theme.blue,
+                          content: 'PK000214'),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUseText(
+                          weight: FontWeight.bold,
+                          size: 12.0,
+                          color: theme.grey,
+                          content: 'Location'),
+                      reUseText(
+                          size: 12.0,
+                          weight: FontWeight.bold,
+                          color: theme.grey,
+                          content: 'Phone number'),
+                      reUseText(
+                          size: 12.0,
+                          weight: FontWeight.bold,
+                          color: theme.grey,
+                          content: 'Qty'),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUseText(
+                          size: 14.0,
+                          color: theme.black,
+                          content: pkc[index]['location'],
+                          weight: FontWeight.w500),
+                      reUseText(
+                          size: 14.0,
+                          color: theme.black,
+                          weight: FontWeight.w500,
+                          content: pkc[index]['phoneNumber']),
+                      reUseText(
+                          size: 14.0,
+                          color: theme.black,
+                          content: '1',
+                          weight: FontWeight.w500),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUseText(
+                          size: 12.0,
+                          weight: FontWeight.bold,
+                          color: theme.grey,
+                          content: 'Status'),
+                      reUseText(
+                          size: 12.0,
+                          color: theme.liteGreen,
+                          content: 'PENDING',
+                          weight: FontWeight.w900),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          }),
+    );
+  }
+  reUseTotalPackageList({removeStatus, List? pkc}) {
+    return Flexible(
+      child: ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: pkc!.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              width: Get.width,
+              margin: EdgeInsets.all(6),
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: theme.liteGrey,
+                borderRadius: BorderRadius.circular(6),
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.grey,
+                    blurRadius: 4,
+                    offset: Offset(0, 1), // Shadow position
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUseText(
+                          weight: FontWeight.w400,
+                          size: 12.0,
+                          color: theme.grey,
+                          content: 'SHIPPING ID :'),
+                      reUseText(
+                          weight: FontWeight.bold,
+                          size: 16.0,
+                          color: theme.blue,
+                          content: 'PK000214'),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUseText(
+                          weight: FontWeight.bold,
+                          size: 12.0,
+                          color: theme.grey,
+                          content: 'Location'),
+                      reUseText(
+                          size: 12.0,
+                          weight: FontWeight.bold,
+                          color: theme.grey,
+                          content: 'Phone number'),
+                      reUseText(
+                          size: 12.0,
+                          weight: FontWeight.bold,
+                          color: theme.grey,
+                          content: 'Qty'),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUseText(
+                          size: 14.0,
+                          color: theme.black,
+                          content: pkc[index]['location'],
+                          weight: FontWeight.w500),
+                      reUseText(
+                          size: 14.0,
+                          color: theme.black,
+                          weight: FontWeight.w500,
+                          content: pkc[index]['phoneNumber']),
+                      reUseText(
+                          size: 14.0,
+                          color: theme.black,
+                          content: '1',
+                          weight: FontWeight.w500),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUseText(
+                          size: 12.0,
+                          weight: FontWeight.bold,
+                          color: theme.grey,
+                          content: 'Status'),
+                      reUseText(
+                          size: 12.0,
+                          color: theme.liteGreen,
+                          content: 'PENDING',
+                          weight: FontWeight.w900),
+                    ],
+                  ),
                 ],
               ),
             );
