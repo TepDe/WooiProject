@@ -38,6 +38,11 @@ class _RenderListDetailState extends State<RenderListDetail> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    print(argumentData);
+    print(argumentData);
+    pendingPackage = argumentData;
+    returnData(pendingPackageData: pendingPackage);
+
     totalPackageData();
   }
 
