@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
@@ -12,13 +14,66 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   final themes = ThemesApp();
   final reUse = ReUseWidget();
+  FirebaseAuth auth = FirebaseAuth.instance;
+  List completeList = [];
+  List returnData = [];
+  List statusData = [];
+  completeListLength() async {
+    DatabaseReference refs = FirebaseDatabase.instance
+        .ref('Complete')
+        .child(auth.currentUser!.uid);
+    refs.onValue.listen((event) async {
+      setState(() {});
+      completeList.clear();
+      DataSnapshot driver = event.snapshot;
+      Map values = driver.value as Map;
+      values.forEach((key, value) async {
+        setState(() {
+          completeList.add(value);
+          statusData.add(value);
+
+        });
+      });
+    });
+    setState(() {});
+  }
+
+  returnListLength() async {
+    DatabaseReference refs = FirebaseDatabase.instance
+        .ref('Return')
+        .child(auth.currentUser!.uid);
+    refs.onValue.listen((event) async {
+      setState(() {});
+      returnData.clear();
+      DataSnapshot driver = event.snapshot;
+      Map values = driver.value as Map;
+      values.forEach((key, value) async {
+        setState(() {
+          returnData.add(value);
+          statusData.add(value);
+        });
+      });
+    });
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    returnListLength();
+    completeListLength();
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: Column(
-          children: [reUse.reUseTopBar(name: 'Notification',context: context), reUse.renderListView()],
+          children: [
+            reUse.reUseTopBar(name: 'Notification', context: context),
+            reUse.reUseUpdateStatusList(data: statusData)
+          ],
         ),
       ),
     );
