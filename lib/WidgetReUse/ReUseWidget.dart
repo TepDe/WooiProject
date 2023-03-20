@@ -281,7 +281,6 @@ class ReUseWidget {
                   onTap: () {
                     Get.to(
                       TotalPackageScreen(),
-
                     );
                   },
                   child: unitTwoText(
@@ -558,7 +557,7 @@ class ReUseWidget {
   final phoneControl = TextEditingController();
   final dialogPhoneNum = TextEditingController();
 
-  reUseHeader({headercolor, title, label,titleColor}) {
+  reUseHeader({headercolor, title, label, titleColor}) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
@@ -1038,6 +1037,7 @@ class ReUseWidget {
           }),
     );
   }
+
   reCompletePackageListview({removeStatus, List? pkc}) {
     return Flexible(
       child: ListView.builder(
@@ -1402,18 +1402,19 @@ class ReUseWidget {
     );
   }
 
-  reUseUpdateStatusList({ List? data}) {
+  reUseUpdateStatusList({List? data}) {
     return Flexible(
       child: ListView.builder(
           padding: const EdgeInsets.all(8),
           itemCount: data!.length,
           itemBuilder: (BuildContext context, int index) {
-            return reUseNotificationBox(value: data[index]);
+            return reUseNotificationBox(
+                value: data[index], status: data[index]['status']);
           }),
     );
   }
 
-  reUseNotificationBox({value}) {
+  reUseNotificationBox({value, status}) {
     return Container(
       margin: EdgeInsets.all(6),
       padding: EdgeInsets.all(6),
@@ -1456,26 +1457,26 @@ class ReUseWidget {
                       reUseText(
                         content: 'Your package ID',
                       ),
-                      reUseText(content: '$value', weight: FontWeight.bold),
+                      reUseText(content: '_', weight: FontWeight.bold),
                     ],
                   ),
-                  reUseText(content: '24/05/2023 03:36 PM'),
+                  reUseText(content: '${value['date']}'),
                 ],
               ),
             ],
           ),
-          reUseStatusBox()
+          reUseStatusBox(value: status)
         ],
       ),
     );
   }
 
-  reUseStatusBox({accentcolor}) {
+  reUseStatusBox({color, value}) {
     return Container(
       margin: EdgeInsets.all(6),
       padding: EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: theme.liteGreen,
+        color: value == 'complete' ? theme.liteGreen : theme.liteRed,
         borderRadius: BorderRadius.circular(10),
         // boxShadow: [
         //   BoxShadow(
@@ -1487,7 +1488,9 @@ class ReUseWidget {
         // ],
       ),
       child: reUseText(
-          content: 'Complete', color: theme.white, weight: FontWeight.w500),
+          content: value == 'complete' ? 'Complete' : 'Return',
+          color: theme.white,
+          weight: FontWeight.w500),
     );
   }
 }
