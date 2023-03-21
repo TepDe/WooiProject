@@ -111,7 +111,7 @@ class ReUseWidget {
     );
   }
 
-  unitOneHomeScreen({function, userID}) {
+  unitOneHomeScreen({function, userID, context}) {
     return Padding(
       padding: const EdgeInsets.only(left: 18.0, top: 20, right: 18),
       child: Row(
@@ -135,7 +135,68 @@ class ReUseWidget {
             ],
           ),
           InkWell(
-            onTap: () async {},
+            onTap: () async {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Dialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      alignment: Alignment.topCenter,
+                      children: [
+                        Positioned(
+                          top: -60.0,
+                          child: CircleAvatar(
+                            radius: 60.0,
+                            backgroundColor: theme.liteOrange,
+                            child: Icon(
+                              Icons.info,
+                              color: Colors.white,
+                              size:100.0,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top:80.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(
+                                'Dialog Title',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 20.0),
+                              Text(
+                                'Dialog content goes here...',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                              SizedBox(height: 20.0),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('Close'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
             child: Icon(
               Icons.account_circle,
               size: 60,
@@ -671,6 +732,60 @@ class ReUseWidget {
     );
   }
 
+  reUseTextNote({content, size, weight, color}) {
+    return Flexible(
+      child: SingleChildScrollView(
+        child: Text(
+          content,
+          maxLines: 5,
+          style: TextStyle(
+              fontSize: size ?? 12,
+              color: color ?? theme.black,
+              fontWeight: weight ?? FontWeight.normal),
+        ),
+      ),
+    );
+  }
+
+  reSetUseText({content, size, weight, color, title, titleColor}) {
+    return Flexible(
+      flex: 1,
+      child: SizedBox(
+        width: Get.width,
+        child: Padding(
+          padding: const EdgeInsets.all(1),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(1),
+                child: Text(
+                  title,
+                  maxLines: 2,
+                  style: TextStyle(
+                      fontSize: 11,
+                      color: titleColor ?? theme.black,
+                      fontWeight: weight ?? FontWeight.normal),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(1),
+                child: Text(
+                  content,
+                  maxLines: 2,
+                  style: TextStyle(
+                      fontSize: size ?? 12,
+                      color: color ?? theme.black,
+                      fontWeight: weight ?? FontWeight.normal),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   final gsc = Get.put(GlbSuperController());
 
   reuseButton({label, function}) {
@@ -952,7 +1067,6 @@ class ReUseWidget {
                 ],
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -962,75 +1076,130 @@ class ReUseWidget {
                           size: 12.0,
                           color: theme.grey,
                           content: 'SHIPPING ID :'),
-                      reUseText(
-                          weight: FontWeight.bold,
-                          size: 16.0,
-                          color: theme.blue,
-                          content: 'PK000214'),
+                      Row(
+                        children: [
+                          reUseText(
+                              weight: FontWeight.bold,
+                              size: 16.0,
+                              color: theme.blue,
+                              content: 'PK000214'),
+                          SizedBox(
+                            height: 40,
+                            width: 40,
+                            child: PopupMenuButton<int>(
+                              onSelected: (item) => {},
+                              itemBuilder: (context) => [
+                                PopupMenuItem<int>(
+                                    value: 0, child: Text('Edit')),
+                                PopupMenuItem<int>(
+                                    value: 1, child: Text('Delete')),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      reUseText(
-                          weight: FontWeight.bold,
-                          size: 12.0,
-                          color: theme.grey,
-                          content: 'Location'),
-                      reUseText(
-                          size: 12.0,
-                          weight: FontWeight.bold,
-                          color: theme.grey,
-                          content: 'Phone number'),
-                      reUseText(
-                          size: 12.0,
-                          weight: FontWeight.bold,
-                          color: theme.grey,
-                          content: 'Qty'),
-                    ],
+                  Divider(
+                    color: theme.grey,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      reUseText(
+                      reSetUseText(
+                          titleColor: theme.grey,
+                          title: 'Destination',
                           size: 14.0,
                           color: theme.black,
                           content: pkc[index]['location'],
                           weight: FontWeight.w500),
-                      reUseText(
+                      reSetUseText(
+                          titleColor: theme.grey,
+                          title: 'Phone number',
                           size: 14.0,
                           color: theme.black,
-                          weight: FontWeight.w500,
-                          content: pkc[index]['phoneNumber']),
-                      reUseText(
+                          content: pkc[index]['phoneNumber'],
+                          weight: FontWeight.w500),
+                      reSetUseText(
+                          titleColor: theme.grey,
+                          title: 'Qty',
                           size: 14.0,
                           color: theme.black,
                           content: '1',
                           weight: FontWeight.w500),
                     ],
                   ),
-                  removeStatus == true
-                      ? Container()
-                      : Divider(
-                          color: theme.grey,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      reUseText(
+                          weight: FontWeight.bold,
+                          size: 12.0,
+                          color: theme.darkGrey,
+                          content: 'Price '),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: theme.hiLiteBlue,
+                          borderRadius: BorderRadius.circular(4),
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: Colors.grey,
+                          //     blurRadius: 1,
+                          //     //offset: Offset(4, 8), // Shadow position
+                          //   ),
+                          // ],
                         ),
-                  removeStatus == true
-                      ? Container()
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            reUseText(
-                                size: 12.0,
-                                weight: FontWeight.bold,
+                        child: reUseText(
+                            weight: FontWeight.bold,
+                            size: 18.0,
+                            color: theme.white ,
+                            content: '\$25'),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        reUseText(
+                            weight: FontWeight.bold,
+                            size: 12.0,
+                            color: theme.darkGrey,
+                            content: 'Note :'),
+                        Flexible(
+                          child: Container(
+                            margin: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: theme.grey)),
+                            child: reUseTextNote(
+                                weight: FontWeight.w400,
+                                size: 14.0,
                                 color: theme.grey,
-                                content: 'Status'),
-                            reUseText(
-                                size: 12.0,
-                                color: theme.liteGreen,
-                                content: 'COMPLETE',
-                                weight: FontWeight.w900),
-                          ],
+                                content:
+                                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry  standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'),
+                          ),
                         ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      reUseText(
+                          weight: FontWeight.w400,
+                          size: 12.0,
+                          color: theme.grey,
+                          content: 'Date : '),
+                      reUseText(
+                          weight: FontWeight.w400,
+                          size: 12.0,
+                          color: theme.darkGrey,
+                          content: '24/05/2023 09:54 AM'),
+                    ],
+                  ),
                 ],
               ),
             );
