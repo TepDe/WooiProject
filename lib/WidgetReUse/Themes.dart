@@ -23,5 +23,6 @@ class ThemesApp{
   var white = const Color(0xffffffff);
   var liteBlue = const Color(0xffaed6f1);
   var blue = const Color(0xff1974d2);
+  var hiLiteBlue = const Color(0xff306eff);
 
 }
