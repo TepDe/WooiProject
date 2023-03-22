@@ -187,6 +187,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    FocusScope.of(context).unfocus();
+
     var viewHeight = MediaQuery.of(context).size.height * 0.3;
     return WillPopScope(
       onWillPop: () => exitApp(),
