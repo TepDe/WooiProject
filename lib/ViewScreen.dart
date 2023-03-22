@@ -22,7 +22,14 @@ class _ViewScreenState extends State<ViewScreen> {
   final themes = ThemesApp();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    FocusScope.of(context).unfocus();
     return SafeArea(
       child: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -31,10 +38,10 @@ class _ViewScreenState extends State<ViewScreen> {
               BottomNavigationBarItem(
                 icon: Image.asset(
                   'assets/images/home_icon.png',
-                  width:  30,
+                  width: 30,
                   height: 30,
                   //alignment: Alignment.topRight,
-                 color: changeColor ?? themes.deepOrange,
+                  color: changeColor ?? themes.deepOrange,
                 ),
                 label: 'Home',
               ),
@@ -51,7 +58,10 @@ class _ViewScreenState extends State<ViewScreen> {
                     //   alignment: Alignment.topRight,
                     //   color: changeColor ?? themes.grey,
                     // ),
-                    Icon(Icons.notifications,size:40 ,),
+                    Icon(
+                      Icons.notifications,
+                      size: 40,
+                    ),
                     Positioned(
                       right: 0,
                       child: Container(
