@@ -282,7 +282,7 @@ class GlobalController {
   //     }
   //   });
   // }
-  Future<void> requestPackage({uid, phoneNumber, location}) async {
+  Future<void> requestPackage({uid, phoneNumber, location,qty}) async {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat(' dd-MM-yyyy HH:mm ').format(now);
     position = await GeolocatorPlatform.instance.getCurrentPosition();
@@ -306,7 +306,8 @@ class GlobalController {
               'phoneNumber': phoneNumber,
               "latitude": latitude.toString(),
               "longitude": longitude.toString(),
-              'date': formattedDate.toString()
+              'date': formattedDate.toString(),
+              'qty': qty.toString(),
             }));
   }
 }
