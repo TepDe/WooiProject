@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wooiproject/CompleteScreen.dart';
+import 'package:wooiproject/CreatePackageScreen.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/HomeScreen.dart';
 import 'package:wooiproject/MapScreen.dart';
@@ -155,12 +156,12 @@ class ReUseWidget {
                             child: Icon(
                               Icons.info,
                               color: Colors.white,
-                              size:100.0,
+                              size: 100.0,
                             ),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top:80.0),
+                          padding: EdgeInsets.only(top: 80.0),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -717,6 +718,51 @@ class ReUseWidget {
       ),
     );
   }
+  reUseTopHeader({headercolor, title, label, titleColor}) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      decoration: BoxDecoration(
+        color: headercolor,
+        //borderRadius: BorderRadius.circular(6),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: theme.grey,
+        //     blurRadius: 4,
+        //     offset: Offset(0, 1), // Shadow position
+        //   ),
+        // ],
+      ),
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              children: [
+                IconButton(
+                    splashRadius: 25,
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: Icon(Icons.arrow_back)),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    title ?? '',
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: titleColor,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+
+        ],
+      ),
+    );
+  }
 
   reUseText({content, size, weight, color}) {
     return Padding(
@@ -855,8 +901,7 @@ class ReUseWidget {
 
   final phoneBox = TextEditingController();
   final locationBox = TextEditingController();
-
-  // final qtyBox = TextEditingController();
+  final qtyBox = TextEditingController();
   final glb = GlobalController();
 
   reUseDialog({context}) {
@@ -882,76 +927,113 @@ class ReUseWidget {
         //
         // ),
         onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: reUseText(
-                  content: 'Create Package',
-                  weight: FontWeight.bold,
-                  size: 18.0),
-              // content: Text('Result is'),
-              actions: [
-                reuseTextField(
-                    textIcon: Icons.phone,
-                    label: 'Phone Number',
-                    controller: phoneBox),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    IconButton(onPressed: () {}, icon: Icon(Icons.remove)),
-                    // Container(
-                    //   width: 60,
-                    //   margin: const EdgeInsets.symmetric(horizontal: 30),
-                    //   child: TextField(
-                    //     controller: qtyBox,
-                    //     decoration: const InputDecoration(
-                    //       //icon: Icon(textIcon ?? null),
-                    //       // fillColor: theme.liteGrey,
-                    //       border: OutlineInputBorder(),
-                    //       //border: InputBorder.none,
-                    //       hintStyle: TextStyle(fontSize: 12),
-                    //       //filled: true,
-                    //       hintText: 'Qty',
-                    //     ),
-                    //   ),
-                    // ),
-                    IconButton(onPressed: () {}, icon: Icon(Icons.add)),
-                  ],
-                ),
-                reuseTextField(
-                    controller: locationBox,
-                    label: 'Location',
-                    textIcon: Icons.location_on),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text('Cancel')),
-                    ElevatedButton(
-                        onPressed: () async {
-                          await glb
-                              .requestPackage(
-                                  //qty: qtyBox.text.trim().toString(),
-                                  phoneNumber: phoneBox.text.trim().toString(),
-                                  location: locationBox.text.trim().toString())
-                              .then((value) {
-                            //qtyBox.clear();
-                            phoneBox.clear();
-                            locationBox.clear();
-                          });
-
-                          Navigator.pop(context);
-                        },
-                        child: Text('OK')),
-                  ],
-                )
-              ],
-            ),
-          );
+          Get.to(const CreatePackageScreen());
+          // showDialog(
+          //   context: context,
+          //   builder: (context) => AlertDialog(
+          //     // content: Text('Result is'),
+          //     actions: [
+          //       SingleChildScrollView(
+          //         child: SizedBox(
+          //           width: Get.width,
+          //           child: Column(
+          //             children: [
+          //               reuseTextField(
+          //                   textIcon: Icons.phone,
+          //                   label: 'Receiver Phone Number',
+          //                   controller: phoneBox),
+          //               reuseTextField(
+          //                   controller: locationBox,
+          //                   label: 'Receiver Location',
+          //                   textIcon: Icons.location_on),
+          //               Row(
+          //                 mainAxisAlignment: MainAxisAlignment.center,
+          //                 crossAxisAlignment: CrossAxisAlignment.center,
+          //                 children: [
+          //                   IconButton(
+          //                       onPressed: () {}, icon: Icon(Icons.remove)),
+          //                   Container(
+          //                     width: 60,
+          //                     margin: const EdgeInsets.symmetric(horizontal: 30),
+          //                     child: TextField(
+          //                       controller: qtyBox,
+          //                       decoration: const InputDecoration(
+          //                         //icon: Icon(textIcon ?? null),
+          //                         // fillColor: theme.liteGrey,
+          //                         //border: OutlineInputBorder(),
+          //                         border: InputBorder.none,
+          //                         hintStyle: TextStyle(fontSize: 12),
+          //                         //filled: true,
+          //                         hintText: 'Qty',
+          //                       ),
+          //                     ),
+          //                   ),
+          //                   IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+          //                 ],
+          //               ),
+          //               Row(
+          //                 children: [
+          //                   const Padding(
+          //                     padding: EdgeInsets.only(right: 8.0, left: 8),
+          //                     child: Text('Note'),
+          //                   ),
+          //                   Flexible(
+          //                     child: Container(
+          //                       alignment: Alignment.center,
+          //                       padding: EdgeInsets.all(20),
+          //                       child: Column(
+          //                         children: [
+          //                           TextField(
+          //                             keyboardType: TextInputType.multiline,
+          //                             maxLines: 4,
+          //                             decoration: InputDecoration(
+          //                                 // hintText: "Enter Remarks",
+          //                                 focusedBorder: OutlineInputBorder(
+          //                                     borderSide: BorderSide(
+          //                                         width: 1,
+          //                                         color: theme.hiLiteBlue))),
+          //                           ),
+          //                         ],
+          //                       ),
+          //                     ),
+          //                   )
+          //                 ],
+          //               ),
+          //               Row(
+          //                 mainAxisAlignment: MainAxisAlignment.end,
+          //                 children: [
+          //                   TextButton(
+          //                       onPressed: () {
+          //                         Navigator.pop(context);
+          //                       },
+          //                       child: Text('Cancel')),
+          //                   ElevatedButton(
+          //                       onPressed: () async {
+          //                         await glb
+          //                             .requestPackage(
+          //                                 //qty: qtyBox.text.trim().toString(),
+          //                                 phoneNumber:
+          //                                     phoneBox.text.trim().toString(),
+          //                                 location:
+          //                                     locationBox.text.trim().toString())
+          //                             .then((value) {
+          //                           //qtyBox.clear();
+          //                           phoneBox.clear();
+          //                           locationBox.clear();
+          //                         });
+          //
+          //                         Navigator.pop(context);
+          //                       },
+          //                       child: Text('OK')),
+          //                 ],
+          //               )
+          //             ],
+          //           ),
+          //         ),
+          //       )
+          //     ],
+          //   ),
+          // );
         },
         icon: Image.asset(
           'assets/images/box.png',
@@ -968,6 +1050,66 @@ class ReUseWidget {
       ),
     );
   }
+
+  reUseCustomizeButton(
+      {isDispose,
+        colorBC,
+        isBcColor,
+        icon,
+        function,
+        context,
+        text,
+        textcolor,
+        showIcon,
+        iconcolor,
+        weight}) {
+    return Flexible(
+      child: Container(
+        height: 40,
+        width: Get.width,
+        decoration: BoxDecoration(
+          color: colorBC,
+          borderRadius: BorderRadius.circular(6),
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.grey,
+          //     blurRadius: 1,
+          //     //offset: Offset(4, 8), // Shadow position
+          //   ),
+          // ],
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                showIcon == true
+                    ? Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Icon(
+                    icon,
+                    color: iconcolor,
+                  ),
+                )
+                    : Container(),
+                Text(
+                  text ?? '',
+                  style: TextStyle(
+                      color: textcolor ?? theme.black,
+                      fontWeight: weight ?? FontWeight.normal),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
 
   reUseOKCancelDialog(context) {
     return showDialog(
@@ -1010,22 +1152,42 @@ class ReUseWidget {
   }
 
   reuseTextField({label, controller, textIcon}) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        controller: controller ?? dialogPhoneNum,
-        decoration: InputDecoration(
-          icon: Icon(textIcon ?? null),
-          // fillColor: theme.liteGrey,
-          border: OutlineInputBorder(),
-          //border: InputBorder.none,
+    return TextField(
+      controller: controller ?? dialogPhoneNum,
+      decoration: InputDecoration(
+        //icon: Icon(textIcon ?? null),
+        // fillColor: theme.liteGrey,
+        border: OutlineInputBorder(),
+        //border: InputBorder.none,
 
-          hintStyle: TextStyle(fontSize: 12),
-          //filled: true,
-          hintText: '$label',
-        ),
+        hintStyle: TextStyle(fontSize: 12),
+        //filled: true,
+        //hintText: '$label',
       ),
     );
+  }
+
+  reUseTextField({label, controller, textIcon}) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: TextFormField(
+
+          controller: controller ?? dialogPhoneNum,
+          decoration: InputDecoration(
+            //icon: Icon(textIcon ?? null),
+            // fillColor: theme.liteGrey,
+            //border: OutlineInputBorder(),
+            //border: InputBorder.none,
+            labelText: '$label',
+            border: OutlineInputBorder(),
+            hintStyle: TextStyle(fontSize: 10),
+            suffixIcon: Icon(
+              textIcon,
+            ),
+            //filled: true,
+            //hintText: '$label',
+          ),
+        ));
   }
 
   reUseListPackage(
@@ -1153,7 +1315,7 @@ class ReUseWidget {
                         child: reUseText(
                             weight: FontWeight.bold,
                             size: 18.0,
-                            color: theme.white ,
+                            color: theme.white,
                             content: '\$25'),
                       ),
                     ],
