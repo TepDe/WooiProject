@@ -137,66 +137,7 @@ class ReUseWidget {
           ),
           InkWell(
             onTap: () async {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return Dialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      alignment: Alignment.topCenter,
-                      children: [
-                        Positioned(
-                          top: -60.0,
-                          child: CircleAvatar(
-                            radius: 60.0,
-                            backgroundColor: theme.liteOrange,
-                            child: Icon(
-                              Icons.info,
-                              color: Colors.white,
-                              size: 100.0,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 80.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                'Dialog Title',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(height: 20.0),
-                              Text(
-                                'Dialog content goes here...',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                              SizedBox(height: 20.0),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text('Close'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
+              reUseCircleDialog(context: context);
             },
             child: Icon(
               Icons.account_circle,
@@ -718,6 +659,7 @@ class ReUseWidget {
       ),
     );
   }
+
   reUseTopHeader({headercolor, title, label, titleColor}) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -754,11 +696,9 @@ class ReUseWidget {
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-
               ],
             ),
           ),
-
         ],
       ),
     );
@@ -1053,16 +993,17 @@ class ReUseWidget {
 
   reUseCustomizeButton(
       {isDispose,
-        colorBC,
-        isBcColor,
-        icon,
-        function,
-        context,
-        text,
-        textcolor,
-        showIcon,
-        iconcolor,
-        weight}) {
+      colorBC,
+      isBcColor,
+      icon,
+      function,
+      context,
+      text,
+      textcolor,
+      showIcon,
+      iconcolor,
+        fontsize,
+      weight}) {
     return Flexible(
       child: Container(
         height: 40,
@@ -1082,23 +1023,24 @@ class ReUseWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: () {
-
+              Navigator.pop(context);
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 showIcon == true
                     ? Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Icon(
-                    icon,
-                    color: iconcolor,
-                  ),
-                )
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Icon(
+                          icon,
+                          color: iconcolor,
+                        ),
+                      )
                     : Container(),
                 Text(
                   text ?? '',
                   style: TextStyle(
+                    fontSize: fontsize ?? 14,
                       color: textcolor ?? theme.black,
                       fontWeight: weight ?? FontWeight.normal),
                 )
@@ -1109,7 +1051,6 @@ class ReUseWidget {
       ),
     );
   }
-
 
   reUseOKCancelDialog(context) {
     return showDialog(
@@ -1157,7 +1098,9 @@ class ReUseWidget {
       decoration: InputDecoration(
         //icon: Icon(textIcon ?? null),
         // fillColor: theme.liteGrey,
-        border: OutlineInputBorder(),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
         //border: InputBorder.none,
 
         hintStyle: TextStyle(fontSize: 12),
@@ -1171,7 +1114,6 @@ class ReUseWidget {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: TextFormField(
-
           controller: controller ?? dialogPhoneNum,
           decoration: InputDecoration(
             //icon: Icon(textIcon ?? null),
@@ -1822,6 +1764,75 @@ class ReUseWidget {
           content: value == 'complete' ? 'Complete' : 'Return',
           color: theme.white,
           weight: FontWeight.w500),
+    );
+  }
+
+  reUseCircleDialog({context}) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.topCenter,
+            children: [
+              Positioned(
+                top: -60.0,
+                child: CircleAvatar(
+                  radius: 60.0,
+                  backgroundColor: theme.white,
+                  child: Icon(
+                    Icons.check_circle_rounded,
+                    color: theme.orange,
+                    size: 100.0,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 80.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      'Dialog Title',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 20.0),
+                    Text(
+                      'Dialog content goes here...',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    SizedBox(height: 20.0),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      child: reUseCustomizeButton(
+
+                          textcolor: theme.orange,
+                          weight: FontWeight.bold,
+                          text: "OK",
+                          fontsize: 16.0,
+                          isBcColor: true,
+                          colorBC: theme.litestOrange),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
