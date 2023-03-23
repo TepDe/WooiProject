@@ -139,6 +139,9 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       });
     });
+    setState(() {
+
+    });
   }
 
   completeListLength() async {
@@ -147,12 +150,18 @@ class _HomeScreenState extends State<HomeScreen> {
     refs.onValue.listen((event) async {
       completeList.clear();
       statusData.clear();
+      setState(() {
+
+      });
       DataSnapshot driver = event.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, value) async {
         completeList.add(value);
         await updateStatus(returnData: returnData, completeList: completeList);
       });
+    });
+    setState(() {
+
     });
   }
 
@@ -162,12 +171,18 @@ class _HomeScreenState extends State<HomeScreen> {
     refs.onValue.listen((event) async {
       returnData.clear();
       statusData.clear();
+      setState(() {
+
+      });
       DataSnapshot driver = event.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, value) async {
         returnData.add(value);
         await updateStatus(returnData: returnData, completeList: completeList);
       });
+    });
+    setState(() {
+
     });
   }
 
