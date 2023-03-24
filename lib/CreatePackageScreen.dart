@@ -186,7 +186,6 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      
                       Flexible(
                         child: Container(
                           height: 40,
@@ -223,6 +222,12 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                   qtyBox.clear();
                                   noteBox.clear();
                                 });
+                                reUse.reUseCircleDialog(
+                                    context: context,
+                                    icon: Icons.check_circle_rounded,
+                                    title: 'Success',
+                                    content:
+                                        'Your package is successfully request');
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
