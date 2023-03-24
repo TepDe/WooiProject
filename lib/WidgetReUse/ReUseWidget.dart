@@ -1767,7 +1767,7 @@ class ReUseWidget {
     );
   }
 
-  reUseCircleDialog({context}) {
+  reUseCircleDialog({context,icon,title,content}) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1785,7 +1785,7 @@ class ReUseWidget {
                   radius: 60.0,
                   backgroundColor: theme.white,
                   child: Icon(
-                    Icons.check_circle_rounded,
+                    icon,
                     color: theme.orange,
                     size: 100.0,
                   ),
@@ -1798,7 +1798,7 @@ class ReUseWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'Dialog Title',
+                      title,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 20.0,
@@ -1807,7 +1807,7 @@ class ReUseWidget {
                     ),
                     SizedBox(height: 20.0),
                     Text(
-                      'Dialog content goes here...',
+                      content,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 16.0,
