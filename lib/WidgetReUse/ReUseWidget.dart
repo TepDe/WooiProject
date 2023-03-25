@@ -1151,163 +1151,183 @@ class ReUseWidget {
 
   reTotalPackageListview({removeStatus, List? pkc}) {
     return Flexible(
-      child: ListView.builder(
-          padding: const EdgeInsets.all(8),
-          itemCount: pkc!.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              width: Get.width,
-              margin: EdgeInsets.all(6),
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: theme.liteGrey,
-                borderRadius: BorderRadius.circular(6),
-                boxShadow: [
-                  BoxShadow(
-                    color: theme.grey,
-                    blurRadius: 4,
-                    offset: Offset(0, 1), // Shadow position
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      reUseText(
-                          weight: FontWeight.w400,
-                          size: 12.0,
-                          color: theme.grey,
-                          content: 'SHIPPING ID :'),
-                      Row(
-                        children: [
-                          reUseText(
-                              weight: FontWeight.bold,
-                              size: 16.0,
-                              color: theme.blue,
-                              content: 'PK000214'),
-                          SizedBox(
-                            height: 40,
-                            width: 40,
-                            child: PopupMenuButton<int>(
-                              onSelected: (item) => {},
-                              itemBuilder: (context) => [
-                                PopupMenuItem<int>(
-                                    value: 0, child: Text('Edit')),
-                                PopupMenuItem<int>(
-                                    value: 1, child: Text('Delete')),
+      child: Scrollbar(
+        isAlwaysShown: true,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+
+            children: [
+              Flexible(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  addAutomaticKeepAlives: true,
+                  padding: const EdgeInsets.all(8),
+                  itemCount: pkc!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return IndexedSemantics(
+                      index: index,
+                      child: Container(
+                        width: Get.width,
+                        margin: EdgeInsets.all(6),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: theme.liteGrey,
+                          borderRadius: BorderRadius.circular(6),
+                          boxShadow: [
+                            BoxShadow(
+                              color: theme.grey,
+                              blurRadius: 4,
+                              offset: Offset(0, 1), // Shadow position
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                reUseText(
+                                    weight: FontWeight.w400,
+                                    size: 12.0,
+                                    color: theme.grey,
+                                    content: 'SHIPPING ID :'),
+                                Row(
+                                  children: [
+                                    reUseText(
+                                        weight: FontWeight.bold,
+                                        size: 16.0,
+                                        color: theme.blue,
+                                        content: 'PK000214'),
+                                    SizedBox(
+                                      height: 40,
+                                      width: 40,
+                                      child: PopupMenuButton<int>(
+                                        onSelected: (item) => {},
+                                        itemBuilder: (context) => [
+                                          PopupMenuItem<int>(
+                                              value: 0, child: Text('Edit')),
+                                          PopupMenuItem<int>(
+                                              value: 1, child: Text('Delete')),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Divider(
-                    color: theme.grey,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      reSetUseText(
-                          titleColor: theme.grey,
-                          title: 'Destination',
-                          size: 14.0,
-                          color: theme.black,
-                          content: pkc[index]['location'],
-                          weight: FontWeight.w500),
-                      reSetUseText(
-                          titleColor: theme.grey,
-                          title: 'Phone number',
-                          size: 14.0,
-                          color: theme.black,
-                          content: pkc[index]['phoneNumber'],
-                          weight: FontWeight.w500),
-                      reSetUseText(
-                          titleColor: theme.grey,
-                          title: 'Qty',
-                          size: 14.0,
-                          color: theme.black,
-                          content: '1',
-                          weight: FontWeight.w500),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      reUseText(
-                          weight: FontWeight.bold,
-                          size: 12.0,
-                          color: theme.darkGrey,
-                          content: 'Price '),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        decoration: BoxDecoration(
-                          color: theme.hiLiteBlue,
-                          borderRadius: BorderRadius.circular(4),
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //     color: Colors.grey,
-                          //     blurRadius: 1,
-                          //     //offset: Offset(4, 8), // Shadow position
-                          //   ),
-                          // ],
+                            Divider(
+                              color: theme.grey,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                reSetUseText(
+                                    titleColor: theme.grey,
+                                    title: 'Destination',
+                                    size: 14.0,
+                                    color: theme.black,
+                                    content: pkc[index]['location'],
+                                    weight: FontWeight.w500),
+                                reSetUseText(
+                                    titleColor: theme.grey,
+                                    title: 'Phone number',
+                                    size: 14.0,
+                                    color: theme.black,
+                                    content: pkc[index]['phoneNumber'],
+                                    weight: FontWeight.w500),
+                                reSetUseText(
+                                    titleColor: theme.grey,
+                                    title: 'Qty',
+                                    size: 14.0,
+                                    color: theme.black,
+                                    content: '1',
+                                    weight: FontWeight.w500),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                reUseText(
+                                    weight: FontWeight.bold,
+                                    size: 12.0,
+                                    color: theme.darkGrey,
+                                    content: 'Price '),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  decoration: BoxDecoration(
+                                    color: theme.hiLiteBlue,
+                                    borderRadius: BorderRadius.circular(4),
+                                    // boxShadow: [
+                                    //   BoxShadow(
+                                    //     color: Colors.grey,
+                                    //     blurRadius: 1,
+                                    //     //offset: Offset(4, 8), // Shadow position
+                                    //   ),
+                                    // ],
+                                  ),
+                                  child: reUseText(
+                                      weight: FontWeight.bold,
+                                      size: 18.0,
+                                      color: theme.white,
+                                      content: '\$25'),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  reUseText(
+                                      weight: FontWeight.bold,
+                                      size: 12.0,
+                                      color: theme.darkGrey,
+                                      content: 'Note :'),
+                                  Flexible(
+                                    child: Container(
+                                      margin: const EdgeInsets.all(8.0),
+                                      padding: const EdgeInsets.all(8.0),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(color: theme.grey)),
+                                      child: reUseTextNote(
+                                          weight: FontWeight.w400,
+                                          size: 14.0,
+                                          color: theme.grey,
+                                          content:
+                                              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry  standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                reUseText(
+                                    weight: FontWeight.w400,
+                                    size: 12.0,
+                                    color: theme.grey,
+                                    content: 'Date : '),
+                                reUseText(
+                                    weight: FontWeight.w400,
+                                    size: 12.0,
+                                    color: theme.darkGrey,
+                                    content: '24/05/2023 09:54 AM'),
+                              ],
+                            ),
+                          ],
                         ),
-                        child: reUseText(
-                            weight: FontWeight.bold,
-                            size: 18.0,
-                            color: theme.white,
-                            content: '\$25'),
                       ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        reUseText(
-                            weight: FontWeight.bold,
-                            size: 12.0,
-                            color: theme.darkGrey,
-                            content: 'Note :'),
-                        Flexible(
-                          child: Container(
-                            margin: const EdgeInsets.all(8.0),
-                            padding: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: theme.grey)),
-                            child: reUseTextNote(
-                                weight: FontWeight.w400,
-                                size: 14.0,
-                                color: theme.grey,
-                                content:
-                                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry  standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      reUseText(
-                          weight: FontWeight.w400,
-                          size: 12.0,
-                          color: theme.grey,
-                          content: 'Date : '),
-                      reUseText(
-                          weight: FontWeight.w400,
-                          size: 12.0,
-                          color: theme.darkGrey,
-                          content: '24/05/2023 09:54 AM'),
-                    ],
-                  ),
-                ],
+                    );
+                  },
+                ),
               ),
-            );
-          }),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -1767,7 +1787,7 @@ class ReUseWidget {
     );
   }
 
-  reUseCircleDialog({context,icon,title,content}) {
+  reUseCircleDialog({context, icon, title, content}) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
