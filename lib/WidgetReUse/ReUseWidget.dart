@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -283,7 +284,7 @@ class ReUseWidget {
                 child: InkWell(
                   onTap: () {
                     Get.to(
-                      TotalPackageScreen(),
+                      const TotalPackageScreen(),
                     );
                   },
                   child: unitTwoText(
@@ -298,9 +299,7 @@ class ReUseWidget {
               Flexible(
                 child: InkWell(
                   onTap: () {
-                    print(pendingData);
-                    print(pendingData);
-                    Get.to(PendingScreen(), arguments: pendingData);
+                    Get.to(const PendingScreen(), arguments: pendingData);
                   },
                   child: unitTwoText(
                       label: "Pending",
@@ -1002,7 +1001,8 @@ class ReUseWidget {
       textcolor,
       showIcon,
       iconcolor,
-        fontsize,
+      fontsize,
+      value,
       weight}) {
     return Flexible(
       child: Container(
@@ -1023,7 +1023,23 @@ class ReUseWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: () {
-              Navigator.pop(context);
+              if (function == 'minus') {
+                Fluttertoast.showToast(
+                  msg: 'Maximum input is 9',
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.red,
+                  textColor: Colors.white,
+                  fontSize: 16.0,
+                );
+              } else if (function == 'add') {
+                int qty = int.parse(value) + 1;
+                print(qty);
+              } else {
+                Get.back();
+                FocusManager.instance.primaryFocus?.unfocus();
+              }
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -1040,7 +1056,7 @@ class ReUseWidget {
                 Text(
                   text ?? '',
                   style: TextStyle(
-                    fontSize: fontsize ?? 14,
+                      fontSize: fontsize ?? 14,
                       color: textcolor ?? theme.black,
                       fontWeight: weight ?? FontWeight.normal),
                 )
@@ -1092,9 +1108,11 @@ class ReUseWidget {
     );
   }
 
-  reuseTextField({label, controller, textIcon}) {
+  reuseTextField({label, controller, textIcon,inputType}) {
     return TextField(
       controller: controller ?? dialogPhoneNum,
+      keyboardType: inputType,
+
       decoration: InputDecoration(
         //icon: Icon(textIcon ?? null),
         // fillColor: theme.liteGrey,
@@ -1152,11 +1170,11 @@ class ReUseWidget {
   reTotalPackageListview({removeStatus, List? pkc}) {
     return Flexible(
       child: Scrollbar(
+        thickness: 10.0,
         isAlwaysShown: true,
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-
             children: [
               Flexible(
                 child: ListView.builder(
@@ -1199,7 +1217,7 @@ class ReUseWidget {
                                         weight: FontWeight.bold,
                                         size: 16.0,
                                         color: theme.blue,
-                                        content: 'PK000214'),
+                                        content: pkc[index]['packageID']),
                                     SizedBox(
                                       height: 40,
                                       width: 40,
@@ -1271,7 +1289,7 @@ class ReUseWidget {
                                       weight: FontWeight.bold,
                                       size: 18.0,
                                       color: theme.white,
-                                      content: '\$25'),
+                                      content: pkc[index]['price']),
                                 ),
                               ],
                             ),
@@ -1287,16 +1305,19 @@ class ReUseWidget {
                                       content: 'Note :'),
                                   Flexible(
                                     child: Container(
+                                      width: Get.width,
                                       margin: const EdgeInsets.all(8.0),
                                       padding: const EdgeInsets.all(8.0),
                                       decoration: BoxDecoration(
-                                          border: Border.all(color: theme.grey)),
-                                      child: reUseTextNote(
-                                          weight: FontWeight.w400,
-                                          size: 14.0,
-                                          color: theme.grey,
-                                          content:
-                                              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry  standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'),
+                                          border:
+                                              Border.all(color: theme.grey)),
+                                      child: Flexible(
+                                        child: reUseTextNote(
+                                            weight: FontWeight.w400,
+                                            size: 14.0,
+                                            color: theme.grey,
+                                            content: pkc[index]['note']),
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -1314,7 +1335,7 @@ class ReUseWidget {
                                     weight: FontWeight.w400,
                                     size: 12.0,
                                     color: theme.darkGrey,
-                                    content: '24/05/2023 09:54 AM'),
+                                    content: pkc[index]['date']),
                               ],
                             ),
                           ],
@@ -1417,164 +1438,6 @@ class ReUseWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Flexible(
-                        child: Container(
-                          width: Get.width,
-                          // decoration: BoxDecoration(
-                          //   color: theme.liteRed,
-                          //   borderRadius: BorderRadius.circular(10),
-                          //   boxShadow: [
-                          //     BoxShadow(
-                          //       color: Colors.grey,
-                          //       blurRadius: 1,
-                          //       //offset: Offset(4, 8), // Shadow position
-                          //     ),
-                          //   ],
-                          // ),
-                          child: TextButton.icon(
-                              onPressed: () {
-                                reUseOKCancelDialog(context);
-                              },
-                              icon: Icon(
-                                Icons.delete_forever,
-                                color: theme.red,
-                              ),
-                              label: Text(
-                                "Delete",
-                                style: TextStyle(color: theme.red),
-                              )),
-                        ),
-                      ),
-                      Flexible(
-                        child: Container(
-                          width: Get.width,
-                          child: TextButton.icon(
-                              onPressed: () {
-                                reUseOKCancelDialog(context);
-                              },
-                              icon: Icon(
-                                Icons.edit,
-                                color: theme.blue,
-                              ),
-                              label: Text(
-                                "Edit",
-                                style: TextStyle(color: theme.blue),
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                  removeStatus == true
-                      ? Container()
-                      : Divider(
-                          color: theme.grey,
-                        ),
-                  removeStatus == true
-                      ? Container()
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            reUseText(
-                                size: 12.0,
-                                weight: FontWeight.bold,
-                                color: theme.grey,
-                                content: 'Status'),
-                            reUseText(
-                                size: 12.0,
-                                color: theme.liteGreen,
-                                content: 'PENDING',
-                                weight: FontWeight.w900),
-                          ],
-                        ),
-                ],
-              ),
-            );
-          }),
-    );
-  }
-
-  reUsePendingList({removeStatus, List? pkc}) {
-    return Flexible(
-      child: ListView.builder(
-          padding: const EdgeInsets.all(8),
-          itemCount: pkc!.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              width: Get.width,
-              margin: EdgeInsets.all(6),
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: theme.liteGrey,
-                borderRadius: BorderRadius.circular(6),
-                boxShadow: [
-                  BoxShadow(
-                    color: theme.grey,
-                    blurRadius: 4,
-                    offset: Offset(0, 1), // Shadow position
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      reUseText(
-                          weight: FontWeight.w400,
-                          size: 12.0,
-                          color: theme.grey,
-                          content: 'SHIPPING ID :'),
-                      reUseText(
-                          weight: FontWeight.bold,
-                          size: 16.0,
-                          color: theme.blue,
-                          content: 'PK000214'),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      reUseText(
-                          weight: FontWeight.bold,
-                          size: 12.0,
-                          color: theme.grey,
-                          content: 'Location'),
-                      reUseText(
-                          size: 12.0,
-                          weight: FontWeight.bold,
-                          color: theme.grey,
-                          content: 'Phone number'),
-                      reUseText(
-                          size: 12.0,
-                          weight: FontWeight.bold,
-                          color: theme.grey,
-                          content: 'Qty'),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      reUseText(
-                          size: 14.0,
-                          color: theme.black,
-                          content: pkc[index]['location'],
-                          weight: FontWeight.w500),
-                      reUseText(
-                          size: 14.0,
-                          color: theme.black,
-                          weight: FontWeight.w500,
-                          content: pkc[index]['phoneNumber']),
-                      reUseText(
-                          size: 14.0,
-                          color: theme.black,
-                          content: '1',
-                          weight: FontWeight.w500),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
                       reUseText(
                           size: 12.0,
                           weight: FontWeight.bold,
@@ -1591,6 +1454,118 @@ class ReUseWidget {
               ),
             );
           }),
+    );
+  }
+
+  reUsePendingList({removeStatus, List? pkc}) {
+    return Flexible(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.all(8),
+                  itemCount: pkc!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      width: Get.width,
+                      margin: EdgeInsets.all(6),
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: theme.liteGrey,
+                        borderRadius: BorderRadius.circular(6),
+                        boxShadow: [
+                          BoxShadow(
+                            color: theme.grey,
+                            blurRadius: 4,
+                            offset: Offset(0, 1), // Shadow position
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              reUseText(
+                                  weight: FontWeight.w400,
+                                  size: 12.0,
+                                  color: theme.grey,
+                                  content: 'SHIPPING ID :'),
+                              reUseText(
+                                  weight: FontWeight.bold,
+                                  size: 16.0,
+                                  color: theme.blue,
+                                  content: 'pkc[index][' 'packageID' ']'),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              reUseText(
+                                  weight: FontWeight.bold,
+                                  size: 12.0,
+                                  color: theme.grey,
+                                  content: 'Location'),
+                              reUseText(
+                                  size: 12.0,
+                                  weight: FontWeight.bold,
+                                  color: theme.grey,
+                                  content: 'Phone number'),
+                              reUseText(
+                                  size: 12.0,
+                                  weight: FontWeight.bold,
+                                  color: theme.grey,
+                                  content: 'Qty'),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              reUseText(
+                                  size: 14.0,
+                                  color: theme.black,
+                                  content: pkc[index]['location'],
+                                  weight: FontWeight.w500),
+                              reUseText(
+                                  size: 14.0,
+                                  color: theme.black,
+                                  weight: FontWeight.w500,
+                                  content: pkc[index]['phoneNumber']),
+                              reUseText(
+                                  size: 14.0,
+                                  color: theme.black,
+                                  content: '1',
+                                  weight: FontWeight.w500),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              reUseText(
+                                  size: 12.0,
+                                  weight: FontWeight.bold,
+                                  color: theme.grey,
+                                  content: 'Status'),
+                              reUseText(
+                                  size: 12.0,
+                                  color: theme.liteGreen,
+                                  content: 'PENDING',
+                                  weight: FontWeight.w900),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -1835,10 +1810,9 @@ class ReUseWidget {
                     ),
                     SizedBox(height: 20.0),
                     Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       child: reUseCustomizeButton(
-
                           textcolor: theme.orange,
                           weight: FontWeight.bold,
                           text: "OK",
