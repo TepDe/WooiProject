@@ -121,8 +121,6 @@ class ReUseWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Good Morning',
@@ -281,6 +279,7 @@ class ReUseWidget {
           Row(
             children: [
               Flexible(
+                flex: 1,
                 child: InkWell(
                   onTap: () {
                     Get.to(
@@ -297,6 +296,7 @@ class ReUseWidget {
                 ),
               ),
               Flexible(
+                flex: 1,
                 child: InkWell(
                   onTap: () {
                     Get.to(const PendingScreen(), arguments: pendingData);
@@ -314,6 +314,7 @@ class ReUseWidget {
           Row(
             children: [
               Flexible(
+                  flex: 1,
                   child: InkWell(
                 onTap: () {
                   Get.to(
@@ -330,6 +331,8 @@ class ReUseWidget {
                     assetsIconColor: theme.liteGreen),
               )),
               Flexible(
+                  flex: 1,
+
                   child: InkWell(
                 onTap: () {
                   Get.to(
@@ -710,6 +713,7 @@ class ReUseWidget {
         content,
         maxLines: 2,
         style: TextStyle(
+
             fontSize: size ?? 12,
             color: color ?? theme.black,
             fontWeight: weight ?? FontWeight.normal),
@@ -843,7 +847,7 @@ class ReUseWidget {
   final qtyBox = TextEditingController();
   final glb = GlobalController();
 
-  reUseDialog({context}) {
+  reUseCreatePackage({context}) {
     return Container(
       width: Get.width,
       height: 50,
@@ -860,119 +864,8 @@ class ReUseWidget {
         // ],
       ),
       child: TextButton.icon(
-        // style: ButtonStyle(
-        //   // overlayColor:
-        //   //     MaterialStateColor.resolveWith((states) => Colors.white70),
-        //
-        // ),
         onPressed: () {
           Get.to(const CreatePackageScreen());
-          // showDialog(
-          //   context: context,
-          //   builder: (context) => AlertDialog(
-          //     // content: Text('Result is'),
-          //     actions: [
-          //       SingleChildScrollView(
-          //         child: SizedBox(
-          //           width: Get.width,
-          //           child: Column(
-          //             children: [
-          //               reuseTextField(
-          //                   textIcon: Icons.phone,
-          //                   label: 'Receiver Phone Number',
-          //                   controller: phoneBox),
-          //               reuseTextField(
-          //                   controller: locationBox,
-          //                   label: 'Receiver Location',
-          //                   textIcon: Icons.location_on),
-          //               Row(
-          //                 mainAxisAlignment: MainAxisAlignment.center,
-          //                 crossAxisAlignment: CrossAxisAlignment.center,
-          //                 children: [
-          //                   IconButton(
-          //                       onPressed: () {}, icon: Icon(Icons.remove)),
-          //                   Container(
-          //                     width: 60,
-          //                     margin: const EdgeInsets.symmetric(horizontal: 30),
-          //                     child: TextField(
-          //                       controller: qtyBox,
-          //                       decoration: const InputDecoration(
-          //                         //icon: Icon(textIcon ?? null),
-          //                         // fillColor: theme.liteGrey,
-          //                         //border: OutlineInputBorder(),
-          //                         border: InputBorder.none,
-          //                         hintStyle: TextStyle(fontSize: 12),
-          //                         //filled: true,
-          //                         hintText: 'Qty',
-          //                       ),
-          //                     ),
-          //                   ),
-          //                   IconButton(onPressed: () {}, icon: Icon(Icons.add)),
-          //                 ],
-          //               ),
-          //               Row(
-          //                 children: [
-          //                   const Padding(
-          //                     padding: EdgeInsets.only(right: 8.0, left: 8),
-          //                     child: Text('Note'),
-          //                   ),
-          //                   Flexible(
-          //                     child: Container(
-          //                       alignment: Alignment.center,
-          //                       padding: EdgeInsets.all(20),
-          //                       child: Column(
-          //                         children: [
-          //                           TextField(
-          //                             keyboardType: TextInputType.multiline,
-          //                             maxLines: 4,
-          //                             decoration: InputDecoration(
-          //                                 // hintText: "Enter Remarks",
-          //                                 focusedBorder: OutlineInputBorder(
-          //                                     borderSide: BorderSide(
-          //                                         width: 1,
-          //                                         color: theme.hiLiteBlue))),
-          //                           ),
-          //                         ],
-          //                       ),
-          //                     ),
-          //                   )
-          //                 ],
-          //               ),
-          //               Row(
-          //                 mainAxisAlignment: MainAxisAlignment.end,
-          //                 children: [
-          //                   TextButton(
-          //                       onPressed: () {
-          //                         Navigator.pop(context);
-          //                       },
-          //                       child: Text('Cancel')),
-          //                   ElevatedButton(
-          //                       onPressed: () async {
-          //                         await glb
-          //                             .requestPackage(
-          //                                 //qty: qtyBox.text.trim().toString(),
-          //                                 phoneNumber:
-          //                                     phoneBox.text.trim().toString(),
-          //                                 location:
-          //                                     locationBox.text.trim().toString())
-          //                             .then((value) {
-          //                           //qtyBox.clear();
-          //                           phoneBox.clear();
-          //                           locationBox.clear();
-          //                         });
-          //
-          //                         Navigator.pop(context);
-          //                       },
-          //                       child: Text('OK')),
-          //                 ],
-          //               )
-          //             ],
-          //           ),
-          //         ),
-          //       )
-          //     ],
-          //   ),
-          // );
         },
         icon: Image.asset(
           'assets/images/box.png',
