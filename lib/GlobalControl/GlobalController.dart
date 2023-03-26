@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,6 +15,7 @@ import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/LoginScreen.dart';
 
 import '../ViewScreen.dart';
+import '../WidgetReUse/ReUseWidget.dart';
 
 class GlobalController {
   var UID = '';
@@ -282,9 +285,10 @@ class GlobalController {
   //     }
   //   });
   // }
-  Future<void> requestPackage({note,packageID,uid, phoneNumber, location,qty}) async {
+  Future<void> requestPackage(
+      {price, note, packageID, uid, phoneNumber, location, qty}) async {
     DateTime now = DateTime.now();
-    String formattedDate = DateFormat(' dd-MM-yyyy HH:mm ').format(now);
+    String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
     position = await GeolocatorPlatform.instance.getCurrentPosition();
     latitude = position.latitude;
     longitude = position.longitude;
@@ -310,16 +314,81 @@ class GlobalController {
               'qty': qty.toString(),
               'packageID': packageID,
               'note': note,
+              'status': 'request',
+              'price': price.toString()
             }));
   }
 
-  generatePackageID(){
+  generatePackageID() {
     Random random = Random();
     int randomNumber = random.nextInt(9999);
-    String format = 'PH00';
+    String format = 'PK00';
     var id = format + randomNumber.toString();
-    return  id.toString();
+    return id.toString();
+  }
 
+  var iconDialog;
+  bool checker = false;
+  String title = '';
+
+  checkInput({location, phoneNumber, price, qty, context, note}) async {
+    if (phoneNumber == '') {
+      title = 'Error';
+      return 'Phone Number Must Include';
+    }
+    if (location == '') {
+      title = 'Error';
+      return 'Location Must Include';
+    }
+    if (price == '') {
+      title = 'Error';
+      return 'Price Must Include';
+    } else {
+      requestPackage(
+          note: note.text.trim().toString(),
+          packageID: generatePackageID.toString(),
+          qty: qty.text.trim().toString(),
+          phoneNumber: phoneNumber.text.trim().toString(),
+          location: location.text.trim().toString());
+    }
+  }
+
+  changeIcon({value, location, phoneNumber, price, qty, context, note}) {
+    if (phoneNumber == '') {
+      title = 'Error';
+      return Icons.phone;
+    } else if (location == '') {
+      title = 'Error';
+      return Icons.location_on_rounded;
+    } else if (price == '') {
+      title = 'Error';
+      return Icons.monetization_on;
+    } else {
+      requestPackage(
+          note: note.text.trim().toString(),
+          packageID: generatePackageID.toString(),
+          qty: qty.text.trim().toString(),
+          phoneNumber: phoneNumber.text.trim().toString(),
+          location: location.text.trim().toString());
+    }
+  }
+
+  qtyControl({value}) {
+    int qty = int.parse(value) + 1;
+    print(qty);
+    if (value == '9') {
+      return Fluttertoast.showToast(
+        msg: 'Maximum input is 9',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    } else {
+      return qty;
+    }
   }
 }
 
