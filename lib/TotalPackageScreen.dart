@@ -22,7 +22,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
   var argumentData = Get.arguments;
   List driverList = [];
   FirebaseAuth auth = FirebaseAuth.instance;
-
+  bool isShow = false;
 
   totalListLength() async {
     DatabaseReference refs = FirebaseDatabase.instance
@@ -40,6 +40,9 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
         data.forEach((key, value) {
           setState(() {
             driverList.add(value);
+            if (driverList == []) {
+              driverList = [];
+            }
           });
         });
       });
@@ -52,17 +55,38 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
     super.initState();
     totalListLength();
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          body: Column(
-            children: [
-              reUse.reUseHeader(
-                  label: 'Total Package', title: 'Total Package', headercolor: theme.dirt),
-              reUse.reTotalPackageListview(pkc: driverList)
-            ],
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            child: Column(
+              children: [
+                reUse.reUseHeader(
+                    label: 'Total Package',
+                    title: 'Total Package',
+                    headercolor: theme.dirt),
+                reUse.reTotalPackageListview(pkc: driverList),
+                // isShow == true
+                //     ? driverList == []
+                //         ? Flexible(child: Center(child: Text('No Package')))
+                //         : reUse.reTotalPackageListview(pkc: driverList)
+                //     : const Flexible(
+                //         child: Center(
+                //             child: SizedBox(
+                //                 height: 50,
+                //                 width: 50,
+                //                 child: CircularProgressIndicator()))),
+              ],
+            ),
           ),
-        ));
+          reUse.reUseDialog(context: context),
+        ],
+      ),
+    ));
   }
 }
