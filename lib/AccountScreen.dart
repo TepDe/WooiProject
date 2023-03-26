@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
@@ -109,6 +110,24 @@ class _AccountScreenState extends State<AccountScreen> {
             Text('${getEmail ?? 'loading...'}'),
             Text('${getPassword ?? 'loading...'}'),
             Text('${getUserID ?? 'loading...'}'),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+
+                  Fluttertoast.showToast(
+                    msg: 'Hello, world!',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.black,
+                    fontSize: 16.0,
+                  );
+                });
+
+              },
+              child: Text('Show Toast'),
+            ),
           ],
         ),
       ),
