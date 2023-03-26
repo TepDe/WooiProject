@@ -6,7 +6,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
@@ -21,11 +20,18 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final reUse = ReUseWidget();
   final theme = ThemesApp();
-  final glb = GlobalController();
 
   exitApp() {
     SystemNavigator.pop();
   }
+
+  // _HomeScreenState() {
+  //   checkid();
+  //   totalListLength();
+  //   pendingListLength();
+  //   completeListLength();
+  //   returnListLength();
+  // }
 
   @override
   void initState() {
@@ -42,34 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String getUserID = '';
   final str = StorageKey();
 
-  getCheckUserID() async {
-    int? userID;
-    var rng = Random();
-    userID = rng.nextInt(999999);
-    await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(auth.currentUser!.uid.toString())
-        .get()
-        .then((DocumentSnapshot documentSnapshot) async {
-      print(auth.currentUser!.uid.toString());
-      try {
-        String userid = await documentSnapshot['userID'] ?? ''.toString();
-        print(userid);
-        if (userid == "") {
-          print('getUserID');
-        } else {
-          print('else');
-        }
-      } catch (e) {
-        print(e);
-      }
-    });
-    setState(() {});
-  }
-
   checkid() async {
     final prefs = await SharedPreferences.getInstance();
-
     try {
       FirebaseFirestore.instance
           .collection('Users')
@@ -81,7 +61,6 @@ class _HomeScreenState extends State<HomeScreen> {
           final name = data['userID'];
           getUserID = name.toString();
           await prefs.setString(str.userID, getUserID.toString());
-
           setState(() {});
           print('User name: $name');
         } else {
@@ -90,7 +69,6 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       });
     } catch (e) {}
-    setState(() {});
   }
 
   List driverList = [];
@@ -103,22 +81,16 @@ class _HomeScreenState extends State<HomeScreen> {
         .ref('PackageRequest')
         .child(auth.currentUser!.uid);
     refs.onValue.listen((event) async {
-      setState(() {});
       driverList.clear();
       DataSnapshot driver = event.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, values) async {
-        print(values);
-        print(values);
         Map data = values as Map;
         data.forEach((key, value) {
-          setState(() {
-            driverList.add(value);
-          });
+          driverList.add(value);
         });
       });
     });
-    setState(() {});
   }
 
   List pendingList = [];
@@ -126,21 +98,15 @@ class _HomeScreenState extends State<HomeScreen> {
   pendingListLength() async {
     DatabaseReference refs = FirebaseDatabase.instance.ref('Pending');
     refs.onValue.listen((event) async {
-      setState(() {});
       pendingList.clear();
       DataSnapshot driver = event.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, value) async {
         Map data = value[auth.currentUser!.uid] as Map;
         data.forEach((key, value) {
-          setState(() {
-            pendingList.add(value);
-          });
+          pendingList.add(value);
         });
       });
-    });
-    setState(() {
-
     });
   }
 
@@ -150,18 +116,12 @@ class _HomeScreenState extends State<HomeScreen> {
     refs.onValue.listen((event) async {
       completeList.clear();
       statusData.clear();
-      setState(() {
-
-      });
       DataSnapshot driver = event.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, value) async {
         completeList.add(value);
         await updateStatus(returnData: returnData, completeList: completeList);
       });
-    });
-    setState(() {
-
     });
   }
 
@@ -171,9 +131,6 @@ class _HomeScreenState extends State<HomeScreen> {
     refs.onValue.listen((event) async {
       returnData.clear();
       statusData.clear();
-      setState(() {
-
-      });
       DataSnapshot driver = event.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, value) async {
@@ -181,29 +138,22 @@ class _HomeScreenState extends State<HomeScreen> {
         await updateStatus(returnData: returnData, completeList: completeList);
       });
     });
-    setState(() {
-
-    });
   }
 
   updateStatus({returnData, completeList}) async {
-    try{
+    try {
       List a = returnData + completeList;
       print(a);
       print(a);
-      statusData=a;
-    }catch(e){
+      statusData = a;
+    } catch (e) {
       print(e);
     }
-
-
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    FocusScope.of(context).unfocus();
-
     var viewHeight = MediaQuery.of(context).size.height * 0.3;
     return WillPopScope(
       onWillPop: () => exitApp(),
@@ -221,7 +171,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Column(
             children: [
               reUse.topBarHomeScreen(),
-              reUse.unitOneHomeScreen(userID: 'ID $getUserID',context: context),
+              reUse.unitOneHomeScreen(
+                  userID: 'ID $getUserID', context: context),
               reUse.unitTwoHomeScreen(
                   returnData: returnData,
                   completeData: completeList,
@@ -233,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
               //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
               // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
               //reUse.renderListView(),
-              reUse.reUseDialog(context: context),
+              reUse.reUseCreatePackage(context: context),
               reUse.reUseUpdateStatusList(data: statusData),
             ],
           ),
