@@ -29,8 +29,8 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
         .ref('PackageRequest')
         .child(auth.currentUser!.uid);
     refs.onValue.listen((event) async {
-      setState(() {});
       driverList.clear();
+      setState(() {});
       DataSnapshot driver = event.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, values) {
@@ -40,20 +40,19 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
         data.forEach((key, value) {
           setState(() {
             driverList.add(value);
-            if (driverList == []) {
-              driverList = [];
-            }
           });
         });
       });
     });
   }
-
+  _TotalPackageScreenState(){
+    totalListLength();
+  }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    totalListLength();
+
   }
 
   @override
@@ -84,7 +83,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
               ],
             ),
           ),
-          reUse.reUseDialog(context: context),
+          reUse.reUseCreatePackage(context: context),
         ],
       ),
     ));
