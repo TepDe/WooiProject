@@ -42,7 +42,7 @@ class _CompleteScreenState extends State<CompleteScreen> {
               title: 'Complete',
               headercolor: theme.liteGreen,
               titleColor: theme.green),
-          reUse.reTotalPackageListview(pkc: completeList)
+          reUse.reCompletePackageListview(pkc: completeList)
         ],
       ),
     ));
