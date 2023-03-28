@@ -294,7 +294,8 @@ class GlobalController {
     longitude = position.longitude;
     DatabaseReference packageRequest =
         FirebaseDatabase.instance.ref("PackageRequest");
-    await packageRequest.child(auth.currentUser!.uid)
+    await packageRequest
+        .child(auth.currentUser!.uid)
         //.child(getUserID.toString())
         .update({
       "userName": 'Tep',
@@ -389,6 +390,75 @@ class GlobalController {
     } else {
       return qty;
     }
+  }
+
+  List returnData = [];
+  List completeList = [];
+  List pendingList = [];
+  List totalPackageList = [];
+
+  returnListLength() async {
+    DatabaseReference refs =
+        FirebaseDatabase.instance.ref('Return').child(auth.currentUser!.uid);
+    refs.onValue.listen((event) async {
+      returnData.clear();
+      DataSnapshot driver = event.snapshot;
+      Map values = driver.value as Map;
+      values.forEach((key, value) async {
+         returnData.add(value);
+      });
+    });
+    return returnData;
+  }
+
+  completeListLength() async {
+    DatabaseReference refs =
+        FirebaseDatabase.instance.ref('Complete').child(auth.currentUser!.uid);
+    refs.onValue.listen((event) async {
+      completeList.clear();
+      DataSnapshot driver = event.snapshot;
+      Map values = driver.value as Map;
+      values.forEach((key, value) async {
+         completeList.add(value);
+      });
+    });
+    print(completeList);
+    print(completeList);
+    return completeList;
+  }
+
+  pendingListLength() async {
+    DatabaseReference refs = FirebaseDatabase.instance.ref('Pending');
+    refs.onValue.listen((event) async {
+      pendingList.clear();
+      DataSnapshot driver = event.snapshot;
+      Map values = driver.value as Map;
+      values.forEach((key, value) async {
+        Map data = value[auth.currentUser!.uid] as Map;
+        data.forEach((key, value) {
+           pendingList.add(value);
+        });
+      });
+    });
+    return pendingList;
+  }
+
+  totalListLength() async {
+    DatabaseReference refs = FirebaseDatabase.instance
+        .ref('PackageRequest')
+        .child(auth.currentUser!.uid);
+    refs.onValue.listen((event) async {
+      totalPackageList.clear();
+      DataSnapshot driver = event.snapshot;
+      Map values = driver.value as Map;
+      values.forEach((key, values) async {
+        Map data = values as Map;
+        data.forEach((key, value) {
+           totalPackageList.add(value);
+        });
+      });
+    });
+    return totalPackageList;
   }
 }
 

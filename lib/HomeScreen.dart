@@ -25,24 +25,24 @@ class _HomeScreenState extends State<HomeScreen> {
     SystemNavigator.pop();
   }
 
-  // _HomeScreenState() {
-  //   checkid();
-  //   totalListLength();
-  //   pendingListLength();
-  //   completeListLength();
-  //   returnListLength();
-  // }
+  _HomeScreenState() {
+    checkid();
+    totalListLength();
+    pendingListLength();
+    completeListLength();
+    returnListLength();
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     //getCheckUserID();
-    checkid();
-    totalListLength();
-    pendingListLength();
-    completeListLength();
-    returnListLength();
+    // checkid();
+    // totalListLength();
+    // pendingListLength();
+    // completeListLength();
+    // returnListLength();
   }
 
   String getUserID = '';
@@ -87,7 +87,10 @@ class _HomeScreenState extends State<HomeScreen> {
       values.forEach((key, values) async {
         Map data = values as Map;
         data.forEach((key, value) {
-          driverList.add(value);
+          setState(() {
+            driverList.add(value);
+
+          });
         });
       });
     });
@@ -104,7 +107,10 @@ class _HomeScreenState extends State<HomeScreen> {
       values.forEach((key, value) async {
         Map data = value[auth.currentUser!.uid] as Map;
         data.forEach((key, value) {
-          pendingList.add(value);
+          setState(()async {
+            pendingList.add(value);
+
+          });
         });
       });
     });
@@ -119,8 +125,11 @@ class _HomeScreenState extends State<HomeScreen> {
       DataSnapshot driver = event.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, value) async {
-        completeList.add(value);
-        await updateStatus(returnData: returnData, completeList: completeList);
+        setState(()async {
+          completeList.add(value);
+          await updateStatus(returnData: returnData, completeList: completeList);
+        });
+
       });
     });
   }
@@ -134,8 +143,11 @@ class _HomeScreenState extends State<HomeScreen> {
       DataSnapshot driver = event.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, value) async {
-        returnData.add(value);
-        await updateStatus(returnData: returnData, completeList: completeList);
+        setState(() async {
+          returnData.add(value);
+          await updateStatus(returnData: returnData, completeList: completeList);
+        });
+
       });
     });
   }

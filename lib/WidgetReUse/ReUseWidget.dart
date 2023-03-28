@@ -304,7 +304,7 @@ class ReUseWidget {
                   child: unitTwoText(
                       label: "Pending",
                       qty: pendingLength.toString(),
-                      assetsIcon: 'assets/images/process.png',
+                      assetsIcon: 'assets/images/delivery_man.png',
                       borderbottom: BorderSide(width: 1, color: theme.liteGrey),
                       borderleft: BorderSide(width: 1, color: theme.liteGrey)),
                 ),
