@@ -45,14 +45,15 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
       });
     });
   }
-  _TotalPackageScreenState(){
+
+  _TotalPackageScreenState() {
     totalListLength();
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
 
   @override
@@ -66,6 +67,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
             child: Column(
               children: [
                 reUse.reUseHeader(
+                    context: context,
                     label: 'Total Package',
                     title: 'Total Package',
                     headercolor: theme.dirt),
