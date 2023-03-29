@@ -341,7 +341,7 @@ class ReUseWidget {
                   child: InkWell(
                     onTap: () {
                       Get.to(
-                        ReturnScreen(),
+                        const ReturnScreen(),
                         arguments: returnData,
                       );
                     },
@@ -1431,106 +1431,162 @@ class ReUseWidget {
     );
   }
 
-  reUseTotalPackageList({removeStatus, List? pkc}) {
-    return Flexible(
-      child: ListView.builder(
-          padding: const EdgeInsets.all(8),
-          itemCount: pkc!.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              width: Get.width,
-              margin: EdgeInsets.all(6),
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: theme.liteGrey,
-                borderRadius: BorderRadius.circular(6),
-                boxShadow: [
-                  BoxShadow(
-                    color: theme.grey,
-                    blurRadius: 4,
-                    offset: Offset(0, 1), // Shadow position
-                  ),
-                ],
+  reUseRerurnPackageList({returnData, List? pkc}) {
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(8),
+                itemCount: pkc!.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    width: Get.width,
+                    margin: const EdgeInsets.all(6),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: theme.liteGrey,
+                      borderRadius: BorderRadius.circular(6),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.grey,
+                          blurRadius: 4,
+                          offset: Offset(0, 1), // Shadow position
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            reUseText(
+                                weight: FontWeight.w400,
+                                size: 12.0,
+                                color: theme.grey,
+                                content: 'SHIPPING ID :'),
+                            Row(
+                              children: [
+                                // reUseText(
+                                //     weight: FontWeight.bold,
+                                //     size: 16.0,
+                                //     color: theme.blue,
+                                //     content: pkc[index]['packageID']),
+                                SizedBox(
+                                  height: 40,
+                                  width: 40,
+                                  child: PopupMenuButton<int>(
+                                    onSelected: (item) => {},
+                                    itemBuilder: (context) => [
+                                      const PopupMenuItem<int>(
+                                          value: 0, child: Text('Return to request')),
+                                      const PopupMenuItem<int>(
+                                          value: 1, child: Text('Delete')),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Divider(
+                          color: theme.grey,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            // reSetUseText(
+                            //     titleColor: theme.grey,
+                            //     title: 'Destination',
+                            //     size: 14.0,
+                            //     color: theme.black,
+                            //     content: pkc[index]['location'],
+                            //     weight: FontWeight.w500),
+                            reSetUseText(
+                                titleColor: theme.grey,
+                                title: 'Phone number',
+                                size: 14.0,
+                                color: theme.black,
+                                content: pkc[index]['phoneNumber'],
+                                weight: FontWeight.w500),
+                            reSetUseText(
+                                titleColor: theme.grey,
+                                title: 'Qty',
+                                size: 14.0,
+                                color: theme.black,
+                                content: '1',
+                                weight: FontWeight.w500),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            reUseText(
+                                weight: FontWeight.bold,
+                                size: 12.0,
+                                color: theme.darkGrey,
+                                content: 'Price '),
+                            // reUseText(
+                            //     weight: FontWeight.bold,
+                            //     size: 18.0,
+                            //     color: theme.blue,
+                            //     content: pkc[index]['price']),
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            reUseText(
+                                weight: FontWeight.bold,
+                                size: 12.0,
+                                color: theme.darkGrey,
+                                content: 'Note :'),
+                            // Flexible(
+                            //   child: Container(
+                            //     width: Get.width,
+                            //     margin: const EdgeInsets.all(8.0),
+                            //     padding: const EdgeInsets.all(8.0),
+                            //     decoration: BoxDecoration(
+                            //         border: Border.all(color: theme.grey)),
+                            //     child: reUseTextNote(
+                            //         weight: FontWeight.w400,
+                            //         size: 14.0,
+                            //         color: theme.grey,
+                            //         content: pkc[index]['note']),
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            reUseText(
+                                weight: FontWeight.w400,
+                                size: 12.0,
+                                color: theme.grey,
+                                content: 'Date : '),
+                            reUseText(
+                                weight: FontWeight.w400,
+                                size: 12.0,
+                                color: theme.darkGrey,
+                                content: pkc[index]['date']),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      reUseText(
-                          weight: FontWeight.w400,
-                          size: 12.0,
-                          color: theme.grey,
-                          content: 'SHIPPING ID :'),
-                      reUseText(
-                          weight: FontWeight.bold,
-                          size: 16.0,
-                          color: theme.blue,
-                          content: 'PK000214'),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      reUseText(
-                          weight: FontWeight.bold,
-                          size: 12.0,
-                          color: theme.grey,
-                          content: 'Location'),
-                      reUseText(
-                          size: 12.0,
-                          weight: FontWeight.bold,
-                          color: theme.grey,
-                          content: 'Phone number'),
-                      reUseText(
-                          size: 12.0,
-                          weight: FontWeight.bold,
-                          color: theme.grey,
-                          content: 'Qty'),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      reUseText(
-                          size: 14.0,
-                          color: theme.black,
-                          content: pkc[index]['location'],
-                          weight: FontWeight.w500),
-                      reUseText(
-                          size: 14.0,
-                          color: theme.black,
-                          weight: FontWeight.w500,
-                          content: pkc[index]['phoneNumber']),
-                      reUseText(
-                          size: 14.0,
-                          color: theme.black,
-                          content: '1',
-                          weight: FontWeight.w500),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      reUseText(
-                          size: 12.0,
-                          weight: FontWeight.bold,
-                          color: theme.grey,
-                          content: 'Status'),
-                      reUseText(
-                          size: 12.0,
-                          color: theme.liteGreen,
-                          content: 'PENDING',
-                          weight: FontWeight.w900),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          }),
+            ),
+          ],
+        ),
+      ),
     );
   }
+
 
   reUseUpdateStatusList({List? data}) {
     return Flexible(
