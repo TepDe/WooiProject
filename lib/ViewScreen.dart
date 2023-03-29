@@ -13,10 +13,10 @@ class ViewScreen extends StatefulWidget {
 
 class _ViewScreenState extends State<ViewScreen> {
   var viewScreen = [
-    HomeScreen(),
+    const HomeScreen(),
     //ActivityScreen(),
-    NotificationScreen(),
-    AccountScreen(),
+    //NotificationScreen(),
+    const AccountScreen(),
   ];
 
   final themes = ThemesApp();
@@ -36,6 +36,7 @@ class _ViewScreenState extends State<ViewScreen> {
           bottomNavigationBar: BottomNavigationBar(
             items: [
               BottomNavigationBarItem(
+                tooltip: null,
                 icon: Image.asset(
                   'assets/images/home_icon.png',
                   width: 30,
@@ -49,41 +50,41 @@ class _ViewScreenState extends State<ViewScreen> {
               //   icon: reUseIcon(icons: Icons.menu),
               //   label: 'Activity',
               // ),
-              BottomNavigationBarItem(
-                icon: Stack(
-                  children: <Widget>[
-                    // Image.asset(
-                    //   'assets/images/box.png',
-                    //   scale: 16,
-                    //   alignment: Alignment.topRight,
-                    //   color: changeColor ?? themes.grey,
-                    // ),
-                    Icon(
-                      Icons.notifications,
-                      size: 40,
-                    ),
-                    Positioned(
-                      right: 0,
-                      child: Container(
-                        padding: EdgeInsets.all(3),
-                        decoration: BoxDecoration(
-                          color: themes.red,
-                          borderRadius: BorderRadius.circular(60),
-                        ),
-                        child: const Text(
-                          '+9',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 8,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                label: 'Notifications',
-              ),
+              // BottomNavigationBarItem(
+              //   icon: Stack(
+              //     children: <Widget>[
+              //       // Image.asset(
+              //       //   'assets/images/box.png',
+              //       //   scale: 16,
+              //       //   alignment: Alignment.topRight,
+              //       //   color: changeColor ?? themes.grey,
+              //       // ),
+              //       Icon(
+              //         Icons.notifications,
+              //         size: 40,
+              //       ),
+              //       Positioned(
+              //         right: 0,
+              //         child: Container(
+              //           padding: EdgeInsets.all(3),
+              //           decoration: BoxDecoration(
+              //             color: themes.red,
+              //             borderRadius: BorderRadius.circular(60),
+              //           ),
+              //           child: const Text(
+              //             '+9',
+              //             style: TextStyle(
+              //               color: Colors.white,
+              //               fontSize: 8,
+              //             ),
+              //             textAlign: TextAlign.center,
+              //           ),
+              //         ),
+              //       )
+              //     ],
+              //   ),
+              //   label: 'Notifications',
+              // ),
               BottomNavigationBarItem(
                 icon: reUseIcon(icons: Icons.account_circle),
                 label: 'Account',
@@ -92,9 +93,9 @@ class _ViewScreenState extends State<ViewScreen> {
             iconSize: 60,
             unselectedFontSize: 12,
             unselectedLabelStyle:
-                TextStyle(color: themes.deepOrange, fontSize: 0),
+                TextStyle(color: themes.deepOrange, fontSize: 12, fontWeight: FontWeight.bold),
             selectedLabelStyle:
-                TextStyle(color: themes.deepOrange, fontSize: 0),
+                TextStyle(color: themes.deepOrange, fontSize: 12, fontWeight: FontWeight.bold),
             selectedItemColor: themes.deepOrange,
             unselectedItemColor: themes.grey,
             currentIndex: selectedIndex,
