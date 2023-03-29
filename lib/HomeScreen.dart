@@ -38,11 +38,11 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     //getCheckUserID();
-    // checkid();
-    // totalListLength();
-    // pendingListLength();
-    // completeListLength();
-    // returnListLength();
+    checkid();
+    totalListLength();
+    pendingListLength();
+    completeListLength();
+    returnListLength();
   }
 
   String getUserID = '';
@@ -89,7 +89,6 @@ class _HomeScreenState extends State<HomeScreen> {
         data.forEach((key, value) {
           setState(() {
             driverList.add(value);
-
           });
         });
       });
@@ -107,9 +106,8 @@ class _HomeScreenState extends State<HomeScreen> {
       values.forEach((key, value) async {
         Map data = value[auth.currentUser!.uid] as Map;
         data.forEach((key, value) {
-          setState(()async {
+          setState(() async {
             pendingList.add(value);
-
           });
         });
       });
@@ -125,11 +123,11 @@ class _HomeScreenState extends State<HomeScreen> {
       DataSnapshot driver = event.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, value) async {
-        setState(()async {
+        setState(() async {
           completeList.add(value);
-          await updateStatus(returnData: returnData, completeList: completeList);
+          await updateStatus(
+              returnData: returnData, completeList: completeList);
         });
-
       });
     });
   }
@@ -145,9 +143,9 @@ class _HomeScreenState extends State<HomeScreen> {
       values.forEach((key, value) async {
         setState(() async {
           returnData.add(value);
-          await updateStatus(returnData: returnData, completeList: completeList);
+          await updateStatus(
+              returnData: returnData, completeList: completeList);
         });
-
       });
     });
   }
@@ -169,38 +167,75 @@ class _HomeScreenState extends State<HomeScreen> {
     var viewHeight = MediaQuery.of(context).size.height * 0.3;
     return WillPopScope(
       onWillPop: () => exitApp(),
-      child: Stack(
-        children: [
-          Container(
-            height: viewHeight,
-            decoration: BoxDecoration(
-              color: theme.liteOrange,
-              borderRadius: BorderRadius.vertical(
-                  bottom: Radius.elliptical(
-                      MediaQuery.of(context).size.width, 100.0)),
+      child: Scaffold(
+        backgroundColor: theme.liteGrey,
+        body: Stack(
+          children: [
+            // Container(
+            //   height: viewHeight,
+            //   decoration: BoxDecoration(
+            //     color: theme.liteOrange,
+            //     borderRadius: BorderRadius.vertical(
+            //         bottom: Radius.elliptical(
+            //             MediaQuery.of(context).size.width, 100.0)),
+            //   ),
+            // ),
+            Column(
+              children: [
+                reUse.topBarHomeScreen(),
+                reUse.unitOneHomeScreen(
+                    userID: 'ID $getUserID', context: context),
+                reUse.unitTwoHomeScreen(
+                    context: context,
+                    returnData: returnData,
+                    completeData: completeList,
+                    returnLength: returnData.length,
+                    completeLength: completeList.length,
+                    pendingData: pendingList,
+                    totalLength: driverList.length,
+                    pendingLength: pendingList.length),
+                //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
+                // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
+                //reUse.renderListView(),
+                SizedBox(
+                  height: 12,
+                ),
+                reUse.reUseCreatePackage(context: context),
+                Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: reUse.reUseText(
+                          content: 'Activity', color: theme.grey),
+                    ),
+                    Flexible(
+                      child: Divider(
+                        height: 1,
+                        color: theme.grey,
+                      ),
+                    ),
+                  ],
+                ),
+                statusData.isEmpty
+                    ? Flexible(
+                        flex: 3,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.notifications,
+                              color: theme.grey,
+                              size: 40,
+                            ),
+                            reUse.reUseText(
+                                content: 'No Activity', color: theme.grey)
+                          ],
+                        ))
+                    : reUse.reUseUpdateStatusList(data: statusData),
+              ],
             ),
-          ),
-          Column(
-            children: [
-              reUse.topBarHomeScreen(),
-              reUse.unitOneHomeScreen(
-                  userID: 'ID $getUserID', context: context),
-              reUse.unitTwoHomeScreen(
-                  returnData: returnData,
-                  completeData: completeList,
-                  returnLength: returnData.length,
-                  completeLength: completeList.length,
-                  pendingData: pendingList,
-                  totalLength: driverList.length,
-                  pendingLength: pendingList.length),
-              //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
-              // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
-              //reUse.renderListView(),
-              reUse.reUseCreatePackage(context: context),
-              reUse.reUseUpdateStatusList(data: statusData),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
