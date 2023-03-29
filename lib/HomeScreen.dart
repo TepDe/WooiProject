@@ -25,19 +25,12 @@ class _HomeScreenState extends State<HomeScreen> {
     SystemNavigator.pop();
   }
 
-  _HomeScreenState() {
-    checkid();
-    totalListLength();
-    pendingListLength();
-    completeListLength();
-    returnListLength();
-  }
+  _HomeScreenState() {}
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    //getCheckUserID();
     checkid();
     totalListLength();
     pendingListLength();
@@ -77,77 +70,90 @@ class _HomeScreenState extends State<HomeScreen> {
   List statusData = [];
 
   totalListLength() async {
-    DatabaseReference refs = FirebaseDatabase.instance
-        .ref('PackageRequest')
-        .child(auth.currentUser!.uid);
-    refs.onValue.listen((event) async {
-      driverList.clear();
-      DataSnapshot driver = event.snapshot;
-      Map values = driver.value as Map;
-      values.forEach((key, values) async {
-        Map data = values as Map;
-        data.forEach((key, value) {
-          setState(() {
-            driverList.add(value);
+    try {
+      DatabaseReference refs = FirebaseDatabase.instance
+          .ref('PackageRequest')
+          .child(auth.currentUser!.uid);
+      refs.onValue.listen((event) {
+        driverList.clear();
+        DataSnapshot driver = event.snapshot;
+        Map values = driver.value as Map;
+        values.forEach((key, values) async {
+          Map data = await values as Map;
+          data.forEach((key, value) async {
+            setState(() {
+              driverList.add(value);
+            });
           });
         });
       });
-    });
+    } catch (e) {
+      print('totalListLength $e');
+    }
   }
 
   List pendingList = [];
 
-  pendingListLength() async {
-    DatabaseReference refs = FirebaseDatabase.instance.ref('Pending');
-    refs.onValue.listen((event) async {
-      pendingList.clear();
-      DataSnapshot driver = event.snapshot;
-      Map values = driver.value as Map;
-      values.forEach((key, value) async {
-        Map data = value[auth.currentUser!.uid] as Map;
-        data.forEach((key, value) {
-          setState(() async {
-            pendingList.add(value);
+  pendingListLength() {
+    try {
+      DatabaseReference refs = FirebaseDatabase.instance.ref('Pending');
+      refs.onValue.listen((event) {
+        pendingList.clear();
+        DataSnapshot driver = event.snapshot;
+        Map values = driver.value as Map;
+        values.forEach((key, value) {
+          Map data = value[auth.currentUser!.uid] as Map;
+          data.forEach((key, value) {
+            setState(() {
+              pendingList.add(value);
+            });
           });
         });
       });
-    });
+    } catch (e) {
+      print('pendingListLength $e');
+    }
   }
 
-  completeListLength() async {
-    DatabaseReference refs =
-        FirebaseDatabase.instance.ref('Complete').child(auth.currentUser!.uid);
-    refs.onValue.listen((event) async {
-      completeList.clear();
-      statusData.clear();
-      DataSnapshot driver = event.snapshot;
-      Map values = driver.value as Map;
-      values.forEach((key, value) async {
-        setState(() async {
-          completeList.add(value);
-          await updateStatus(
-              returnData: returnData, completeList: completeList);
+  completeListLength() {
+    try {
+      DatabaseReference refs = FirebaseDatabase.instance
+          .ref('Complete')
+          .child(auth.currentUser!.uid);
+      refs.onValue.listen((event) {
+        completeList.clear();
+        statusData.clear();
+        DataSnapshot driver = event.snapshot;
+        Map values = driver.value as Map;
+        values.forEach((key, value) {
+          setState(() {
+            completeList.add(value);
+          });
         });
       });
-    });
+    } catch (e) {
+      print('completeListLength $e');
+    }
   }
 
-  returnListLength() async {
-    DatabaseReference refs =
-        FirebaseDatabase.instance.ref('Return').child(auth.currentUser!.uid);
-    refs.onValue.listen((event) async {
-      returnData.clear();
-      statusData.clear();
-      DataSnapshot driver = event.snapshot;
-      Map values = driver.value as Map;
-      values.forEach((key, value) async {
-        setState(() async {
-          returnData.add(value);
-          await updateStatus(
-              returnData: returnData, completeList: completeList);
+  returnListLength() {
+    try {
+      DatabaseReference refs =
+          FirebaseDatabase.instance.ref('Return').child(auth.currentUser!.uid);
+      refs.onValue.listen((event) {
+        returnData.clear();
+        statusData.clear();
+        DataSnapshot driver = event.snapshot;
+        Map values = driver.value as Map;
+        values.forEach((key, value) {
+          setState(() {
+            returnData.add(value);
+          });
         });
       });
-    });
+    } catch (e) {
+      print('returnListLength $e');
+    }
   }
 
   updateStatus({returnData, completeList}) async {
@@ -187,6 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     userID: 'ID $getUserID', context: context),
                 reUse.unitTwoHomeScreen(
                     context: context,
+                    totalPackageData: driverList,
                     returnData: returnData,
                     completeData: completeList,
                     returnLength: returnData.length,
