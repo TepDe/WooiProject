@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import 'GlobalControl/GlobalController.dart';
+import 'ViewScreen.dart';
 import 'WidgetReUse/ReUseWidget.dart';
 import 'WidgetReUse/Themes.dart';
 
@@ -51,7 +52,12 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                 children: [
                   TextButton.icon(
                     onPressed: () {
-                      Get.back();
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const ViewScreen(),
+                      //   ),
+                      // );
+                      Navigator.pop(context);
                     },
                     icon: Icon(Icons.arrow_back_rounded, color: theme.black),
                     label: Text(
