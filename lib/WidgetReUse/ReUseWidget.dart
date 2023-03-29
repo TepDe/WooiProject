@@ -258,6 +258,7 @@ class ReUseWidget {
     List? completeData,
     int? returnLength,
     List? returnData,
+    context
   }) {
     return Container(
       width: Get.width,
@@ -282,9 +283,14 @@ class ReUseWidget {
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    Get.to(
-                      const TotalPackageScreen(),
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const TotalPackageScreen(),
+                      ),
                     );
+                    // Get.to(
+                    //   const TotalPackageScreen(),
+                    // );
                   },
                   child: unitTwoText(
                       label: "Total package",
@@ -318,7 +324,7 @@ class ReUseWidget {
                   child: InkWell(
                 onTap: () {
                   Get.to(
-                    CompleteScreen(),
+                    const CompleteScreen(),
                     arguments: completeData,
                   );
                 },
@@ -562,7 +568,7 @@ class ReUseWidget {
   final phoneControl = TextEditingController();
   final dialogPhoneNum = TextEditingController();
 
-  reUseHeader({headercolor, title, label, titleColor}) {
+  reUseHeader({headercolor, title, label, titleColor,context}) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
@@ -587,7 +593,12 @@ class ReUseWidget {
                 IconButton(
                     splashRadius: 25,
                     onPressed: () {
-                      Get.back();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const ViewScreen(),
+                        ),
+                      );
+                      //Get.back();
                     },
                     icon: Icon(Icons.arrow_back)),
                 Align(
@@ -707,17 +718,14 @@ class ReUseWidget {
   }
 
   reUseText({content, size, weight, color}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3),
-      child: Text(
-        content,
-        maxLines: 2,
-        style: TextStyle(
+    return Text(
+      content,
+      maxLines: 2,
+      style: TextStyle(
 
-            fontSize: size ?? 12,
-            color: color ?? theme.black,
-            fontWeight: weight ?? FontWeight.normal),
-      ),
+          fontSize: size ?? 12,
+          color: color ?? theme.black,
+          fontWeight: weight ?? FontWeight.normal),
     );
   }
 
@@ -865,7 +873,12 @@ class ReUseWidget {
       ),
       child: TextButton.icon(
         onPressed: () {
-          Get.to(const CreatePackageScreen());
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const CreatePackageScreen(),
+            ),
+          );
+          //Get.to(const CreatePackageScreen());
         },
         icon: Image.asset(
           'assets/images/box.png',
@@ -1071,8 +1084,9 @@ class ReUseWidget {
             children: [
               Flexible(
                 child: ListView.builder(
+                  primary: false,
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   addAutomaticKeepAlives: true,
                   padding: const EdgeInsets.all(8),
                   itemCount: pkc!.length,
@@ -1117,9 +1131,9 @@ class ReUseWidget {
                                       child: PopupMenuButton<int>(
                                         onSelected: (item) => {},
                                         itemBuilder: (context) => [
-                                          PopupMenuItem<int>(
+                                          const PopupMenuItem<int>(
                                               value: 0, child: Text('Edit')),
-                                          PopupMenuItem<int>(
+                                          const PopupMenuItem<int>(
                                               value: 1, child: Text('Delete')),
                                         ],
                                       ),
