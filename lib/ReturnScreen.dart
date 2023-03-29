@@ -27,6 +27,7 @@ class _ReturnScreenState extends State<ReturnScreen> {
     // TODO: implement initState
     super.initState();
     returnList = argumentData;
+    print(returnList);
     isShow = true;
   }
 
@@ -52,7 +53,7 @@ class _ReturnScreenState extends State<ReturnScreen> {
                       reUse.reUseText(content: 'No Return \n Available', color: theme.grey)
                     ],
                   ))
-              : reUse.reTotalPackageListview(pkc: returnList),
+              : reUse.reUseRerurnPackageList(returnData: returnList,pkc:returnList ),
         ],
       ),
     ));
