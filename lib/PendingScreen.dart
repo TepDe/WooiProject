@@ -18,7 +18,6 @@ class _PendingScreenState extends State<PendingScreen> {
   final reUse = ReUseWidget();
   final theme = ThemesApp();
   final glb = GlobalController();
-  var argumentData = Get.arguments;
 
   @override
   void initState() {
@@ -26,6 +25,7 @@ class _PendingScreenState extends State<PendingScreen> {
     super.initState();
     pendingListLength();
   }
+
   FirebaseAuth auth = FirebaseAuth.instance;
   List pendingList = [];
 
@@ -45,6 +45,7 @@ class _PendingScreenState extends State<PendingScreen> {
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -53,7 +54,17 @@ class _PendingScreenState extends State<PendingScreen> {
         children: [
           reUse.reUseHeader(
               label: 'Pending', title: 'Pending', headercolor: theme.orange),
-          reUse.reUsePendingList(pkc: pendingList)
+          pendingList.isEmpty
+              ? Flexible(
+                  flex: 3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/images/delivery_man.png', color: theme.grey,scale: 12),
+                      reUse.reUseText(content: 'Pending not available', color: theme.grey)
+                    ],
+                  ))
+              : reUse.reUsePendingList(pkc: pendingList),
         ],
       ),
     ));
