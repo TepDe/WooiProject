@@ -567,7 +567,14 @@ class ReUseWidget {
   final phoneControl = TextEditingController();
   final dialogPhoneNum = TextEditingController();
 
-  reUseHeader({headercolor, title, label, titleColor, context}) {
+  reUseHeader(
+      {TextEditingController? searchcontroll,
+      headercolor,
+      title,
+      List? packageList,
+      label,
+      titleColor,
+      context}) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
@@ -626,7 +633,7 @@ class ReUseWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 12.0),
                   child: TextField(
-                    controller: nameControl,
+                    controller: searchcontroll,
                     decoration: InputDecoration(
                       filled: true,
                       hintStyle: TextStyle(fontSize: 12),
@@ -1483,7 +1490,8 @@ class ReUseWidget {
                                     onSelected: (item) => {},
                                     itemBuilder: (context) => [
                                       const PopupMenuItem<int>(
-                                          value: 0, child: Text('Return to request')),
+                                          value: 0,
+                                          child: Text('Return to request')),
                                       const PopupMenuItem<int>(
                                           value: 1, child: Text('Delete')),
                                     ],
@@ -1586,7 +1594,6 @@ class ReUseWidget {
       ),
     );
   }
-
 
   reUseUpdateStatusList({List? data}) {
     return Flexible(
