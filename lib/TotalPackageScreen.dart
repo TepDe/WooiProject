@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:wooiproject/GlobalControl/GlobalController.dart';
 
 import 'WidgetReUse/ReUseWidget.dart';
 import 'WidgetReUse/Themes.dart';
@@ -19,6 +20,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
   final theme = ThemesApp();
   var argumentData = Get.arguments;
   List driverList = [];
+  List forDisplay = [];
   FirebaseAuth auth = FirebaseAuth.instance;
   bool isShow = false;
 
@@ -44,6 +46,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
 
   _TotalPackageScreenState() {
     driverList = argumentData;
+    forDisplay = driverList;
     isShow = true;
 
     print(driverList);
@@ -57,6 +60,9 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
     //totalListLength();
   }
 
+  final search = TextEditingController();
+  final glb = GlobalController();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -68,6 +74,8 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
             child: Column(
               children: [
                 reUse.reUseHeader(
+                    packageList: driverList,
+                    searchcontroll: search,
                     context: context,
                     label: 'Total Package',
                     title: 'Total Package',
@@ -80,7 +88,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                 height: 50,
                                 width: 50,
                                 child: CircularProgressIndicator())))
-                    : reUse.reTotalPackageListview(pkc: driverList),
+                    : reUse.reTotalPackageListview(pkc: forDisplay),
 
                 // isShow == true
                 //     ? driverList == []
