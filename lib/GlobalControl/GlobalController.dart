@@ -294,8 +294,7 @@ class GlobalController {
     longitude = position.longitude;
     DatabaseReference packageRequest =
         FirebaseDatabase.instance.ref("PackageRequest");
-    await packageRequest
-        .child(auth.currentUser!.uid)
+    await packageRequest.child(auth.currentUser!.uid)
         //.child(getUserID.toString())
         .update({
       "userName": 'Tep',
@@ -405,7 +404,7 @@ class GlobalController {
       DataSnapshot driver = event.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, value) async {
-         returnData.add(value);
+        returnData.add(value);
       });
     });
     return returnData;
@@ -419,7 +418,7 @@ class GlobalController {
       DataSnapshot driver = event.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, value) async {
-         completeList.add(value);
+        completeList.add(value);
       });
     });
     print(completeList);
@@ -436,7 +435,7 @@ class GlobalController {
       values.forEach((key, value) async {
         Map data = value[auth.currentUser!.uid] as Map;
         data.forEach((key, value) {
-           pendingList.add(value);
+          pendingList.add(value);
         });
       });
     });
@@ -454,11 +453,31 @@ class GlobalController {
       values.forEach((key, values) async {
         Map data = values as Map;
         data.forEach((key, value) {
-           totalPackageList.add(value);
+          totalPackageList.add(value);
         });
       });
     });
     return totalPackageList;
+  }
+
+  List onSearchControl({searchWord, list}) {
+    var results = list!
+        .where((user) => user["packageID"]
+            .toLowerCase()
+            .contains(searchWord?.text.toLowerCase()))
+        .toList();
+    return results;
+  }
+
+  List searchResult = [];
+
+  List createList(searchWord, List? list) {
+    searchResult= list!
+        .where((user) => user["packageID"]
+        .toLowerCase()
+        .contains(searchWord?.text.toLowerCase()))
+        .toList();
+    return searchResult;
   }
 }
 
