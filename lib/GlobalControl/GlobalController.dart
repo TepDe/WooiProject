@@ -294,7 +294,8 @@ class GlobalController {
     longitude = position.longitude;
     DatabaseReference packageRequest =
         FirebaseDatabase.instance.ref("PackageRequest");
-    await packageRequest.child(auth.currentUser!.uid)
+    await packageRequest
+        .child(auth.currentUser!.uid)
         //.child(getUserID.toString())
         .update({
       "userName": 'Tep',
@@ -460,22 +461,22 @@ class GlobalController {
     return totalPackageList;
   }
 
-  List onSearchControl({searchWord, list}) {
-    var results = list!
-        .where((user) => user["packageID"]
-            .toLowerCase()
-            .contains(searchWord?.text.toLowerCase()))
-        .toList();
-    return results;
+  onSearchControl({searchWord, list}) {
+    // var results = list!
+    //     .where((user) => user["packageID"]
+    //         .toLowerCase()
+    //         .contains(searchWord?.text.toLowerCase()))
+    //     .toList();
+    return list;
   }
 
   List searchResult = [];
 
   List createList(searchWord, List? list) {
-    searchResult= list!
+    searchResult = list!
         .where((user) => user["packageID"]
-        .toLowerCase()
-        .contains(searchWord?.text.toLowerCase()))
+            .toLowerCase()
+            .contains(searchWord?.text.toLowerCase()))
         .toList();
     return searchResult;
   }
