@@ -45,11 +45,7 @@ class _ReturnScreenState extends State<ReturnScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.notifications,
-                        color: theme.grey,
-                        size: 40,
-                      ),
+                     Image.asset('assets/images/return-box.png',scale: 12,color: theme.grey,),
                       reUse.reUseText(content: 'No Return \n Available', color: theme.grey)
                     ],
                   ))

@@ -48,6 +48,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
     driverList = argumentData;
     forDisplay = driverList;
     isShow = true;
+    glb.onSearchControl(list: driverList);
 
     print(driverList);
     print(driverList);
@@ -88,7 +89,8 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                 height: 50,
                                 width: 50,
                                 child: CircularProgressIndicator())))
-                    : reUse.reTotalPackageListview(pkc: forDisplay),
+                    : reUse.reTotalPackageListview(
+                        pkc: glb.onSearchControl(list: forDisplay)),
 
                 // isShow == true
                 //     ? driverList == []
