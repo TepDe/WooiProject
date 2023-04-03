@@ -1000,6 +1000,7 @@ class ReUseWidget {
               } else if (function == 'add') {
                 int qty = int.parse(value) + 1;
                 print(qty);
+              } else if (function == 'pincode') {
               } else {
                 Get.back();
                 FocusManager.instance.primaryFocus?.unfocus();
@@ -1856,6 +1857,7 @@ class ReUseWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 10),
                       child: reUseCustomizeButton(
+                          function: 'pincode',
                           textcolor: theme.orange,
                           weight: FontWeight.bold,
                           text: "OK",
