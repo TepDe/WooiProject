@@ -95,7 +95,8 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   child: reUse.reUseText(
                       content: 'Receiver Phone Number:',
                       size: textSize,
-                      color: theme.grey),
+                      weight: FontWeight.bold,
+                      color: theme.black),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -113,7 +114,8 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   child: reUse.reUseText(
                       content: 'Receiver Location :',
                       size: textSize,
-                      color: theme.grey),
+                      weight: FontWeight.bold,
+                      color: theme.black),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -128,7 +130,10 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20),
                   child: reUse.reUseText(
-                      content: 'Price :', size: textSize, color: theme.grey),
+                      content: 'Price :',
+                      size: textSize,
+                      weight: FontWeight.bold,
+                      color: theme.black),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -145,6 +150,39 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+
+                    Container(
+                      width: 60,
+                      margin: const EdgeInsets.symmetric(horizontal: 30),
+                      child: TextField(
+                          maxLines: 1,
+                          onChanged: (value) {
+                            if (value.isNotEmpty) {
+                              int? digit = int.tryParse(value);
+                              if (digit == null || digit < 1 || digit > 9) {
+                                qtyBox.clear();
+                                Fluttertoast.cancel();
+                                setState(() {
+                                  Fluttertoast.showToast(
+                                    msg: 'Maximum input is 9',
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0,
+                                  );
+                                });
+                              }
+                            }
+                          },
+                          keyboardType: TextInputType.number,
+                          controller: qtyBox,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintStyle: TextStyle(fontSize: 12),
+                              hintText: '1')),
+                    ),
                     reUse.reUseCustomizeButton(
                         icon: Icons.remove,
                         value: 'minus',
@@ -213,8 +251,8 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
 
                         // hintText: "Enter Remarks",
                         focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                width: 1, color: theme.hiLiteBlue))),
+                            borderSide:
+                                BorderSide(width: 1, color: theme.hiLiteBlue))),
                   ),
                 ),
                 const SizedBox(
@@ -283,16 +321,14 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                 );
                                 await glb
                                     .requestPackage(
-                                        price:
-                                            priceBox.text.trim().toString(),
+                                        price: priceBox.text.trim().toString(),
                                         note: noteBox.text.trim().toString(),
                                         packageID: packageID.toString(),
                                         qty: qtyBox.text.trim().toString(),
                                         phoneNumber:
                                             phoneBox.text.trim().toString(),
-                                        location: locationBox.text
-                                            .trim()
-                                            .toString())
+                                        location:
+                                            locationBox.text.trim().toString())
                                     .then((value) {
                                   phoneBox.clear();
                                   priceBox.clear();
