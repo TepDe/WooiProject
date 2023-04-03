@@ -22,140 +22,149 @@ class LogInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var height =MediaQuery.of(context).size.width * 0.3;
+
     return WillPopScope(
       onWillPop: () async => false,
       child: SafeArea(
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: theme.white,
-          body: Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 30,
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: SizedBox(
-                    height: 83,
-                    width: 83,
-                    child: Text('MACAW'),
+          body: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/login_background.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Column(
+                 crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 80,
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // TextButton(
-                    //   onPressed: () {},
-                    //   child: Text('Register',
-                    //       style: TextStyle(
-                    //         // decoration: TextDecoration.underline,
-                    //         fontSize: 18,
-                    //         color: theme.deepOrange,
-                    //       )),
-                    // ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text('Sign In',
-                          style: TextStyle(
-                            // decoration: TextDecoration.underline,
-                            fontSize: 18,
-                            color: theme.grey,
-                          )),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: SizedBox(
+                      height: 83,
+                      width: 83,
+                      child: Text('MACAW'),
                     ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Column(
-                  children: [
-                    rw.ruTextBox(
-                        icon: Icon(Icons.email),
-                        controller: lc.userEmail.value,
-                        hind: 'Email',
-                        obscureText: false),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    rw.ruTextBox(
-                        icon: Icon(Icons.password),
-                        controller: lc.userPassword.value,
-                        hind: 'Password',
-                        obscureText: true),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  width: Get.width,
-                  height: 50,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        backgroundColor: theme.deepOrange,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // TextButton(
+                      //   onPressed: () {},
+                      //   child: Text('Register',
+                      //       style: TextStyle(
+                      //         // decoration: TextDecoration.underline,
+                      //         fontSize: 18,
+                      //         color: theme.deepOrange,
+                      //       )),
+                      // ),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text('Sign In',
+                            style: TextStyle(
+                              // decoration: TextDecoration.underline,
+                              fontSize: 18,
+                              color: theme.grey,
+                            )),
                       ),
-                      onPressed: () async {
-                        // lc.onDialogWaiting();
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Column(
+                    children: [
+                      rw.ruTextBox(
+                          icon: Icon(Icons.email),
+                          controller: lc.userEmail.value,
+                          hind: 'Email',
+                          obscureText: false),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      rw.ruTextBox(
+                          icon: Icon(Icons.password),
+                          controller: lc.userPassword.value,
+                          hind: 'Password',
+                          obscureText: true),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: Get.width,
+                    height: 50,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          backgroundColor: theme.deepOrange,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                        onPressed: () async {
+                          // lc.onDialogWaiting();
 
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return SizedBox(
-                                height: 60,
-                                width: 60,
-                                child: Align(
-                                    alignment: Alignment.center,
-                                    child: CircularProgressIndicator()));
-                          },
-                        );
-                        lc.onUserSignIn(
-                            email: lc.userEmail.value.text.trim(),
-                            // email: 'u@gmail.com',
-                            password: lc.userPassword.value.text.trim(),
-                            // password: '111111',
-                            context: context);
-                        // lc._phoneVerify(context);
-                      },
-                      child: Text(
-                        'Sign in',
-                        style: TextStyle(color: theme.white),
-                      )),
-                ),
-                // Row(
-                //   crossAxisAlignment: CrossAxisAlignment.center,
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: const [
-                //     Flexible(
-                //       child: Divider(
-                //         color: Colors.black,
-                //       ),
-                //     ),
-                //     Padding(
-                //       padding: EdgeInsets.all(8.0),
-                //       child: Text("Already have Account?"),
-                //     ),
-                //     Flexible(
-                //       child: Divider(
-                //         color: Colors.black,
-                //       ),
-                //     ),
-                //   ],
-                // ),
-                // const Align(
-                //     alignment: Alignment.topCenter,
-                //     child: Text(
-                //       "Sign in",
-                //       style: TextStyle(color: Colors.blue),
-                //     )),
-              ],
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return SizedBox(
+                                  height: 60,
+                                  width: 60,
+                                  child: Align(
+                                      alignment: Alignment.center,
+                                      child: CircularProgressIndicator()));
+                            },
+                          );
+                          lc.onUserSignIn(
+                              email: lc.userEmail.value.text.trim(),
+                              // email: 'u@gmail.com',
+                              password: lc.userPassword.value.text.trim(),
+                              // password: '111111',
+                              context: context);
+                          // lc._phoneVerify(context);
+                        },
+                        child: Text(
+                          'Sign in',
+                          style: TextStyle(color: theme.white),
+                        )),
+                  ),
+                  // Row(
+                  //   crossAxisAlignment: CrossAxisAlignment.center,
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: const [
+                  //     Flexible(
+                  //       child: Divider(
+                  //         color: Colors.black,
+                  //       ),
+                  //     ),
+                  //     Padding(
+                  //       padding: EdgeInsets.all(8.0),
+                  //       child: Text("Already have Account?"),
+                  //     ),
+                  //     Flexible(
+                  //       child: Divider(
+                  //         color: Colors.black,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // const Align(
+                  //     alignment: Alignment.topCenter,
+                  //     child: Text(
+                  //       "Sign in",
+                  //       style: TextStyle(color: Colors.blue),
+                  //     )),
+                ],
+              ),
             ),
           ),
         ),
