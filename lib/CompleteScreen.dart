@@ -41,7 +41,8 @@ class _CompleteScreenState extends State<CompleteScreen> {
           reUse.reUseHeader(
               title: 'Complete',
               headercolor: theme.liteGreen,
-              titleColor: theme.green),
+              titleColor: theme.black
+          ),
           // reUse.reCompletePackageListview(pkc: completeList),
           completeList.isEmpty
               ? Flexible(
@@ -53,7 +54,7 @@ class _CompleteScreenState extends State<CompleteScreen> {
                   reUse.reUseText(content: 'Pending not available', color: theme.grey)
                 ],
               ))
-              : reUse.reUsePendingList(pkc: completeList),
+              : reUse.reCompletePackageListview(pkc: completeList),
         ],
       ),
     ));
