@@ -480,6 +480,78 @@ class GlobalController {
         .toList();
     return searchResult;
   }
+
+  getTelegramTooken() {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    users
+        .add({'name': 'John Doe', 'phone': '1234567890'})
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+  }
+
+  Future<void> getUserInformation() async {
+    UserData userData = UserData();
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc(auth.currentUser!.uid)
+        .get()
+        .then((DocumentSnapshot querySnapshot) async {
+      Map data = querySnapshot.data() as Map;
+      userData.userID = await data['userID'];
+      userData.email = await data['email'];
+
+      print(data);
+      print(data);
+    });
+  }
+
+  Future<void> insertTelegramtoken() async {
+    UserData userData = UserData();
+    // FirebaseFirestore.instance
+    //    .collection('Users')
+    //    .doc(auth.currentUser!.uid)
+    //    .get() .then((DocumentSnapshot  querySnapshot) async{
+    //      Map data = querySnapshot.data() as Map;
+    //      if (querySnapshot.data() != null) {
+    //          // myText3 = "key exists";
+    //
+    //      } else {
+    //          // myText4 = "key not exists";
+    //      }
+    //      userData.userID =await data['userID'];
+    //      userData.email = await data['email'];
+    //
+    //      print(data);
+    //      print(data);
+    //
+    // });
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc(auth.currentUser!.uid)
+        .get()
+        .then((value) {
+          print(value);
+          print(value);
+      if (value.data()?.containsKey('telegramToken') == true) {
+
+        print('true');
+        print('true');
+      }
+    });
+  }
+}
+
+class UserData {
+  String latitude = '';
+  String longitude = '';
+  String phoneNumber = '';
+  String location = '';
+  String email = '';
+  String password = '';
+  String name = '';
+  String uid = '';
+  String userID = '';
+  String qty = '';
 }
 
 class PackageData {
