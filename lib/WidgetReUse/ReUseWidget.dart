@@ -702,7 +702,6 @@ class ReUseWidget {
                 child: IconButton(
                     splashRadius: 20,
                     onPressed: () {
-                      final glb = GlobalController();
                       List results = packageList!
                           .where((user) => user['packageID']
                               .toLowerCase()
@@ -954,6 +953,7 @@ class ReUseWidget {
     );
   }
 
+  final glb = GlobalController();
   reUseCustomizeButton(
       {isDispose,
       colorBC,
@@ -1001,6 +1001,8 @@ class ReUseWidget {
                 int qty = int.parse(value) + 1;
                 print(qty);
               } else if (function == 'pincode') {
+                glb.insertTelegramtoken();
+
               } else {
                 Get.back();
                 FocusManager.instance.primaryFocus?.unfocus();
@@ -1052,7 +1054,6 @@ class ReUseWidget {
                   child: const Text('Cancel')),
               ElevatedButton(
                   onPressed: () async {
-                    final glb = GlobalController();
                     await glb
                         .requestPackage(
                             //qty: qtyBox.text.trim().toString(),
@@ -1857,7 +1858,7 @@ class ReUseWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 10),
                       child: reUseCustomizeButton(
-                          function: 'pincode',
+                          function: function,
                           textcolor: theme.orange,
                           weight: FontWeight.bold,
                           text: "OK",
