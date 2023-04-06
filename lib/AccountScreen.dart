@@ -1,14 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
-import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
@@ -34,7 +31,7 @@ class _AccountScreenState extends State<AccountScreen> {
   var getEmail;
   var getPassword;
   var getUserName;
-  var getUserID;
+  String getUserID = 'loading...';
   var getUid;
   var getLocation;
   var getQty;
@@ -44,10 +41,12 @@ class _AccountScreenState extends State<AccountScreen> {
     // TODO: implement initState
     super.initState();
     driverMarkerList();
+    var object =glb.getUserInformation();
+    print(object);
+    print(object);
     //fetchLocalStorage();
     fetchUserData();
   }
-
   getDatsa(getUid) async {
     FirebaseFirestore.instance
         .collection('Users')
@@ -55,6 +54,24 @@ class _AccountScreenState extends State<AccountScreen> {
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       getUserID = documentSnapshot['qty'];
+    });
+  }
+  Future<void> insertTelegramToken() async {
+    UserData userData = UserData();
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc(auth.currentUser!.uid)
+        .get()
+        .then((value) {
+      print(value);
+      print(value);
+      if (value.data()?.containsKey('telegramToken') == true) {
+        print('true');
+        print('true');
+      }else{
+        print('false');
+        print('false');
+      }
     });
   }
 
@@ -176,7 +193,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     size: 20.0,
                     color: theme.black),
                 reUse.reUseText(
-                    content: 'ID : ' + getUserID.toString() ?? 'loading...',
+                    content: getUserID ?? 'loading...',
                     weight: FontWeight.bold,
                     size: 12.0,
                     color: theme.grey),
@@ -252,6 +269,27 @@ class _AccountScreenState extends State<AccountScreen> {
                     title: Text('Password'),
                     context: context,
                     leading: Icon(Icons.password_rounded)),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () async {
+                      reUse.reUseCircleDialog(
+                          function: 'pincode',
+                          context: context,
+                          title: 'title',
+                          content: reUse.reUseTextFormField(),
+                          icon: Icons.password);
+                    },
+                    child: reUse.reUseSettingItem(
+                        trailingIcon: Text(
+                          '',
+                          style: TextStyle(color: theme.grey),
+                        ),
+                        title: Text('Telegram Token'),
+                        context: context,
+                        leading: Icon(Icons.telegram_outlined)),
+                  ),
+                ),
                 Container(
                   margin: EdgeInsets.all(padding),
                   width: Get.width,

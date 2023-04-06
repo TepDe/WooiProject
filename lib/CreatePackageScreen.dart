@@ -150,7 +150,6 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-
                     Container(
                       width: 60,
                       margin: const EdgeInsets.symmetric(horizontal: 30),
@@ -285,21 +284,42 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                     context: context,
                                     icon: Icons.phone,
                                     title: 'Error',
-                                    content: 'Phone Number Must Include');
+                                    content: Center(
+                                      child: Text(
+                                        'Phone Number Must Include',
+                                        style: TextStyle(
+                                          color: theme.black,
+                                        ),
+                                      ),
+                                    ));
                               } else if (locationBox.text.trim().toString() ==
                                   '') {
                                 await reUse.reUseCircleDialog(
                                     context: context,
                                     icon: Icons.location_on_rounded,
                                     title: 'Error',
-                                    content: 'Location Must Include');
+                                    content: Center(
+                                      child: Text(
+                                        'Location Must Include',
+                                        style: TextStyle(
+                                          color: theme.black,
+                                        ),
+                                      ),
+                                    ));
                               } else if (priceBox.text.trim().toString() ==
                                   '') {
                                 await reUse.reUseCircleDialog(
                                     context: context,
                                     icon: Icons.monetization_on,
                                     title: 'Error',
-                                    content: 'Price Must Include');
+                                    content: Center(
+                                      child: Text(
+                                        'Price Must Include',
+                                        style: TextStyle(
+                                          color: theme.black,
+                                        ),
+                                      ),
+                                    ));
                               } else {
                                 showDialog(
                                   context: context,
@@ -341,8 +361,14 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                     context: context,
                                     icon: Icons.check_circle_rounded,
                                     title: 'Success',
-                                    content:
-                                        'Your package is successfully request');
+                                    content: Center(
+                                      child: Text(
+                                        'Your package is successfully request',
+                                        style: TextStyle(
+                                          color: theme.black,
+                                        ),
+                                      ),
+                                    ));
                                 setState(() {
                                   packageID = glb.generatePackageID();
                                 });

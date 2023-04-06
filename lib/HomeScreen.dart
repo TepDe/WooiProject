@@ -6,6 +6,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
@@ -25,12 +26,14 @@ class _HomeScreenState extends State<HomeScreen> {
     SystemNavigator.pop();
   }
 
-  _HomeScreenState() {}
+  final glb = GlobalController();
+  UserData userData = UserData();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     checkid();
     totalListLength();
     pendingListLength();
@@ -168,22 +171,22 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     setState(() {});
   }
+
   String greeting = "";
-  currentTime(){
+
+  currentTime() {
     DateTime now = DateTime.now();
-    int hours=now.hour;
-    if(hours>=1 && hours<=12){
+    int hours = now.hour;
+    if (hours >= 1 && hours <= 12) {
       greeting = "Good Morning";
-    } else if(hours>=12 && hours<=16){
+    } else if (hours >= 12 && hours <= 16) {
       greeting = "Good Afternoon";
-    } else if(hours>=16 && hours<=21){
+    } else if (hours >= 16 && hours <= 21) {
       greeting = "Good Evening";
-    } else if(hours>=21 && hours<=24){
+    } else if (hours >= 21 && hours <= 24) {
       greeting = "Good Night";
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
@@ -206,9 +209,10 @@ class _HomeScreenState extends State<HomeScreen> {
             // ),
             Column(
               children: [
-                reUse.topBarHomeScreen(),
-                reUse.unitOneHomeScreen(getTime: greeting,
-                    userID: 'ID $getUserID', context: context),
+                reUse.unitOneHomeScreen(
+                    getTime: greeting,
+                    userID: 'ID $getUserID',
+                    context: context),
                 reUse.unitTwoHomeScreen(
                     context: context,
                     totalPackageData: driverList,
