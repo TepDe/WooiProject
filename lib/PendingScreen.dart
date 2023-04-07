@@ -193,11 +193,11 @@ class _PendingScreenState extends State<PendingScreen> {
                                 .where((user) =>
                                 user['packageID']
                                     .toLowerCase()
-                                    .contains(searchController!.text
+                                    .contains(searchController.text
                                     .toString()
                                     .toLowerCase()))
                                 .toList();
-                            results  = forDisplay;
+                            forDisplay  = results;
                             FocusManager.instance.primaryFocus?.unfocus();
                             setState(() {});
                           },

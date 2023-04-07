@@ -250,15 +250,16 @@ class ReUseWidget {
     );
   }
 
-  unitTwoHomeScreen({int? totalLength,
-    List? totalPackageData,
-    int? pendingLength,
-    List? pendingData,
-    int? completeLength,
-    List? completeData,
-    int? returnLength,
-    List? returnData,
-    context}) {
+  unitTwoHomeScreen(
+      {int? totalLength,
+      List? totalPackageData,
+      int? pendingLength,
+      List? pendingData,
+      int? completeLength,
+      List? completeData,
+      int? returnLength,
+      List? returnData,
+      context}) {
     return Container(
       width: Get.width,
       margin: const EdgeInsets.only(top: 30, right: 10, left: 10),
@@ -331,7 +332,7 @@ class ReUseWidget {
                         qty: completeLength.toString(),
                         assetsIcon: 'assets/images/check.png',
                         borderright:
-                        BorderSide(width: 1, color: theme.liteGrey),
+                            BorderSide(width: 1, color: theme.liteGrey),
                         bordertop: BorderSide(width: 1, color: theme.liteGrey),
                         assetsIconColor: theme.liteGreen),
                   )),
@@ -426,8 +427,7 @@ class ReUseWidget {
                       content: '$qty',
                       size: 24.0,
                       weight: FontWeight.bold,
-                      color: theme.black
-                  ),
+                      color: theme.black),
                   // Text('pc',
                   //     overflow: TextOverflow.ellipsis,
                   //     style: TextStyle(
@@ -569,26 +569,27 @@ class ReUseWidget {
   final phoneControl = TextEditingController();
   final dialogPhoneNum = TextEditingController();
 
-  reUseHeader({TextEditingController? searchcontroll,
-    headercolor,
-    title,
-    List? packageList,
-    label,
-    titleColor,
-    context}) {
+  reUseHeader(
+      {TextEditingController? searchcontroll,
+      headercolor,
+      title,
+      List? packageList,
+      label,
+      titleColor,
+      context}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: const BoxDecoration(
-        //color: headercolor,
-        //borderRadius: BorderRadius.circular(6),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: theme.grey,
-        //     blurRadius: 4,
-        //     offset: Offset(0, 1), // Shadow position
-        //   ),
-        // ],
-      ),
+          //color: headercolor,
+          //borderRadius: BorderRadius.circular(6),
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: theme.grey,
+          //     blurRadius: 4,
+          //     offset: Offset(0, 1), // Shadow position
+          //   ),
+          // ],
+          ),
       child: Column(
         children: [
           Container(
@@ -662,8 +663,7 @@ class ReUseWidget {
                       ),
                       suffixIcon: IconButton(
                         splashColor: Colors.transparent,
-                        onPressed: () =>
-                        {
+                        onPressed: () => {
                           searchcontroll!.clear(),
                           //packageList!.clear(),
                           FocusManager.instance.primaryFocus?.unfocus(),
@@ -702,12 +702,11 @@ class ReUseWidget {
                     splashRadius: 20,
                     onPressed: () {
                       List results = packageList!
-                          .where((user) =>
-                          user['packageID']
+                          .where((user) => user['packageID']
                               .toLowerCase()
                               .contains(searchcontroll!.text
-                              .toString()
-                              .toLowerCase()))
+                                  .toString()
+                                  .toLowerCase()))
                           .toList();
                       glb.onSearchControl(list: results);
                       print(results);
@@ -955,19 +954,20 @@ class ReUseWidget {
 
   final glb = GlobalController();
 
-  reUseCustomizeButton({isDispose,
-    colorBC,
-    isBcColor,
-    icon,
-    function,
-    context,
-    text,
-    textcolor,
-    showIcon,
-    iconcolor,
-    fontsize,
-    value,
-    weight}) {
+  reUseCustomizeButton(
+      {isDispose,
+      colorBC,
+      isBcColor,
+      icon,
+      function,
+      context,
+      text,
+      textcolor,
+      showIcon,
+      iconcolor,
+      fontsize,
+      value,
+      weight}) {
     return Flexible(
       child: Container(
         height: 40,
@@ -1001,9 +1001,11 @@ class ReUseWidget {
                 int qty = int.parse(value) + 1;
                 print(qty);
               } else if (function == 'pincode') {
-                glb.insertTelegramtoken();
+                glb.insertTelegramToken();
               } else if (function == 'token') {
-                glb.insertTelegramtoken();
+                print(value);
+                print(value);
+                glb.insertTelegramToken(token: value);
               } else {
                 Get.back();
                 FocusManager.instance.primaryFocus?.unfocus();
@@ -1014,12 +1016,12 @@ class ReUseWidget {
               children: [
                 showIcon == true
                     ? Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Icon(
-                    icon,
-                    color: iconcolor,
-                  ),
-                )
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Icon(
+                          icon,
+                          color: iconcolor,
+                        ),
+                      )
                     : Container(),
                 Text(
                   text ?? '',
@@ -1039,42 +1041,40 @@ class ReUseWidget {
   reUseOKCancelDialog(context) {
     return showDialog(
       context: context,
-      builder: (context) =>
-          AlertDialog(
-            title: reUseText(
-                content: 'Create Package', weight: FontWeight.bold, size: 18.0),
-            // content: Text('Result is'),
-            actions: [
-              reUseText(
-                  content: 'Are you sure you want to delete this package'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Cancel')),
-                  ElevatedButton(
-                      onPressed: () async {
-                        await glb
-                            .requestPackage(
-                          //qty: qtyBox.text.trim().toString(),
+      builder: (context) => AlertDialog(
+        title: reUseText(
+            content: 'Create Package', weight: FontWeight.bold, size: 18.0),
+        // content: Text('Result is'),
+        actions: [
+          reUseText(content: 'Are you sure you want to delete this package'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Cancel')),
+              ElevatedButton(
+                  onPressed: () async {
+                    await glb
+                        .requestPackage(
+                            //qty: qtyBox.text.trim().toString(),
                             phoneNumber: phoneBox.text.trim().toString(),
                             location: locationBox.text.trim().toString())
-                            .then((value) {
-                          //qtyBox.clear();
-                          phoneBox.clear();
-                          locationBox.clear();
-                        });
+                        .then((value) {
+                      //qtyBox.clear();
+                      phoneBox.clear();
+                      locationBox.clear();
+                    });
 
-                        Navigator.pop(context);
-                      },
-                      child: const Text('OK')),
-                ],
-              )
+                    Navigator.pop(context);
+                  },
+                  child: const Text('OK')),
             ],
-          ),
+          )
+        ],
+      ),
     );
   }
 
@@ -1189,8 +1189,7 @@ class ReUseWidget {
                                     width: 40,
                                     child: PopupMenuButton<int>(
                                       onSelected: (item) => {},
-                                      itemBuilder: (context) =>
-                                      [
+                                      itemBuilder: (context) => [
                                         const PopupMenuItem<int>(
                                             value: 0, child: Text('Edit')),
                                         const PopupMenuItem<int>(
@@ -1335,7 +1334,7 @@ class ReUseWidget {
                             weight: FontWeight.bold,
                             size: 16.0,
                             color: theme.blue,
-                            content: pkc[index]['packageID'] ?? 'No ID'),
+                            content: pkc[index]['packageID']),
                       ],
                     ),
                     Padding(
@@ -1402,15 +1401,15 @@ class ReUseWidget {
                               color: theme.grey,
                               content: 'Status'),
                           Container(
-                              width: 100,
-                              child: reUseText(
-                                  size: 12.0,
-                                  color: theme.liteGreen,
-                                  content:
-                                  pkc[index]['status'].toString().toUpperCase(),
-                                  weight: FontWeight.w900),
+                            width: 100,
+                            child: reUseText(
+                                size: 12.0,
+                                color: theme.liteGreen,
+                                content: pkc[index]['status']
+                                    .toString()
+                                    .toUpperCase(),
+                                weight: FontWeight.w900),
                           ),
-
                         ],
                       ),
                     ),
@@ -1472,7 +1471,7 @@ class ReUseWidget {
                                     size: 16.0,
                                     color: theme.blue,
                                     content:
-                                    pkc[index]['packageID'] ?? 'No ID'),
+                                        pkc[index]['packageID'] ?? 'No ID'),
                               ],
                             ),
                           ),
@@ -1596,14 +1595,13 @@ class ReUseWidget {
                                     size: 16.0,
                                     color: theme.blue,
                                     content:
-                                    pkc[index]['packageID'] ?? "No ID"),
+                                        pkc[index]['packageID'] ?? "No ID"),
                                 SizedBox(
                                   height: 40,
                                   width: 40,
                                   child: PopupMenuButton<int>(
                                     onSelected: (item) => {},
-                                    itemBuilder: (context) =>
-                                    [
+                                    itemBuilder: (context) => [
                                       const PopupMenuItem<int>(
                                           value: 0,
                                           child: Text('Return to request')),
@@ -1816,6 +1814,8 @@ class ReUseWidget {
   }
 
   reUseCircleDialog({data, context, icon, title, content, function}) {
+    print(data);
+    print(data);
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1867,6 +1867,7 @@ class ReUseWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 10),
                       child: reUseCustomizeButton(
+                          value: data,
                           function: function,
                           textcolor: theme.orange,
                           weight: FontWeight.bold,
@@ -1885,7 +1886,7 @@ class ReUseWidget {
     );
   }
 
-  reUseTextFormField({textController}) {
+  reUseTextFormField({TextEditingController? textController, prefixIcon, hintText}) {
     return Container(
       height: 60,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -1903,14 +1904,14 @@ class ReUseWidget {
       child: TextFormField(
         controller: textController,
         decoration: InputDecoration(
-          prefixIcon: const Text('***'),
+          prefixIcon: prefixIcon,
           suffixIcon: const Icon(
             Icons.search,
-            color: Colors.red,
+            color: Colors.transparent,
           ),
           filled: true,
           fillColor: theme.white,
-          hintText: 'Username',
+          hintText: hintText,
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.white),
             borderRadius: BorderRadius.circular(25.7),
@@ -1924,8 +1925,16 @@ class ReUseWidget {
     );
   }
 
+  final token = TextEditingController();
+
   reUseSettingItem(
-      {function, title, trailingIcon, trailingIconColor, context, leading}) {
+      {data,
+      function,
+      title,
+      trailingIcon,
+      trailingIconColor,
+      context,
+      leading}) {
     return Container(
       height: 60,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -1945,13 +1954,77 @@ class ReUseWidget {
         child: InkWell(
           onTap: () {
             if (function == 'token') {
-              reUseCircleDialog(
-                  function: 'token',
-                  context: context,
-                  title: 'title',
-                  content: reUseTextFormField(),
-                  icon: Icons.password);
-              //glb.insertTelegramtoken();
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Dialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      alignment: Alignment.topCenter,
+                      children: [
+                        Positioned(
+                          top: -60.0,
+                          child: CircleAvatar(
+                            radius: 60.0,
+                            backgroundColor: theme.white,
+                            child: Icon(
+                              Icons.telegram_rounded,
+                              color: theme.orange,
+                              size: 100.0,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 80.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(
+                                'title',
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 20.0),
+                              // Text(
+                              //   content,
+                              //   textAlign: TextAlign.center,
+                              //   style: const TextStyle(
+                              //     fontSize: 16.0,
+                              //   ),
+                              // ),
+                              reUseTextFormField(
+                                hintText: 'your token',
+                                textController: token
+                              ),
+                              const SizedBox(height: 20.0),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
+                                child: reUseCustomizeButton(
+                                    value: token.text,
+                                    function: function,
+                                    textcolor: theme.orange,
+                                    weight: FontWeight.bold,
+                                    text: "OK",
+                                    fontsize: 16.0,
+                                    isBcColor: true,
+                                    colorBC: theme.litestOrange),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
             }
           },
           child: Center(

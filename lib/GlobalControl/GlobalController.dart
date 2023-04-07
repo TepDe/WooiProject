@@ -294,8 +294,7 @@ class GlobalController {
     longitude = position.longitude;
     DatabaseReference packageRequest =
         FirebaseDatabase.instance.ref("PackageRequest");
-    await packageRequest
-        .child(auth.currentUser!.uid)
+    await packageRequest.child(auth.currentUser!.uid)
         //.child(getUserID.toString())
         .update({
       "userName": 'Tep',
@@ -505,21 +504,16 @@ class GlobalController {
     });
   }
 
-  Future<void> insertTelegramtoken() async {
-    UserData userData = UserData();
-    FirebaseFirestore.instance
-        .collection('Users')
-        .doc(auth.currentUser!.uid)
-        .get()
-        .then((value) {
-          print(value);
-          print(value);
-      if (value.data()?.containsKey('telegramToken') == true) {
+  final users = FirebaseFirestore.instance.collection('Users');
 
-        print('true');
-        print('true');
-      }
-    });
+  insertTelegramToken({token}) async {
+    users.doc(auth.currentUser!.uid).update({
+      'token': token,
+    }).then((value) {
+      print("User Added");
+      FocusManager.instance.primaryFocus?.unfocus();
+      Get.back();
+    }).catchError((error) => print("Failed to add user: $error"));
   }
 }
 
