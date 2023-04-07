@@ -507,24 +507,6 @@ class GlobalController {
 
   Future<void> insertTelegramtoken() async {
     UserData userData = UserData();
-    // FirebaseFirestore.instance
-    //    .collection('Users')
-    //    .doc(auth.currentUser!.uid)
-    //    .get() .then((DocumentSnapshot  querySnapshot) async{
-    //      Map data = querySnapshot.data() as Map;
-    //      if (querySnapshot.data() != null) {
-    //          // myText3 = "key exists";
-    //
-    //      } else {
-    //          // myText4 = "key not exists";
-    //      }
-    //      userData.userID =await data['userID'];
-    //      userData.email = await data['email'];
-    //
-    //      print(data);
-    //      print(data);
-    //
-    // });
     FirebaseFirestore.instance
         .collection('Users')
         .doc(auth.currentUser!.uid)
