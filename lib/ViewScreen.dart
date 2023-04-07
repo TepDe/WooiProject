@@ -29,7 +29,6 @@ class _ViewScreenState extends State<ViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    FocusScope.of(context).unfocus();
     return SafeArea(
       child: Scaffold(
           resizeToAvoidBottomInset: false,

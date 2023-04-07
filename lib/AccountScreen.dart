@@ -41,12 +41,13 @@ class _AccountScreenState extends State<AccountScreen> {
     // TODO: implement initState
     super.initState();
     driverMarkerList();
-    var object =glb.getUserInformation();
+    var object = glb.getUserInformation();
     print(object);
     print(object);
     //fetchLocalStorage();
     fetchUserData();
   }
+
   getDatsa(getUid) async {
     FirebaseFirestore.instance
         .collection('Users')
@@ -56,6 +57,7 @@ class _AccountScreenState extends State<AccountScreen> {
       getUserID = documentSnapshot['qty'];
     });
   }
+
   Future<void> insertTelegramToken() async {
     UserData userData = UserData();
     FirebaseFirestore.instance
@@ -68,7 +70,7 @@ class _AccountScreenState extends State<AccountScreen> {
       if (value.data()?.containsKey('telegramToken') == true) {
         print('true');
         print('true');
-      }else{
+      } else {
         print('false');
         print('false');
       }
@@ -160,15 +162,16 @@ class _AccountScreenState extends State<AccountScreen> {
         // );
         SafeArea(
       child: Scaffold(
+        backgroundColor: theme.liteGrey,
         body: SingleChildScrollView(
-          child: Center(
+          child: Stack(children: [Center(
             child: Column(
               children: [
                 SizedBox(
                   height: viewHeight2,
                 ),
                 reUse.reUseText(
-                    content: 'My profile', weight: FontWeight.bold, size: 15.0),
+                    content: 'Profile', weight: FontWeight.w500, size: 18.0),
                 SizedBox(
                   height: viewHeight2,
                 ),
@@ -207,8 +210,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     child: reUse.reUseText(
                         content: 'General',
                         weight: FontWeight.bold,
-                        size: 12.0,
-                        color: theme.grey),
+                        size: 16.0,
+                        color: theme.black),
                   ),
                 ),
                 InkWell(
@@ -249,8 +252,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     child: reUse.reUseText(
                         content: 'Account',
                         weight: FontWeight.bold,
-                        size: 12.0,
-                        color: theme.grey),
+                        size: 16.0,
+                        color: theme.black),
                   ),
                 ),
                 reUse.reUseSettingItem(
@@ -269,27 +272,15 @@ class _AccountScreenState extends State<AccountScreen> {
                     title: Text('Password'),
                     context: context,
                     leading: Icon(Icons.password_rounded)),
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () async {
-                      reUse.reUseCircleDialog(
-                          function: 'pincode',
-                          context: context,
-                          title: 'title',
-                          content: reUse.reUseTextFormField(),
-                          icon: Icons.password);
-                    },
-                    child: reUse.reUseSettingItem(
-                        trailingIcon: Text(
-                          '',
-                          style: TextStyle(color: theme.grey),
-                        ),
-                        title: Text('Telegram Token'),
-                        context: context,
-                        leading: Icon(Icons.telegram_outlined)),
-                  ),
-                ),
+                reUse.reUseSettingItem(
+                    function: 'token',
+                    trailingIcon: Text(
+                      '',
+                      style: TextStyle(color: theme.grey),
+                    ),
+                    title: Text('Telegram Token'),
+                    context: context,
+                    leading: Icon(Icons.telegram_outlined)),
                 Container(
                   margin: EdgeInsets.all(padding),
                   width: Get.width,
@@ -313,7 +304,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
               ],
             ),
-          ),
+          )],),
         ),
       ),
     );
