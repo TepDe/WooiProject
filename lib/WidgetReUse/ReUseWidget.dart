@@ -115,7 +115,7 @@ class ReUseWidget {
 
   unitOneHomeScreen({getTime, function, String? userID, context}) {
     return Padding(
-      padding: const EdgeInsets.only(left: 18.0, top: 20, right: 18),
+      padding: const EdgeInsets.only(left: 18.0, top: 20.0, right: 5.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -250,23 +250,22 @@ class ReUseWidget {
     );
   }
 
-  unitTwoHomeScreen(
-      {int? totalLength,
-      List? totalPackageData,
-      int? pendingLength,
-      List? pendingData,
-      int? completeLength,
-      List? completeData,
-      int? returnLength,
-      List? returnData,
-      context}) {
+  unitTwoHomeScreen({int? totalLength,
+    List? totalPackageData,
+    int? pendingLength,
+    List? pendingData,
+    int? completeLength,
+    List? completeData,
+    int? returnLength,
+    List? returnData,
+    context}) {
     return Container(
       width: Get.width,
       margin: const EdgeInsets.only(top: 30, right: 10, left: 10),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(40.0),
         boxShadow: const [
           BoxShadow(
             color: Colors.grey,
@@ -332,7 +331,7 @@ class ReUseWidget {
                         qty: completeLength.toString(),
                         assetsIcon: 'assets/images/check.png',
                         borderright:
-                            BorderSide(width: 1, color: theme.liteGrey),
+                        BorderSide(width: 1, color: theme.liteGrey),
                         bordertop: BorderSide(width: 1, color: theme.liteGrey),
                         assetsIconColor: theme.liteGreen),
                   )),
@@ -427,7 +426,8 @@ class ReUseWidget {
                       content: '$qty',
                       size: 24.0,
                       weight: FontWeight.bold,
-                      color: theme.darkGrey),
+                      color: theme.black
+                  ),
                   // Text('pc',
                   //     overflow: TextOverflow.ellipsis,
                   //     style: TextStyle(
@@ -569,49 +569,47 @@ class ReUseWidget {
   final phoneControl = TextEditingController();
   final dialogPhoneNum = TextEditingController();
 
-  reUseHeader(
-      {TextEditingController? searchcontroll,
-      headercolor,
-      title,
-      List? packageList,
-      label,
-      titleColor,
-      context}) {
+  reUseHeader({TextEditingController? searchcontroll,
+    headercolor,
+    title,
+    List? packageList,
+    label,
+    titleColor,
+    context}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: const BoxDecoration(
-          //color: headercolor,
-          //borderRadius: BorderRadius.circular(6),
-          // boxShadow: [
-          //   BoxShadow(
-          //     color: theme.grey,
-          //     blurRadius: 4,
-          //     offset: Offset(0, 1), // Shadow position
-          //   ),
-          // ],
-          ),
+        //color: headercolor,
+        //borderRadius: BorderRadius.circular(6),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: theme.grey,
+        //     blurRadius: 4,
+        //     offset: Offset(0, 1), // Shadow position
+        //   ),
+        // ],
+      ),
       child: Column(
         children: [
           Container(
             margin: const EdgeInsets.symmetric(vertical: 10),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
                   height: 40,
                   width: 40,
-                  decoration: BoxDecoration(
-                    color: theme.litestOrange,
-                    borderRadius: BorderRadius.circular(60),
-                    boxShadow: [
-                      BoxShadow(
-                        color: theme.minGrey,
-                        blurRadius: 6,
-                        offset: const Offset(0, 0), // Shadow position
-                      ),
-                    ],
-                  ),
+                  // decoration: BoxDecoration(
+                  //   color: theme.litestOrange,
+                  //   borderRadius: BorderRadius.circular(60),
+                  //   boxShadow: [
+                  //     BoxShadow(
+                  //       color: theme.minGrey,
+                  //       blurRadius: 6,
+                  //       offset: const Offset(0, 0), // Shadow position
+                  //     ),
+                  //   ],
+                  // ),
                   child: IconButton(
                       splashRadius: 25,
                       onPressed: () {
@@ -619,11 +617,11 @@ class ReUseWidget {
                       },
                       icon: Icon(
                         Icons.arrow_back_ios_new_outlined,
-                        color: theme.orange,
+                        color: theme.black,
                       )),
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
+                Padding(
+                  padding: EdgeInsets.only(left: 18.0),
                   child: Text(
                     title ?? '',
                     style: TextStyle(
@@ -664,7 +662,8 @@ class ReUseWidget {
                       ),
                       suffixIcon: IconButton(
                         splashColor: Colors.transparent,
-                        onPressed: () => {
+                        onPressed: () =>
+                        {
                           searchcontroll!.clear(),
                           //packageList!.clear(),
                           FocusManager.instance.primaryFocus?.unfocus(),
@@ -703,11 +702,12 @@ class ReUseWidget {
                     splashRadius: 20,
                     onPressed: () {
                       List results = packageList!
-                          .where((user) => user['packageID']
+                          .where((user) =>
+                          user['packageID']
                               .toLowerCase()
                               .contains(searchcontroll!.text
-                                  .toString()
-                                  .toLowerCase()))
+                              .toString()
+                              .toLowerCase()))
                           .toList();
                       glb.onSearchControl(list: results);
                       print(results);
@@ -912,14 +912,14 @@ class ReUseWidget {
   final locationBox = TextEditingController();
   final qtyBox = TextEditingController();
 
-  reUseCreatePackage({context}) {
+  reUseCreatePackage({context, padding}) {
     return Container(
       width: Get.width,
-      height: 50,
+      height: padding,
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: theme.litestOrange,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(40),
         // boxShadow: [
         //   BoxShadow(
         //     color: theme.grey,
@@ -954,20 +954,20 @@ class ReUseWidget {
   }
 
   final glb = GlobalController();
-  reUseCustomizeButton(
-      {isDispose,
-      colorBC,
-      isBcColor,
-      icon,
-      function,
-      context,
-      text,
-      textcolor,
-      showIcon,
-      iconcolor,
-      fontsize,
-      value,
-      weight}) {
+
+  reUseCustomizeButton({isDispose,
+    colorBC,
+    isBcColor,
+    icon,
+    function,
+    context,
+    text,
+    textcolor,
+    showIcon,
+    iconcolor,
+    fontsize,
+    value,
+    weight}) {
     return Flexible(
       child: Container(
         height: 40,
@@ -1002,7 +1002,8 @@ class ReUseWidget {
                 print(qty);
               } else if (function == 'pincode') {
                 glb.insertTelegramtoken();
-
+              } else if (function == 'token') {
+                glb.insertTelegramtoken();
               } else {
                 Get.back();
                 FocusManager.instance.primaryFocus?.unfocus();
@@ -1013,12 +1014,12 @@ class ReUseWidget {
               children: [
                 showIcon == true
                     ? Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Icon(
-                          icon,
-                          color: iconcolor,
-                        ),
-                      )
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Icon(
+                    icon,
+                    color: iconcolor,
+                  ),
+                )
                     : Container(),
                 Text(
                   text ?? '',
@@ -1038,40 +1039,42 @@ class ReUseWidget {
   reUseOKCancelDialog(context) {
     return showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: reUseText(
-            content: 'Create Package', weight: FontWeight.bold, size: 18.0),
-        // content: Text('Result is'),
-        actions: [
-          reUseText(content: 'Are you sure you want to delete this package'),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Cancel')),
-              ElevatedButton(
-                  onPressed: () async {
-                    await glb
-                        .requestPackage(
-                            //qty: qtyBox.text.trim().toString(),
+      builder: (context) =>
+          AlertDialog(
+            title: reUseText(
+                content: 'Create Package', weight: FontWeight.bold, size: 18.0),
+            // content: Text('Result is'),
+            actions: [
+              reUseText(
+                  content: 'Are you sure you want to delete this package'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancel')),
+                  ElevatedButton(
+                      onPressed: () async {
+                        await glb
+                            .requestPackage(
+                          //qty: qtyBox.text.trim().toString(),
                             phoneNumber: phoneBox.text.trim().toString(),
                             location: locationBox.text.trim().toString())
-                        .then((value) {
-                      //qtyBox.clear();
-                      phoneBox.clear();
-                      locationBox.clear();
-                    });
+                            .then((value) {
+                          //qtyBox.clear();
+                          phoneBox.clear();
+                          locationBox.clear();
+                        });
 
-                    Navigator.pop(context);
-                  },
-                  child: const Text('OK')),
+                        Navigator.pop(context);
+                      },
+                      child: const Text('OK')),
+                ],
+              )
             ],
-          )
-        ],
-      ),
+          ),
     );
   }
 
@@ -1186,7 +1189,8 @@ class ReUseWidget {
                                     width: 40,
                                     child: PopupMenuButton<int>(
                                       onSelected: (item) => {},
-                                      itemBuilder: (context) => [
+                                      itemBuilder: (context) =>
+                                      [
                                         const PopupMenuItem<int>(
                                             value: 0, child: Text('Edit')),
                                         const PopupMenuItem<int>(
@@ -1397,12 +1401,16 @@ class ReUseWidget {
                               weight: FontWeight.bold,
                               color: theme.grey,
                               content: 'Status'),
-                          reUseText(
-                              size: 12.0,
-                              color: theme.liteGreen,
-                              content:
+                          Container(
+                              width: 100,
+                              child: reUseText(
+                                  size: 12.0,
+                                  color: theme.liteGreen,
+                                  content:
                                   pkc[index]['status'].toString().toUpperCase(),
-                              weight: FontWeight.w900),
+                                  weight: FontWeight.w900),
+                          ),
+
                         ],
                       ),
                     ),
@@ -1464,7 +1472,7 @@ class ReUseWidget {
                                     size: 16.0,
                                     color: theme.blue,
                                     content:
-                                        pkc[index]['packageID'] ?? 'No ID'),
+                                    pkc[index]['packageID'] ?? 'No ID'),
                               ],
                             ),
                           ),
@@ -1588,13 +1596,14 @@ class ReUseWidget {
                                     size: 16.0,
                                     color: theme.blue,
                                     content:
-                                        pkc[index]['packageID'] ?? "No ID"),
+                                    pkc[index]['packageID'] ?? "No ID"),
                                 SizedBox(
                                   height: 40,
                                   width: 40,
                                   child: PopupMenuButton<int>(
                                     onSelected: (item) => {},
-                                    itemBuilder: (context) => [
+                                    itemBuilder: (context) =>
+                                    [
                                       const PopupMenuItem<int>(
                                           value: 0,
                                           child: Text('Return to request')),
@@ -1806,7 +1815,7 @@ class ReUseWidget {
     );
   }
 
-  reUseCircleDialog({context, icon, title, content, function}) {
+  reUseCircleDialog({data, context, icon, title, content, function}) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1876,7 +1885,7 @@ class ReUseWidget {
     );
   }
 
-  reUseTextFormField() {
+  reUseTextFormField({textController}) {
     return Container(
       height: 60,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -1892,6 +1901,7 @@ class ReUseWidget {
         ],
       ),
       child: TextFormField(
+        controller: textController,
         decoration: InputDecoration(
           prefixIcon: const Text('***'),
           suffixIcon: const Icon(
@@ -1914,7 +1924,8 @@ class ReUseWidget {
     );
   }
 
-  reUseSettingItem({title, trailingIcon, trailingIconColor, context, leading}) {
+  reUseSettingItem(
+      {function, title, trailingIcon, trailingIconColor, context, leading}) {
     return Container(
       height: 60,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -1929,11 +1940,27 @@ class ReUseWidget {
           ),
         ],
       ),
-      child: Center(
-        child: ListTile(
-          title: title,
-          trailing: trailingIcon,
-          leading: leading,
+      child: Material(
+        color: theme.white,
+        child: InkWell(
+          onTap: () {
+            if (function == 'token') {
+              reUseCircleDialog(
+                  function: 'token',
+                  context: context,
+                  title: 'title',
+                  content: reUseTextFormField(),
+                  icon: Icons.password);
+              //glb.insertTelegramtoken();
+            }
+          },
+          child: Center(
+            child: ListTile(
+              title: title,
+              trailing: trailingIcon,
+              leading: leading,
+            ),
+          ),
         ),
       ),
     );
