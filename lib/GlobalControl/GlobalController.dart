@@ -286,7 +286,7 @@ class GlobalController {
   //   });
   // }
   Future<void> requestPackage(
-      {price, note, packageID, uid, phoneNumber, location, qty}) async {
+      {price, note, packageID, uid, phoneNumber, location, qty,tokenKey,chatid}) async {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
     position = await GeolocatorPlatform.instance.getCurrentPosition();
@@ -306,8 +306,10 @@ class GlobalController {
                 .push()
                 .update({
               'uid': auth.currentUser!.uid,
-              'location': location,
-              'phoneNumber': phoneNumber,
+              'location': location.toString(),
+              'phoneNumber': phoneNumber.toString(),
+              'token': tokenKey.toString(),
+              'chatid': chatid.toString(),
               "latitude": latitude.toString(),
               "longitude": longitude.toString(),
               'date': formattedDate.toString(),
@@ -509,6 +511,16 @@ class GlobalController {
   insertTelegramToken({token}) async {
     users.doc(auth.currentUser!.uid).update({
       'token': token,
+    }).then((value) {
+      print("User Added");
+      FocusManager.instance.primaryFocus?.unfocus();
+      Get.back();
+    }).catchError((error) => print("Failed to add user: $error"));
+  }
+  insertTelegramChatID({chatid}) async {
+
+    users.doc(auth.currentUser!.uid).update({
+      'chatid': chatid,
     }).then((value) {
       print("User Added");
       FocusManager.instance.primaryFocus?.unfocus();
