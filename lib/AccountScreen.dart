@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -8,6 +10,9 @@ import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
+import 'package:http/http.dart' as http;
+import 'package:teledart/teledart.dart';
+import 'package:dart_telegram_bot/dart_telegram_bot.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);
@@ -109,6 +114,7 @@ class _AccountScreenState extends State<AccountScreen> {
   bool light = false;
 
   final token = TextEditingController();
+  final chatid = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -384,7 +390,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                   child: Material(
                                                     color: Colors.transparent,
                                                     child: InkWell(
-                                                      onTap: () {
+                                                      onTap: () async {
                                                         glb.insertTelegramToken(
                                                             token: token.text);
                                                       },
@@ -433,6 +439,206 @@ class _AccountScreenState extends State<AccountScreen> {
                           child: Center(
                             child: ListTile(
                               title: Text('Telegram Token'),
+                              trailing: Text(''),
+                              leading: Icon(Icons.telegram_rounded),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 60,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: theme.white,
+                        borderRadius: BorderRadius.circular(6),
+                        boxShadow: [
+                          BoxShadow(
+                            color: theme.midGrey,
+                            blurRadius: 2,
+                            offset: const Offset(0, 0), // Shadow position
+                          ),
+                        ],
+                      ),
+                      child: Material(
+                        color: theme.white,
+                        child: InkWell(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Dialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Stack(
+                                    clipBehavior: Clip.none,
+                                    alignment: Alignment.topCenter,
+                                    children: [
+                                      Positioned(
+                                        top: -60.0,
+                                        child: CircleAvatar(
+                                          radius: 60.0,
+                                          backgroundColor: theme.white,
+                                          child: Icon(
+                                            Icons.telegram_rounded,
+                                            color: theme.orange,
+                                            size: 100.0,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 80.0, left: 15, right: 15),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            reUse.reUseText(
+                                                content:
+                                                    'Insert your telegram token down here',
+                                                color: theme.grey,
+                                                weight: FontWeight.w500,
+                                                size: 14.0),
+                                            const SizedBox(height: 20.0),
+                                            // Text(
+                                            //   content,
+                                            //   textAlign: TextAlign.center,
+                                            //   style: const TextStyle(
+                                            //     fontSize: 16.0,
+                                            //   ),
+                                            // ),
+                                            Container(
+                                              height: 60,
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 3),
+                                              decoration: BoxDecoration(
+                                                color: theme.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: theme.midGrey,
+                                                    blurRadius: 2,
+                                                    offset: const Offset(0,
+                                                        0), // Shadow position
+                                                  ),
+                                                ],
+                                              ),
+                                              child: TextFormField(
+                                                controller: chatid,
+                                                decoration: InputDecoration(
+                                                  prefixIcon:
+                                                      Icon(Icons.key_rounded),
+                                                  suffixIcon: const Icon(
+                                                    Icons.search,
+                                                    color: Colors.transparent,
+                                                  ),
+                                                  filled: true,
+                                                  fillColor: theme.white,
+                                                  hintText: 'hintText',
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide:
+                                                        const BorderSide(
+                                                            color:
+                                                                Colors.white),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25.7),
+                                                  ),
+                                                  enabledBorder:
+                                                      UnderlineInputBorder(
+                                                    borderSide:
+                                                        const BorderSide(
+                                                            color:
+                                                                Colors.white),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25.7),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 20.0),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 10),
+                                              child: Flexible(
+                                                child: Container(
+                                                  height: 40,
+                                                  width: Get.width,
+                                                  decoration: BoxDecoration(
+                                                    color: theme.litestOrange,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            6),
+                                                    // boxShadow: [
+                                                    //   BoxShadow(
+                                                    //     color: Colors.grey,
+                                                    //     blurRadius: 1,
+                                                    //     //offset: Offset(4, 8), // Shadow position
+                                                    //   ),
+                                                    // ],
+                                                  ),
+                                                  child: Material(
+                                                    color: Colors.transparent,
+                                                    child: InkWell(
+                                                      onTap: () async {
+                                                        glb.insertTelegramChatID(
+                                                            chatid: chatid.text);
+                                                      },
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    right: 8.0),
+                                                            child: Icon(
+                                                              null,
+                                                              color:
+                                                                  theme.orange,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            'ok',
+                                                            style: TextStyle(
+                                                                fontSize: 14,
+                                                                color:
+                                                                    theme.black,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: Center(
+                            child: ListTile(
+                              title: Text('Chat ID'),
                               trailing: Text(''),
                               leading: Icon(Icons.telegram_rounded),
                             ),
