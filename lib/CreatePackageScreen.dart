@@ -1,3 +1,7 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -26,19 +30,39 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
   final noteBox = TextEditingController();
   double textSize = 12;
   String packageID = '';
+  generatePackageID() {
+    Random random = Random();
+    int randomNumber = random.nextInt(9999);
+    String format = 'PK00';
+    packageID = format + randomNumber.toString();
 
+  }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    packageID = glb.generatePackageID();
-    qtyBox.text = '1';
+    generatePackageID();
+    fetchToken();
+  }
+
+  String getToken = '';
+  String chatid = '';
+
+  fetchToken() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(auth.currentUser!.uid.toString())
+        .get()
+        .then((DocumentSnapshot documentSnapshot) async {
+      getToken = await documentSnapshot['token'];
+      chatid = await documentSnapshot['chatid'];
+    });
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    FocusManager.instance.primaryFocus?.unfocus();
-
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -113,6 +137,21 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   padding: const EdgeInsets.only(left: 20),
                   child: reUse.reUseText(
                       content: 'Receiver Location :',
+                      size: textSize,
+                      weight: FontWeight.bold,
+                      color: theme.black),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: reUse.reUseText(
+                      content: '$getToken',
+                      size: textSize,
+                      weight: FontWeight.bold,
+                      color: theme.black),
+                ),Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: reUse.reUseText(
+                      content: '$chatid',
                       size: textSize,
                       weight: FontWeight.bold,
                       color: theme.black),
@@ -341,6 +380,8 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                 );
                                 await glb
                                     .requestPackage(
+                                        tokenKey: getToken.trim().toString(),
+                                        chatid: chatid.trim().toString(),
                                         price: priceBox.text.trim().toString(),
                                         note: noteBox.text.trim().toString(),
                                         packageID: packageID.toString(),
