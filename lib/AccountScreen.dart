@@ -11,8 +11,6 @@ import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 import 'package:http/http.dart' as http;
-import 'package:teledart/teledart.dart';
-import 'package:dart_telegram_bot/dart_telegram_bot.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);
@@ -37,6 +35,8 @@ class _AccountScreenState extends State<AccountScreen> {
   String getPassword = 'loading...';
   String getUserName = 'loading...';
   String getUserID = 'loading...';
+  String getToken = 'loading...';
+  String getChatId = 'loading...';
   String getUid = 'loading';
   String getLocation = 'loading';
   String getQty = 'loading';
@@ -57,6 +57,8 @@ class _AccountScreenState extends State<AccountScreen> {
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       getUserID = documentSnapshot['qty'];
+      getToken = documentSnapshot['token'];
+      getChatId = documentSnapshot['chatid'];
     });
   }
 
@@ -104,6 +106,8 @@ class _AccountScreenState extends State<AccountScreen> {
       getEmail = documentSnapshot['email'].toString();
       getPassword = documentSnapshot['password'].toString();
       getUserID = documentSnapshot['userID'].toString();
+      getToken = documentSnapshot['token'];
+      getChatId = documentSnapshot['chatid'];
       setState(() {});
     });
     setState(() {});
@@ -121,6 +125,7 @@ class _AccountScreenState extends State<AccountScreen> {
     var imageSize = MediaQuery.of(context).size.height * 0.1;
     var viewHeight2 = MediaQuery.of(context).size.height * 0.03;
     var padding = MediaQuery.of(context).size.height * 0.01;
+    var textWidth = MediaQuery.of(context).size.width * 0.2;
     return SafeArea(
       child: Scaffold(
         backgroundColor: theme.liteGrey,
@@ -174,7 +179,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         alignment: Alignment.topLeft,
                         child: reUse.reUseText(
                             content: 'General',
-                            weight: FontWeight.bold,
+                            //weight: FontWeight.bold,
                             size: 16.0,
                             color: theme.black),
                       ),
@@ -216,7 +221,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         alignment: Alignment.topLeft,
                         child: reUse.reUseText(
                             content: 'Account',
-                            weight: FontWeight.bold,
+                            //weight: FontWeight.bold,
                             size: 16.0,
                             color: theme.black),
                       ),
@@ -231,7 +236,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         leading: Icon(Icons.email)),
                     reUse.reUseSettingItem(
                         trailingIcon: Text(
-                          '${getPassword ?? 'loading...'}',
+                          getPassword ?? 'loading...',
                           style: TextStyle(color: theme.grey),
                         ),
                         title: Text('Password'),
@@ -439,7 +444,15 @@ class _AccountScreenState extends State<AccountScreen> {
                           child: Center(
                             child: ListTile(
                               title: Text('Telegram Token'),
-                              trailing: Text(''),
+                              trailing: SizedBox(
+                                  width: textWidth,
+                                  child: Text(
+                                    getToken,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        color: theme.grey,
+                                        overflow: TextOverflow.ellipsis),
+                                  )),
                               leading: Icon(Icons.telegram_rounded),
                             ),
                           ),
@@ -592,7 +605,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                     child: InkWell(
                                                       onTap: () async {
                                                         glb.insertTelegramChatID(
-                                                            chatid: chatid.text);
+                                                            chatid:
+                                                                chatid.text);
                                                       },
                                                       child: Row(
                                                         mainAxisAlignment:
@@ -639,7 +653,15 @@ class _AccountScreenState extends State<AccountScreen> {
                           child: Center(
                             child: ListTile(
                               title: Text('Chat ID'),
-                              trailing: Text(''),
+                              trailing: SizedBox(
+                                  width: textWidth,
+                                  child: Text(
+                                    getChatId,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        color: theme.grey,
+                                        overflow: TextOverflow.ellipsis),
+                                  )),
                               leading: Icon(Icons.telegram_rounded),
                             ),
                           ),
@@ -681,7 +703,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   List driverList = [];
 
-  onFeatchDriver() {
+  onFetchDriver() {
     DatabaseReference refs = FirebaseDatabase.instance.ref('Driver');
     refs.onValue.listen((event) {
       DataSnapshot latitude = event.snapshot.child('latitude');

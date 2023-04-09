@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -31,8 +32,8 @@ class _CompleteScreenState extends State<CompleteScreen> {
     completeList = argumentData;
     forDisplay = argumentData;
   }
-  final search = TextEditingController();
 
+  final search = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -60,16 +61,16 @@ class _CompleteScreenState extends State<CompleteScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: const BoxDecoration(
-              //color: headercolor,
-              //borderRadius: BorderRadius.circular(6),
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: theme.grey,
-              //     blurRadius: 4,
-              //     offset: Offset(0, 1), // Shadow position
-              //   ),
-              // ],
-            ),
+                //color: headercolor,
+                //borderRadius: BorderRadius.circular(6),
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: theme.grey,
+                //     blurRadius: 4,
+                //     offset: Offset(0, 1), // Shadow position
+                //   ),
+                // ],
+                ),
             child: Column(
               children: [
                 Container(
@@ -104,7 +105,7 @@ class _CompleteScreenState extends State<CompleteScreen> {
                       Padding(
                         padding: EdgeInsets.only(left: 18.0),
                         child: Text(
-                           'Complete',
+                          'Complete',
                           style: TextStyle(
                               fontSize: 18,
                               // color: titleColor,
@@ -143,15 +144,12 @@ class _CompleteScreenState extends State<CompleteScreen> {
                             ),
                             suffixIcon: IconButton(
                               splashColor: Colors.transparent,
-                              onPressed: ()
-                              {
+                              onPressed: () {
                                 search.clear();
                                 //packageList!.clear(),
                                 forDisplay = completeList;
                                 FocusManager.instance.primaryFocus?.unfocus();
-                                setState(() {
-
-                                });
+                                setState(() {});
                               },
                               icon: const Icon(Icons.close),
                             ),
@@ -187,17 +185,13 @@ class _CompleteScreenState extends State<CompleteScreen> {
                           splashRadius: 20,
                           onPressed: () {
                             List results = completeList
-                                .where((user) =>
-                                user['packageID']
+                                .where((user) => user['packageID']
                                     .toLowerCase()
-                                    .contains(search.text
-                                    .toString()
-                                    .toLowerCase()))
+                                    .contains(
+                                        search.text.toString().toLowerCase()))
                                 .toList();
-                            forDisplay =results;
-                            setState(() {
-
-                            });
+                            forDisplay = results;
+                            setState(() {});
                             FocusManager.instance.primaryFocus?.unfocus();
                           },
                           icon: Icon(
@@ -262,11 +256,38 @@ class _CompleteScreenState extends State<CompleteScreen> {
                                   size: 12.0,
                                   color: theme.grey,
                                   content: 'SHIPPING ID :'),
-                              reUse.reUseText(
-                                  weight: FontWeight.bold,
-                                  size: 16.0,
-                                  color: theme.blue,
-                                  content: forDisplay[index]['packageID']),
+                              Row(
+                                children: [
+                                  reUse.reUseText(
+                                      weight: FontWeight.bold,
+                                      size: 16.0,
+                                      color: theme.blue,
+                                      content: forDisplay[index]['packageID']),
+                                  SizedBox(
+                                    height: 40,
+                                    width: 40,
+                                    child: PopupMenuButton<int>(
+                                      onSelected: (item) async {
+                                        if (item == 0) {
+                                        } else {}
+                                      },
+                                      itemBuilder: (context) => [
+                                        PopupMenuItem<int>(
+                                            value: 1,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Icon(Icons
+                                                    .delete_forever_rounded),
+                                                Text('Delete'),
+                                              ],
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                           Padding(
@@ -337,11 +358,11 @@ class _CompleteScreenState extends State<CompleteScreen> {
                                   child: reUse.reUseText(
                                       size: 12.0,
                                       color: theme.liteGreen,
-                                      content:
-                                      forDisplay[index]['status'].toString().toUpperCase(),
+                                      content: forDisplay[index]['status']
+                                          .toString()
+                                          .toUpperCase(),
                                       weight: FontWeight.w900),
                                 ),
-
                               ],
                             ),
                           ),
@@ -354,5 +375,20 @@ class _CompleteScreenState extends State<CompleteScreen> {
         ],
       ),
     ));
+  }
+  removeItem({keyIndex, listIndex}) async {
+    DatabaseReference packageRequest =
+    FirebaseDatabase.instance.ref("PackageRequest");
+    await packageRequest
+        .child(auth.currentUser!.uid)
+        .child('package')
+        .child(keyIndex)
+        .remove();
+    completeList.removeWhere((item) => item == listIndex);
+    // keyList.removeWhere((item) => item == keyIndex);
+    // forDisplay = totalList;
+    setState(() {
+
+    });
   }
 }

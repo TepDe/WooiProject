@@ -360,24 +360,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                       ),
                                     ));
                               } else {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return const AlertDialog(
-                                      elevation: 0,
-                                      backgroundColor: Colors.transparent,
-                                      actions: [
-                                        Center(
-                                          child: SizedBox(
-                                              width: 50,
-                                              height: 50,
-                                              child:
-                                                  CircularProgressIndicator()),
-                                        )
-                                      ],
-                                    );
-                                  },
-                                );
+                                alertDialog();
                                 await glb
                                     .requestPackage(
                                         tokenKey: getToken.trim().toString(),
@@ -414,43 +397,6 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                   packageID = glb.generatePackageID();
                                 });
                               }
-
-                              // await reUse.reUseCircleDialog(
-                              //     context: context,
-                              //     icon: Icons.cancel_rounded,
-                              //     title: 'Error',
-                              //     content: glb.checkInput(
-                              //         price: priceBox.text.trim().toString(),
-                              //         phoneNumber:
-                              //         phoneBox.text.trim().toString(),
-                              //         qty: qtyBox.text.trim().toString(),
-                              //         location: locationBox.text
-                              //             .trim()
-                              //             .toString()));
-                              // await glb
-                              //     .requestPackage(
-                              //         note: noteBox.text.trim().toString(),
-                              //         packageID: packageID.toString(),
-                              //         qty: qtyBox.text.trim().toString(),
-                              //         phoneNumber:
-                              //             phoneBox.text.trim().toString(),
-                              //         location:
-                              //             locationBox.text.trim().toString())
-                              //     .then((value) {
-                              //   //qtyBox.clear();
-                              //   phoneBox.clear();
-                              //   locationBox.clear();
-                              //   qtyBox.clear();
-                              //   noteBox.clear();
-                              // });
-                              // Navigator.pop(context);
-                              // reUse.reUseCircleDialog(
-                              //     context: context,
-                              //     icon: Icons.check_circle_rounded,
-                              //     title: 'Success',
-                              //     content:
-                              //         'Your package is successfully request');
-                              // await glb.generatePackageID();
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -482,6 +428,27 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
           ),
         ),
       ),
+    );
+  }
+  alertDialog() {
+    return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: const AlertDialog(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            actions: [
+              Center(
+                child: SizedBox(
+                    height: 40, width: 40, child: CircularProgressIndicator()),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }
