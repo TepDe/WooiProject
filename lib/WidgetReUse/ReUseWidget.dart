@@ -114,37 +114,29 @@ class ReUseWidget {
   }
 
   unitOneHomeScreen({getTime, function, String? userID, context}) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 18.0, top: 20.0, right: 5.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            children: [
-              Text(
-                getTime,
-                style: TextStyle(
-                    color: theme.darkGrey, fontWeight: FontWeight.bold),
-              ),
-              reUseText(
-                  size: 20.0,
-                  color: theme.black,
-                  weight: FontWeight.bold,
-                  content: userID ?? 'loading'),
-            ],
-          ),
-          InkWell(
-            onTap: () async {
-              reUseCircleDialog(context: context);
-            },
-            child: const Icon(
-              Icons.account_circle,
-              size: 60,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          children: [
+            Text(
+              getTime,
+              style:
+                  TextStyle(color: theme.darkGrey, fontWeight: FontWeight.bold),
             ),
-          )
-        ],
-      ),
+            reUseText(
+                size: 20.0,
+                color: theme.black,
+                weight: FontWeight.bold,
+                content: userID ?? 'loading'),
+          ],
+        ),
+        const Icon(
+          Icons.account_circle,
+          size: 60,
+        )
+      ],
     );
   }
 
@@ -253,6 +245,7 @@ class ReUseWidget {
   unitTwoHomeScreen(
       {int? totalLength,
       List? totalPackageData,
+      List? totalPackageDataKey,
       int? pendingLength,
       List? pendingData,
       int? completeLength,
@@ -262,11 +255,10 @@ class ReUseWidget {
       context}) {
     return Container(
       width: Get.width,
-      margin: const EdgeInsets.only(top: 30, right: 10, left: 10),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(40.0),
+        borderRadius: BorderRadius.circular(20.0),
         boxShadow: const [
           BoxShadow(
             color: Colors.grey,
@@ -288,8 +280,10 @@ class ReUseWidget {
                     //     builder: (context) => const TotalPackageScreen(),
                     //   ),
                     // );
-                    Get.to(const TotalPackageScreen(),
-                        arguments: totalPackageData);
+                    Get.to(const TotalPackageScreen(), arguments: [
+                      {'data': totalPackageData},
+                      {'key': totalPackageDataKey}
+                    ]);
                   },
                   child: unitTwoText(
                       label: "Total package",
@@ -810,33 +804,32 @@ class ReUseWidget {
   }
 
   reSetUseText({content, size, weight, color, title, titleColor}) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(1),
-          child: Text(
-            title,
-            softWrap: true,
-            maxLines: 2,
-            style: TextStyle(
-                fontSize: 11,
-                color: titleColor ?? theme.black,
-                fontWeight: weight ?? FontWeight.normal),
-          ),
+    return Flexible(
+      child: SizedBox(
+        width: Get.width,
+        child: Column(
+          children: [
+            Text(
+              title,
+              softWrap: true,
+              maxLines: 2,
+              style: TextStyle(
+                  fontSize: 10,
+                  color: titleColor ?? theme.black,
+                  fontWeight: weight ?? FontWeight.normal),
+            ),
+            Text(
+              content,
+              softWrap: true,
+              maxLines: 2,
+              style: TextStyle(
+                  fontSize: size ?? 12,
+                  color: color ?? theme.black,
+                  fontWeight: weight ?? FontWeight.normal),
+            ),
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.all(1),
-          child: Text(
-            content,
-            softWrap: true,
-            maxLines: 2,
-            style: TextStyle(
-                fontSize: size ?? 12,
-                color: color ?? theme.black,
-                fontWeight: weight ?? FontWeight.normal),
-          ),
-        ),
-      ],
+      ),
     );
   }
 
@@ -911,23 +904,12 @@ class ReUseWidget {
   final locationBox = TextEditingController();
   final qtyBox = TextEditingController();
 
-  reUseCreatePackage({context, padding}) {
-    return Container(
+  reUseCreatePackage({context, padding, height}) {
+    return SizedBox(
+      height: height,
       width: Get.width,
-      height: padding,
-      margin: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: theme.litestOrange,
-        borderRadius: BorderRadius.circular(40),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: theme.grey,
-        //     blurRadius: 4,
-        //     offset: Offset(0, 1), // Shadow position
-        //   ),
-        // ],
-      ),
       child: TextButton.icon(
+        style: TextButton.styleFrom(backgroundColor: theme.litestOrange),
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -1724,7 +1706,6 @@ class ReUseWidget {
   reUseUpdateStatusList({List? data}) {
     return Flexible(
       child: ListView.builder(
-          padding: const EdgeInsets.all(8),
           itemCount: data!.length,
           itemBuilder: (BuildContext context, int index) {
             return reUseNotificationBox(
@@ -1839,45 +1820,42 @@ class ReUseWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 80.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      title,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: 20.0),
-                    // Text(
-                    //   content,
-                    //   textAlign: TextAlign.center,
-                    //   style: const TextStyle(
-                    //     fontSize: 16.0,
-                    //   ),
-                    // ),
-                    content,
-                    const SizedBox(height: 20.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      child: reUseCustomizeButton(
-                          value: data,
-                          function: function,
-                          textcolor: theme.orange,
-                          weight: FontWeight.bold,
-                          text: "OK",
-                          fontsize: 16.0,
-                          isBcColor: true,
-                          colorBC: theme.litestOrange),
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 20.0),
+                  // Text(
+                  //   content,
+                  //   textAlign: TextAlign.center,
+                  //   style: const TextStyle(
+                  //     fontSize: 16.0,
+                  //   ),
+                  // ),
+                  content,
+                  const SizedBox(height: 20.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
+                    child: reUseCustomizeButton(
+                        value: data,
+                        function: function,
+                        textcolor: theme.orange,
+                        weight: FontWeight.bold,
+                        text: "OK",
+                        fontsize: 16.0,
+                        isBcColor: true,
+                        colorBC: theme.litestOrange),
+                  ),
+                ],
               ),
             ],
           ),
@@ -1886,7 +1864,8 @@ class ReUseWidget {
     );
   }
 
-  reUseTextFormField({TextEditingController? textController, prefixIcon, hintText}) {
+  reUseTextFormField(
+      {TextEditingController? textController, prefixIcon, hintText}) {
     return Container(
       height: 60,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -2000,9 +1979,8 @@ class ReUseWidget {
                               //   ),
                               // ),
                               reUseTextFormField(
-                                hintText: 'your token',
-                                textController: token
-                              ),
+                                  hintText: 'your token',
+                                  textController: token),
                               const SizedBox(height: 20.0),
                               Padding(
                                 padding: const EdgeInsets.symmetric(

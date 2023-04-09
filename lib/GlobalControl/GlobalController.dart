@@ -286,7 +286,15 @@ class GlobalController {
   //   });
   // }
   Future<void> requestPackage(
-      {price, note, packageID, uid, phoneNumber, location, qty,tokenKey,chatid}) async {
+      {price,
+      note,
+      packageID,
+      uid,
+      phoneNumber,
+      location,
+      qty,
+      tokenKey,
+      chatid}) async {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
     position = await GeolocatorPlatform.instance.getCurrentPosition();
@@ -298,14 +306,14 @@ class GlobalController {
         //.child(getUserID.toString())
         .update({
       "userName": 'Tep',
-      "uLatitude": latitude,
-      "uLongitude": longitude,
+      "uLatitude": latitude.toString(),
+      "uLongitude": longitude.toString(),
     }).then((value) => packageRequest
                 .child(auth.currentUser!.uid)
                 .child('package')
                 .push()
                 .update({
-              'uid': auth.currentUser!.uid,
+              'uid': auth.currentUser!.uid.toString(),
               'location': location.toString(),
               'phoneNumber': phoneNumber.toString(),
               'token': tokenKey.toString(),
@@ -314,8 +322,8 @@ class GlobalController {
               "longitude": longitude.toString(),
               'date': formattedDate.toString(),
               'qty': qty.toString(),
-              'packageID': packageID,
-              'note': note,
+              'packageID': packageID.toString(),
+              'note': note.toString(),
               'status': 'request',
               'price': price.toString()
             }));
@@ -517,8 +525,8 @@ class GlobalController {
       Get.back();
     }).catchError((error) => print("Failed to add user: $error"));
   }
-  insertTelegramChatID({chatid}) async {
 
+  insertTelegramChatID({chatid}) async {
     users.doc(auth.currentUser!.uid).update({
       'chatid': chatid,
     }).then((value) {
@@ -526,6 +534,16 @@ class GlobalController {
       FocusManager.instance.primaryFocus?.unfocus();
       Get.back();
     }).catchError((error) => print("Failed to add user: $error"));
+  }
+
+  deletePackage({data}) async {
+    DatabaseReference packageRequest =
+        FirebaseDatabase.instance.ref("PackageRequest");
+    await packageRequest
+        .child(auth.currentUser!.uid)
+        .child('package')
+        .child(data)
+        .remove();
   }
 }
 
