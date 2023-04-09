@@ -19,7 +19,8 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
   final reUse = ReUseWidget();
   final theme = ThemesApp();
   var argumentData = Get.arguments;
-  List driverList = [];
+  List totalList = [];
+  List keyList = [];
   List forDisplay = [];
   FirebaseAuth auth = FirebaseAuth.instance;
   bool isShow = false;
@@ -45,13 +46,35 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
   // }
 
   _TotalPackageScreenState() {
-    driverList = argumentData;
-    forDisplay = driverList;
-    isShow = true;
-    glb.onSearchControl(list: driverList);
+    totalList = argumentData[0]['data'];
+    forDisplay = totalList;
+    keyList = argumentData[1]['key'];
+    totalListLength();
+  }
 
-    print(driverList);
-    print(driverList);
+  totalListLength() async {
+    try {
+      DatabaseReference refs = FirebaseDatabase.instance
+          .ref('PackageRequest')
+          .child(auth.currentUser!.uid);
+      refs.onValue.listen((event) {
+        setState(() {});
+        totalList.clear();
+        DataSnapshot driver = event.snapshot;
+        Map values = driver.value as Map;
+        values.forEach((key, values) async {
+          Map data = await values as Map;
+          data.forEach((key, value) async {
+            setState(() {
+              totalList.add(value);
+              forDisplay = totalList;
+            });
+          });
+        });
+      });
+    } catch (e) {
+      print('totalListLength $e');
+    }
   }
 
   @override
@@ -63,6 +86,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
 
   final search = TextEditingController();
   final glb = GlobalController();
+  double padding = 8.0;
 
   @override
   Widget build(BuildContext context) {
@@ -74,36 +98,20 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
           Flexible(
             child: Column(
               children: [
-                // reUse.reUseHeader(
-                //     packageList: driverList,
-                //     searchcontroll: search,
-                //     context: context,
-                //     label: 'Total Package',
-                //     title: 'Total Package',
-                //     headercolor: theme.dirt),
-
-                // isShow == false
-                //     ? const Flexible(
-                //         child: Center(
-                //             child: SizedBox(
-                //                 height: 50,
-                //                 width: 50,
-                //                 child: CircularProgressIndicator())))
-                //     : reUse.reTotalPackageListview(
-                //         pkc: glb.onSearchControl(list: forDisplay)),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   decoration: const BoxDecoration(
-                    //color: headercolor,
-                    //borderRadius: BorderRadius.circular(6),
-                    // boxShadow: [
-                    //   BoxShadow(
-                    //     color: theme.grey,
-                    //     blurRadius: 4,
-                    //     offset: Offset(0, 1), // Shadow position
-                    //   ),
-                    // ],
-                  ),
+                      //color: headercolor,
+                      //borderRadius: BorderRadius.circular(6),
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //     color: theme.grey,
+                      //     blurRadius: 4,
+                      //     offset: Offset(0, 1), // Shadow position
+                      //   ),
+                      // ],
+                      ),
                   child: Column(
                     children: [
                       Container(
@@ -138,7 +146,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                             Padding(
                               padding: EdgeInsets.only(left: 18.0),
                               child: Text(
-                                '',
+                                'Package',
                                 style: TextStyle(
                                     fontSize: 18,
                                     // color: titleColor,
@@ -166,7 +174,6 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                 decoration: InputDecoration(
                                   filled: true,
                                   hintStyle: const TextStyle(fontSize: 12),
-
                                   fillColor: theme.midGrey,
                                   hintText: 'Search ID or Phone number',
                                   border: OutlineInputBorder(
@@ -177,16 +184,13 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                   ),
                                   suffixIcon: IconButton(
                                     splashColor: Colors.transparent,
-                                    onPressed: ()
-                                    {
+                                    onPressed: () {
                                       search.clear();
                                       //packageList!.clear(),
-                                      FocusManager.instance.primaryFocus?.unfocus();
-                                      forDisplay = driverList;
-                                      setState(() {
-
-                                      });
-
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                      forDisplay = totalList;
+                                      setState(() {});
                                     },
                                     icon: const Icon(Icons.close),
                                   ),
@@ -196,12 +200,12 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                           ),
                           Container(
                             decoration: BoxDecoration(
-                              color: theme.liteBlue,
+                              color: theme.blue,
                               borderRadius: BorderRadius.circular(6),
                               boxShadow: [
                                 BoxShadow(
-                                  color: theme.minGrey,
-                                  blurRadius: 6,
+                                  color: theme.grey,
+                                  blurRadius: 3,
                                   offset: const Offset(0, 0), // Shadow position
                                 ),
                               ],
@@ -209,31 +213,28 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                             child: IconButton(
                                 splashRadius: 20,
                                 onPressed: () {
-                                  List results = driverList
-                                      .where((user) =>
-                                      user['packageID']
+                                  List results = totalList
+                                      .where((user) => user['packageID']
                                           .toLowerCase()
                                           .contains(search.text
-                                          .toString()
-                                          .toLowerCase()))
+                                              .toString()
+                                              .toLowerCase()))
                                       .toList();
                                   forDisplay = results;
                                   FocusManager.instance.primaryFocus?.unfocus();
-                                  setState(() {
-
-                                  });
-
+                                  setState(() {});
                                 },
                                 icon: Icon(
                                   Icons.search,
-                                  color: theme.blue,
+                                  color: theme.white,
                                 )),
                           )
                         ],
                       ),
                       Row(
                         children: [
-                          reUse.reUseText(content: 'Total : '),
+                          reUse.reUseText(
+                              content: 'Total : ${forDisplay.length}'),
                           const Flexible(child: Divider()),
                           Container(
                             decoration: BoxDecoration(
@@ -279,73 +280,103 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                       BoxShadow(
                                         color: theme.grey,
                                         blurRadius: 4,
-                                        offset: const Offset(0, 1), // Shadow position
+                                        offset: const Offset(
+                                            0, 1), // Shadow position
                                       ),
                                     ],
                                   ),
                                   child: Column(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          reUse.reUseText(
-                                              weight: FontWeight.w400,
-                                              size: 12.0,
-                                              color: theme.grey,
-                                              content: 'SHIPPING ID :'),
-                                          Row(
-                                            children: [
-                                              reUse.reUseText(
-                                                  weight: FontWeight.bold,
-                                                  size: 16.0,
-                                                  color: theme.blue,
-                                                  content: forDisplay[index]['packageID']),
-                                              SizedBox(
-                                                height: 40,
-                                                width: 40,
-                                                child: PopupMenuButton<int>(
-                                                  onSelected: (item) => {},
-                                                  itemBuilder: (context) =>
-                                                  [
-                                                    const PopupMenuItem<int>(
-                                                        value: 0, child: Text('Edit')),
-                                                    const PopupMenuItem<int>(
-                                                        value: 1, child: Text('Delete')),
-                                                  ],
+                                      Flexible(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            reUse.reUseText(
+                                                weight: FontWeight.w400,
+                                                size: 12.0,
+                                                color: theme.grey,
+                                                content: 'SHIPPING ID :'),
+                                            Row(
+                                              children: [
+                                                reUse.reUseText(
+                                                    weight: FontWeight.bold,
+                                                    size: 16.0,
+                                                    color: theme.blue,
+                                                    content: (forDisplay[index]
+                                                            ['packageID'])
+                                                        .toString()),
+                                                SizedBox(
+                                                  height: 40,
+                                                  width: 40,
+                                                  child: PopupMenuButton<int>(
+                                                    onSelected: (item) async {
+                                                      if (item == 0) {
+                                                      } else {
+                                                        alertDialog();
+                                                        removeItem(
+                                                            keyIndex:
+                                                                keyList[index],
+                                                            listIndex:
+                                                                forDisplay[
+                                                                    index]);
+                                                        Get.back();
+                                                      }
+                                                    },
+                                                    itemBuilder: (context) => [
+                                                      const PopupMenuItem<int>(
+                                                          value: 0,
+                                                          child: Text('Edit')),
+                                                      const PopupMenuItem<int>(
+                                                          value: 1,
+                                                          child:
+                                                              Text('Delete')),
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      Divider(
-                                        color: theme.grey,
+                                      Flexible(
+                                        child: Divider(
+                                          color: theme.grey,
+                                        ),
                                       ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                        children: [
-                                          reUse.reSetUseText(
-                                              titleColor: theme.grey,
-                                              title: 'Destination',
-                                              size: 14.0,
-                                              color: theme.black,
-                                              content: forDisplay[index]['location'],
-                                              weight: FontWeight.w500),
-                                          reUse.reSetUseText(
-                                              titleColor: theme.grey,
-                                              title: 'Phone number',
-                                              size: 14.0,
-                                              color: theme.black,
-                                              content: forDisplay[index]['phoneNumber'],
-                                              weight: FontWeight.w500),
-                                          reUse.reSetUseText(
-                                              titleColor: theme.grey,
-                                              title: 'Qty',
-                                              size: 14.0,
-                                              color: theme.black,
-                                              content: '1',
-                                              weight: FontWeight.w500),
-                                        ],
+                                      Flexible(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            reUse.reSetUseText(
+                                                titleColor: theme.grey,
+                                                title: 'Destination',
+                                                size: 14.0,
+                                                color: theme.black,
+                                                content: forDisplay[index]
+                                                    ['location'],
+                                                weight: FontWeight.w500),
+                                            reUse.reSetUseText(
+                                                titleColor: theme.grey,
+                                                title: 'Phone number',
+                                                size: 14.0,
+                                                color: theme.black,
+                                                content: forDisplay[index]
+                                                    ['phoneNumber'],
+                                                weight: FontWeight.w500),
+                                            reUse.reSetUseText(
+                                                titleColor: theme.grey,
+                                                title: 'Qty',
+                                                size: 14.0,
+                                                color: theme.black,
+                                                content: '1',
+                                                weight: FontWeight.w500),
+                                          ],
+                                        ),
                                       ),
                                       Row(
                                         children: [
@@ -358,35 +389,43 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                               weight: FontWeight.bold,
                                               size: 18.0,
                                               color: theme.blue,
-                                              content: forDisplay[index]['price']),
+                                              content: forDisplay[index]
+                                                  ['price']),
                                         ],
                                       ),
-                                      Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          reUse.reUseText(
-                                              weight: FontWeight.bold,
-                                              size: 12.0,
-                                              color: theme.darkGrey,
-                                              content: 'Note :'),
-                                          Flexible(
-                                            child: Container(
-                                              width: Get.width,
-                                              margin: const EdgeInsets.all(8.0),
-                                              padding: const EdgeInsets.all(8.0),
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(color: theme.grey)),
-                                              child: reUse.reUseTextNote(
-                                                  weight: FontWeight.w400,
-                                                  size: 14.0,
-                                                  color: theme.grey,
-                                                  content: forDisplay[index]['note']),
+                                      Flexible(
+                                        child: Row(
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  right: padding),
+                                              child: reUse.reUseText(
+                                                  weight: FontWeight.bold,
+                                                  size: 12.0,
+                                                  color: theme.darkGrey,
+                                                  content: 'Note :'),
                                             ),
-                                          ),
-                                        ],
+                                            Flexible(
+                                              child: Container(
+                                                padding:
+                                                    EdgeInsets.all(padding),
+                                                width: Get.width,
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: theme.grey)),
+                                                child: reUse.reUseTextNote(
+                                                    weight: FontWeight.w400,
+                                                    size: 14.0,
+                                                    color: theme.grey,
+                                                    content: keyList[index]),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
                                         children: [
                                           reUse.reUseText(
                                               weight: FontWeight.w400,
@@ -397,7 +436,8 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                               weight: FontWeight.w400,
                                               size: 12.0,
                                               color: theme.darkGrey,
-                                              content: forDisplay[index]['date']),
+                                              content: forDisplay[index]
+                                                  ['date']),
                                         ],
                                       ),
                                     ],
@@ -428,5 +468,43 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
         ],
       ),
     ));
+  }
+
+  alertDialog() {
+    return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: const AlertDialog(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            actions: [
+              Center(
+                child: SizedBox(
+                    height: 40, width: 40, child: CircularProgressIndicator()),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  removeItem({keyIndex, listIndex}) async {
+    DatabaseReference packageRequest =
+        FirebaseDatabase.instance.ref("PackageRequest");
+    await packageRequest
+        .child(auth.currentUser!.uid)
+        .child('package')
+        .child(keyIndex)
+        .remove();
+    print(keyIndex);
+    print(listIndex);
+    totalList.removeWhere((item) => item == listIndex);
+    keyList.removeWhere((item) => item == keyIndex);
+    forDisplay = totalList;
+    setState(() {});
   }
 }

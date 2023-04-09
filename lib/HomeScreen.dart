@@ -32,14 +32,18 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
-
-    checkid();
+    super.initState();checkid();
     totalListLength();
     pendingListLength();
     completeListLength();
     returnListLength();
     currentTime();
+  }
+  _HomeScreenState(){
+    totalListLength();
+    pendingListLength();
+    completeListLength();
+    returnListLength();
   }
 
   String getUserID = '';
@@ -69,9 +73,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List driverList = [];
+  List totalPackageIndex = [];
   List completeList = [];
   List returnData = [];
-  List statusData = [];
 
   totalListLength() async {
     try {
@@ -79,13 +83,16 @@ class _HomeScreenState extends State<HomeScreen> {
           .ref('PackageRequest')
           .child(auth.currentUser!.uid);
       refs.onValue.listen((event) {
+        setState(() {});
         driverList.clear();
+        totalPackageIndex.clear();
         DataSnapshot driver = event.snapshot;
         Map values = driver.value as Map;
         values.forEach((key, values) async {
           Map data = await values as Map;
           data.forEach((key, value) async {
             setState(() {
+              totalPackageIndex.add(key);
               driverList.add(value);
             });
           });
@@ -102,6 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       DatabaseReference refs = FirebaseDatabase.instance.ref('Pending');
       refs.onValue.listen((event) {
+        setState(() {});
         pendingList.clear();
         DataSnapshot driver = event.snapshot;
         Map values = driver.value as Map;
@@ -125,8 +133,8 @@ class _HomeScreenState extends State<HomeScreen> {
           .ref('Complete')
           .child(auth.currentUser!.uid);
       refs.onValue.listen((event) {
+        setState(() {});
         completeList.clear();
-        statusData.clear();
         DataSnapshot driver = event.snapshot;
         Map values = driver.value as Map;
         values.forEach((key, value) {
@@ -145,8 +153,8 @@ class _HomeScreenState extends State<HomeScreen> {
       DatabaseReference refs =
           FirebaseDatabase.instance.ref('Return').child(auth.currentUser!.uid);
       refs.onValue.listen((event) {
+        setState(() {});
         returnData.clear();
-        statusData.clear();
         DataSnapshot driver = event.snapshot;
         Map values = driver.value as Map;
         values.forEach((key, value) {
@@ -158,18 +166,6 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       print('returnListLength $e');
     }
-  }
-
-  updateStatus({returnData, completeList}) async {
-    try {
-      List a = returnData + completeList;
-      print(a);
-      print(a);
-      statusData = a;
-    } catch (e) {
-      print(e);
-    }
-    setState(() {});
   }
 
   String greeting = "";
@@ -189,10 +185,11 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
   }
 
+  double paddings = 10.0;
+
   @override
   Widget build(BuildContext context) {
-    var viewHeight = MediaQuery.of(context).size.height * 0.3;
-    double paddings = MediaQuery.of(context).size.height * 0.06;
+    double btnHeight = MediaQuery.of(context).size.height * 0.06;
     return WillPopScope(
       onWillPop: () => exitApp(),
       child: Scaffold(
@@ -212,24 +209,39 @@ class _HomeScreenState extends State<HomeScreen> {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  reUse.unitOneHomeScreen(
-                      getTime: greeting,
-                      userID: 'ID $getUserID',
-                      context: context),
-                  reUse.unitTwoHomeScreen(
-                      context: context,
-                      totalPackageData: driverList,
-                      returnData: returnData,
-                      completeData: completeList,
-                      returnLength: returnData.length,
-                      completeLength: completeList.length,
-                      pendingData: pendingList,
-                      totalLength: driverList.length,
-                      pendingLength: pendingList.length),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: 40, right: paddings, left: paddings),
+                    child: reUse.unitOneHomeScreen(
+                        getTime: greeting,
+                        userID: 'ID $getUserID',
+                        context: context),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.all(paddings),
+                    child: reUse.unitTwoHomeScreen(
+                        context: context,
+                        totalPackageDataKey: totalPackageIndex,
+                        totalPackageData: driverList,
+                        returnData: returnData,
+                        completeData: completeList,
+                        returnLength: returnData.length,
+                        completeLength: completeList.length,
+                        pendingData: pendingList,
+                        totalLength: driverList.length,
+                        pendingLength: pendingList.length),
+                  ),
+
                   //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
                   // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
                   //reUse.renderListView(),
-                  reUse.reUseCreatePackage(context: context,padding: paddings),
+                  Padding(
+                    padding: EdgeInsets.all(paddings),
+                    child: reUse.reUseCreatePackage(
+                        context: context, padding: paddings, height: btnHeight),
+                  ),
+
                   Row(
                     children: [
                       Padding(
@@ -269,6 +281,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  List statusData = [];
 
   FirebaseAuth auth = FirebaseAuth.instance;
 

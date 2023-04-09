@@ -278,7 +278,7 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                           [
                                             const PopupMenuItem<int>(
                                                 value: 0,
-                                                child: Text('Return to request')),
+                                                child: Text('Back to Request')),
                                             const PopupMenuItem<int>(
                                                 value: 1, child: Text('Delete')),
                                           ],
@@ -291,41 +291,38 @@ class _ReturnScreenState extends State<ReturnScreen> {
                               Divider(
                                 color: theme.grey,
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
-                                    // reUse.reSetUseText(
-                                    //     titleColor: theme.grey,
-                                    //     title: 'Destination',
-                                    //     size: 14.0,
-                                    //     color: theme.black,
-                                    //     content: forDisplay[index]['location'],
-                                    //     weight: FontWeight.w500),
-                                    reUse.reSetUseText(
-                                        titleColor: theme.grey,
-                                        title: 'Destination',
-                                        size: 14.0,
-                                        color: theme.black,
-                                        content: forDisplay[index]['location'],
-                                        weight: FontWeight.w500),
-                                    reUse.reSetUseText(
-                                        titleColor: theme.grey,
-                                        title: 'Phone number',
-                                        size: 14.0,
-                                        color: theme.black,
-                                        content: forDisplay[index]['phoneNumber'],
-                                        weight: FontWeight.w500),
-                                    reUse.reSetUseText(
-                                        titleColor: theme.grey,
-                                        title: 'Qty',
-                                        size: 14.0,
-                                        color: theme.black,
-                                        content: '1',
-                                        weight: FontWeight.w500),
-                                  ],
-                                ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  // reUse.reSetUseText(
+                                  //     titleColor: theme.grey,
+                                  //     title: 'Destination',
+                                  //     size: 14.0,
+                                  //     color: theme.black,
+                                  //     content: forDisplay[index]['location'],
+                                  //     weight: FontWeight.w500),
+                                  reUse.reSetUseText(
+                                      titleColor: theme.grey,
+                                      title: 'Destination',
+                                      size: 14.0,
+                                      color: theme.black,
+                                      content: forDisplay[index]['location'],
+                                      weight: FontWeight.w500),
+                                  reUse.reSetUseText(
+                                      titleColor: theme.grey,
+                                      title: 'Phone number',
+                                      size: 14.0,
+                                      color: theme.black,
+                                      content: forDisplay[index]['phoneNumber'],
+                                      weight: FontWeight.w500),
+                                  reUse.reSetUseText(
+                                      titleColor: theme.grey,
+                                      title: 'Qty',
+                                      size: 14.0,
+                                      color: theme.black,
+                                      content: '1',
+                                      weight: FontWeight.w500),
+                                ],
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(3.0),

@@ -50,7 +50,8 @@ class _PendingScreenState extends State<PendingScreen> {
       });
     });
   }
-  double reUseReturnPadding = 2.0;
+
+  double padding = 2.0;
 
   @override
   Widget build(BuildContext context) {
@@ -63,16 +64,16 @@ class _PendingScreenState extends State<PendingScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: const BoxDecoration(
-              //color: headercolor,
-              //borderRadius: BorderRadius.circular(6),
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: theme.grey,
-              //     blurRadius: 4,
-              //     offset: Offset(0, 1), // Shadow position
-              //   ),
-              // ],
-            ),
+                //color: headercolor,
+                //borderRadius: BorderRadius.circular(6),
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: theme.grey,
+                //     blurRadius: 4,
+                //     offset: Offset(0, 1), // Shadow position
+                //   ),
+                // ],
+                ),
             child: Column(
               children: [
                 Container(
@@ -107,7 +108,7 @@ class _PendingScreenState extends State<PendingScreen> {
                       Padding(
                         padding: EdgeInsets.only(left: 18.0),
                         child: Text(
-                           'Pending',
+                          'Pending',
                           style: TextStyle(
                               fontSize: 18,
                               //color: titleColor,
@@ -146,15 +147,13 @@ class _PendingScreenState extends State<PendingScreen> {
                             ),
                             suffixIcon: IconButton(
                               splashColor: Colors.transparent,
-                              onPressed: ()
-                              {
+                              onPressed: () {
                                 forDisplay = pendingList;
 
                                 searchController.clear();
                                 //packageList!.clear(),
                                 FocusManager.instance.primaryFocus?.unfocus();
                                 setState(() {});
-
                               },
                               icon: const Icon(Icons.close),
                             ),
@@ -190,14 +189,13 @@ class _PendingScreenState extends State<PendingScreen> {
                           splashRadius: 20,
                           onPressed: () {
                             List results = pendingList
-                                .where((user) =>
-                                user['packageID']
+                                .where((user) => user['packageID']
                                     .toLowerCase()
                                     .contains(searchController.text
-                                    .toString()
-                                    .toLowerCase()))
+                                        .toString()
+                                        .toLowerCase()))
                                 .toList();
-                            forDisplay  = results;
+                            forDisplay = results;
                             FocusManager.instance.primaryFocus?.unfocus();
                             setState(() {});
                           },
@@ -210,21 +208,25 @@ class _PendingScreenState extends State<PendingScreen> {
                 ),
                 Row(
                   children: [
-                    reUse.reUseText(content: 'Total : '),
+                    Padding(
+                      padding: EdgeInsets.all(padding),
+                      child: reUse.reUseText(content: 'Total : '),
+                    ),
+
                     const Flexible(child: Divider()),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: theme.litestOrange,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: IconButton(
-                          splashRadius: 20,
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.filter_alt_outlined,
-                            color: theme.orange,
-                          )),
-                    )
+                    // Container(
+                    //   decoration: BoxDecoration(
+                    //     color: theme.litestOrange,
+                    //     borderRadius: BorderRadius.circular(6),
+                    //   ),
+                    //   child: IconButton(
+                    //       splashRadius: 20,
+                    //       onPressed: () {},
+                    //       icon: Icon(
+                    //         Icons.filter_alt_outlined,
+                    //         color: theme.orange,
+                    //       )),
+                    // )
                   ],
                 )
               ],
@@ -251,12 +253,13 @@ class _PendingScreenState extends State<PendingScreen> {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         padding: const EdgeInsets.all(8),
-                        itemCount: forDisplay!.length,
+                        itemCount: forDisplay.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Container(
                             width: Get.width,
                             margin: const EdgeInsets.all(6),
-                            padding: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
                             decoration: BoxDecoration(
                               color: theme.liteGrey,
                               borderRadius: BorderRadius.circular(6),
@@ -271,29 +274,29 @@ class _PendingScreenState extends State<PendingScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Padding(
-                                  padding: EdgeInsets.all(reUseReturnPadding),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      reUse.reUseText(
-                                          weight: FontWeight.w400,
-                                          size: 12.0,
-                                          color: theme.grey,
-                                          content: 'SHIPPING ID :'),
-                                      reUse.reUseText(
-                                          weight: FontWeight.bold,
-                                          size: 16.0,
-                                          color: theme.blue,
-                                          content:
-                                          forDisplay[index]['packageID'] ?? 'No ID'),
-                                    ],
-                                  ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    reUse.reUseText(
+                                        weight: FontWeight.w400,
+                                        size: 12.0,
+                                        color: theme.grey,
+                                        content: 'SHIPPING ID :'),
+                                    reUse.reUseText(
+                                        weight: FontWeight.bold,
+                                        size: 16.0,
+                                        color: theme.blue,
+                                        content: forDisplay[index]
+                                                ['packageID'] ??
+                                            'No ID'),
+                                  ],
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.all(reUseReturnPadding),
+                                  padding: EdgeInsets.all(padding),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       reUse.reUseText(
                                           weight: FontWeight.bold,
@@ -314,20 +317,23 @@ class _PendingScreenState extends State<PendingScreen> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.all(reUseReturnPadding),
+                                  padding: EdgeInsets.all(padding),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       reUse.reUseText(
                                           size: 14.0,
                                           color: theme.black,
-                                          content: forDisplay[index]['location'],
+                                          content: forDisplay[index]
+                                              ['location'],
                                           weight: FontWeight.w500),
                                       reUse.reUseText(
                                           size: 14.0,
                                           color: theme.black,
                                           weight: FontWeight.w500,
-                                          content: forDisplay[index]['phoneNumber']),
+                                          content: forDisplay[index]
+                                              ['phoneNumber']),
                                       reUse.reUseText(
                                           size: 14.0,
                                           color: theme.black,
@@ -336,10 +342,12 @@ class _PendingScreenState extends State<PendingScreen> {
                                     ],
                                   ),
                                 ),
+                                Divider(),
                                 Padding(
-                                  padding: EdgeInsets.all(reUseReturnPadding),
+                                  padding: EdgeInsets.all(padding),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       reUse.reUseText(
                                           size: 12.0,
