@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
+import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 import 'package:http/http.dart' as http;
@@ -673,15 +674,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       width: Get.width,
                       child: TextButton.icon(
                         onPressed: () {
-                          reUse.reUseCircleDialog(
-                              data: token.text.toString(),
-                              context: context,
-                              function: 'logout',
-                              title: 'Log Out',
-                              content: Center(
-                                  child: Text(
-                                      'Are you sure you want to log out?')),
-                              icon: Icons.login_outlined);
+                          reUseCircleDialog();
                         },
                         icon: Icon(Icons.login_rounded),
                         label: Text('Log Out'),
@@ -727,6 +720,91 @@ class _AccountScreenState extends State<AccountScreen> {
       //   icon: BitmapDescriptor.defaultMarker, //Icon for Marker
       // ));
     });
+  }
+  reUseCircleDialog({data, context, icon, title, content, function}) {
+
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.topCenter,
+            children: [
+              Positioned(
+                top: -60.0,
+                child: CircleAvatar(
+                  radius: 60.0,
+                  backgroundColor: theme.white,
+                  child: Icon(
+                    icon,
+                    color: theme.orange,
+                    size: 100.0,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 80.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 20.0),
+                    // Text(
+                    //   content,
+                    //   textAlign: TextAlign.center,
+                    //   style: const TextStyle(
+                    //     fontSize: 16.0,
+                    //   ),
+                    // ),
+                    content,
+                    const SizedBox(height: 20.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      child: reUseButton(
+                          text: "OK"
+                         ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+  reUseButton({data, key, icon, text, backgroundColor, textColor}) {
+    return SizedBox(
+      width: Get.width,
+      child: TextButton(
+        style: TextButton.styleFrom(
+          backgroundColor: backgroundColor,
+        ),
+        onPressed: () async {
+          FirebaseAuth.instance.signOut();
+          Get.to(LogInScreen());
+          setState(() {});
+        },
+        child: Text(
+          text,
+          style: TextStyle(
+              color: textColor, fontWeight: FontWeight.bold, fontSize: 14),
+        ),
+      ),
+    );
   }
 }
 
