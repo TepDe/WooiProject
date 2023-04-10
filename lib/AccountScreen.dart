@@ -674,7 +674,11 @@ class _AccountScreenState extends State<AccountScreen> {
                       width: Get.width,
                       child: TextButton.icon(
                         onPressed: () {
-                          reUseCircleDialog();
+                          reUseCircleDialog(
+                              context: context,
+                              title: 'Text',
+                              icon: Icons.add,
+                              content: Text('test'));
                         },
                         icon: Icon(Icons.login_rounded),
                         label: Text('Log Out'),
@@ -721,8 +725,8 @@ class _AccountScreenState extends State<AccountScreen> {
       // ));
     });
   }
-  reUseCircleDialog({data, context, icon, title, content, function}) {
 
+  reUseCircleDialog({data, context, icon, title, content, function}) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -773,9 +777,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 10),
-                      child: reUseButton(
-                          text: "OK"
-                         ),
+                      child: reUseButton(text: "OK"),
                     ),
                   ],
                 ),
@@ -786,6 +788,7 @@ class _AccountScreenState extends State<AccountScreen> {
       },
     );
   }
+
   reUseButton({data, key, icon, text, backgroundColor, textColor}) {
     return SizedBox(
       width: Get.width,
