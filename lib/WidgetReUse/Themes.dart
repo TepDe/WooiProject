@@ -15,6 +15,7 @@ class ThemesApp{
   var midGrey = const Color(0xffe1e1e1);
   var green = const Color(0xff186a3b);
   var red = const Color(0xffe74c3c);
+  var litestGreen = const Color(0xffabebc6);
   var liteRed = const Color(0xffff6347);
   var litestRed = const Color(0xfffadbd8);
   var liteGreen = const Color(0xff00cc71);

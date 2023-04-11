@@ -262,189 +262,222 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Flexible(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding: const EdgeInsets.all(8),
-                              itemCount: forDisplay.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Container(
-                                  width: Get.width,
-                                  margin: const EdgeInsets.all(6),
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    color: theme.liteGrey,
-                                    borderRadius: BorderRadius.circular(6),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: theme.grey,
-                                        blurRadius: 4,
-                                        offset: const Offset(
-                                            0, 1), // Shadow position
-                                      ),
-                                    ],
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Flexible(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            reUse.reUseText(
-                                                weight: FontWeight.w400,
-                                                size: 12.0,
-                                                color: theme.grey,
-                                                content: 'SHIPPING ID :'),
-                                            Row(
-                                              children: [
-                                                reUse.reUseText(
-                                                    weight: FontWeight.bold,
-                                                    size: 16.0,
-                                                    color: theme.blue,
-                                                    content: (forDisplay[index]
-                                                            ['packageID'])
-                                                        .toString()),
-                                                SizedBox(
-                                                  height: 40,
-                                                  width: 40,
-                                                  child: PopupMenuButton<int>(
-                                                    onSelected: (item) async {
-                                                      if (item == 0) {
-                                                      } else {
-                                                        alertDialog();
-                                                        removeItem(
-                                                            keyIndex:
-                                                                keyList[index],
-                                                            listIndex:
-                                                                forDisplay[
-                                                                    index]);
-                                                        Get.back();
-                                                      }
-                                                    },
-                                                    itemBuilder: (context) => [
-                                                      const PopupMenuItem<int>(
-                                                          value: 0,
-                                                          child: Text('Edit')),
-                                                      const PopupMenuItem<int>(
-                                                          value: 1,
-                                                          child:
-                                                              Text('Delete')),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Flexible(
-                                        child: Divider(
-                                          color: theme.grey,
-                                        ),
-                                      ),
-                                      Flexible(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            reUse.reSetUseText(
-                                                titleColor: theme.grey,
-                                                title: 'Destination',
-                                                size: 14.0,
-                                                color: theme.black,
-                                                content: forDisplay[index]
-                                                    ['location'],
-                                                weight: FontWeight.w500),
-                                            reUse.reSetUseText(
-                                                titleColor: theme.grey,
-                                                title: 'Phone number',
-                                                size: 14.0,
-                                                color: theme.black,
-                                                content: forDisplay[index]
-                                                    ['phoneNumber'],
-                                                weight: FontWeight.w500),
-                                            reUse.reSetUseText(
-                                                titleColor: theme.grey,
-                                                title: 'Qty',
-                                                size: 14.0,
-                                                color: theme.black,
-                                                content: '1',
-                                                weight: FontWeight.w500),
-                                          ],
-                                        ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          reUse.reUseText(
-                                              weight: FontWeight.bold,
-                                              size: 12.0,
-                                              color: theme.darkGrey,
-                                              content: 'Price '),
-                                          reUse.reUseText(
-                                              weight: FontWeight.bold,
-                                              size: 18.0,
-                                              color: theme.blue,
-                                              content: forDisplay[index]
-                                                  ['price']),
-                                        ],
-                                      ),
-                                      Flexible(
-                                        child: Row(
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.only(
-                                                  right: padding),
-                                              child: reUse.reUseText(
-                                                  weight: FontWeight.bold,
-                                                  size: 12.0,
-                                                  color: theme.darkGrey,
-                                                  content: 'Note :'),
-                                            ),
-                                            Flexible(
-                                              child: Container(
-                                                padding:
-                                                    EdgeInsets.all(padding),
-                                                width: Get.width,
-                                                decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: theme.grey)),
-                                                child: reUse.reUseTextNote(
-                                                    weight: FontWeight.w400,
-                                                    size: 14.0,
-                                                    color: theme.grey,
-                                                    content: keyList[index]),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Row(
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: const EdgeInsets.all(8),
+                            itemCount: forDisplay.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                width: Get.width,
+                                margin: const EdgeInsets.all(6),
+                                padding:
+                                    EdgeInsets.symmetric(horizontal: padding),
+                                decoration: BoxDecoration(
+                                  color: theme.liteGrey,
+                                  borderRadius: BorderRadius.circular(6),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: theme.grey,
+                                      blurRadius: 4,
+                                      offset:
+                                          const Offset(0, 0), // Shadow position
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(3),
+                                      child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           reUse.reUseText(
                                               weight: FontWeight.w400,
                                               size: 12.0,
                                               color: theme.grey,
-                                              content: 'Date : '),
-                                          reUse.reUseText(
-                                              weight: FontWeight.w400,
-                                              size: 12.0,
-                                              color: theme.darkGrey,
-                                              content: forDisplay[index]
-                                                  ['date']),
+                                              content: 'SHIPPING ID :'),
+                                          Row(
+                                            children: [
+                                              reUse.reUseText(
+                                                  weight: FontWeight.bold,
+                                                  size: 16.0,
+                                                  color: theme.blue,
+                                                  content: (forDisplay[index]
+                                                          ['packageID'])
+                                                      .toString()),
+                                              forDisplay[index]['status'] !=
+                                                      'pending'
+                                                  ? SizedBox(
+                                                      height: 40,
+                                                      width: 40,
+                                                      child: PopupMenuButton<int>(
+                                                        onSelected: (item) async {
+                                                          if (item == 0) {
+                                                          } else {
+                                                            alertDialog();
+                                                            removeItem(
+                                                                keyIndex: keyList[
+                                                                    index],
+                                                                listIndex:
+                                                                    forDisplay[
+                                                                        index]);
+                                                            Get.back();
+                                                          }
+                                                        },
+                                                        itemBuilder: (context) =>
+                                                            [
+                                                          const PopupMenuItem<
+                                                                  int>(
+                                                              value: 0,
+                                                              child:
+                                                                  Text('Edit')),
+                                                          const PopupMenuItem<
+                                                                  int>(
+                                                              value: 1,
+                                                              child:
+                                                                  Text('Delete')),
+                                                        ],
+                                                      ),
+                                                    )
+                                                  : Container(),
+                                            ],
+                                          ),
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
+                                    ),
+                                    Divider(
+                                      color: theme.grey,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        reUse.reSetUseText(
+                                            titleColor: theme.grey,
+                                            title: 'Destination',
+                                            size: 14.0,
+                                            color: theme.black,
+                                            content: forDisplay[index]
+                                                ['location'],
+                                            weight: FontWeight.w500),
+                                        reUse.reSetUseText(
+                                            titleColor: theme.grey,
+                                            title: 'Phone number',
+                                            size: 14.0,
+                                            color: theme.black,
+                                            content: forDisplay[index]
+                                                ['phoneNumber'],
+                                            weight: FontWeight.w500),
+                                        reUse.reSetUseText(
+                                            titleColor: theme.grey,
+                                            title: 'Qty',
+                                            size: 14.0,
+                                            color: theme.black,
+                                            content: '1',
+                                            weight: FontWeight.w500),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        reUse.reUseText(
+                                            weight: FontWeight.bold,
+                                            size: 12.0,
+                                            color: theme.darkGrey,
+                                            content: 'Price '),
+                                        reUse.reUseText(
+                                            weight: FontWeight.bold,
+                                            size: 18.0,
+                                            color: theme.blue,
+                                            content: forDisplay[index]
+                                                ['price']),
+                                      ],
+                                    ),
+                                    Flexible(
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsets.only(right: padding),
+                                            child: reUse.reUseText(
+                                                weight: FontWeight.bold,
+                                                size: 12.0,
+                                                color: theme.darkGrey,
+                                                content: 'Note :'),
+                                          ),
+                                          Flexible(
+                                            child: Container(
+                                              padding: EdgeInsets.all(padding),
+                                              width: Get.width,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: theme.minGrey)),
+                                              child: reUse.reUseTextNote(
+                                                  weight: FontWeight.w400,
+                                                  size: 14.0,
+                                                  color: theme.grey,
+                                                  content: keyList[index]),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(padding),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              reUse.reUseText(
+                                                  weight: FontWeight.w400,
+                                                  size: 12.0,
+                                                  color: theme.grey,
+                                                  content: 'Date : '),
+                                              reUse.reUseText(
+                                                  weight: FontWeight.w400,
+                                                  size: 12.0,
+                                                  color: theme.black,
+                                                  content: forDisplay[index]
+                                                      ['date']),
+                                            ],
+                                          ),
+                                          forDisplay[index]['status'] ==
+                                                  'pending'
+                                              ? Container(
+                                                  decoration: BoxDecoration(
+                                                    color: theme.litestOrange,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            6),
+                                                  ),
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 4),
+                                                  child: reUse.reUseText(
+                                                      weight: FontWeight.bold,
+                                                      size: 10.0,
+                                                      color: theme.orange,
+                                                      content: forDisplay[index]
+                                                              ['status']
+                                                          .toString()
+                                                          .toUpperCase()),
+                                                )
+                                              : Container(),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -464,7 +497,10 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
               ],
             ),
           ),
-          reUse.reUseCreatePackage(context: context),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: padding),
+            child: reUse.reUseCreatePackage(context: context),
+          )
         ],
       ),
     ));

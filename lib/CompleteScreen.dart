@@ -171,7 +171,7 @@ class _CompleteScreenState extends State<CompleteScreen> {
                     ),
                     Container(
                       decoration: BoxDecoration(
-                        color: theme.liteBlue,
+                        color: theme.btnBlue,
                         borderRadius: BorderRadius.circular(6),
                         boxShadow: [
                           BoxShadow(
@@ -196,7 +196,7 @@ class _CompleteScreenState extends State<CompleteScreen> {
                           },
                           icon: Icon(
                             Icons.search,
-                            color: theme.blue,
+                            color: theme.white,
                           )),
                     )
                   ],
@@ -233,7 +233,7 @@ class _CompleteScreenState extends State<CompleteScreen> {
                     return Container(
                       width: Get.width,
                       margin: const EdgeInsets.all(6),
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: theme.liteGrey,
                         borderRadius: BorderRadius.circular(6),
@@ -337,34 +337,36 @@ class _CompleteScreenState extends State<CompleteScreen> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(3.0),
+                            padding: const EdgeInsets.all(6.0),
                             child: Divider(
                               height: 1,
                               color: theme.grey,
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(3.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                reUse.reUseText(
-                                    size: 12.0,
-                                    weight: FontWeight.bold,
-                                    color: theme.grey,
-                                    content: 'Status'),
-                                Container(
-                                  width: 100,
-                                  child: reUse.reUseText(
-                                      size: 12.0,
-                                      color: theme.liteGreen,
-                                      content: forDisplay[index]['status']
-                                          .toString()
-                                          .toUpperCase(),
-                                      weight: FontWeight.w900),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              reUse.reUseText(
+                                  size: 12.0,
+                                  weight: FontWeight.bold,
+                                  color: theme.grey,
+                                  content: 'Status'),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: theme.litestGreen,
+                                  borderRadius: BorderRadius.circular(6),
                                 ),
-                              ],
-                            ),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 4),
+                                child: reUse.reUseText(
+                                    size: 10.0,
+                                    color: theme.liteGreen,
+                                    content: forDisplay[index]['status']
+                                        .toString()
+                                        .toUpperCase(),
+                                    weight: FontWeight.w900),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -376,9 +378,10 @@ class _CompleteScreenState extends State<CompleteScreen> {
       ),
     ));
   }
+
   removeItem({keyIndex, listIndex}) async {
     DatabaseReference packageRequest =
-    FirebaseDatabase.instance.ref("PackageRequest");
+        FirebaseDatabase.instance.ref("PackageRequest");
     await packageRequest
         .child(auth.currentUser!.uid)
         .child('package')
@@ -387,8 +390,6 @@ class _CompleteScreenState extends State<CompleteScreen> {
     completeList.removeWhere((item) => item == listIndex);
     // keyList.removeWhere((item) => item == keyIndex);
     // forDisplay = totalList;
-    setState(() {
-
-    });
+    setState(() {});
   }
 }

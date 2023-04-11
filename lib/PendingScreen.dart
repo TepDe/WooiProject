@@ -354,11 +354,25 @@ class _PendingScreenState extends State<PendingScreen> {
                                           weight: FontWeight.bold,
                                           color: theme.grey,
                                           content: 'Status'),
-                                      reUse.reUseText(
-                                          size: 12.0,
-                                          color: theme.liteGreen,
-                                          content: 'PENDING',
-                                          weight: FontWeight.w900),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: theme.litestOrange,
+                                          borderRadius:
+                                          BorderRadius.circular(
+                                              6),
+                                        ),
+                                        padding: const EdgeInsets
+                                            .symmetric(
+                                            horizontal: 10,
+                                            vertical: 4),
+                                        child: reUse.reUseText(
+                                            weight: FontWeight.bold,
+                                            size: 10.0,
+                                            color: theme.orange,
+                                            content: 'PENDING'
+                                                .toString()
+                                                .toUpperCase()),
+                                      ),
                                     ],
                                   ),
                                 ),

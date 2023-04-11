@@ -285,6 +285,9 @@ class GlobalController {
   //     }
   //   });
   // }
+  DatabaseReference packageRequest =
+      FirebaseDatabase.instance.ref("PackageRequest");
+
   Future<void> requestPackage(
       {price,
       note,
@@ -300,9 +303,9 @@ class GlobalController {
     position = await GeolocatorPlatform.instance.getCurrentPosition();
     latitude = position.latitude;
     longitude = position.longitude;
-    DatabaseReference packageRequest =
-        FirebaseDatabase.instance.ref("PackageRequest");
-    await packageRequest.child(auth.currentUser!.uid)
+    String pushKey = generatePushKey();
+    await packageRequest
+        .child(auth.currentUser!.uid)
         //.child(getUserID.toString())
         .update({
       "userName": 'Tep',
@@ -311,10 +314,11 @@ class GlobalController {
     }).then((value) => packageRequest
                 .child(auth.currentUser!.uid)
                 .child('package')
-                .push()
+                .child(pushKey)
                 .update({
               'uid': auth.currentUser!.uid.toString(),
               'location': location.toString(),
+              'pushKey': pushKey.toString(),
               'phoneNumber': phoneNumber.toString(),
               'token': tokenKey.toString(),
               'chatid': chatid.toString(),
@@ -327,6 +331,11 @@ class GlobalController {
               'status': 'request',
               'price': price.toString()
             }));
+  }
+
+  String generatePushKey() {
+    String pushKey = packageRequest.push().key.toString().trim();
+    return pushKey;
   }
 
   generatePackageID() {
