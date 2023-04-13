@@ -220,6 +220,14 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                               .toString()
                                               .toLowerCase()))
                                       .toList();
+                                  if (results == null || results.isEmpty)
+                                    results = totalList
+                                        .where((user) => user['phoneNumber']
+                                            .toLowerCase()
+                                            .contains(search.text
+                                                .toString()
+                                                .toLowerCase()))
+                                        .toList();
                                   forDisplay = results;
                                   FocusManager.instance.primaryFocus?.unfocus();
                                   setState(() {});
@@ -290,7 +298,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.all(3),
+                                      padding: const EdgeInsets.only(top: 6),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -309,41 +317,38 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                   content: (forDisplay[index]
                                                           ['packageID'])
                                                       .toString()),
-                                              forDisplay[index]['status'] !=
-                                                      'pending'
-                                                  ? SizedBox(
-                                                      height: 40,
-                                                      width: 40,
-                                                      child: PopupMenuButton<int>(
-                                                        onSelected: (item) async {
-                                                          if (item == 0) {
-                                                          } else {
-                                                            alertDialog();
-                                                            removeItem(
-                                                                keyIndex: keyList[
-                                                                    index],
-                                                                listIndex:
-                                                                    forDisplay[
-                                                                        index]);
-                                                            Get.back();
-                                                          }
-                                                        },
-                                                        itemBuilder: (context) =>
-                                                            [
-                                                          const PopupMenuItem<
-                                                                  int>(
-                                                              value: 0,
-                                                              child:
-                                                                  Text('Edit')),
-                                                          const PopupMenuItem<
-                                                                  int>(
-                                                              value: 1,
-                                                              child:
-                                                                  Text('Delete')),
-                                                        ],
-                                                      ),
-                                                    )
-                                                  : Container(),
+                                              if (forDisplay[index]['status'] ==
+                                                  'pending')
+                                                Container()
+                                              else
+                                                SizedBox(
+                                                  height: 40,
+                                                  width: 40,
+                                                  child: PopupMenuButton<int>(
+                                                    onSelected: (item) async {
+                                                      if (item == 0) {
+                                                      } else {
+                                                        alertDialog();
+                                                        removeItem(
+                                                            keyIndex:
+                                                                keyList[index],
+                                                            listIndex:
+                                                                forDisplay[
+                                                                    index]);
+                                                        Get.back();
+                                                      }
+                                                    },
+                                                    itemBuilder: (context) => [
+                                                      const PopupMenuItem<int>(
+                                                          value: 0,
+                                                          child: Text('Edit')),
+                                                      const PopupMenuItem<int>(
+                                                          value: 1,
+                                                          child:
+                                                              Text('Delete')),
+                                                    ],
+                                                  ),
+                                                )
                                             ],
                                           ),
                                         ],
@@ -448,29 +453,91 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                       ['date']),
                                             ],
                                           ),
-                                          forDisplay[index]['status'] ==
-                                                  'pending'
-                                              ? Container(
-                                                  decoration: BoxDecoration(
-                                                    color: theme.litestOrange,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            6),
-                                                  ),
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
+                                          if (forDisplay[index]['status'] ==
+                                              'pending')
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                color: theme.litestOrange,
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
                                                       horizontal: 10,
                                                       vertical: 4),
-                                                  child: reUse.reUseText(
-                                                      weight: FontWeight.bold,
-                                                      size: 10.0,
-                                                      color: theme.orange,
-                                                      content: forDisplay[index]
-                                                              ['status']
-                                                          .toString()
-                                                          .toUpperCase()),
-                                                )
-                                              : Container(),
+                                              child: reUse.reUseText(
+                                                  weight: FontWeight.bold,
+                                                  size: 10.0,
+                                                  color: theme.orange,
+                                                  content: forDisplay[index]
+                                                          ['status']
+                                                      .toString()
+                                                      .toUpperCase()),
+                                            )
+                                          else if (forDisplay[index]
+                                                  ['status'] ==
+                                              'complete')
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                color: theme.litestGreen,
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 4),
+                                              child: reUse.reUseText(
+                                                  weight: FontWeight.bold,
+                                                  size: 10.0,
+                                                  color: theme.liteGreen,
+                                                  content: forDisplay[index]
+                                                          ['status']
+                                                      .toString()
+                                                      .toUpperCase()),
+                                            )
+                                          else if (forDisplay[index]
+                                                  ['status'] ==
+                                              'return')
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                color: theme.litestRed,
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 4),
+                                              child: reUse.reUseText(
+                                                  weight: FontWeight.bold,
+                                                  size: 10.0,
+                                                  color: theme.liteRed,
+                                                  content: forDisplay[index]
+                                                          ['status']
+                                                      .toString()
+                                                      .toUpperCase()),
+                                            )
+                                          else
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                //color: theme.litestRed,
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 4),
+                                              child: reUse.reUseText(
+                                                  weight: FontWeight.bold,
+                                                  size: 10.0,
+                                                  color: theme.dirt,
+                                                  content: forDisplay[index]
+                                                          ['status']
+                                                      .toString()
+                                                      .toUpperCase()),
+                                            )
                                         ],
                                       ),
                                     ),
