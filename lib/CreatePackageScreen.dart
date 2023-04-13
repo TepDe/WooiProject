@@ -360,7 +360,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                       ),
                                     ));
                               } else {
-                                alertDialog();
+                                alertDialog(context);
                                 await glb
                                     .requestPackage(
                                         tokenKey: getToken.trim().toString(),
@@ -430,7 +430,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
       ),
     );
   }
-  alertDialog() {
+  alertDialog(context) {
     return showDialog(
       barrierDismissible: false,
       context: context,
