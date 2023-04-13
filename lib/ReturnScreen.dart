@@ -29,7 +29,7 @@ class _ReturnScreenState extends State<ReturnScreen> {
     // TODO: implement initState
     super.initState();
     returnList = argumentData;
-    forDisplay =  returnList;
+    forDisplay = returnList;
     print(returnList);
     isShow = true;
   }
@@ -56,16 +56,16 @@ class _ReturnScreenState extends State<ReturnScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: const BoxDecoration(
-              //color: headercolor,
-              //borderRadius: BorderRadius.circular(6),
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: theme.grey,
-              //     blurRadius: 4,
-              //     offset: Offset(0, 1), // Shadow position
-              //   ),
-              // ],
-            ),
+                //color: headercolor,
+                //borderRadius: BorderRadius.circular(6),
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: theme.grey,
+                //     blurRadius: 4,
+                //     offset: Offset(0, 1), // Shadow position
+                //   ),
+                // ],
+                ),
             child: Column(
               children: [
                 Container(
@@ -108,10 +108,7 @@ class _ReturnScreenState extends State<ReturnScreen> {
                         ),
                       ),
                       IconButton(
-                          onPressed: () {
-
-
-                          },
+                          onPressed: () {},
                           icon: const Icon(
                             Icons.search,
                             color: Colors.transparent,
@@ -142,8 +139,7 @@ class _ReturnScreenState extends State<ReturnScreen> {
                             ),
                             suffixIcon: IconButton(
                               splashColor: Colors.transparent,
-                              onPressed: () =>
-                              {
+                              onPressed: () => {
                                 search.clear(),
                                 //packageList!.clear(),
                                 FocusManager.instance.primaryFocus?.unfocus(),
@@ -182,18 +178,22 @@ class _ReturnScreenState extends State<ReturnScreen> {
                           splashRadius: 20,
                           onPressed: () {
                             List results = returnList
-                                .where((user) =>
-                                user['packageID']
+                                .where((user) => user['packageID']
                                     .toLowerCase()
-                                    .contains(search.text
-                                    .toString()
-                                    .toLowerCase()))
+                                    .contains(
+                                        search.text.toString().toLowerCase()))
                                 .toList();
+                            if (results == null || results.isEmpty) {
+                              results = returnList
+                                  .where((user) => user['phoneNumber']
+                                      .toLowerCase()
+                                      .contains(
+                                          search.text.toString().toLowerCase()))
+                                  .toList();
+                            }
                             forDisplay = results;
                             FocusManager.instance.primaryFocus?.unfocus();
-                            setState(() {
-                            });
-
+                            setState(() {});
                           },
                           icon: Icon(
                             Icons.search,
@@ -202,24 +202,27 @@ class _ReturnScreenState extends State<ReturnScreen> {
                     )
                   ],
                 ),
-                Row(
-                  children: [
-                    reUse.reUseText(content: 'Total : '),
-                    const Flexible(child: Divider()),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: theme.litestOrange,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: IconButton(
-                          splashRadius: 20,
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.filter_alt_outlined,
-                            color: theme.orange,
-                          )),
-                    )
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      reUse.reUseText(content: 'Total : ${forDisplay.length}'),
+                      const Flexible(child: Divider()),
+                      // Container(
+                      //   decoration: BoxDecoration(
+                      //     color: theme.litestOrange,
+                      //     borderRadius: BorderRadius.circular(6),
+                      //   ),
+                      //   child: IconButton(
+                      //       splashRadius: 20,
+                      //       onPressed: () {},
+                      //       icon: Icon(
+                      //         Icons.filter_alt_outlined,
+                      //         color: theme.orange,
+                      //       )),
+                      // )
+                    ],
+                  ),
                 )
               ],
             ),
@@ -254,7 +257,8 @@ class _ReturnScreenState extends State<ReturnScreen> {
                           child: Column(
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   reUse.reUseText(
                                       weight: FontWeight.w400,
@@ -267,20 +271,21 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                           weight: FontWeight.bold,
                                           size: 16.0,
                                           color: theme.blue,
-                                          content:
-                                          forDisplay[index]['packageID'] ?? "No ID"),
+                                          content: forDisplay[index]
+                                                  ['packageID'] ??
+                                              "No ID"),
                                       SizedBox(
                                         height: 40,
                                         width: 40,
                                         child: PopupMenuButton<int>(
                                           onSelected: (item) => {},
-                                          itemBuilder: (context) =>
-                                          [
+                                          itemBuilder: (context) => [
                                             const PopupMenuItem<int>(
                                                 value: 0,
                                                 child: Text('Back to Request')),
                                             const PopupMenuItem<int>(
-                                                value: 1, child: Text('Delete')),
+                                                value: 1,
+                                                child: Text('Delete')),
                                           ],
                                         ),
                                       ),
@@ -292,7 +297,8 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                 color: theme.grey,
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   // reUse.reSetUseText(
                                   //     titleColor: theme.grey,
@@ -337,7 +343,8 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                         weight: FontWeight.bold,
                                         size: 12.0,
                                         color: theme.blue,
-                                        content: forDisplay[index]['price'] ?? "No price"),
+                                        content: forDisplay[index]['price'] ??
+                                            "No price"),
                                   ],
                                 ),
                               ),
@@ -355,12 +362,14 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                       margin: const EdgeInsets.all(8.0),
                                       padding: const EdgeInsets.all(8.0),
                                       decoration: BoxDecoration(
-                                          border: Border.all(color: theme.grey)),
+                                          border:
+                                              Border.all(color: theme.grey)),
                                       child: reUse.reUseTextNote(
                                           weight: FontWeight.w400,
                                           size: 14.0,
                                           color: theme.grey,
-                                          content: forDisplay[index]['note'] ?? "No reason"),
+                                          content: forDisplay[index]['note'] ??
+                                              "No reason"),
                                     ),
                                   ),
                                 ],
