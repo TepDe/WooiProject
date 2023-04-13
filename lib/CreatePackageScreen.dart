@@ -141,21 +141,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                       weight: FontWeight.bold,
                       color: theme.black),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: reUse.reUseText(
-                      content: '$getToken',
-                      size: textSize,
-                      weight: FontWeight.bold,
-                      color: theme.black),
-                ),Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: reUse.reUseText(
-                      content: '$chatid',
-                      size: textSize,
-                      weight: FontWeight.bold,
-                      color: theme.black),
-                ),
+
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: reUse.reuseTextField(
@@ -184,91 +170,6 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                 ),
                 const SizedBox(
                   height: 18,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 60,
-                      margin: const EdgeInsets.symmetric(horizontal: 30),
-                      child: TextField(
-                          maxLines: 1,
-                          onChanged: (value) {
-                            if (value.isNotEmpty) {
-                              int? digit = int.tryParse(value);
-                              if (digit == null || digit < 1 || digit > 9) {
-                                qtyBox.clear();
-                                Fluttertoast.cancel();
-                                setState(() {
-                                  Fluttertoast.showToast(
-                                    msg: 'Maximum input is 9',
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0,
-                                  );
-                                });
-                              }
-                            }
-                          },
-                          keyboardType: TextInputType.number,
-                          controller: qtyBox,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintStyle: TextStyle(fontSize: 12),
-                              hintText: '1')),
-                    ),
-                    reUse.reUseCustomizeButton(
-                        icon: Icons.remove,
-                        value: 'minus',
-                        showIcon: true,
-                        iconcolor: theme.orange,
-                        colorBC: theme.liteOrange,
-                        isBcColor: true),
-                    Container(
-                      width: 60,
-                      margin: const EdgeInsets.symmetric(horizontal: 30),
-                      child: TextField(
-                          maxLines: 1,
-                          onChanged: (value) {
-                            if (value.isNotEmpty) {
-                              int? digit = int.tryParse(value);
-                              if (digit == null || digit < 1 || digit > 9) {
-                                qtyBox.clear();
-                                Fluttertoast.cancel();
-                                setState(() {
-                                  Fluttertoast.showToast(
-                                    msg: 'Maximum input is 9',
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0,
-                                  );
-                                });
-                              }
-                            }
-                          },
-                          keyboardType: TextInputType.number,
-                          controller: qtyBox,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintStyle: TextStyle(fontSize: 12),
-                              hintText: '1')),
-                    ),
-                    reUse.reUseCustomizeButton(
-                        function: 'add',
-                        icon: Icons.add,
-                        value: qtyBox.text,
-                        showIcon: true,
-                        iconcolor: theme.orange,
-                        colorBC: theme.liteOrange,
-                        isBcColor: true)
-                  ],
                 ),
                 const SizedBox(
                   height: 18,
