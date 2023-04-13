@@ -195,6 +195,15 @@ class _PendingScreenState extends State<PendingScreen> {
                                         .toString()
                                         .toLowerCase()))
                                 .toList();
+                            if (results == null || results.isEmpty) {
+                              results = pendingList
+                                  .where((user) => user['phoneNumber']
+                                      .toLowerCase()
+                                      .contains(searchController.text
+                                          .toString()
+                                          .toLowerCase()))
+                                  .toList();
+                            }
                             forDisplay = results;
                             FocusManager.instance.primaryFocus?.unfocus();
                             setState(() {});
@@ -206,28 +215,31 @@ class _PendingScreenState extends State<PendingScreen> {
                     )
                   ],
                 ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(padding),
-                      child: reUse.reUseText(content: 'Total : '),
-                    ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(padding),
+                        child: reUse.reUseText(content: 'Total : ${forDisplay.length}'),
+                      ),
 
-                    const Flexible(child: Divider()),
-                    // Container(
-                    //   decoration: BoxDecoration(
-                    //     color: theme.litestOrange,
-                    //     borderRadius: BorderRadius.circular(6),
-                    //   ),
-                    //   child: IconButton(
-                    //       splashRadius: 20,
-                    //       onPressed: () {},
-                    //       icon: Icon(
-                    //         Icons.filter_alt_outlined,
-                    //         color: theme.orange,
-                    //       )),
-                    // )
-                  ],
+                      const Flexible(child: Divider()),
+                      // Container(
+                      //   decoration: BoxDecoration(
+                      //     color: theme.litestOrange,
+                      //     borderRadius: BorderRadius.circular(6),
+                      //   ),
+                      //   child: IconButton(
+                      //       splashRadius: 20,
+                      //       onPressed: () {},
+                      //       icon: Icon(
+                      //         Icons.filter_alt_outlined,
+                      //         color: theme.orange,
+                      //       )),
+                      // )
+                    ],
+                  ),
                 )
               ],
             ),
@@ -358,13 +370,10 @@ class _PendingScreenState extends State<PendingScreen> {
                                         decoration: BoxDecoration(
                                           color: theme.litestOrange,
                                           borderRadius:
-                                          BorderRadius.circular(
-                                              6),
+                                              BorderRadius.circular(6),
                                         ),
-                                        padding: const EdgeInsets
-                                            .symmetric(
-                                            horizontal: 10,
-                                            vertical: 4),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 4),
                                         child: reUse.reUseText(
                                             weight: FontWeight.bold,
                                             size: 10.0,
