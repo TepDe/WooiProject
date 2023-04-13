@@ -190,6 +190,15 @@ class _CompleteScreenState extends State<CompleteScreen> {
                                     .contains(
                                         search.text.toString().toLowerCase()))
                                 .toList();
+                            if (results == null || results.isEmpty) {
+                              results = completeList
+                                  .where((user) => user['phoneNumber']
+                                  .toLowerCase()
+                                  .contains(search.text
+                                  .toString()
+                                  .toLowerCase()))
+                                  .toList();
+                            }
                             forDisplay = results;
                             setState(() {});
                             FocusManager.instance.primaryFocus?.unfocus();
@@ -201,24 +210,27 @@ class _CompleteScreenState extends State<CompleteScreen> {
                     )
                   ],
                 ),
-                Row(
-                  children: [
-                    reUse.reUseText(content: 'Total : '),
-                    const Flexible(child: Divider()),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: theme.litestOrange,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: IconButton(
-                          splashRadius: 20,
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.filter_alt_outlined,
-                            color: theme.orange,
-                          )),
-                    )
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      reUse.reUseText(content: 'Total : ${forDisplay.length}'),
+                      const Flexible(child: Divider()),
+                      // Container(
+                      //   decoration: BoxDecoration(
+                      //     color: theme.litestOrange,
+                      //     borderRadius: BorderRadius.circular(6),
+                      //   ),
+                      //   child: IconButton(
+                      //       splashRadius: 20,
+                      //       onPressed: () {},
+                      //       icon: Icon(
+                      //         Icons.filter_alt_outlined,
+                      //         color: theme.orange,
+                      //       )),
+                      // )
+                    ],
+                  ),
                 )
               ],
             ),
