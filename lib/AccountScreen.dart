@@ -22,25 +22,23 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
-  final dbRef =
-      FirebaseDatabase.instance.reference().child("Driver").child("PlantData");
 
   List lists = [];
   final str = StorageKey();
   var glb = GlobalController();
-  String getLatitude = 'loading...';
-  String getLongitude = 'loading...';
-  String getIsGoOnline = 'loading...';
-  String getPhoneNumber = 'loading...';
-  String getEmail = 'loading...';
-  String getPassword = 'loading...';
-  String getUserName = 'loading...';
-  String getUserID = 'loading...';
-  String getToken = 'loading...';
-  String getChatId = 'loading...';
-  String getUid = 'loading';
-  String getLocation = 'loading';
-  String getQty = 'loading';
+  String getLatitude = '';
+  String getLongitude = '';
+  String getIsGoOnline = '';
+  String getPhoneNumber = '';
+  String getEmail = '';
+  String getPassword = '';
+  String getUserName = '';
+  String getUserID = '';
+  String getToken = '';
+  String getChatId = '';
+  String getUid = '';
+  String getLocation = '';
+  String getQty = '';
 
   @override
   void initState() {
@@ -48,7 +46,6 @@ class _AccountScreenState extends State<AccountScreen> {
     super.initState();
     //fetchLocalStorage();
     fetchUserData();
-    setState(() {});
   }
 
   getDatsa(getUid) async {
@@ -82,18 +79,6 @@ class _AccountScreenState extends State<AccountScreen> {
     });
   }
 
-  fetchLocalStorage() async {
-    final prefs = await SharedPreferences.getInstance();
-    getLatitude = prefs.getString(str.latitude) ?? '';
-    getLongitude = prefs.getString(str.longitude) ?? '';
-    getUid = prefs.getString(str.uid) ?? '';
-    getEmail = prefs.getString(str.email) ?? '';
-    getPassword = prefs.getString(str.password) ?? '';
-    getUserID = prefs.getString(str.userID) ?? '';
-
-    setState(() {});
-  }
-
   var fetch = FirebaseFirestore.instance.collection('Users');
 
   fetchUserData() async {
@@ -101,14 +86,18 @@ class _AccountScreenState extends State<AccountScreen> {
         .doc(auth.currentUser!.uid.toString())
         .get()
         .then((DocumentSnapshot documentSnapshot) async {
-      getLatitude = documentSnapshot['latitude'].toString();
-      getLongitude = documentSnapshot['longitude'].toString();
-      getUid = documentSnapshot['uid'].toString();
-      getEmail = documentSnapshot['email'].toString();
-      getPassword = documentSnapshot['password'].toString();
-      getUserID = documentSnapshot['userID'].toString();
-      getToken = documentSnapshot['token'];
-      getChatId = documentSnapshot['chatid'];
+      try {
+        getLatitude = documentSnapshot['latitude'].toString() ?? 'not have';
+        getLongitude = documentSnapshot['longitude'].toString() ?? 'not have';
+        getUid = documentSnapshot['uid'].toString() ?? 'not have';
+        getEmail = documentSnapshot['email'].toString() ?? 'not have';
+        getPassword = documentSnapshot['password'].toString() ?? 'not have';
+        getUserID = documentSnapshot['userID'].toString() ?? 'not have';
+        getToken = documentSnapshot['token'].toString() ?? 'not have';
+        getChatId = documentSnapshot['chatid'].toString() ?? 'not have';
+      } catch (e) {
+        print(e);
+      }
       setState(() {});
     });
     setState(() {});
