@@ -28,6 +28,8 @@ class _AccountScreenState extends State<AccountScreen> {
   var glb = GlobalController();
   String getLatitude = '';
   String getLongitude = '';
+  String getFirstName = '';
+  String getLastName = '';
   String getIsGoOnline = '';
   String getPhoneNumber = '';
   String getEmail = '';
@@ -95,6 +97,8 @@ class _AccountScreenState extends State<AccountScreen> {
         getUserID = documentSnapshot['userID'].toString() ?? 'not have';
         getToken = documentSnapshot['token'].toString() ?? 'not have';
         getChatId = documentSnapshot['chatid'].toString() ?? 'not have';
+        getLastName = documentSnapshot['lastname'];
+        getFirstName = documentSnapshot['firstname'];
       } catch (e) {
         print(e);
       }
@@ -151,7 +155,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       height: viewHeight2,
                     ),
                     reUse.reUseText(
-                        content: 'John Wick',
+                        content: '$getFirstName $getLastName',
                         weight: FontWeight.bold,
                         size: 20.0,
                         color: theme.black),
@@ -663,11 +667,19 @@ class _AccountScreenState extends State<AccountScreen> {
                       width: Get.width,
                       child: TextButton.icon(
                         onPressed: () {
-                          reUseCircleDialog(
+                          reUse.reUseCircleDialog(
                               context: context,
-                              title: 'Text',
-                              icon: Icons.add,
-                              content: Text('test'));
+                              function: 'logOut',
+                              icon: Icons.logout_rounded,
+                              title: 'Log out',
+                              content: Center(
+                                child: Text(
+                                  'Are sure you want to log out?',
+                                  style: TextStyle(
+                                    color: theme.black,
+                                  ),
+                                ),
+                              ));
                         },
                         icon: Icon(Icons.login_rounded),
                         label: Text('Log Out'),
@@ -743,7 +755,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 padding: const EdgeInsets.only(top: 80.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       title,
