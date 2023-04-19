@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -89,16 +90,20 @@ class _AccountScreenState extends State<AccountScreen> {
         .get()
         .then((DocumentSnapshot documentSnapshot) async {
       try {
-        getLatitude = documentSnapshot['latitude'].toString() ?? 'not have';
-        getLongitude = documentSnapshot['longitude'].toString() ?? 'not have';
-        getUid = documentSnapshot['uid'].toString() ?? 'not have';
-        getEmail = documentSnapshot['email'].toString() ?? 'not have';
-        getPassword = documentSnapshot['password'].toString() ?? 'not have';
-        getUserID = documentSnapshot['userID'].toString() ?? 'not have';
-        getToken = documentSnapshot['token'].toString() ?? 'not have';
-        getChatId = documentSnapshot['chatid'].toString() ?? 'not have';
-        getLastName = documentSnapshot['lastname'];
-        getFirstName = documentSnapshot['firstname'];
+        getLatitude = documentSnapshot['latitude'].toString();
+        getLongitude = documentSnapshot['longitude'].toString();
+        getUid = documentSnapshot['uid'].toString();
+        getEmail = documentSnapshot['email'].toString();
+        getPassword = documentSnapshot['password'].toString();
+        getUserID = documentSnapshot['userID'].toString();
+        getLastName = documentSnapshot['lastname'].toString();
+        getFirstName = documentSnapshot['firstname'].toString();
+        if (documentSnapshot['token'] == null) {
+          getToken = documentSnapshot['token'].toString();
+          getChatId = documentSnapshot['chatid'].toString();
+        }else{
+
+        }
       } catch (e) {
         print(e);
       }

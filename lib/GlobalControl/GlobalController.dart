@@ -96,46 +96,66 @@ class GlobalController {
 
   onCreatePackage() {}
   final str = StorageKey();
-  var documentStream = FirebaseFirestore.instance.collection('Users');
+  CollectionReference documentStream =
+      FirebaseFirestore.instance.collection('Users');
 
   Future<void> storeUser({email, password, uid}) async {
-    // try {
-    //   FirebaseFirestore.instance
-    //       .collection('Users')
-    //       .doc(uid)
-    //       .get()
-    //       .then((doc) async {
-    //     print('User name: ${doc.exists}');
-    //     print('User name: ${doc.exists}');
-    //     if (doc.exists == false) {
-    //       await documentStream
-    //           .set({
-    //             'email': email,
-    //             'password': password,
-    //             'uid': uid,
-    //             'longitude': longitude,
-    //             'latitude': latitude,
-    //           })
-    //           .then((value) => Get.to(const ViewScreen()))
-    //           .catchError((error) => print("Failed to add user: $error"));
-    //       print('User name: ${doc.exists}');
-    //     } else {
-    //       await documentStream
-    //           .update({
-    //             'email': email,
-    //             'password': password,
-    //             'uid': uid,
-    //             'longitude': longitude,
-    //             'latitude': latitude,
-    //           })
-    //           .then((value) => Get.to(const ViewScreen()))
-    //           .catchError((error) => print("Failed to add user: $error"));
-    //       print('Name field does not exist in document${doc.exists}');
-    //     }
-    //   });
-    // } catch (e) {
-    //   print('login screen error $e');
-    // }
+    position = await GeolocatorPlatform.instance.getCurrentPosition();
+    latitude = position.latitude;
+    longitude = position.longitude;
+    Random random = Random();
+    int randomNumber = random.nextInt(999999);
+    try {
+      FirebaseFirestore.instance
+          .collection('Users')
+          .doc(auth.currentUser!.uid)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) async {
+        if (documentSnapshot.exists) {
+          return;
+        } else {
+          documentStream.doc(auth.currentUser!.uid).set({
+            'email': email.toString(),
+            'password': password.toString(),
+            'uid': auth.currentUser!.uid.toString(),
+            'userID': randomNumber.toString(),
+            'latitude': latitude.toString(),
+            'longitude': longitude.toString(),
+          });
+          await checkUserInformation();
+        }
+      });
+      await checkUserInformation();
+    } catch (e) {
+      print('login screen error $e');
+    }
+    //
+    // documentStream
+    //     .doc(auth.currentUser!.uid)
+    //     .get()
+    //     .then((DocumentSnapshot documentSnapshot) async {
+    //   Map data = documentSnapshot.data() as Map;
+    //   if (data['userID'] == null) {
+    //     Random random = Random();
+    //     int randomNumber = random.nextInt(999999);
+    //     documentStream
+    //         .doc(auth.currentUser!.uid)
+    //         .update({'userID': randomNumber.toString()})
+    //         .then((value) => print("User's Property Deleted"))
+    //         .catchError(
+    //             (error) => print("Failed to delete user's property: $error"));
+    //   } else {}
+    //   if (data['firstname'] == null ||
+    //       data['lastname'] == null ||
+    //       data['phoneNumber'] == null) {
+    //     Get.to(const SetUpScreen());
+    //   } else {
+    //     Get.to(const ViewScreen());
+    //   }
+    // });
+  }
+
+  checkUserInformation() async {
     documentStream
         .doc(auth.currentUser!.uid)
         .get()
@@ -144,7 +164,7 @@ class GlobalController {
       if (data['userID'] == null) {
         Random random = Random();
         int randomNumber = random.nextInt(999999);
-        documentStream
+        await documentStream
             .doc(auth.currentUser!.uid)
             .update({'userID': randomNumber.toString()})
             .then((value) => print("User's Property Deleted"))
@@ -302,8 +322,7 @@ class GlobalController {
     latitude = position.latitude;
     longitude = position.longitude;
     String pushKey = generatePushKey();
-    await packageRequest
-        .child(auth.currentUser!.uid)
+    await packageRequest.child(auth.currentUser!.uid)
         //.child(getUserID.toString())
         .update({
       "userName": 'Tep',

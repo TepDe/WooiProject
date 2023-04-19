@@ -116,23 +116,38 @@ class _LogInScreenState extends State<LogInScreen> {
                         onPressed: () async {
                           // lc.onDialogWaiting();
 
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return SizedBox(
-                                  height: 60,
-                                  width: 60,
-                                  child: Align(
-                                      alignment: Alignment.center,
-                                      child: CircularProgressIndicator()));
-                            },
-                          );
-                          onUserSignIn(
-                              email: userEmail.text.trim(),
-                              // email: 'u@gmail.com',
-                              password: userPassword.text.trim(),
-                              // password: '111111',
-                              context: context);
+                          // showDialog(
+                          //   context: context,
+                          //   builder: (BuildContext context) {
+                          //     return SizedBox(
+                          //         height: 60,
+                          //         width: 60,
+                          //         child: Align(
+                          //             alignment: Alignment.center,
+                          //             child: CircularProgressIndicator()));
+                          //   },
+                          // );
+                          if (userEmail.text.isEmpty) {
+                            onDialogOK(
+                                context: context,
+                                title: 'Not Found',
+                                content:
+                                'Email is missing');
+                          } else if (userPassword.text.isEmpty) {
+                            onDialogOK(
+                                context: context,
+                                title: 'Not Found',
+                                content:
+                                'Password is missing');
+                          } else {
+                            onUserSignIn(
+                                email: userEmail.text.trim(),
+                                // email: 'u3@gmail.com',
+                                password: userPassword.text.trim(),
+                                // password: '111111',
+                                context: context);
+                          }
+
                           // lc._phoneVerify(context);
                         },
                         child: Text(
@@ -197,19 +212,24 @@ class _LogInScreenState extends State<LogInScreen> {
         );
       }
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-      } else if (e.code == 'email-already-in-use') {
-        // onDialog(context: context);
-      } else if (e.code == 'wrong-password') {
+      if (e.code == 'wrong-password') {
         onDialogOK(
             context: context,
             title: 'Wrong Password',
             content: 'Please check your password and again!');
-      } else if (e.code == 'wrong-email') {
+        setState(() {});
+      } else if (e.code == 'invalid-email') {
         onDialogOK(
             context: context,
             title: 'Wrong Email',
-            content: 'Please check your password and again!');
+            content: 'Please check your Email and again!');
+        setState(() {});
+      } else if (e.code == 'user-not-found') {
+        onDialogOK(
+            context: context,
+            title: 'Not Found',
+            content: 'This User is not found please check and again!');
+        setState(() {});
       }
     } catch (e) {
       if (kDebugMode) {
@@ -232,7 +252,7 @@ class _LogInScreenState extends State<LogInScreen> {
             actions: [
               TextButton(
                 onPressed: () {
-                  Get.back();
+                  Navigator.pop(context);
                 },
                 child: const Text('OK'),
               ),
@@ -264,8 +284,7 @@ class LoginController extends GetxController {
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
-      if (userCredential.isNull) {
-      } else {
+      if (userCredential.isNull) {} else {
         glb.UID = (userCredential.user?.uid).toString();
         userEmail.value.clear();
         userPassword.value.clear();
@@ -276,8 +295,8 @@ class LoginController extends GetxController {
         );
       }
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-      } else if (e.code == 'email-already-in-use') {
+      if (e.code == 'weak-password') {} else
+      if (e.code == 'email-already-in-use') {
         // onDialog(context: context);
       } else if (e.code == 'wrong-password') {
         onDialogOK(
@@ -366,7 +385,8 @@ class LoginController extends GetxController {
           showDialog(
               context: context,
               barrierDismissible: false,
-              builder: (context) => AlertDialog(
+              builder: (context) =>
+                  AlertDialog(
                     title: Text("Enter SMS Code"),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
