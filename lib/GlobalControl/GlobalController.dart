@@ -13,6 +13,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/LoginScreen.dart';
+import 'package:wooiproject/SetUpScreen.dart';
 
 import '../ViewScreen.dart';
 import '../WidgetReUse/ReUseWidget.dart';
@@ -90,77 +91,74 @@ class GlobalController {
   }
 
   userLogOut() async {
-    await auth.signOut().then((value) => Get.to(LogInScreen()));
+    await auth.signOut().then((value) => Get.to(const LogInScreen()));
   }
 
   onCreatePackage() {}
   final str = StorageKey();
+  var documentStream = FirebaseFirestore.instance.collection('Users');
 
   Future<void> storeUser({email, password, uid}) async {
-    // CollectionReference collectionReference =
-    //     FirebaseFirestore.instance.collection('Users').doc(uid);
-    position = await GeolocatorPlatform.instance.getCurrentPosition();
-    latitude = position.latitude;
-    longitude = position.longitude;
-    var documentStream =
-        FirebaseFirestore.instance.collection('Users').doc(uid);
-    try {
-      FirebaseFirestore.instance
-          .collection('Users')
-          .doc(uid)
-          .get()
-          .then((doc) async {
-        print('User name: ${doc.exists}');
-        print('User name: ${doc.exists}');
-        if (doc.exists == false) {
-          await documentStream
-              .set({
-                'email': email,
-                'password': password,
-                'uid': uid,
-                'longitude': longitude,
-                'latitude': latitude,
-              })
-              .then((value) => Get.to(const ViewScreen()))
-              .catchError((error) => print("Failed to add user: $error"));
-          print('User name: ${doc.exists}');
-        } else {
-          await documentStream
-              .update({
-                'email': email,
-                'password': password,
-                'uid': uid,
-                'longitude': longitude,
-                'latitude': latitude,
-              })
-              .then((value) => Get.to(const ViewScreen()))
-              .catchError((error) => print("Failed to add user: $error"));
-          print('Name field does not exist in document${doc.exists}');
-        }
-      });
-    } catch (e) {
-      print('login screen error $e');
-    }
-
-    // if (getUserID != null) {
-    //
-    // } else {
-    //   int? userID;
-    //   var rng = Random();
-    //   userID = rng.nextInt(999999);
-    //
-    //   documentStream
-    //       .update({
-    //         'email': email,
-    //         'password': password,
-    //         'uid': uid,
-    //         'longitude': longitude,
-    //         'latitude': latitude,
-    //         'userID': userID,
-    //       })
-    //       .then((value) => print("User Added"))
-    //       .catchError((error) => print("Failed to add user: $error"));
+    // try {
+    //   FirebaseFirestore.instance
+    //       .collection('Users')
+    //       .doc(uid)
+    //       .get()
+    //       .then((doc) async {
+    //     print('User name: ${doc.exists}');
+    //     print('User name: ${doc.exists}');
+    //     if (doc.exists == false) {
+    //       await documentStream
+    //           .set({
+    //             'email': email,
+    //             'password': password,
+    //             'uid': uid,
+    //             'longitude': longitude,
+    //             'latitude': latitude,
+    //           })
+    //           .then((value) => Get.to(const ViewScreen()))
+    //           .catchError((error) => print("Failed to add user: $error"));
+    //       print('User name: ${doc.exists}');
+    //     } else {
+    //       await documentStream
+    //           .update({
+    //             'email': email,
+    //             'password': password,
+    //             'uid': uid,
+    //             'longitude': longitude,
+    //             'latitude': latitude,
+    //           })
+    //           .then((value) => Get.to(const ViewScreen()))
+    //           .catchError((error) => print("Failed to add user: $error"));
+    //       print('Name field does not exist in document${doc.exists}');
+    //     }
+    //   });
+    // } catch (e) {
+    //   print('login screen error $e');
     // }
+    documentStream
+        .doc(auth.currentUser!.uid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) async {
+      Map data = documentSnapshot.data() as Map;
+      if (data['userID'] == null) {
+        Random random = Random();
+        int randomNumber = random.nextInt(999999);
+        documentStream
+            .doc(auth.currentUser!.uid)
+            .update({'userID': randomNumber.toString()})
+            .then((value) => print("User's Property Deleted"))
+            .catchError(
+                (error) => print("Failed to delete user's property: $error"));
+      } else {}
+      if (data['firstname'] == null ||
+          data['lastname'] == null ||
+          data['phoneNumber'] == null) {
+        Get.to(const SetUpScreen());
+      } else {
+        Get.to(const ViewScreen());
+      }
+    });
   }
 
   globalSetData({email, password, uid}) {
@@ -553,6 +551,19 @@ class GlobalController {
         .child('package')
         .child(data)
         .remove();
+  }
+
+  storeSetUpAccount({phoneNumber, firstname, lastname}) async {
+    users
+        .doc(auth.currentUser!.uid)
+        .update({
+          'phoneNumber': phoneNumber,
+          'firstname': firstname,
+          'lastname': lastname,
+        })
+        .then((value) => print("User's Property Deleted"))
+        .catchError(
+            (error) => print("Failed to delete user's property: $error"));
   }
 }
 
