@@ -30,13 +30,14 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
   final noteBox = TextEditingController();
   double textSize = 12;
   String packageID = '';
+
   generatePackageID() {
     Random random = Random();
     int randomNumber = random.nextInt(9999);
     String format = 'PK00';
     packageID = format + randomNumber.toString();
-
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -160,13 +161,22 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                       weight: FontWeight.bold,
                       color: theme.black),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: reUse.reuseTextField(
-                      inputType: TextInputType.number,
-                      controller: priceBox,
-                      label: '',
-                      textIcon: Icons.location_on),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Flexible(
+                      flex: 6,
+                      child: reUse.reuseTextField(
+                          inputType: TextInputType.number,
+                          controller: priceBox,
+                          label: ' ',
+                          textIcon: Icons.location_on),
+                    ),
+                    Flexible(
+                      flex:1,
+                      child: reUse.reUseText(content: '\$', size: 20.0),
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 18,
@@ -331,6 +341,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
       ),
     );
   }
+
   alertDialog(context) {
     return showDialog(
       barrierDismissible: false,
