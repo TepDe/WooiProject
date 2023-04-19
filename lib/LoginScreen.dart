@@ -14,16 +14,19 @@ import 'package:wooiproject/ViewScreen.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 
-class LogInScreen extends StatelessWidget {
-  LogInScreen({Key? key}) : super(key: key);
+class LogInScreen extends StatefulWidget {
+  const LogInScreen({Key? key}) : super(key: key);
 
+  @override
+  State<LogInScreen> createState() => _LogInScreenState();
+}
+
+class _LogInScreenState extends State<LogInScreen> {
   final theme = ThemesApp();
   final rw = ReUseWidget();
 
   @override
   Widget build(BuildContext context) {
-    var height =MediaQuery.of(context).size.width * 0.3;
-
     return WillPopScope(
       onWillPop: () async => false,
       child: SafeArea(
@@ -39,7 +42,7 @@ class LogInScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(18.0),
               child: Column(
-                 crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(
                     height: 80,
@@ -83,7 +86,7 @@ class LogInScreen extends StatelessWidget {
                     children: [
                       rw.ruTextBox(
                           icon: Icon(Icons.email),
-                          controller: lc.userEmail.value,
+                          controller: userEmail,
                           hind: 'Email',
                           obscureText: false),
                       const SizedBox(
@@ -91,7 +94,7 @@ class LogInScreen extends StatelessWidget {
                       ),
                       rw.ruTextBox(
                           icon: Icon(Icons.password),
-                          controller: lc.userPassword.value,
+                          controller: userPassword,
                           hind: 'Password',
                           obscureText: true),
                     ],
@@ -124,10 +127,10 @@ class LogInScreen extends StatelessWidget {
                                       child: CircularProgressIndicator()));
                             },
                           );
-                          lc.onUserSignIn(
-                              email: lc.userEmail.value.text.trim(),
+                          onUserSignIn(
+                              email: userEmail.text.trim(),
                               // email: 'u@gmail.com',
-                              password: lc.userPassword.value.text.trim(),
+                              password: userPassword.text.trim(),
                               // password: '111111',
                               context: context);
                           // lc._phoneVerify(context);
@@ -172,7 +175,73 @@ class LogInScreen extends StatelessWidget {
     );
   }
 
-  final lc = Get.put(LoginController());
+  FirebaseAuth auth = FirebaseAuth.instance;
+
+  final glb = GlobalController();
+  final textphone = TextEditingController();
+  var userEmail = TextEditingController();
+  var userPassword = TextEditingController();
+
+  onUserSignIn({email, password, context}) async {
+    try {
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      if (userCredential.isNull) {
+      } else {
+        userEmail.clear();
+        userPassword.clear();
+        await glb.storeUser(
+          uid: auth.currentUser!.uid,
+          email: email.toString(),
+          password: password.toString(),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+      } else if (e.code == 'email-already-in-use') {
+        // onDialog(context: context);
+      } else if (e.code == 'wrong-password') {
+        onDialogOK(
+            context: context,
+            title: 'Wrong Password',
+            content: 'Please check your password and again!');
+      } else if (e.code == 'wrong-email') {
+        onDialogOK(
+            context: context,
+            title: 'Wrong Email',
+            content: 'Please check your password and again!');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    setState(() {
+
+    });
+  }
+
+  onDialogOK({context, title, content}) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Expanded(
+          child: AlertDialog(
+            title: Text('$title'),
+            content: Text('$content'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
 
 class LoginController extends GetxController {
