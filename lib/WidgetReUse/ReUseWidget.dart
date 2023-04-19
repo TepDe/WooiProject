@@ -11,6 +11,7 @@ import 'package:wooiproject/CompleteScreen.dart';
 import 'package:wooiproject/CreatePackageScreen.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/HomeScreen.dart';
+import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/MapScreen.dart';
 import 'package:wooiproject/PendingScreen.dart';
 import 'package:wooiproject/ProfileScreen.dart';
@@ -616,7 +617,7 @@ class ReUseWidget {
                       )),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 18.0),
+                  padding: const EdgeInsets.only(left: 18.0),
                   child: Text(
                     title ?? '',
                     style: TextStyle(
@@ -865,27 +866,31 @@ class ReUseWidget {
     );
   }
 
-  ruTextBox({hind, icon, controller, obscureText}) {
-    return Container(
-      padding: const EdgeInsets.only(left: 20, top: 3, bottom: 3),
-      decoration: BoxDecoration(
-          color: theme.liteGrey, borderRadius: BorderRadius.circular(9)),
-      child: TextField(
-        obscureText: obscureText,
-        controller: controller,
-        decoration: InputDecoration(
-          filled: true,
-          //<-- SEE HERE
-          fillColor: theme.liteGrey,
-          //iconColor: theme.grey,
-          //enabled: true,
-          //focusColor: Colors.grey,
-          //prefix: Icon(Icons.phone),
-          border: InputBorder.none,
-          icon: icon,
-          hintText: hind,
+  ruTextBox({hind, icon, controller, obscureText,keyboardType}) {
+    return TextFormField(
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: BorderSide.none,
         ),
+        disabledBorder: InputBorder.none,
+        hintText: hind,
+        filled: true,
+        labelText: hind,
       ),
+      obscureText: obscureText?? false,
+      controller: controller,
+      // decoration: InputDecoration(
+      //
+      //   //<-- SEE HERE
+      //
+      //   //iconColor: theme.grey,
+      //   //enabled: true,
+      //   //focusColor: Colors.grey,
+      //   //prefix: Icon(Icons.phone),
+      //
+      // ),
     );
   }
 
@@ -988,6 +993,9 @@ class ReUseWidget {
                 print(value);
                 print(value);
                 glb.insertTelegramToken(token: value);
+              } else if (function == 'logOut') {
+                FirebaseAuth.instance.signOut();
+                Get.to(const LogInScreen());
               } else {
                 Get.back();
                 FocusManager.instance.primaryFocus?.unfocus();
@@ -1795,8 +1803,6 @@ class ReUseWidget {
   }
 
   reUseCircleDialog({data, context, icon, title, content, function}) {
-    print(data);
-    print(data);
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1965,10 +1971,10 @@ class ReUseWidget {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Text(
+                              const Text(
                                 'title',
                                 textAlign: TextAlign.center,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.bold,
                                 ),
