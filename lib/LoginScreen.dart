@@ -174,7 +174,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                 // password: '111111',
                                 context: context);
                           }
-                          reUse.alertDialog(context);
+                          //reUse.alertDialog(context);
                           // password: '111111');
 
                           // lc._phoneVerify(context);
@@ -250,6 +250,7 @@ class _LogInScreenState extends State<LogInScreen> {
           email: email.toString(),
           password: password.toString(),
         );
+        reUse.alertDialog(context);
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'wrong-password') {
@@ -257,19 +258,16 @@ class _LogInScreenState extends State<LogInScreen> {
             context: context,
             title: 'Wrong Password',
             content: 'Please check your password and again!');
-        setState(() {});
       } else if (e.code == 'invalid-email') {
         onDialogOK(
             context: context,
             title: 'Wrong Email',
             content: 'Please check your Email and again!');
-        setState(() {});
       } else if (e.code == 'user-not-found') {
         onDialogOK(
             context: context,
             title: 'Not Found',
             content: 'This User is not found please check and again!');
-        setState(() {});
       }
     } catch (e) {
       if (kDebugMode) {
@@ -283,19 +281,17 @@ class _LogInScreenState extends State<LogInScreen> {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Expanded(
-          child: AlertDialog(
-            title: Text('$title'),
-            content: Text('$content'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          ),
+        return AlertDialog(
+          title: Text('$title'),
+          content: Text('$content'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
         );
       },
     );
