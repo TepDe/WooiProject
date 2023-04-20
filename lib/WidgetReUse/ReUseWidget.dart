@@ -2025,4 +2025,25 @@ class ReUseWidget {
       ),
     );
   }
+  alertDialog(context) {
+    return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: const AlertDialog(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            actions: [
+              Center(
+                child: SizedBox(
+                    height: 40, width: 40, child: CircularProgressIndicator()),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
