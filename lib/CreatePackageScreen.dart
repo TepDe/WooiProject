@@ -38,11 +38,30 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
     packageID = format + randomNumber.toString();
   }
 
+  FirebaseAuth auth = FirebaseAuth.instance;
+
+  String userName = '';
+  String phoneNumber = '';
+
+  fetchUserInformation() async {
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc(auth.currentUser!.uid)
+        .get()
+        .then((doc) async {
+      Map data = doc.data() as Map;
+      userName = data['firstname'] +' '+ data['lastname'].toString();
+      phoneNumber = data['phoneNumber'].toString();
+      setState(() {});
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     generatePackageID();
+    fetchUserInformation();
     fetchToken();
   }
 
@@ -173,7 +192,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                           textIcon: Icons.location_on),
                     ),
                     Flexible(
-                      flex:1,
+                      flex: 1,
                       child: reUse.reUseText(content: '\$', size: 20.0),
                     ),
                   ],
@@ -274,6 +293,9 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                 alertDialog(context);
                                 await glb
                                     .requestPackage(
+                                        userName: userName.trim().toString(),
+                                        userPhoneNumber:
+                                            phoneNumber.trim().toString(),
                                         tokenKey: getToken.trim().toString(),
                                         chatid: chatid.trim().toString(),
                                         price: priceBox.text.trim().toString(),
