@@ -308,6 +308,8 @@ class GlobalController {
 
   Future<void> requestPackage(
       {price,
+      userName,
+      userPhoneNumber,
       note,
       packageID,
       uid,
@@ -322,10 +324,12 @@ class GlobalController {
     latitude = position.latitude;
     longitude = position.longitude;
     String pushKey = generatePushKey();
-    await packageRequest.child(auth.currentUser!.uid)
+    await packageRequest
+        .child(auth.currentUser!.uid)
         //.child(getUserID.toString())
         .update({
-      "userName": 'Tep',
+      "userName": userName,
+      "userPhoneNumber": userPhoneNumber,
       "uLatitude": latitude.toString(),
       "uLongitude": longitude.toString(),
     }).then((value) => packageRequest
