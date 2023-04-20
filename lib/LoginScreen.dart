@@ -23,7 +23,7 @@ class LogInScreen extends StatefulWidget {
 
 class _LogInScreenState extends State<LogInScreen> {
   final theme = ThemesApp();
-  final rw = ReUseWidget();
+  final reUse = ReUseWidget();
 
   @override
   Widget build(BuildContext context) {
@@ -44,47 +44,24 @@ class _LogInScreenState extends State<LogInScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(
-                    height: 80,
+                  SizedBox(
+                    height: Get.height * 0.1,
                   ),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: SizedBox(
-                      height: 83,
-                      width: 83,
-                      child: Text('MACAW'),
-                    ),
+                  reUse.reUseText(
+                      content: 'Sign in',
+                      color: theme.black,
+                      size: 25.0,
+                      weight: FontWeight.bold),
+                  reUse.reUseText(
+                    content: 'Please sign in to Continue (User)',
+                    size: 12.0,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      // TextButton(
-                      //   onPressed: () {},
-                      //   child: Text('Register',
-                      //       style: TextStyle(
-                      //         // decoration: TextDecoration.underline,
-                      //         fontSize: 18,
-                      //         color: theme.deepOrange,
-                      //       )),
-                      // ),
-                      TextButton(
-                        onPressed: () {},
-                        child: Text('Sign In',
-                            style: TextStyle(
-                              // decoration: TextDecoration.underline,
-                              fontSize: 18,
-                              color: theme.grey,
-                            )),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: Get.height * 0.09,
                   ),
                   Column(
                     children: [
-                      rw.ruTextBox(
+                      reUse.ruTextBox(
                           icon: Icon(Icons.email),
                           controller: userEmail,
                           hind: 'Email',
@@ -92,34 +69,86 @@ class _LogInScreenState extends State<LogInScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      rw.ruTextBox(
+                      reUse.ruTextBox(
                           icon: Icon(Icons.password),
                           controller: userPassword,
                           hind: 'Password',
                           obscureText: true),
                     ],
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
                   SizedBox(
-                    width: Get.width,
-                    height: 50,
-                    child: ElevatedButton(
+                    height: Get.height * 0.03,
+                  ),
+                  // SizedBox(
+                  //   width: Get.width,
+                  //   height: 50,
+                  //   child: ElevatedButton(
+                  //       style: ElevatedButton.styleFrom(
+                  //         elevation: 0,
+                  //         backgroundColor: theme.deepOrange,
+                  //         shape: RoundedRectangleBorder(
+                  //           borderRadius: BorderRadius.circular(6),
+                  //         ),
+                  //       ),
+                  //       onPressed: () async {
+                  //         // lc.onDialogWaiting();
+                  //
+                  //         // showDialog(
+                  //         //   context: context,
+                  //         //   builder: (BuildContext context) {
+                  //         //     return SizedBox(
+                  //         //         height: 60,
+                  //         //         width: 60,
+                  //         //         child: Align(
+                  //         //             alignment: Alignment.center,
+                  //         //             child: CircularProgressIndicator()));
+                  //         //   },
+                  //         // );
+                  //         if (userEmail.text.isEmpty) {
+                  //           onDialogOK(
+                  //               context: context,
+                  //               title: 'Not Found',
+                  //               content: 'Email is missing');
+                  //         } else if (userPassword.text.isEmpty) {
+                  //           onDialogOK(
+                  //               context: context,
+                  //               title: 'Not Found',
+                  //               content: 'Password is missing');
+                  //         } else {
+                  //           onUserSignIn(
+                  //               email: userEmail.text.trim(),
+                  //               // email: 'u3@gmail.com',
+                  //               password: userPassword.text.trim(),
+                  //               // password: '111111',
+                  //               context: context);
+                  //         }
+                  //
+                  //         // lc._phoneVerify(context);
+                  //       },
+                  //       child: Text(
+                  //         'Continue',
+                  //         style: TextStyle(color: theme.white),
+                  //       )),
+                  // ),
+
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: SizedBox(
+                      width: Get.width * 0.33,
+                      height: Get.height * 0.05,
+                      child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          backgroundColor: theme.deepOrange,
+                          elevation: 1,
+                          backgroundColor: theme.orange,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(6),
                           ),
                         ),
                         onPressed: () async {
-                          // lc.onDialogWaiting();
-
                           // showDialog(
                           //   context: context,
                           //   builder: (BuildContext context) {
-                          //     return SizedBox(
+                          //     return const SizedBox(
                           //         height: 60,
                           //         width: 60,
                           //         child: Align(
@@ -131,14 +160,12 @@ class _LogInScreenState extends State<LogInScreen> {
                             onDialogOK(
                                 context: context,
                                 title: 'Not Found',
-                                content:
-                                'Email is missing');
+                                content: 'Email is missing');
                           } else if (userPassword.text.isEmpty) {
                             onDialogOK(
                                 context: context,
                                 title: 'Not Found',
-                                content:
-                                'Password is missing');
+                                content: 'Password is missing');
                           } else {
                             onUserSignIn(
                                 email: userEmail.text.trim(),
@@ -147,14 +174,27 @@ class _LogInScreenState extends State<LogInScreen> {
                                 // password: '111111',
                                 context: context);
                           }
+                          reUse.alertDialog(context);
+                          // password: '111111');
 
                           // lc._phoneVerify(context);
                         },
-                        child: Text(
-                          'Sign in',
-                          style: TextStyle(color: theme.white),
-                        )),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              'Continue',
+                              style: TextStyle(
+                                  color: theme.white,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                            Icon(Icons.navigate_next_rounded),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
+
                   // Row(
                   //   crossAxisAlignment: CrossAxisAlignment.center,
                   //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -236,9 +276,7 @@ class _LogInScreenState extends State<LogInScreen> {
         print(e);
       }
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   onDialogOK({context, title, content}) {
@@ -284,7 +322,8 @@ class LoginController extends GetxController {
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
-      if (userCredential.isNull) {} else {
+      if (userCredential.isNull) {
+      } else {
         glb.UID = (userCredential.user?.uid).toString();
         userEmail.value.clear();
         userPassword.value.clear();
@@ -295,8 +334,8 @@ class LoginController extends GetxController {
         );
       }
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {} else
-      if (e.code == 'email-already-in-use') {
+      if (e.code == 'weak-password') {
+      } else if (e.code == 'email-already-in-use') {
         // onDialog(context: context);
       } else if (e.code == 'wrong-password') {
         onDialogOK(
@@ -385,8 +424,7 @@ class LoginController extends GetxController {
           showDialog(
               context: context,
               barrierDismissible: false,
-              builder: (context) =>
-                  AlertDialog(
+              builder: (context) => AlertDialog(
                     title: Text("Enter SMS Code"),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
