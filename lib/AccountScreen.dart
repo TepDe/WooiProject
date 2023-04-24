@@ -99,10 +99,11 @@ class _AccountScreenState extends State<AccountScreen> {
         getLastName = documentSnapshot['lastname'].toString();
         getFirstName = documentSnapshot['firstname'].toString();
         if (documentSnapshot['token'] == null) {
+          getToken='not have';
+          getChatId='not have';
+        }else{
           getToken = documentSnapshot['token'].toString();
           getChatId = documentSnapshot['chatid'].toString();
-        }else{
-
         }
       } catch (e) {
         print(e);
