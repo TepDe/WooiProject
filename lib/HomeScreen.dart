@@ -32,14 +32,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();checkid();
+    super.initState();
+    checkid();
     totalListLength();
     pendingListLength();
     completeListLength();
     returnListLength();
     currentTime();
   }
-  _HomeScreenState(){
+
+  _HomeScreenState() {
     totalListLength();
     pendingListLength();
     completeListLength();
@@ -184,6 +186,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     setState(() {});
   }
+
+  bool circleIndicator = false;
 
   double paddings = 10.0;
 
