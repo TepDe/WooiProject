@@ -866,7 +866,7 @@ class ReUseWidget {
     );
   }
 
-  ruTextBox({hind, icon, controller, obscureText,keyboardType}) {
+  ruTextBox({hind, icon, controller, obscureText, keyboardType}) {
     return TextFormField(
       keyboardType: keyboardType,
       decoration: InputDecoration(
@@ -879,7 +879,7 @@ class ReUseWidget {
         filled: true,
         labelText: hind,
       ),
-      obscureText: obscureText?? false,
+      obscureText: obscureText ?? false,
       controller: controller,
       // decoration: InputDecoration(
       //
@@ -2025,6 +2025,7 @@ class ReUseWidget {
       ),
     );
   }
+
   alertDialog(context) {
     return showDialog(
       barrierDismissible: false,
