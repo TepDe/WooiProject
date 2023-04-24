@@ -390,17 +390,22 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                     ),
                                     Row(
                                       children: [
-                                        reUse.reUseText(
-                                            weight: FontWeight.bold,
-                                            size: 12.0,
-                                            color: theme.darkGrey,
-                                            content: 'Price '),
-                                        reUse.reUseText(
-                                            weight: FontWeight.bold,
-                                            size: 18.0,
-                                            color: theme.blue,
-                                            content: forDisplay[index]
-                                                ['price']),
+                                        reUse.reSetUseText(
+                                            titleColor: theme.grey,
+                                            title: 'Weight',
+                                            size: 14.0,
+                                            color: theme.black,
+                                            content:
+                                                "1 KG",
+                                            weight: FontWeight.w500),
+                                        reUse.reSetUseText(
+                                            titleColor: theme.grey,
+                                            title: 'Price',
+                                            size: 14.0,
+                                            color: theme.black,
+                                            content:
+                                                "${forDisplay[index]['price']} \$",
+                                            weight: FontWeight.w500),
                                       ],
                                     ),
                                     Flexible(
@@ -426,7 +431,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                   weight: FontWeight.w400,
                                                   size: 14.0,
                                                   color: theme.grey,
-                                                  content: keyList[index]),
+                                                  content: forDisplay[index]['note'] ?? 'No note'),
                                             ),
                                           ),
                                         ],
