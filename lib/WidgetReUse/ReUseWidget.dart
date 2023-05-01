@@ -1069,7 +1069,7 @@ class ReUseWidget {
   }
 
   reuseTextField({label, controller, textIcon, inputType}) {
-    return TextField(
+    return TextFormField(
       controller: controller ?? dialogPhoneNum,
       keyboardType: inputType,
       decoration: InputDecoration(
@@ -1081,9 +1081,9 @@ class ReUseWidget {
         //border: InputBorder.none,
 
         hintStyle: const TextStyle(fontSize: 12),
-        //filled: true,
-        //hintText: '$label',
+
       ),
+
     );
   }
 
