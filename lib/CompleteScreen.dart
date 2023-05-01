@@ -275,29 +275,29 @@ class _CompleteScreenState extends State<CompleteScreen> {
                                       size: 16.0,
                                       color: theme.blue,
                                       content: forDisplay[index]['packageID']),
-                                  SizedBox(
-                                    height: 40,
-                                    width: 40,
-                                    child: PopupMenuButton<int>(
-                                      onSelected: (item) async {
-                                        if (item == 0) {
-                                        } else {}
-                                      },
-                                      itemBuilder: (context) => [
-                                        PopupMenuItem<int>(
-                                            value: 1,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                Icon(Icons
-                                                    .delete_forever_rounded),
-                                                Text('Delete'),
-                                              ],
-                                            )),
-                                      ],
-                                    ),
-                                  ),
+                                  // SizedBox(
+                                  //   height: 40,
+                                  //   width: 40,
+                                  //   child: PopupMenuButton<int>(
+                                  //     onSelected: (item) async {
+                                  //       if (item == 0) {
+                                  //       } else {}
+                                  //     },
+                                  //     itemBuilder: (context) => [
+                                  //       PopupMenuItem<int>(
+                                  //           value: 1,
+                                  //           child: Row(
+                                  //             mainAxisAlignment:
+                                  //                 MainAxisAlignment.spaceAround,
+                                  //             children: [
+                                  //               Icon(Icons
+                                  //                   .delete_forever_rounded),
+                                  //               Text('Delete'),
+                                  //             ],
+                                  //           )),
+                                  //     ],
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ],
