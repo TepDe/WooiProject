@@ -350,7 +350,9 @@ class GlobalController {
               'packageID': packageID.toString(),
               'note': note.toString(),
               'status': 'request',
-              'price': price.toString()
+              'price': price.toString(),
+              "recLatitude": latitude.toString(),
+              "recLongitude": longitude.toString(),
             }));
   }
 
