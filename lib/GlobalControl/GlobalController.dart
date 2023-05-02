@@ -12,6 +12,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
+import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/SetUpScreen.dart';
 
@@ -267,19 +268,6 @@ class GlobalController {
     getUserName = prefs.getString(str.userName);
     return prefs;
   }
-
-  Future<String> fetchUserID() async {
-    String UserID = '';
-    await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(auth.currentUser!.uid.toString())
-        .get()
-        .then((DocumentSnapshot documentSnapshot) async {
-      UserID = await documentSnapshot['userID'];
-    });
-    return UserID;
-  }
-
   // Future<void> requestPackage({uid, phoneNumber, location}) async {
   //   position = await GeolocatorPlatform.instance.getCurrentPosition();
   //   latitude = position.latitude;
@@ -305,6 +293,8 @@ class GlobalController {
   // }
   DatabaseReference packageRequest =
       FirebaseDatabase.instance.ref("PackageRequest");
+
+  final field = FieldData();
 
   Future<void> requestPackage(
       {price,
@@ -337,22 +327,22 @@ class GlobalController {
                 .child('package')
                 .child(pushKey)
                 .update({
-              'uid': auth.currentUser!.uid.toString(),
-              'location': location.toString(),
-              'pushKey': pushKey.toString(),
-              'phoneNumber': phoneNumber.toString(),
-              'token': tokenKey.toString(),
-              'chatid': chatid.toString(),
-              "latitude": latitude.toString(),
-              "longitude": longitude.toString(),
-              'date': formattedDate.toString(),
-              'qty': qty.toString(),
-              'packageID': packageID.toString(),
-              'note': note.toString(),
-              'status': 'request',
-              'price': price.toString(),
-              "recLatitude": latitude.toString(),
-              "recLongitude": longitude.toString(),
+              field.uid: auth.currentUser!.uid.toString(),
+              field.location: location.toString(),
+              field.pushKey: pushKey.toString(),
+              field.phoneNumber: phoneNumber.toString(),
+              field.token: tokenKey.toString(),
+              field.chatid: chatid.toString(),
+              field.latitude: latitude.toString(),
+              field.longitude: longitude.toString(),
+              field.date: formattedDate.toString(),
+              field.qty: qty.toString(),
+              field.packageID: packageID.toString(),
+              field.note: note.toString(),
+              field.status: 'request',
+              field.price: price.toString(),
+              field.recLatitude: latitude.toString(),
+              field.recLongitude: longitude.toString(),
             }));
   }
 
