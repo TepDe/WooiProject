@@ -143,7 +143,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: reUse.reuseTextField(
-                    inputType: TextInputType.number,
+                    inputType: TextInputType.numberWithOptions(decimal: true),
                     textIcon: Icons.phone,
                     label: 'Receiver Phone Number',
                     controller: phoneBox),
