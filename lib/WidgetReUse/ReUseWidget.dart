@@ -21,6 +21,7 @@ import 'package:wooiproject/TotalPackageScreen.dart';
 import 'package:wooiproject/ViewScreen.dart';
 import 'package:wooiproject/WidgetReUse/SuperController.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
+import 'package:flutter/services.dart';
 
 class ReUseWidget {
   topButtonLeft({function, icon}) {
@@ -1068,10 +1069,13 @@ class ReUseWidget {
     );
   }
 
-  reuseTextField({label, controller, textIcon, inputType}) {
+  reuseTextField({label, controller, textIcon, inputType, require}) {
     return TextFormField(
       controller: controller ?? dialogPhoneNum,
+      // keyboardType: inputType,
       keyboardType: inputType,
+      inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),],
+      // onChanged: (value) => doubleVar = double.parse(value),
       decoration: InputDecoration(
         //icon: Icon(textIcon ?? null),
         // fillColor: theme.liteGrey,
@@ -1081,9 +1085,7 @@ class ReUseWidget {
         //border: InputBorder.none,
 
         hintStyle: const TextStyle(fontSize: 12),
-
       ),
-
     );
   }
 
