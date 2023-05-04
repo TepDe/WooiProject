@@ -199,21 +199,12 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         backgroundColor: theme.liteGrey,
         body: SingleChildScrollView(
-          child: Stack(
-            children: [
-              // Container(
-              //   height: viewHeight,
-              //   decoration: BoxDecoration(
-              //     color: theme.liteOrange,
-              //     borderRadius: BorderRadius.vertical(
-              //         bottom: Radius.elliptical(
-              //             MediaQuery.of(context).size.width, 100.0)),
-              //   ),
-              // ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
+          child: Flexible(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: Padding(
                     padding: EdgeInsets.only(
                         top: 40, right: paddings, left: paddings),
                     child: reUse.unitOneHomeScreen(
@@ -221,8 +212,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         userID: 'ID $getUserID',
                         context: context),
                   ),
+                ),
 
-                  Padding(
+                Flexible(
+                  child: Padding(
                     padding: EdgeInsets.all(paddings),
                     child: reUse.unitTwoHomeScreen(
                         context: context,
@@ -236,17 +229,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         totalLength: driverList.length,
                         pendingLength: pendingList.length),
                   ),
+                ),
 
-                  //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
-                  // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
-                  //reUse.renderListView(),
-                  Padding(
+                //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
+                // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
+                //reUse.renderListView(),
+                Flexible(
+                  child: Padding(
                     padding: EdgeInsets.all(paddings),
                     child: reUse.reUseCreatePackage(
                         context: context, padding: paddings, height: btnHeight),
                   ),
+                ),
 
-                  Row(
+                Flexible(
+                  child: Row(
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
@@ -261,25 +258,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  statusData.isEmpty
-                      ? Flexible(
-                          flex: 3,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.notifications,
-                                color: theme.grey,
-                                size: 40,
-                              ),
-                              reUse.reUseText(
-                                  content: 'No Activity', color: theme.grey)
-                            ],
-                          ))
-                      : reUse.reUseUpdateStatusList(data: statusData),
-                ],
-              ),
-            ],
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.notifications,
+                      color: theme.grey,
+                      size: 40,
+                    ),
+                    reUse.reUseText(content: 'No Activity', color: theme.grey)
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
