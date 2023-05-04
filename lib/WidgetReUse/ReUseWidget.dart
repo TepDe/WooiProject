@@ -1069,12 +1069,12 @@ class ReUseWidget {
     );
   }
 
-  reuseTextField({label, controller, textIcon, inputType, require}) {
+  reuseTextField({label, controller, textIcon, inputType, require,formater}) {
     return TextFormField(
       controller: controller ?? dialogPhoneNum,
       // keyboardType: inputType,
       keyboardType: inputType,
-      inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),],
+      inputFormatters: formater,
       // onChanged: (value) => doubleVar = double.parse(value),
       decoration: InputDecoration(
         //icon: Icon(textIcon ?? null),
