@@ -307,21 +307,21 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                   //     color: theme.black,
                                   //     content: forDisplay[index]['location'],
                                   //     weight: FontWeight.w500),
-                                  reUse.reSetUseText(
+                                  reUse.reUseColumnText(
                                       titleColor: theme.grey,
                                       title: 'Destination',
                                       size: 14.0,
                                       color: theme.black,
                                       content: forDisplay[index]['location'],
                                       weight: FontWeight.w500),
-                                  reUse.reSetUseText(
+                                  reUse.reUseColumnText(
                                       titleColor: theme.grey,
                                       title: 'Phone number',
                                       size: 14.0,
                                       color: theme.black,
                                       content: forDisplay[index]['phoneNumber'],
                                       weight: FontWeight.w500),
-                                  reUse.reSetUseText(
+                                  reUse.reUseColumnText(
                                       titleColor: theme.grey,
                                       title: 'Qty',
                                       size: 14.0,
