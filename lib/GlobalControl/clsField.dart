@@ -15,4 +15,7 @@ class FieldData {
   String price = 'price';
   String recLatitude = "recLatitude";
   String recLongitude = "recLongitude";
+  String dLastName = "dLastname";
+  String dFirstName = "dFirstname";
+  String dPhone = "dPhoneNumber";
 }
