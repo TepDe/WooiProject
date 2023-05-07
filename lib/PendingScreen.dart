@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
+import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
@@ -52,6 +53,7 @@ class _PendingScreenState extends State<PendingScreen> {
   }
 
   double padding = 2.0;
+  final field = FieldData();
 
   @override
   Widget build(BuildContext context) {
@@ -221,7 +223,8 @@ class _PendingScreenState extends State<PendingScreen> {
                     children: [
                       Padding(
                         padding: EdgeInsets.all(padding),
-                        child: reUse.reUseText(content: 'Total : ${forDisplay.length}'),
+                        child: reUse.reUseText(
+                            content: 'Total : ${forDisplay.length}'),
                       ),
 
                       const Flexible(child: Divider()),
@@ -286,45 +289,24 @@ class _PendingScreenState extends State<PendingScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    reUse.reUseText(
-                                        weight: FontWeight.w400,
-                                        size: 12.0,
-                                        color: theme.grey,
-                                        content: 'SHIPPING ID :'),
-                                    reUse.reUseText(
-                                        weight: FontWeight.bold,
-                                        size: 16.0,
-                                        color: theme.blue,
-                                        content: forDisplay[index]
-                                                ['packageID'] ??
-                                            'No ID'),
-                                  ],
-                                ),
                                 Padding(
-                                  padding: EdgeInsets.all(padding),
+                                  padding: EdgeInsets.only(top: 6, bottom: 6),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       reUse.reUseText(
-                                          weight: FontWeight.bold,
+                                          weight: FontWeight.w400,
                                           size: 12.0,
                                           color: theme.grey,
-                                          content: 'Location'),
+                                          content: 'SHIPPING ID :'),
                                       reUse.reUseText(
-                                          size: 12.0,
                                           weight: FontWeight.bold,
-                                          color: theme.grey,
-                                          content: 'Phone number'),
-                                      reUse.reUseText(
-                                          size: 12.0,
-                                          weight: FontWeight.bold,
-                                          color: theme.grey,
-                                          content: 'Qty'),
+                                          size: 16.0,
+                                          color: theme.blue,
+                                          content: forDisplay[index]
+                                                  ['packageID'] ??
+                                              'No ID'),
                                     ],
                                   ),
                                 ),
@@ -334,27 +316,69 @@ class _PendingScreenState extends State<PendingScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      reUse.reUseText(
+                                      reUse.reUseColumnText(
+                                          titleColor: theme.grey,
+                                          title: 'Location',
                                           size: 14.0,
                                           color: theme.black,
                                           content: forDisplay[index]
                                               ['location'],
                                           weight: FontWeight.w500),
-                                      reUse.reUseText(
+                                      reUse.reUseColumnText(
+                                          titleColor: theme.grey,
+                                          title: 'Phone Number',
                                           size: 14.0,
                                           color: theme.black,
-                                          weight: FontWeight.w500,
                                           content: forDisplay[index]
-                                              ['phoneNumber']),
-                                      reUse.reUseText(
+                                              ['phoneNumber'],
+                                          weight: FontWeight.w500),
+                                      reUse.reUseColumnText(
+                                          titleColor: theme.grey,
+                                          title: 'Qty',
                                           size: 14.0,
                                           color: theme.black,
-                                          content: '1',
+                                          content: forDisplay[index]
+                                              ['location'],
                                           weight: FontWeight.w500),
                                     ],
                                   ),
                                 ),
-                                Divider(),
+                                Padding(
+                                  padding: EdgeInsets.only(top:6),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      reUse.reUseColumnText(
+                                          titleColor: theme.grey,
+                                          title: 'Assign by : ',
+                                          lableSize: 14,
+                                          size: 0.0,
+                                          color: theme.black,
+                                          content: '',
+                                          weight: FontWeight.w500),
+                                      reUse.reUseColumnText(
+                                          title: 'Driver Name',
+                                          size: 14.0,
+                                          color: theme.black,
+                                          content: forDisplay[index]
+                                                  [field.dLastName] +
+                                              ' ' +
+                                              forDisplay[index]
+                                                  [field.dFirstName],
+                                          weight: FontWeight.w500),
+                                      reUse.reUseColumnText(
+                                          titleColor: theme.grey,
+                                          title: 'Phone Number',
+                                          size: 14.0,
+                                          color: theme.black,
+                                          content: forDisplay[index]
+                                              ['location'],
+                                          weight: FontWeight.w500),
+                                    ],
+                                  ),
+                                ),
+                                Divider(color: theme.grey, height: 11),
                                 Padding(
                                   padding: EdgeInsets.all(padding),
                                   child: Row(
