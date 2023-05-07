@@ -363,7 +363,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        reUse.reSetUseText(
+                                        reUse.reUseColumnText(
                                             titleColor: theme.grey,
                                             title: 'Destination',
                                             size: 14.0,
@@ -371,7 +371,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                             content: forDisplay[index]
                                                 ['location'],
                                             weight: FontWeight.w500),
-                                        reUse.reSetUseText(
+                                        reUse.reUseColumnText(
                                             titleColor: theme.grey,
                                             title: 'Phone number',
                                             size: 14.0,
@@ -379,7 +379,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                             content: forDisplay[index]
                                                 ['phoneNumber'],
                                             weight: FontWeight.w500),
-                                        reUse.reSetUseText(
+                                        reUse.reUseColumnText(
                                             titleColor: theme.grey,
                                             title: 'Qty',
                                             size: 14.0,
@@ -390,7 +390,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                     ),
                                     Row(
                                       children: [
-                                        reUse.reSetUseText(
+                                        reUse.reUseColumnText(
                                             titleColor: theme.grey,
                                             title: 'Weight',
                                             size: 14.0,
@@ -398,7 +398,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                             content:
                                                 "1 KG",
                                             weight: FontWeight.w500),
-                                        reUse.reSetUseText(
+                                        reUse.reUseColumnText(
                                             titleColor: theme.grey,
                                             title: 'Price',
                                             size: 14.0,
