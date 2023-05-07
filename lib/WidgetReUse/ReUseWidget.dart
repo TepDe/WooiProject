@@ -805,7 +805,7 @@ class ReUseWidget {
     );
   }
 
-  reSetUseText({content, size, weight, color, title, titleColor}) {
+  reUseColumnText({double? lableSize,content, size, weight, color, title, titleColor}) {
     return Flexible(
       child: SizedBox(
         width: Get.width,
@@ -816,7 +816,7 @@ class ReUseWidget {
               softWrap: true,
               maxLines: 2,
               style: TextStyle(
-                  fontSize: 10,
+                  fontSize: lableSize ?? 10.0,
                   color: titleColor ?? theme.black,
                   fontWeight: weight ?? FontWeight.normal),
             ),
@@ -825,7 +825,7 @@ class ReUseWidget {
               softWrap: true,
               maxLines: 2,
               style: TextStyle(
-                  fontSize: size ?? 12,
+                  fontSize: size ?? 12.0,
                   color: color ?? theme.black,
                   fontWeight: weight ?? FontWeight.normal),
             ),
@@ -956,73 +956,71 @@ class ReUseWidget {
       fontsize,
       value,
       weight}) {
-    return Flexible(
-      child: Container(
-        height: 40,
-        width: Get.width,
-        decoration: BoxDecoration(
-          color: colorBC,
-          borderRadius: BorderRadius.circular(6),
-          // boxShadow: [
-          //   BoxShadow(
-          //     color: Colors.grey,
-          //     blurRadius: 1,
-          //     //offset: Offset(4, 8), // Shadow position
-          //   ),
-          // ],
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () {
-              if (function == 'minus') {
-                Fluttertoast.showToast(
-                  msg: 'Maximum input is 9',
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.red,
-                  textColor: Colors.white,
-                  fontSize: 16.0,
-                );
-              } else if (function == 'add') {
-                int qty = int.parse(value) + 1;
-                print(qty);
-              } else if (function == 'pincode') {
-                glb.insertTelegramToken();
-              } else if (function == 'token') {
-                print(value);
-                print(value);
-                glb.insertTelegramToken(token: value);
-              } else if (function == 'logOut') {
-                FirebaseAuth.instance.signOut();
-                Get.to(const LogInScreen());
-              } else {
-                Get.back();
-                FocusManager.instance.primaryFocus?.unfocus();
-              }
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                showIcon == true
-                    ? Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Icon(
-                          icon,
-                          color: iconcolor,
-                        ),
-                      )
-                    : Container(),
-                Text(
-                  text ?? '',
-                  style: TextStyle(
-                      fontSize: fontsize ?? 14,
-                      color: textcolor ?? theme.black,
-                      fontWeight: weight ?? FontWeight.normal),
-                )
-              ],
-            ),
+    return Container(
+      height: 40,
+      width: Get.width,
+      decoration: BoxDecoration(
+        color: colorBC,
+        borderRadius: BorderRadius.circular(6),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.grey,
+        //     blurRadius: 1,
+        //     //offset: Offset(4, 8), // Shadow position
+        //   ),
+        // ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            if (function == 'minus') {
+              Fluttertoast.showToast(
+                msg: 'Maximum input is 9',
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 16.0,
+              );
+            } else if (function == 'add') {
+              int qty = int.parse(value) + 1;
+              print(qty);
+            } else if (function == 'pincode') {
+              glb.insertTelegramToken();
+            } else if (function == 'token') {
+              print(value);
+              print(value);
+              glb.insertTelegramToken(token: value);
+            } else if (function == 'logOut') {
+              FirebaseAuth.instance.signOut();
+              Get.to(const LogInScreen());
+            } else {
+              Get.back();
+              FocusManager.instance.primaryFocus?.unfocus();
+            }
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              showIcon == true
+                  ? Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Icon(
+                        icon,
+                        color: iconcolor,
+                      ),
+                    )
+                  : Container(),
+              Text(
+                text ?? '',
+                style: TextStyle(
+                    fontSize: fontsize ?? 14,
+                    color: textcolor ?? theme.black,
+                    fontWeight: weight ?? FontWeight.normal),
+              )
+            ],
           ),
         ),
       ),
@@ -1199,21 +1197,21 @@ class ReUseWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              reSetUseText(
+                              reUseColumnText(
                                   titleColor: theme.grey,
                                   title: 'Destination',
                                   size: 14.0,
                                   color: theme.black,
                                   content: pkc[index]['location'],
                                   weight: FontWeight.w500),
-                              reSetUseText(
+                              reUseColumnText(
                                   titleColor: theme.grey,
                                   title: 'Phone number',
                                   size: 14.0,
                                   color: theme.black,
                                   content: pkc[index]['phoneNumber'],
                                   weight: FontWeight.w500),
-                              reSetUseText(
+                              reUseColumnText(
                                   titleColor: theme.grey,
                                   title: 'Qty',
                                   size: 14.0,
@@ -1621,21 +1619,21 @@ class ReUseWidget {
                               //     color: theme.black,
                               //     content: pkc[index]['location'],
                               //     weight: FontWeight.w500),
-                              reSetUseText(
+                              reUseColumnText(
                                   titleColor: theme.grey,
                                   title: 'Destination',
                                   size: 14.0,
                                   color: theme.black,
                                   content: pkc[index]['location'],
                                   weight: FontWeight.w500),
-                              reSetUseText(
+                              reUseColumnText(
                                   titleColor: theme.grey,
                                   title: 'Phone number',
                                   size: 14.0,
                                   color: theme.black,
                                   content: pkc[index]['phoneNumber'],
                                   weight: FontWeight.w500),
-                              reSetUseText(
+                              reUseColumnText(
                                   titleColor: theme.grey,
                                   title: 'Qty',
                                   size: 14.0,
@@ -1808,11 +1806,11 @@ class ReUseWidget {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
+        return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
-          child: Stack(
+          actions: [Stack(
             clipBehavior: Clip.none,
             alignment: Alignment.topCenter,
             children: [
@@ -1869,7 +1867,8 @@ class ReUseWidget {
                 ],
               ),
             ],
-          ),
+          ),],
+
         );
       },
     );
