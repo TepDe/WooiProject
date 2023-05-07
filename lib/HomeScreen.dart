@@ -199,81 +199,71 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         backgroundColor: theme.liteGrey,
         body: SingleChildScrollView(
-          child: Flexible(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        top: 40, right: paddings, left: paddings),
-                    child: reUse.unitOneHomeScreen(
-                        getTime: greeting,
-                        userID: 'ID $getUserID',
-                        context: context),
-                  ),
-                ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                    top: 40, right: paddings, left: paddings),
+                child: reUse.unitOneHomeScreen(
+                    getTime: greeting,
+                    userID: 'ID $getUserID',
+                    context: context),
+              ),
 
-                Flexible(
-                  child: Padding(
-                    padding: EdgeInsets.all(paddings),
-                    child: reUse.unitTwoHomeScreen(
-                        context: context,
-                        totalPackageDataKey: totalPackageIndex,
-                        totalPackageData: driverList,
-                        returnData: returnData,
-                        completeData: completeList,
-                        returnLength: returnData.length,
-                        completeLength: completeList.length,
-                        pendingData: pendingList,
-                        totalLength: driverList.length,
-                        pendingLength: pendingList.length),
-                  ),
-                ),
+              Padding(
+                padding: EdgeInsets.all(paddings),
+                child: reUse.unitTwoHomeScreen(
+                    context: context,
+                    totalPackageDataKey: totalPackageIndex,
+                    totalPackageData: driverList,
+                    returnData: returnData,
+                    completeData: completeList,
+                    returnLength: returnData.length,
+                    completeLength: completeList.length,
+                    pendingData: pendingList,
+                    totalLength: driverList.length,
+                    pendingLength: pendingList.length),
+              ),
 
-                //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
-                // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
-                //reUse.renderListView(),
-                Flexible(
-                  child: Padding(
-                    padding: EdgeInsets.all(paddings),
-                    child: reUse.reUseCreatePackage(
-                        context: context, padding: paddings, height: btnHeight),
-                  ),
-                ),
+              //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
+              // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
+              //reUse.renderListView(),
+              Padding(
+                padding: EdgeInsets.all(paddings),
+                child: reUse.reUseCreatePackage(
+                    context: context, padding: paddings, height: btnHeight),
+              ),
 
-                Flexible(
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: reUse.reUseText(
-                            content: 'Activity', color: theme.grey),
-                      ),
-                      Flexible(
-                        child: Divider(
-                          height: 1,
-                          color: theme.grey,
-                        ),
-                      ),
-                    ],
+              Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: reUse.reUseText(
+                        content: 'Activity', color: theme.grey),
                   ),
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.notifications,
+                  Flexible(
+                    child: Divider(
+                      height: 1,
                       color: theme.grey,
-                      size: 40,
                     ),
-                    reUse.reUseText(content: 'No Activity', color: theme.grey)
-                  ],
-                )
-              ],
-            ),
+                  ),
+                ],
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.notifications,
+                    color: theme.grey,
+                    size: 40,
+                  ),
+                  reUse.reUseText(content: 'No Activity', color: theme.grey)
+                ],
+              )
+            ],
           ),
         ),
       ),
