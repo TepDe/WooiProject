@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -57,10 +58,19 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
     });
   }
 
+  suggestionLocation()async{
+    final String response = await rootBundle.loadString('assets/Distination/distination.json');
+    final data = await json.decode(response);
+    print(data);
+    print(data);
+  }
+
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    suggestionLocation();
     generatePackageID();
     fetchUserInformation();
     fetchToken();
@@ -294,7 +304,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                               } else {
                                 alertDialog(context);
                                 await glb
-                                    .requestPackage(
+                                    .createPackage(
                                         userName: userName.trim().toString(),
                                         userPhoneNumber:
                                             phoneNumber.trim().toString(),
