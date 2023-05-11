@@ -1047,7 +1047,7 @@ class ReUseWidget {
               ElevatedButton(
                   onPressed: () async {
                     await glb
-                        .requestPackage(
+                        .createPackage(
                             //qty: qtyBox.text.trim().toString(),
                             phoneNumber: phoneBox.text.trim().toString(),
                             location: locationBox.text.trim().toString())
