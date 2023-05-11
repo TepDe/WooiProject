@@ -31,6 +31,7 @@ class GlobalController {
   var getLongitude;
   var getIsGoOnline;
   var getPhoneNumber;
+  var getField;
   var getEmail;
   var getPassword;
   var getUserName;
@@ -76,19 +77,16 @@ class GlobalController {
         .update({"latitude": la.toString(), "longitude": long.toString()});
   }
 
-  fetchUserData() async {
+  Future<String> fetchUserData(whichField) async {
+    String whichOfField='';
     await FirebaseFirestore.instance
         .collection('Users')
         .doc(auth.currentUser!.uid.toString())
         .get()
         .then((DocumentSnapshot documentSnapshot) async {
-      getLatitude = await documentSnapshot['latitude'];
-      getLongitude = await documentSnapshot['longitude'];
-      getUid = await documentSnapshot['uid'];
-      getEmail = await documentSnapshot['email'];
-      getPassword = await documentSnapshot['password'];
-      getUserID = await documentSnapshot['userID'];
+      whichOfField = await documentSnapshot[whichField];
     });
+    return whichOfField;
   }
 
   userLogOut() async {
@@ -268,6 +266,7 @@ class GlobalController {
     getUserName = prefs.getString(str.userName);
     return prefs;
   }
+
   // Future<void> requestPackage({uid, phoneNumber, location}) async {
   //   position = await GeolocatorPlatform.instance.getCurrentPosition();
   //   latitude = position.latitude;
@@ -295,8 +294,9 @@ class GlobalController {
       FirebaseDatabase.instance.ref("PackageRequest");
 
   final field = FieldData();
+  final fieldInfo = FieldInfo();
 
-  Future<void> requestPackage(
+  Future<void> createPackage(
       {price,
       userName,
       userPhoneNumber,
@@ -313,16 +313,16 @@ class GlobalController {
     position = await GeolocatorPlatform.instance.getCurrentPosition();
     latitude = position.latitude;
     longitude = position.longitude;
+
     String pushKey = generatePushKey();
-    await packageRequest
-        .child(auth.currentUser!.uid)
+    await packageRequest.child(auth.currentUser!.uid)
         //.child(getUserID.toString())
         .update({
       "userName": userName,
       "userPhoneNumber": userPhoneNumber,
       "uLatitude": latitude.toString(),
       "uLongitude": longitude.toString(),
-    }).then((value) => packageRequest
+    }).then((value) async => packageRequest
                 .child(auth.currentUser!.uid)
                 .child('package')
                 .child(pushKey)
@@ -343,6 +343,7 @@ class GlobalController {
               field.price: price.toString(),
               field.recLatitude: latitude.toString(),
               field.recLongitude: longitude.toString(),
+              field.senderPhone: await fetchUserData(fieldInfo.phoneNumber),
             }));
   }
 
@@ -376,7 +377,7 @@ class GlobalController {
       title = 'Error';
       return 'Price Must Include';
     } else {
-      requestPackage(
+      createPackage(
           note: note.text.trim().toString(),
           packageID: generatePackageID.toString(),
           qty: qty.text.trim().toString(),
@@ -396,7 +397,7 @@ class GlobalController {
       title = 'Error';
       return Icons.monetization_on;
     } else {
-      requestPackage(
+      createPackage(
           note: note.text.trim().toString(),
           packageID: generatePackageID.toString(),
           qty: qty.text.trim().toString(),
