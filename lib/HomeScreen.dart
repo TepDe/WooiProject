@@ -58,9 +58,13 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       final jsonString = await rootBundle.loadString('assets/distination.json');
       var data = await json.decode(jsonString);
-      print(data);
-      print(data);
-      distince = data;
+      Map dist = data as Map;
+      dist.forEach((key, values) {
+        distince.add(values[0]);
+        print(distince);
+      });
+      print(distince);
+      print(distince);
     } catch (e) {
       print(e);
     }
@@ -275,18 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              SizedBox(
-                height: Get.height,
-                child: ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: distince.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        height: 50,
-                        child: Center(child: Text('Entry ${distince[index]}')),
-                      );
-                    }),
-              ),
+
               // Row(
               //   children: [
               //     Flexible(
@@ -303,7 +296,6 @@ class _HomeScreenState extends State<HomeScreen> {
               //     )
               //   ],
               // ),
-
             ],
           ),
         ),
