@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:wooiproject/Distination/clsDistin.dart';
 
 import 'GlobalControl/GlobalController.dart';
 import 'ViewScreen.dart';
@@ -52,19 +53,11 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
         .get()
         .then((doc) async {
       Map data = doc.data() as Map;
-      userName = data['firstname'] +' '+ data['lastname'].toString();
+      userName = data['firstname'] + ' ' + data['lastname'].toString();
       phoneNumber = data['phoneNumber'].toString();
       setState(() {});
     });
   }
-
-  suggestionLocation()async{
-    final String response = await rootBundle.loadString('assets/Distination/distination.json');
-    final data = await json.decode(response);
-    print(data);
-    print(data);
-  }
-
 
   @override
   void initState() {
@@ -74,6 +67,23 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
     generatePackageID();
     fetchUserInformation();
     fetchToken();
+  }
+
+  Future<void> suggestionLocation() async {
+    try {
+      final jsonString =
+          await rootBundle.loadString('assets/distination_en.json');
+      var data = await json.decode(jsonString);
+      Map dist = data as Map;
+      dist.forEach((key, values) {
+        distince.add(values[0]);
+        print(distince);
+      });
+      print(distince);
+      print(distince);
+    } catch (e) {
+      print(e);
+    }
   }
 
   String getToken = '';
@@ -91,6 +101,10 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
     });
     setState(() {});
   }
+
+  List distince = [];
+  List forDisplay = [];
+  final location = ClsDestination();
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +169,9 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: reUse.reuseTextField(
-                      formater: [FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),],
+                      formater: [
+                        FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
+                      ],
                       inputType: TextInputType.numberWithOptions(decimal: true),
                       textIcon: Icons.phone,
                       label: 'Receiver Phone Number',
@@ -172,13 +188,66 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                       weight: FontWeight.bold,
                       color: theme.black),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: reUse.reuseTextField(
-                      controller: locationBox,
-                      label: 'Receiver Location',
-                      textIcon: Icons.location_on),
+                  child: TextFormField(
+                    controller: locationBox,
+                    // keyboardType: inputType,
+                    //keyboardType: inputType,
+                    //inputFormatters: formater,
+                    onChanged: (value) {
+                      print(value);
+                      print(distince);
+                      print(distince);
+
+                      List results = location.destination
+                          .where((user) => user.toLowerCase().contains(
+                              locationBox.text.toString().toLowerCase()))
+                          .toList();
+                      // if (results == null || results.isEmpty) {
+                      //   results = completeList
+                      //       .where((user) => user['phoneNumber']
+                      //       .toLowerCase()
+                      //       .contains(search.text
+                      //       .toString()
+                      //       .toLowerCase()))
+                      //       .toList();
+                      // }
+                      forDisplay = results;
+                      setState(() {});
+                      // FocusManager.instance.primaryFocus?.unfocus();
+                    },
+                    decoration: InputDecoration(
+                      hintText: locationBox.text.toString()?? '',
+                      //icon: Icon(textIcon ?? null),
+                      // fillColor: theme.liteGrey,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      //border: InputBorder.none,
+
+                      hintStyle: const TextStyle(fontSize: 12),
+                    ),
+                  ),
+                ),
+                Container(
+                  //color: theme.red,
+                  height: Get.height * 0.08,
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.all(8),
+                      itemCount: forDisplay.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return SizedBox(
+                          child: TextButton(
+                            onPressed: () {
+                              locationBox.text =
+                                  forDisplay[index].toString().trim();
+                            },
+                            child: Text(forDisplay[index]),
+                          ),
+                        );
+                      }),
                 ),
                 const SizedBox(
                   height: 18,
@@ -198,8 +267,12 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                       flex: 6,
                       child: reUse.reuseTextField(
                           controller: priceBox,
-                          formater: [FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),],
-                          inputType: TextInputType.numberWithOptions(decimal: true),
+                          formater: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp('[0-9.,]+')),
+                          ],
+                          inputType:
+                              TextInputType.numberWithOptions(decimal: true),
                           label: ' ',
                           textIcon: Icons.location_on),
                     ),
