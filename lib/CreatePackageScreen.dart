@@ -26,12 +26,12 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
   final theme = ThemesApp();
   final glb = GlobalController();
 
-  final phoneBox = TextEditingController();
+  final phoneBox = TextEditingController(text: '0');
   final locationBox = TextEditingController();
   final priceBox = TextEditingController();
   final qtyBox = TextEditingController();
   final noteBox = TextEditingController();
-  double textSize = 12;
+  double textSize = 14;
   String packageID = '';
 
   generatePackageID() {
@@ -63,16 +63,17 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    suggestionLocation();
+    //suggestionLocation();
     generatePackageID();
     fetchUserInformation();
     fetchToken();
+    distince = clsDis.destination;
   }
 
   Future<void> suggestionLocation() async {
     try {
       final jsonString =
-          await rootBundle.loadString('assets/distination_en.json');
+      await rootBundle.loadString('assets/distination_en.json');
       var data = await json.decode(jsonString);
       Map dist = data as Map;
       dist.forEach((key, values) {
@@ -104,8 +105,11 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
 
   List distince = [];
   List forDisplay = [];
-  final location = ClsDestination();
-
+  final clsDis = ClsDestination();
+  bool _validateInput(String input) {
+    RegExp regExp = new RegExp(r'^[^0]\d*');
+    return regExp.hasMatch(input);
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -159,33 +163,59 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   height: 25,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20),
+                  padding: const EdgeInsets.only(left: 20, bottom: 10),
                   child: reUse.reUseText(
-                      content: 'Receiver Phone Number:',
+                      content: 'លេខទូរស័ព្ទអ្នកទទួល :',
                       size: textSize,
-                      weight: FontWeight.bold,
+                      weight: FontWeight.w500,
                       color: theme.black),
                 ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 10),
+                //   child: reUse.reuseTextField(
+                //       formater: [
+                //         FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
+                //       ],
+                //       inputType: TextInputType.numberWithOptions(decimal: true),
+                //       textIcon: Icons.phone,
+                //       label: 'Receiver Phone Number',
+                //       controller: phoneBox),
+                // ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: reUse.reuseTextField(
-                      formater: [
-                        FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
-                      ],
-                      inputType: TextInputType.numberWithOptions(decimal: true),
-                      textIcon: Icons.phone,
-                      label: 'Receiver Phone Number',
-                      controller: phoneBox),
+                  child: TextFormField(
+                    controller: phoneBox,
+                    // keyboardType: inputType,
+                    keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    maxLength: 10,
+                    onChanged: (value) async{
+                    },
+                    decoration: InputDecoration(
+                      //icon: Icon(textIcon ?? null),
+                      // fillColor: theme.liteGrey,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      //border: InputBorder.none,
+
+                      hintStyle: const TextStyle(fontSize: 12),
+                    ),
+                  ),
                 ),
                 const SizedBox(
                   height: 18,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20),
+                  padding: const EdgeInsets.only(left: 20, bottom: 10),
                   child: reUse.reUseText(
-                      content: 'Receiver Location :',
+                      content: 'ទីតាំងអ្នកទទួល :',
                       size: textSize,
-                      weight: FontWeight.bold,
+                      weight: FontWeight.w500,
                       color: theme.black),
                 ),
                 Padding(
@@ -200,8 +230,9 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                       print(distince);
                       print(distince);
 
-                      List results = location.destination
-                          .where((user) => user.toLowerCase().contains(
+                      List results = clsDis.destination
+                          .where((user) =>
+                          user.toLowerCase().contains(
                               locationBox.text.toString().toLowerCase()))
                           .toList();
                       // if (results == null || results.isEmpty) {
@@ -218,7 +249,17 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                       // FocusManager.instance.primaryFocus?.unfocus();
                     },
                     decoration: InputDecoration(
-                      hintText: locationBox.text.toString()?? '',
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          locationBox.clear();
+                          locationBox.text = '';
+                          setState(() {
+
+                          });
+                        },
+                        icon: const Icon(Icons.close),
+                      ),
+                      hintText: locationBox.text.toString() ?? '',
                       //icon: Icon(textIcon ?? null),
                       // fillColor: theme.liteGrey,
                       border: OutlineInputBorder(
@@ -230,10 +271,10 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                     ),
                   ),
                 ),
-                Container(
+                SizedBox(
                   //color: theme.red,
                   height: Get.height * 0.08,
-                  child: ListView.builder(
+                  child: forDisplay != []?ListView.builder(
                       scrollDirection: Axis.horizontal,
                       padding: const EdgeInsets.all(8),
                       itemCount: forDisplay.length,
@@ -242,12 +283,12 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                           child: TextButton(
                             onPressed: () {
                               locationBox.text =
-                                  forDisplay[index].toString().trim();
+                                  forDisplay[index].toString().trim().toLowerCase();
                             },
                             child: Text(forDisplay[index]),
                           ),
                         );
-                      }),
+                      }):const SizedBox(),
                 ),
                 const SizedBox(
                   height: 18,
@@ -272,7 +313,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                 RegExp('[0-9.,]+')),
                           ],
                           inputType:
-                              TextInputType.numberWithOptions(decimal: true),
+                          const TextInputType.numberWithOptions(decimal: true),
                           label: ' ',
                           textIcon: Icons.location_on),
                     ),
@@ -299,13 +340,13 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                     decoration: InputDecoration(
                         border: const OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.grey, width: 0.0),
+                          BorderSide(color: Colors.grey, width: 0.0),
                         ),
 
                         // hintText: "Enter Remarks",
                         focusedBorder: OutlineInputBorder(
                             borderSide:
-                                BorderSide(width: 1, color: theme.hiLiteBlue))),
+                            BorderSide(width: 1, color: theme.hiLiteBlue))),
                   ),
                 ),
                 const SizedBox(
@@ -374,23 +415,36 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                         ),
                                       ),
                                     ));
+                              }  else if (!_validateInput(phoneBox.text.toString())) {
+                                await reUse.reUseCircleDialog(
+                                    context: context,
+                                    icon: Icons.monetization_on,
+                                    title: 'Error',
+                                    content: Center(
+                                      child: Text(
+                                        'no zero',
+                                        style: TextStyle(
+                                          color: theme.black,
+                                        ),
+                                      ),
+                                    ));
                               } else {
                                 alertDialog(context);
                                 await glb
                                     .createPackage(
-                                        userName: userName.trim().toString(),
-                                        userPhoneNumber:
-                                            phoneNumber.trim().toString(),
-                                        tokenKey: getToken.trim().toString(),
-                                        chatid: chatid.trim().toString(),
-                                        price: priceBox.text.trim().toString(),
-                                        note: noteBox.text.trim().toString(),
-                                        packageID: packageID.toString(),
-                                        qty: qtyBox.text.trim().toString(),
-                                        phoneNumber:
-                                            phoneBox.text.trim().toString(),
-                                        location:
-                                            locationBox.text.trim().toString())
+                                    userName: userName.trim().toString(),
+                                    userPhoneNumber:
+                                    phoneNumber.trim().toString(),
+                                    tokenKey: getToken.trim().toString(),
+                                    chatid: chatid.trim().toString(),
+                                    price: priceBox.text.trim().toString(),
+                                    note: noteBox.text.trim().toString(),
+                                    packageID: packageID.toString(),
+                                    qty: qtyBox.text.trim().toString(),
+                                    phoneNumber:
+                                    phoneBox.text.trim().toString(),
+                                    location:
+                                    locationBox.text.trim().toString())
                                     .then((value) {
                                   phoneBox.clear();
                                   priceBox.clear();
@@ -430,8 +484,10 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                 Text(
                                   'OK',
                                   style: TextStyle(
+                                    fontSize: 16,
                                       color: theme.white,
-                                      fontWeight: FontWeight.normal),
+                                      fontWeight: FontWeight.bold
+                                  ),
                                 )
                               ],
                             ),
