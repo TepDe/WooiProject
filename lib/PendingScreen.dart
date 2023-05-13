@@ -313,6 +313,7 @@ class _PendingScreenState extends State<PendingScreen> {
                                 Padding(
                                   padding: EdgeInsets.all(padding),
                                   child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
@@ -337,8 +338,7 @@ class _PendingScreenState extends State<PendingScreen> {
                                           title: 'Qty',
                                           size: 14.0,
                                           color: theme.black,
-                                          content: forDisplay[index]
-                                              ['location'],
+                                          content: '1',
                                           weight: FontWeight.w500),
                                     ],
                                   ),
@@ -346,34 +346,46 @@ class _PendingScreenState extends State<PendingScreen> {
                                 Padding(
                                   padding: EdgeInsets.only(top:6),
                                   child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       reUse.reUseColumnText(
                                           titleColor: theme.grey,
                                           title: 'Assign by : ',
-                                          lableSize: 14,
+                                          lableSize: 12,
                                           size: 0.0,
                                           color: theme.black,
                                           content: '',
                                           weight: FontWeight.w500),
-                                      reUse.reUseColumnText(
-                                          title: 'Driver Name',
-                                          size: 14.0,
-                                          color: theme.black,
-                                          content: forDisplay[index]
-                                                  [field.dLastName] +
-                                              ' ' +
-                                              forDisplay[index]
-                                                  [field.dFirstName],
-                                          weight: FontWeight.w500),
+                                      // reUse.reUseColumnText(
+                                      //     title: 'Driver Name',
+                                      //     size: 14.0,
+                                      //     color: theme.black,
+                                      //     content: forDisplay[index]
+                                      //             [field.dLastName] +
+                                      //         ' ' +
+                                      //         forDisplay[index]
+                                      //             [field.dFirstName],
+                                      //     weight: FontWeight.w500),
                                       reUse.reUseColumnText(
                                           titleColor: theme.grey,
                                           title: 'Phone Number',
                                           size: 14.0,
                                           color: theme.black,
                                           content: forDisplay[index]
-                                              ['location'],
+                                              [field.dPhone],
+                                          weight: FontWeight.w500),
+                                      reUse.reUseColumnText(
+                                          titleColor: theme.grey,
+                                          title: 'Driver Name',
+                                          size: 14.0,
+                                          color: theme.black,
+                                          content: forDisplay[index]
+                                          [field.dLastName] +
+                                              ' ' +
+                                              forDisplay[index]
+                                              [field.dFirstName],
                                           weight: FontWeight.w500),
                                     ],
                                   ),
