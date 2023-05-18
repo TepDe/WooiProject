@@ -61,10 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Map dist = data as Map;
       dist.forEach((key, values) {
         distince.add(values[0]);
-        print(distince);
       });
-      print(distince);
-      print(distince);
     } catch (e) {
       print(e);
     }
@@ -205,13 +202,13 @@ class _HomeScreenState extends State<HomeScreen> {
     DateTime now = DateTime.now();
     int hours = now.hour;
     if (hours >= 1 && hours <= 12) {
-      greeting = "Good Morning";
+      greeting = "អរុណ សួស្តី";
     } else if (hours >= 12 && hours <= 16) {
-      greeting = "Good Afternoon";
+      greeting = "ទិវា សួស្ដី";
     } else if (hours >= 16 && hours <= 21) {
-      greeting = "Good Evening";
+      greeting = "សាយ័ណ សួរស្តី";
     } else if (hours >= 21 && hours <= 24) {
-      greeting = "Good Night";
+      greeting = "រាត្រី សួស្តី";
     }
     setState(() {});
   }
