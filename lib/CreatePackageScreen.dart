@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:wooiproject/Distination/clsDistin.dart';
+import 'package:wooiproject/Distination/language.dart';
 
 import 'GlobalControl/GlobalController.dart';
 import 'ViewScreen.dart';
@@ -63,25 +64,25 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    //suggestionLocation();
+    suggestionLocation();
     generatePackageID();
     fetchUserInformation();
     fetchToken();
     distince = clsDis.destination;
   }
 
+  final clsLan = ClsLanguage();
+
   Future<void> suggestionLocation() async {
     try {
       final jsonString =
-      await rootBundle.loadString('assets/distination_en.json');
+          await rootBundle.loadString('assets/distination_en.json');
       var data = await json.decode(jsonString);
       Map dist = data as Map;
       dist.forEach((key, values) {
-        distince.add(values[0]);
-        print(distince);
+        eng_distin.add(values[0]);
+        print(eng_distin);
       });
-      print(distince);
-      print(distince);
     } catch (e) {
       print(e);
     }
@@ -104,12 +105,15 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
   }
 
   List distince = [];
+  List eng_distin = [];
   List forDisplay = [];
   final clsDis = ClsDestination();
+
   bool _validateInput(String input) {
     RegExp regExp = new RegExp(r'^[^0]\d*');
     return regExp.hasMatch(input);
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -143,7 +147,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       reUse.reUseText(
-                        content: 'Package ID : ',
+                        content: clsLan.packageID+' : ',
                         size: 16.0,
                         color: theme.grey,
                       ),
@@ -186,15 +190,14 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   child: TextFormField(
                     controller: phoneBox,
                     // keyboardType: inputType,
-                    keyboardType: const TextInputType.numberWithOptions(
-                        decimal: true),
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
                       FilteringTextInputFormatter.digitsOnly,
                     ],
                     maxLength: 10,
-                    onChanged: (value) async{
-                    },
+                    onChanged: (value) async {},
                     decoration: InputDecoration(
                       //icon: Icon(textIcon ?? null),
                       // fillColor: theme.liteGrey,
@@ -229,33 +232,27 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                       print(value);
                       print(distince);
                       print(distince);
-
                       List results = clsDis.destination
-                          .where((user) =>
-                          user.toLowerCase().contains(
+                          .where((user) => user.toLowerCase().contains(
                               locationBox.text.toString().toLowerCase()))
                           .toList();
-                      // if (results == null || results.isEmpty) {
-                      //   results = completeList
-                      //       .where((user) => user['phoneNumber']
-                      //       .toLowerCase()
-                      //       .contains(search.text
-                      //       .toString()
-                      //       .toLowerCase()))
-                      //       .toList();
-                      // }
+                      if (results == null) {
+                        results = eng_distin
+                            .where((user) => user.toLowerCase().contains(
+                                locationBox.text.toString().toLowerCase()))
+                            .toList();
+                      }
+                      print(results);
+                      print(results);
                       forDisplay = results;
                       setState(() {});
-                      // FocusManager.instance.primaryFocus?.unfocus();
                     },
                     decoration: InputDecoration(
                       suffixIcon: IconButton(
                         onPressed: () {
                           locationBox.clear();
                           locationBox.text = '';
-                          setState(() {
-
-                          });
+                          setState(() {});
                         },
                         icon: const Icon(Icons.close),
                       ),
@@ -274,31 +271,35 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                 SizedBox(
                   //color: theme.red,
                   height: Get.height * 0.08,
-                  child: forDisplay != []?ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.all(8),
-                      itemCount: forDisplay.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return SizedBox(
-                          child: TextButton(
-                            onPressed: () {
-                              locationBox.text =
-                                  forDisplay[index].toString().trim().toLowerCase();
-                            },
-                            child: Text(forDisplay[index]),
-                          ),
-                        );
-                      }):const SizedBox(),
+                  child: forDisplay != []
+                      ? ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.all(8),
+                          itemCount: forDisplay.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return SizedBox(
+                              child: TextButton(
+                                onPressed: () {
+                                  locationBox.text = forDisplay[index]
+                                      .toString()
+                                      .trim()
+                                      .toLowerCase();
+                                },
+                                child: Text(forDisplay[index]),
+                              ),
+                            );
+                          })
+                      : const SizedBox(),
                 ),
                 const SizedBox(
                   height: 18,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20),
+                  padding: const EdgeInsets.only(left: 20, bottom: 10, top: 10),
                   child: reUse.reUseText(
-                      content: 'Price :',
+                      content: clsLan.price+" :",
                       size: textSize,
-                      weight: FontWeight.bold,
+                      weight: FontWeight.w500,
                       color: theme.black),
                 ),
                 Row(
@@ -312,14 +313,44 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                             FilteringTextInputFormatter.allow(
                                 RegExp('[0-9.,]+')),
                           ],
-                          inputType:
-                          const TextInputType.numberWithOptions(decimal: true),
+                          inputType: const TextInputType.numberWithOptions(
+                              decimal: true),
                           label: ' ',
                           textIcon: Icons.location_on),
                     ),
                     Flexible(
                       flex: 1,
                       child: reUse.reUseText(content: '\$', size: 20.0),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, bottom: 10, top: 10),
+                  child: reUse.reUseText(
+                      content: clsLan.qty+" :",
+                      size: textSize,
+                      weight: FontWeight.w500,
+                      color: theme.black),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Flexible(
+                      flex: 6,
+                      child: reUse.reuseTextField(
+                          controller: qtyBox,
+                          formater: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp('[0-9.,]+')),
+                          ],
+                          inputType: const TextInputType.numberWithOptions(
+                              decimal: true),
+                          label: ' ',
+                          textIcon: Icons.location_on),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      child: reUse.reUseText(content: '', size: 20.0),
                     ),
                   ],
                 ),
@@ -340,13 +371,13 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                     decoration: InputDecoration(
                         border: const OutlineInputBorder(
                           borderSide:
-                          BorderSide(color: Colors.grey, width: 0.0),
+                              BorderSide(color: Colors.grey, width: 0.0),
                         ),
 
                         // hintText: "Enter Remarks",
                         focusedBorder: OutlineInputBorder(
                             borderSide:
-                            BorderSide(width: 1, color: theme.hiLiteBlue))),
+                                BorderSide(width: 1, color: theme.hiLiteBlue))),
                   ),
                 ),
                 const SizedBox(
@@ -415,36 +446,23 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                         ),
                                       ),
                                     ));
-                              }  else if (!_validateInput(phoneBox.text.toString())) {
-                                await reUse.reUseCircleDialog(
-                                    context: context,
-                                    icon: Icons.monetization_on,
-                                    title: 'Error',
-                                    content: Center(
-                                      child: Text(
-                                        'no zero',
-                                        style: TextStyle(
-                                          color: theme.black,
-                                        ),
-                                      ),
-                                    ));
                               } else {
                                 alertDialog(context);
                                 await glb
                                     .createPackage(
-                                    userName: userName.trim().toString(),
-                                    userPhoneNumber:
-                                    phoneNumber.trim().toString(),
-                                    tokenKey: getToken.trim().toString(),
-                                    chatid: chatid.trim().toString(),
-                                    price: priceBox.text.trim().toString(),
-                                    note: noteBox.text.trim().toString(),
-                                    packageID: packageID.toString(),
-                                    qty: qtyBox.text.trim().toString(),
-                                    phoneNumber:
-                                    phoneBox.text.trim().toString(),
-                                    location:
-                                    locationBox.text.trim().toString())
+                                        userName: userName.trim().toString(),
+                                        userPhoneNumber:
+                                            phoneNumber.trim().toString(),
+                                        tokenKey: getToken.trim().toString(),
+                                        chatid: chatid.trim().toString(),
+                                        price: priceBox.text.trim().toString(),
+                                        note: noteBox.text.toString(),
+                                        packageID: packageID.toString(),
+                                        qty: qtyBox.text.trim().toString(),
+                                        phoneNumber:
+                                            phoneBox.text.trim().toString(),
+                                        location:
+                                            locationBox.text.trim().toString())
                                     .then((value) {
                                   phoneBox.clear();
                                   priceBox.clear();
@@ -484,10 +502,9 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                 Text(
                                   'OK',
                                   style: TextStyle(
-                                    fontSize: 16,
+                                      fontSize: 16,
                                       color: theme.white,
-                                      fontWeight: FontWeight.bold
-                                  ),
+                                      fontWeight: FontWeight.bold),
                                 )
                               ],
                             ),
