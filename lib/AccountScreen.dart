@@ -170,51 +170,58 @@ class _AccountScreenState extends State<AccountScreen> {
                         weight: FontWeight.bold,
                         size: 12.0,
                         color: theme.grey),
-                    SizedBox(
-                      height: viewHeight2,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(padding),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: reUse.reUseText(
-                            content: 'General',
-                            //weight: FontWeight.bold,
-                            size: 16.0,
-                            color: theme.black),
-                      ),
-                    ),
-                    InkWell(
-                        onTap: () {
-                          reUse.reUseCircleDialog(
-                              context: context,
-                              title: 'title',
-                              content: reUse.reUseTextFormField(),
-                              icon: Icons.password);
-                        },
-                        child: Material(
-                          color: Colors.transparent,
-                          child: reUse.reUseSettingItem(
-                              trailingIcon: Icon(Icons.visibility_off),
-                              title: Text('Pin Code'),
-                              context: context,
-                              leading: Icon(Icons.password)),
-                        )),
-                    reUse.reUseSettingItem(
-                        trailingIcon: Switch(
-                          // This bool value toggles the switch.
-                          value: light,
-                          activeColor: theme.btnBlue,
-                          onChanged: (bool value) {
-                            // This is called when the user toggles the switch.
-                            setState(() {
-                              light = value;
-                            });
-                          },
+                    Row(
+                      children: [
+                        Flexible(
+                          child: reUse.reUseBoxText(value: '12',title: 'Payback'),
                         ),
-                        title: Text('Light Mode'),
-                        context: context,
-                        leading: Icon(Icons.sunny)),
+                        Flexible(
+                          child: reUse.reUseBoxText(value: '10',title: 'Earning'),
+                        ),
+                      ],
+                    ),
+                    // Padding(
+                    //   padding:  EdgeInsets.only(left:8.0,top:padding,bottom:padding),
+                    //   child: Align(
+                    //     alignment: Alignment.topLeft,
+                    //     child: reUse.reUseText(
+                    //         content: 'General',
+                    //         //weight: FontWeight.bold,
+                    //         size: 16.0,
+                    //         color: theme.black),
+                    //   ),
+                    // ),
+                    // InkWell(
+                    //     onTap: () {
+                    //       reUse.reUseCircleDialog(
+                    //           context: context,
+                    //           title: 'title',
+                    //           content: reUse.reUseTextFormField(),
+                    //           icon: Icons.password);
+                    //     },
+                    //     child: Material(
+                    //       color: Colors.transparent,
+                    //       child: reUse.reUseSettingItem(
+                    //           trailingIcon: Icon(Icons.visibility_off),
+                    //           title: Text('Pin Code'),
+                    //           context: context,
+                    //           leading: Icon(Icons.password)),
+                    //     )),
+                    // reUse.reUseSettingItem(
+                    //     trailingIcon: Switch(
+                    //       // This bool value toggles the switch.
+                    //       value: light,
+                    //       activeColor: theme.btnBlue,
+                    //       onChanged: (bool value) {
+                    //         // This is called when the user toggles the switch.
+                    //         setState(() {
+                    //           light = value;
+                    //         });
+                    //       },
+                    //     ),
+                    //     title: Text('Light Mode'),
+                    //     context: context,
+                    //     leading: Icon(Icons.sunny)),
                     Padding(
                       padding: EdgeInsets.all(padding),
                       child: Align(
