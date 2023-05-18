@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wooiproject/CompleteScreen.dart';
 import 'package:wooiproject/CreatePackageScreen.dart';
+import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/HomeScreen.dart';
 import 'package:wooiproject/LoginScreen.dart';
@@ -125,7 +126,7 @@ class ReUseWidget {
             Text(
               getTime,
               style:
-                  TextStyle(color: theme.darkGrey, fontWeight: FontWeight.bold),
+                  TextStyle(color: theme.black, fontWeight: FontWeight.bold),
             ),
             reUseText(
                 size: 20.0,
@@ -134,10 +135,7 @@ class ReUseWidget {
                 content: userID ?? 'loading'),
           ],
         ),
-        const Icon(
-          Icons.account_circle,
-          size: 60,
-        )
+        const Icon(Icons.account_circle, size: 60, color: Colors.transparent)
       ],
     );
   }
@@ -243,7 +241,7 @@ class ReUseWidget {
       color: theme.litestOrange,
     );
   }
-
+  final clsLan = ClsLanguage();
   unitTwoHomeScreen(
       {int? totalLength,
       List? totalPackageData,
@@ -288,7 +286,7 @@ class ReUseWidget {
                     ]);
                   },
                   child: unitTwoText(
-                      label: "Total package",
+                      label: clsLan.totalPackage,
                       qty: totalLength.toString(),
                       assetsIconColor: theme.dirt,
                       assetsIcon: 'assets/images/box.png',
@@ -303,7 +301,7 @@ class ReUseWidget {
                     Get.to(const PendingScreen(), arguments: pendingData);
                   },
                   child: unitTwoText(
-                      label: "Pending",
+                      label: clsLan.pending,
                       qty: pendingLength.toString(),
                       assetsIcon: 'assets/images/delivery_man.png',
                       borderbottom: BorderSide(width: 1, color: theme.liteGrey),
@@ -324,7 +322,7 @@ class ReUseWidget {
                       );
                     },
                     child: unitTwoText(
-                        label: 'Complete',
+                        label: clsLan.complete,
                         qty: completeLength.toString(),
                         assetsIcon: 'assets/images/check.png',
                         borderright:
@@ -342,7 +340,7 @@ class ReUseWidget {
                       );
                     },
                     child: unitTwoText(
-                        label: "Return Ship",
+                        label: clsLan.returns,
                         qty: returnLength.toString(),
                         assetsIcon: 'assets/images/return-box.png',
                         bordertop: BorderSide(width: 1, color: theme.liteGrey),
@@ -805,7 +803,8 @@ class ReUseWidget {
     );
   }
 
-  reUseColumnText({double? lableSize,content, size, weight, color, title, titleColor}) {
+  reUseColumnText(
+      {double? lableSize, content, size, weight, color, title, titleColor}) {
     return Flexible(
       child: SizedBox(
         width: Get.width,
@@ -931,7 +930,7 @@ class ReUseWidget {
           color: theme.orange,
         ),
         label: Text(
-          'Create',
+          clsLan.create,
           style: TextStyle(
             color: theme.orange,
           ),
@@ -1067,7 +1066,7 @@ class ReUseWidget {
     );
   }
 
-  reuseTextField({label, controller, textIcon, inputType, require,formater}) {
+  reuseTextField({label, controller, textIcon, inputType, require, formater}) {
     return TextFormField(
       controller: controller ?? dialogPhoneNum,
       // keyboardType: inputType,
@@ -1810,65 +1809,66 @@ class ReUseWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
-          actions: [Stack(
-            clipBehavior: Clip.none,
-            alignment: Alignment.topCenter,
-            children: [
-              Positioned(
-                top: -60.0,
-                child: CircleAvatar(
-                  radius: 60.0,
-                  backgroundColor: theme.white,
-                  child: Icon(
-                    icon,
-                    color: theme.orange,
-                    size: 100.0,
-                  ),
-                ),
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: Get.height * 0.08),
-                    child: Text(
-                      title,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+          actions: [
+            Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.topCenter,
+              children: [
+                Positioned(
+                  top: -60.0,
+                  child: CircleAvatar(
+                    radius: 60.0,
+                    backgroundColor: theme.white,
+                    child: Icon(
+                      icon,
+                      color: theme.orange,
+                      size: 100.0,
                     ),
                   ),
-                  const SizedBox(height: 20.0),
-                  // Text(
-                  //   content,
-                  //   textAlign: TextAlign.center,
-                  //   style: const TextStyle(
-                  //     fontSize: 16.0,
-                  //   ),
-                  // ),
-                  content,
-                  const SizedBox(height: 20.0),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    child: reUseCustomizeButton(
-                        value: data,
-                        function: function,
-                        textcolor: theme.orange,
-                        weight: FontWeight.bold,
-                        text: "OK",
-                        fontsize: 16.0,
-                        isBcColor: true,
-                        colorBC: theme.litestOrange),
-                  ),
-                ],
-              ),
-            ],
-          ),],
-
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: Get.height * 0.08),
+                      child: Text(
+                        title,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20.0),
+                    // Text(
+                    //   content,
+                    //   textAlign: TextAlign.center,
+                    //   style: const TextStyle(
+                    //     fontSize: 16.0,
+                    //   ),
+                    // ),
+                    content,
+                    const SizedBox(height: 20.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      child: reUseCustomizeButton(
+                          value: data,
+                          function: function,
+                          textcolor: theme.orange,
+                          weight: FontWeight.bold,
+                          text: "OK",
+                          fontsize: 16.0,
+                          isBcColor: true,
+                          colorBC: theme.litestOrange),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
         );
       },
     );
@@ -2046,6 +2046,46 @@ class ReUseWidget {
           ),
         );
       },
+    );
+  }
+
+  reUseBoxText({title, value}) {
+    return Container(
+      height: Get.height * 0.1,
+      width: Get.width,
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: theme.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: theme.midGrey,
+            blurRadius: 1,
+            //offset: Offset(4, 8), // Shadow position
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: reUseText(
+                content: title,
+                size: 14.0,
+                weight: FontWeight.w500,
+                color: theme.darkGrey),
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: reUseText(
+                content: value + ' \$',
+                size: 24.0,
+                weight: FontWeight.bold,
+                color: theme.darkGrey),
+          ),
+        ],
+      ),
     );
   }
 }
