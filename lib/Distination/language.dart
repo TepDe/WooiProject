@@ -7,5 +7,5 @@ class ClsLanguage{
   String home = 'ផ្ទាំងដើម';
   String price = 'តំលៃទំនិញ';
   String qty = 'ចំនួន';
-  String packageID = 'លេខកញ្ចប់';
+  String packageID = 'លេខទំនិញ';
 }
