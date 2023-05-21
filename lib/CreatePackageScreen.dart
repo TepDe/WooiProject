@@ -216,7 +216,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10),
                   child: reUse.reUseText(
-                      content: 'ទីតាំងអ្នកទទួល :',
+                      content: 'ទីតាំងអ្នកទទួល : ( សូមបញ្ចូលទីតាំងអ្នកទទួលជាអក្សរខ្មែរ )',
                       size: textSize,
                       weight: FontWeight.w500,
                       color: theme.black),
@@ -297,7 +297,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10, top: 10),
                   child: reUse.reUseText(
-                      content: clsLan.price+" :",
+                      content: clsLan.price+" : ( សូមបញ្ចូលតំលៃគិតជាដុល្លារ )",
                       size: textSize,
                       weight: FontWeight.w500,
                       color: theme.black),
@@ -361,7 +361,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   height: 18,
                 ),
                 reUse.reUseText(
-                    content: 'Note:', size: textSize, color: theme.grey),
+                    content: 'ចំណាំ :', size: textSize, color: theme.black),
                 Container(
                   alignment: Alignment.center,
                   child: TextField(
