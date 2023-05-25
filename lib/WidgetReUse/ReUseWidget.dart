@@ -910,8 +910,9 @@ class ReUseWidget {
   final qtyBox = TextEditingController();
 
   reUseCreatePackage({context, padding, height}) {
-    return SizedBox(
-      height: height,
+    return Container(
+      margin: EdgeInsets.only(bottom: 10),
+      height: Get.height *0.06,
       width: Get.width,
       child: TextButton.icon(
         style: TextButton.styleFrom(backgroundColor: theme.litestOrange),
