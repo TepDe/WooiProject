@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
+import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
@@ -73,46 +76,23 @@ class _ReturnScreenState extends State<ReturnScreen> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        height: 40,
-                        width: 40,
-                        // decoration: BoxDecoration(
-                        //   color: theme.litestOrange,
-                        //   borderRadius: BorderRadius.circular(60),
-                        //   boxShadow: [
-                        //     BoxShadow(
-                        //       color: theme.minGrey,
-                        //       blurRadius: 6,
-                        //       offset: const Offset(0, 0), // Shadow position
-                        //     ),
-                        //   ],
-                        // ),
-                        child: IconButton(
-                            splashRadius: 25,
-                            onPressed: () {
-                              Get.back();
-                            },
-                            icon: Icon(
-                              Icons.arrow_back_ios_new_outlined,
-                              color: theme.black,
-                            )),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 18.0),
-                        child: Text(
+                      TextButton.icon(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        icon: Icon(
+                          Icons.arrow_back_ios_new_outlined,
+                          color: theme.black,
+                        ),
+                        label: Text(
                           'Return',
                           style: TextStyle(
                               fontSize: 18,
+                              color: theme.black,
                               //color: titleColor,
                               fontWeight: FontWeight.bold),
                         ),
                       ),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.search,
-                            color: Colors.transparent,
-                          )),
                     ],
                   ),
                 ),
@@ -278,7 +258,12 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                         height: 40,
                                         width: 40,
                                         child: PopupMenuButton<int>(
-                                          onSelected: (item) => {},
+                                          onSelected: (item) {
+                                            optionSelect(
+                                                opt: item,
+                                                data: forDisplay[index]);
+                                            setState(() {});
+                                          },
                                           itemBuilder: (context) => [
                                             const PopupMenuItem<int>(
                                                 value: 0,
@@ -380,11 +365,11 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                   reUse.reUseText(
                                       weight: FontWeight.w400,
                                       size: 12.0,
-                                      color: theme.grey,
+                                      color: theme.darkGrey,
                                       content: 'Return Time : '),
                                   reUse.reUseText(
-                                      weight: FontWeight.w400,
-                                      size: 12.0,
+                                      weight: FontWeight.bold,
+                                      size: 14.0,
                                       color: theme.darkGrey,
                                       content: forDisplay[index]['date']),
                                 ],
@@ -402,5 +387,45 @@ class _ReturnScreenState extends State<ReturnScreen> {
         ],
       ),
     ));
+  }
+
+  final field = FieldData();
+  final fieldInfo = FieldInfo();
+  DatabaseReference packageRequest =
+  FirebaseDatabase.instance.ref("PackageRequest");
+  optionSelect({opt, data}) async {
+    if (opt == 0) {
+      await fetchUserInformation();
+      await glb.createPackage(
+          userName: userName,
+          uid: data[field.uid],
+          userPhoneNumber: phoneNumber,
+          tokenKey: data[field.token],
+          chatid: data[field.chatid],
+          price: data[field.price],
+          note: data[field.note],
+          packageID: data[field.packageID],
+          qty: data[field.qty],
+          phoneNumber: data[field.phoneNumber],
+          location: data[field.location]);
+      glb.deletePackage(witchDataBase: packageRequest,data:data);
+
+    }
+  }
+
+  String userName = "";
+  String phoneNumber = "";
+
+  fetchUserInformation() async {
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc(auth.currentUser!.uid)
+        .get()
+        .then((doc) async {
+      Map data = doc.data() as Map;
+      userName = data['firstname'] + ' ' + data['lastname'].toString();
+      phoneNumber = data['phoneNumber'].toString();
+      setState(() {});
+    });
   }
 }
