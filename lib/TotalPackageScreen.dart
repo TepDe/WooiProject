@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:wooiproject/EditPackageScreen.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
+import 'package:wooiproject/GlobalControl/clsField.dart';
 
 import 'WidgetReUse/ReUseWidget.dart';
 import 'WidgetReUse/Themes.dart';
@@ -52,7 +53,8 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
     keyList = argumentData[1]['key'];
     totalListLength();
   }
-
+  final field = FieldData();
+  final fieldInfo = FieldInfo();
   totalListLength() async {
     try {
       DatabaseReference refs = FirebaseDatabase.instance
