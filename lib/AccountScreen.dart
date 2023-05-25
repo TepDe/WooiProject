@@ -64,7 +64,6 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   Future<void> insertTelegramToken() async {
-    UserData userData = UserData();
     FirebaseFirestore.instance
         .collection('Users')
         .doc(auth.currentUser!.uid)
