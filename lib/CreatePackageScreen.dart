@@ -388,11 +388,11 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   children: [
                     Flexible(
                       child: Container(
-                        height: 40,
+                        height: 50,
                         width: Get.width,
                         decoration: BoxDecoration(
                           color: theme.orange,
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius: BorderRadius.circular(12),
                           // boxShadow: [
                           //   BoxShadow(
                           //     color: Colors.grey,
@@ -511,8 +511,12 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                           ),
                         ),
                       ),
-                    )
+                    ),
+
                   ],
+                ),
+                const SizedBox(
+                  height: 18,
                 ),
               ],
             ),
