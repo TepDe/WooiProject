@@ -702,7 +702,6 @@ class ReUseWidget {
                                   .toString()
                                   .toLowerCase()))
                           .toList();
-                      glb.onSearchControl(list: results);
                       print(results);
                       print(results);
                     },
