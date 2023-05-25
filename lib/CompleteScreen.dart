@@ -349,6 +349,25 @@ class _CompleteScreenState extends State<CompleteScreen> {
                             ),
                           ),
                           Padding(
+                            padding: const EdgeInsets.all(3.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                reUse.reUseText(
+                                    size: 14.0,
+                                    color: theme.black,
+                                    content: forDisplay[index]['location'],
+                                    weight: FontWeight.w500),
+                                reUse.reUseText(
+                                    size: 14.0,
+                                    color: theme.black,
+                                    weight: FontWeight.w500,
+                                    content: forDisplay[index]['driverUID']),
+
+                              ],
+                            ),
+                          ),
+                          Padding(
                             padding: const EdgeInsets.all(6.0),
                             child: Divider(
                               height: 1,
