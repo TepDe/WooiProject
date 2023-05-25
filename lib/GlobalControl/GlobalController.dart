@@ -307,7 +307,7 @@ class GlobalController {
       location,
       qty,
       tokenKey,
-      chatid}) async {
+      chatid,data}) async {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
     position = await GeolocatorPlatform.instance.getCurrentPosition();
@@ -406,24 +406,6 @@ class GlobalController {
     }
   }
 
-  qtyControl({value}) {
-    int qty = int.parse(value) + 1;
-    print(qty);
-    if (value == '9') {
-      return Fluttertoast.showToast(
-        msg: 'Maximum input is 9',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-    } else {
-      return qty;
-    }
-  }
-
   List returnData = [];
   List completeList = [];
   List pendingList = [];
@@ -493,48 +475,12 @@ class GlobalController {
     return totalPackageList;
   }
 
-  onSearchControl({searchWord, list}) {
-    // var results = list!
-    //     .where((user) => user["packageID"]
-    //         .toLowerCase()
-    //         .contains(searchWord?.text.toLowerCase()))
-    //     .toList();
-    return list;
-  }
-
-  List searchResult = [];
-
-  List createList(searchWord, List? list) {
-    searchResult = list!
-        .where((user) => user["packageID"]
-            .toLowerCase()
-            .contains(searchWord?.text.toLowerCase()))
-        .toList();
-    return searchResult;
-  }
-
   getTelegramTooken() {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     users
         .add({'name': 'John Doe', 'phone': '1234567890'})
         .then((value) => print("User Added"))
         .catchError((error) => print("Failed to add user: $error"));
-  }
-
-  Future<void> getUserInformation() async {
-    UserData userData = UserData();
-    FirebaseFirestore.instance
-        .collection('Users')
-        .doc(auth.currentUser!.uid)
-        .get()
-        .then((DocumentSnapshot querySnapshot) async {
-      Map data = querySnapshot.data() as Map;
-      userData.userID = await data['userID'];
-      userData.email = await data['email'];
-
-      print(data);
-      print(data);
-    });
   }
 
   final users = FirebaseFirestore.instance.collection('Users');
@@ -559,10 +505,8 @@ class GlobalController {
     }).catchError((error) => print("Failed to add user: $error"));
   }
 
-  deletePackage({data}) async {
-    DatabaseReference packageRequest =
-        FirebaseDatabase.instance.ref("PackageRequest");
-    await packageRequest
+  deletePackage({witchDataBase ,data ,witchUID,witchPushKey}) async {
+    await witchDataBase
         .child(auth.currentUser!.uid)
         .child('package')
         .child(data)
@@ -630,25 +574,12 @@ class GlobalController {
       field.senderPhone: await fetchUserData(fieldInfo.phoneNumber),
     }));
   }
+
+  updateStatus({uid, key, status}) async {
+    await packageRequest.child(uid).child('package').child(key).update({
+      'status': status,
+      field.packageID : auth.currentUser!.uid
+    });
+  }
 }
 
-class UserData {
-  String latitude = '';
-  String longitude = '';
-  String phoneNumber = '';
-  String location = '';
-  String email = '';
-  String password = '';
-  String name = '';
-  String uid = '';
-  String userID = '';
-  String qty = '';
-}
-
-class PackageData {
-  String latitude = '';
-  String longitude = '';
-  String phoneNumber = '';
-  String location = '';
-  String qty = '';
-}
