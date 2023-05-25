@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:wooiproject/EditPackageScreen.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 
 import 'WidgetReUse/ReUseWidget.dart';
@@ -143,7 +144,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                     color: theme.black,
                                   )),
                             ),
-                            Padding(
+                            const Padding(
                               padding: EdgeInsets.only(left: 18.0),
                               child: Text(
                                 'Package',
@@ -249,14 +250,37 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                               color: theme.litestOrange,
                               borderRadius: BorderRadius.circular(6),
                             ),
-                            child: IconButton(
-                                splashRadius: 20,
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.filter_alt_outlined,
-                                  color: theme.orange,
-                                )),
-                          )
+                            child: PopupMenuButton<String>(
+                              icon: Icon(
+                                Icons.filter_alt_rounded,
+                                color: theme.deepOrange,
+                              ),
+                              itemBuilder: (BuildContext context) {
+                                return [
+                                  PopupMenuItem<String>(
+                                    value: 'Request',
+                                    child: Text('Request'),
+                                  ),
+                                  PopupMenuItem<String>(
+                                    value: 'Pending',
+                                    child: Text('Pending'),
+                                  ),
+                                  PopupMenuItem<String>(
+                                    value: 'Complete',
+                                    child: Text('Complete'),
+                                  ),
+                                  PopupMenuItem<String>(
+                                    value: 'Return',
+                                    child: Text('Return'),
+                                  ),
+                                ];
+                              },
+                              onSelected: (String value) {
+                                // Handle menu item selection
+                                print('Selected: $value');
+                              },
+                            ),
+                          ),
                         ],
                       )
                     ],
@@ -327,6 +351,11 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                   child: PopupMenuButton<int>(
                                                     onSelected: (item) async {
                                                       if (item == 0) {
+                                                        Get.to(
+                                                            const EditPackageScreen(),
+                                                            arguments:
+                                                                forDisplay[
+                                                                    index]);
                                                       } else {
                                                         alertDialog();
                                                         removeItem(
@@ -384,7 +413,8 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                             title: 'Qty',
                                             size: 14.0,
                                             color: theme.black,
-                                            content: '1',
+                                            content:
+                                                forDisplay[index]['qty'] ?? '1',
                                             weight: FontWeight.w500),
                                       ],
                                     ),
@@ -395,8 +425,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                             title: 'Weight',
                                             size: 14.0,
                                             color: theme.black,
-                                            content:
-                                                "1 KG",
+                                            content: "1 KG",
                                             weight: FontWeight.w500),
                                         reUse.reUseColumnText(
                                             titleColor: theme.grey,
@@ -431,7 +460,9 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                   weight: FontWeight.w400,
                                                   size: 14.0,
                                                   color: theme.grey,
-                                                  content: forDisplay[index]['note'] ?? 'No note'),
+                                                  content: forDisplay[index]
+                                                          ['note'] ??
+                                                      'No note'),
                                             ),
                                           ),
                                         ],
@@ -576,6 +607,13 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
         ],
       ),
     ));
+  }
+
+  filterView(){
+
+
+
+
   }
 
   alertDialog() {
