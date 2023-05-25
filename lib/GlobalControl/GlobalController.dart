@@ -581,6 +581,55 @@ class GlobalController {
         .catchError(
             (error) => print("Failed to delete user's property: $error"));
   }
+  Future<void> editPackage(
+      {price,
+        data,
+        userName,
+        userPhoneNumber,
+        note,
+        packageID,
+        uid,
+        phoneNumber,
+        location,
+        qty,
+        tokenKey,
+        chatid}) async {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
+    position = await GeolocatorPlatform.instance.getCurrentPosition();
+    latitude = position.latitude;
+    longitude = position.longitude;
+    await packageRequest.child(auth.currentUser!.uid)
+    //.child(getUserID.toString())
+        .update({
+      "userName": userName,
+      "userPhoneNumber": userPhoneNumber,
+      "uLatitude": latitude.toString(),
+      "uLongitude": longitude.toString(),
+    }).then((value) async => packageRequest
+        .child(auth.currentUser!.uid)
+        .child('package')
+        .child(data[field.pushKey])
+        .update({
+      field.uid: auth.currentUser!.uid.toString(),
+      field.location: location.toString(),
+      field.pushKey: data[field.pushKey].toString(),
+      field.phoneNumber: phoneNumber.toString(),
+      field.token: tokenKey.toString(),
+      field.chatid: chatid.toString(),
+      field.latitude: latitude.toString(),
+      field.longitude: longitude.toString(),
+      field.date: formattedDate.toString(),
+      field.qty: qty.toString(),
+      field.packageID: packageID.toString(),
+      field.note: note.toString(),
+      field.status: 'request',
+      field.price: price.toString(),
+      field.recLatitude: latitude.toString(),
+      field.recLongitude: longitude.toString(),
+      field.senderPhone: await fetchUserData(fieldInfo.phoneNumber),
+    }));
+  }
 }
 
 class UserData {
