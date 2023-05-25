@@ -30,7 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   final glb = GlobalController();
-  UserData userData = UserData();
 
   @override
   void initState() {
