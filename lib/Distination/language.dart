@@ -1,5 +1,5 @@
 class ClsLanguage{
-  String totalPackage = 'កញ្ចប់សរុប';
+  String totalPackage = 'ទំនិញសរុប';
   String pending = 'កំពុងដំណើរការ';
   String complete = 'បញ្ចប់';
   String returns = 'ត្រឡប់';
