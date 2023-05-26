@@ -8,4 +8,5 @@ class ClsLanguage{
   String price = 'តំលៃទំនិញ';
   String qty = 'ចំនួន';
   String packageID = 'លេខទំនិញ';
+  String revenue = 'ទឹកប្រាក់ត្រូវសង';
 }
