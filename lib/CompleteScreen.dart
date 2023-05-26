@@ -193,10 +193,9 @@ class _CompleteScreenState extends State<CompleteScreen> {
                             if (results == null || results.isEmpty) {
                               results = completeList
                                   .where((user) => user['phoneNumber']
-                                  .toLowerCase()
-                                  .contains(search.text
-                                  .toString()
-                                  .toLowerCase()))
+                                      .toLowerCase()
+                                      .contains(
+                                          search.text.toString().toLowerCase()))
                                   .toList();
                             }
                             forDisplay = results;
@@ -235,176 +234,176 @@ class _CompleteScreenState extends State<CompleteScreen> {
               ],
             ),
           ),
-          Flexible(
-            child: Scrollbar(
-              thickness: 2,
-              child: ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: forDisplay.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      width: Get.width,
-                      margin: const EdgeInsets.all(6),
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: theme.liteGrey,
-                        borderRadius: BorderRadius.circular(6),
-                        boxShadow: [
-                          BoxShadow(
-                            color: theme.minGrey,
-                            blurRadius: 4,
-                            offset: const Offset(0, 0), // Shadow position
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              reUse.reUseText(
-                                  weight: FontWeight.w400,
-                                  size: 12.0,
-                                  color: theme.grey,
-                                  content: 'SHIPPING ID :'),
-                              Row(
-                                children: [
-                                  reUse.reUseText(
-                                      weight: FontWeight.bold,
-                                      size: 16.0,
-                                      color: theme.blue,
-                                      content: forDisplay[index]['packageID']),
-                                  // SizedBox(
-                                  //   height: 40,
-                                  //   width: 40,
-                                  //   child: PopupMenuButton<int>(
-                                  //     onSelected: (item) async {
-                                  //       if (item == 0) {
-                                  //       } else {}
-                                  //     },
-                                  //     itemBuilder: (context) => [
-                                  //       PopupMenuItem<int>(
-                                  //           value: 1,
-                                  //           child: Row(
-                                  //             mainAxisAlignment:
-                                  //                 MainAxisAlignment.spaceAround,
-                                  //             children: [
-                                  //               Icon(Icons
-                                  //                   .delete_forever_rounded),
-                                  //               Text('Delete'),
-                                  //             ],
-                                  //           )),
-                                  //     ],
-                                  //   ),
-                                  // ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(3.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                reUse.reUseText(
-                                    weight: FontWeight.bold,
-                                    size: 12.0,
-                                    color: theme.grey,
-                                    content: 'Location'),
-                                reUse.reUseText(
-                                    size: 12.0,
-                                    weight: FontWeight.bold,
-                                    color: theme.grey,
-                                    content: 'Phone number'),
-                                reUse.reUseText(
-                                    size: 12.0,
-                                    weight: FontWeight.bold,
-                                    color: theme.grey,
-                                    content: 'Qty'),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(3.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                reUse.reUseText(
-                                    size: 14.0,
-                                    color: theme.black,
-                                    content: forDisplay[index]['location'],
-                                    weight: FontWeight.w500),
-                                reUse.reUseText(
-                                    size: 14.0,
-                                    color: theme.black,
-                                    weight: FontWeight.w500,
-                                    content: forDisplay[index]['phoneNumber']),
-                                reUse.reUseText(
-                                    size: 14.0,
-                                    color: theme.black,
-                                    content: '1',
-                                    weight: FontWeight.w500),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(3.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                reUse.reUseText(
-                                    size: 14.0,
-                                    color: theme.black,
-                                    content: forDisplay[index]['location'],
-                                    weight: FontWeight.w500),
-                                reUse.reUseText(
-                                    size: 14.0,
-                                    color: theme.black,
-                                    weight: FontWeight.w500,
-                                    content: forDisplay[index]['driverUID']),
-
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: Divider(
-                              height: 1,
-                              color: theme.grey,
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              reUse.reUseText(
-                                  size: 12.0,
-                                  weight: FontWeight.bold,
-                                  color: theme.grey,
-                                  content: 'Status'),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: theme.litestGreen,
-                                  borderRadius: BorderRadius.circular(6),
+          forDisplay == []
+              ? Flexible(
+                  child: Scrollbar(
+                    thickness: 2,
+                    child: ListView.builder(
+                        padding: const EdgeInsets.all(8),
+                        itemCount: forDisplay.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Container(
+                            width: Get.width,
+                            margin: const EdgeInsets.all(6),
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: theme.liteGrey,
+                              borderRadius: BorderRadius.circular(6),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: theme.minGrey,
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 0), // Shadow position
                                 ),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 4),
-                                child: reUse.reUseText(
-                                    size: 10.0,
-                                    color: theme.liteGreen,
-                                    content: forDisplay[index]['status']
-                                        .toString()
-                                        .toUpperCase(),
-                                    weight: FontWeight.w900),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
-            ),
-          ),
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    reUse.reUseText(
+                                        weight: FontWeight.w400,
+                                        size: 12.0,
+                                        color: theme.grey,
+                                        content: 'SHIPPING ID :'),
+                                    Row(
+                                      children: [
+                                        reUse.reUseText(
+                                            weight: FontWeight.bold,
+                                            size: 16.0,
+                                            color: theme.blue,
+                                            content: forDisplay[index]
+                                                ['packageID']),
+                                        // SizedBox(
+                                        //   height: 40,
+                                        //   width: 40,
+                                        //   child: PopupMenuButton<int>(
+                                        //     onSelected: (item) async {
+                                        //       if (item == 0) {
+                                        //       } else {}
+                                        //     },
+                                        //     itemBuilder: (context) => [
+                                        //       PopupMenuItem<int>(
+                                        //           value: 1,
+                                        //           child: Row(
+                                        //             mainAxisAlignment:
+                                        //                 MainAxisAlignment.spaceAround,
+                                        //             children: [
+                                        //               Icon(Icons
+                                        //                   .delete_forever_rounded),
+                                        //               Text('Delete'),
+                                        //             ],
+                                        //           )),
+                                        //     ],
+                                        //   ),
+                                        // ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      reUse.reUseText(
+                                          weight: FontWeight.bold,
+                                          size: 12.0,
+                                          color: theme.grey,
+                                          content: 'Location'),
+                                      reUse.reUseText(
+                                          size: 12.0,
+                                          weight: FontWeight.bold,
+                                          color: theme.grey,
+                                          content: 'Phone number'),
+                                      reUse.reUseText(
+                                          size: 12.0,
+                                          weight: FontWeight.bold,
+                                          color: theme.grey,
+                                          content: 'Qty'),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      reUse.reUseText(
+                                          size: 14.0,
+                                          color: theme.black,
+                                          content: forDisplay[index]
+                                              ['location'],
+                                          weight: FontWeight.w500),
+                                      reUse.reUseText(
+                                          size: 14.0,
+                                          color: theme.black,
+                                          weight: FontWeight.w500,
+                                          content: forDisplay[index]
+                                              ['phoneNumber']),
+                                      reUse.reUseText(
+                                          size: 14.0,
+                                          color: theme.black,
+                                          content: '1',
+                                          weight: FontWeight.w500),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(6.0),
+                                  child: Divider(
+                                    height: 1,
+                                    color: theme.grey,
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    reUse.reUseText(
+                                        size: 12.0,
+                                        weight: FontWeight.bold,
+                                        color: theme.grey,
+                                        content: 'Status'),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: theme.litestGreen,
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 4),
+                                      child: reUse.reUseText(
+                                          size: 10.0,
+                                          color: theme.liteGreen,
+                                          content: forDisplay[index]['status']
+                                              .toString()
+                                              .toUpperCase(),
+                                          weight: FontWeight.w900),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
+                  ),
+                )
+              : Expanded(child: Center(child: Column(
+                children: [
+                  Image.asset(
+                    'assets/images/check.png',
+                    height: 30,
+                    width: 30,
+                    color:   theme.liteGreen,
+                  ),
+                  reUse.reUseText(content: "No Data"),
+                ],
+              ))),
         ],
       ),
     ));
