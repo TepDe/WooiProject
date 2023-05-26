@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/LoginScreen.dart';
@@ -118,6 +119,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   final token = TextEditingController();
   final chatid = TextEditingController();
+  final clsLan = ClsLanguage();
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +174,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     Row(
                       children: [
                         Flexible(
-                          child: reUse.reUseBoxText(value: '12',title: 'Payback'),
+                          child: reUse.reUseBoxText(value: '12',title: clsLan.revenue),
                         ),
                         Flexible(
                           child: reUse.reUseBoxText(value: '10',title: 'Earning'),
