@@ -393,22 +393,19 @@ class _ReturnScreenState extends State<ReturnScreen> {
   final fieldInfo = FieldInfo();
   DatabaseReference packageRequest =
   FirebaseDatabase.instance.ref("PackageRequest");
+  DatabaseReference userReturn =
+  FirebaseDatabase.instance.ref("Return");
+  DatabaseReference driverReturn =
+  FirebaseDatabase.instance.ref("DriverReturn");
   optionSelect({opt, data}) async {
     if (opt == 0) {
       await fetchUserInformation();
-      await glb.createPackage(
-          userName: userName,
-          uid: data[field.uid],
-          userPhoneNumber: phoneNumber,
-          tokenKey: data[field.token],
-          chatid: data[field.chatid],
-          price: data[field.price],
-          note: data[field.note],
-          packageID: data[field.packageID],
-          qty: data[field.qty],
-          phoneNumber: data[field.phoneNumber],
-          location: data[field.location]);
-      glb.deletePackage(witchDataBase: packageRequest,data:data);
+      await glb.backToReturn(data: data);
+      // await glb.deletePackage(witchDataBase: packageRequest,data:data);
+      await glb.deleteFromDriver(data: data,witchDataBase: driverReturn);
+      await glb.deleteFromReturn(data: data,witchDataBase: userReturn);
+
+    }else{
 
     }
   }
