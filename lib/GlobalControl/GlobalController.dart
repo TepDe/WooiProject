@@ -78,7 +78,7 @@ class GlobalController {
   }
 
   Future<String> fetchUserData(whichField) async {
-    String whichOfField='';
+    String whichOfField = '';
     await FirebaseFirestore.instance
         .collection('Users')
         .doc(auth.currentUser!.uid.toString())
@@ -307,7 +307,8 @@ class GlobalController {
       location,
       qty,
       tokenKey,
-      chatid,data}) async {
+      chatid,
+      data}) async {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
     position = await GeolocatorPlatform.instance.getCurrentPosition();
@@ -315,7 +316,8 @@ class GlobalController {
     longitude = position.longitude;
 
     String pushKey = generatePushKey();
-    await packageRequest.child(auth.currentUser!.uid)
+    await packageRequest
+        .child(auth.currentUser!.uid)
         //.child(getUserID.toString())
         .update({
       "userName": userName,
@@ -505,12 +507,28 @@ class GlobalController {
     }).catchError((error) => print("Failed to add user: $error"));
   }
 
-  deletePackage({witchDataBase ,data ,witchUID,witchPushKey}) async {
+  deletePackage({witchDataBase, data, witchUID, witchPushKey}) async {
     await witchDataBase
         .child(auth.currentUser!.uid)
         .child('package')
-        .child(data)
+        .child(witchPushKey)
         .remove();
+  }
+  deleteFromDriver({witchDataBase, data, witchUID, witchPushKey}) async {
+    await witchDataBase
+        .child(data[field.driverUID])
+        .child(data[field.pushKey])
+        .remove();
+  }
+  deleteFromReturn({witchDataBase, data, witchUID, witchPushKey}) async {
+    await witchDataBase
+        .child(data[field.uid])
+        .child(data[field.pushKey])
+        .remove();
+  }
+
+  deleteUserPackage({witchDataBase, data, witchUID, witchPushKey}) async {
+    await witchDataBase.child(data[field.driverUID]);
   }
 
   storeSetUpAccount({phoneNumber, firstname, lastname}) async {
@@ -525,61 +543,97 @@ class GlobalController {
         .catchError(
             (error) => print("Failed to delete user's property: $error"));
   }
+
   Future<void> editPackage(
       {price,
-        data,
-        userName,
-        userPhoneNumber,
-        note,
-        packageID,
-        uid,
-        phoneNumber,
-        location,
-        qty,
-        tokenKey,
-        chatid}) async {
+      data,
+      userName,
+      userPhoneNumber,
+      note,
+      packageID,
+      uid,
+      phoneNumber,
+      location,
+      qty,
+      tokenKey,
+      chatid}) async {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
     position = await GeolocatorPlatform.instance.getCurrentPosition();
     latitude = position.latitude;
     longitude = position.longitude;
-    await packageRequest.child(auth.currentUser!.uid)
-    //.child(getUserID.toString())
+    await packageRequest
+        .child(auth.currentUser!.uid)
+        //.child(getUserID.toString())
         .update({
       "userName": userName,
       "userPhoneNumber": userPhoneNumber,
       "uLatitude": latitude.toString(),
       "uLongitude": longitude.toString(),
     }).then((value) async => packageRequest
+                .child(auth.currentUser!.uid)
+                .child('package')
+                .child(data[field.pushKey])
+                .update({
+              field.uid: auth.currentUser!.uid.toString(),
+              field.location: location.toString(),
+              field.pushKey: data[field.pushKey].toString(),
+              field.phoneNumber: phoneNumber.toString(),
+              field.token: tokenKey.toString(),
+              field.chatid: chatid.toString(),
+              field.latitude: latitude.toString(),
+              field.longitude: longitude.toString(),
+              field.date: formattedDate.toString(),
+              field.qty: qty.toString(),
+              field.packageID: packageID.toString(),
+              field.note: note.toString(),
+              field.status: 'request',
+              field.price: price.toString(),
+              field.recLatitude: latitude.toString(),
+              field.recLongitude: longitude.toString(),
+              field.senderPhone: await fetchUserData(fieldInfo.phoneNumber),
+            }));
+  }
+
+  updateStatus({uid, key, status}) async {
+    await packageRequest
+        .child(uid)
+        .child('package')
+        .child(key)
+        .update({'status': status, field.packageID: auth.currentUser!.uid});
+  }
+
+  Future<void> backToReturn({data}) async {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
+    position = await GeolocatorPlatform.instance.getCurrentPosition();
+    latitude = position.latitude;
+    longitude = position.longitude;
+    await packageRequest
         .child(auth.currentUser!.uid)
         .child('package')
         .child(data[field.pushKey])
         .update({
-      field.uid: auth.currentUser!.uid.toString(),
-      field.location: location.toString(),
-      field.pushKey: data[field.pushKey].toString(),
-      field.phoneNumber: phoneNumber.toString(),
-      field.token: tokenKey.toString(),
-      field.chatid: chatid.toString(),
-      field.latitude: latitude.toString(),
-      field.longitude: longitude.toString(),
-      field.date: formattedDate.toString(),
-      field.qty: qty.toString(),
-      field.packageID: packageID.toString(),
-      field.note: note.toString(),
+      field.uid: data[field.uid],
+      field.location: data[field.location],
+      field.pushKey: data[field.pushKey],
+      field.phoneNumber: data[field.phoneNumber],
+      field.token: data[field.token],
+      field.chatid: data[field.chatid],
+      field.latitude: latitude,
+      field.longitude: longitude,
+      field.date: formattedDate,
+      field.qty: data[field.qty],
+      field.packageID: data[field.packageID],
+      field.note: data[field.note],
       field.status: 'request',
-      field.price: price.toString(),
-      field.recLatitude: latitude.toString(),
-      field.recLongitude: longitude.toString(),
-      field.senderPhone: await fetchUserData(fieldInfo.phoneNumber),
-    }));
-  }
-
-  updateStatus({uid, key, status}) async {
-    await packageRequest.child(uid).child('package').child(key).update({
-      'status': status,
-      field.packageID : auth.currentUser!.uid
+      field.price: data[field.price],
+      field.recLatitude: data[field.recLatitude],
+      field.recLongitude: data[field.recLongitude],
+      field.senderPhone: data[field.senderPhone],
+      field.driverUID: data[field.driverUID],
+      field.dLastName: data[field.dLastName],
+      field.dFirstName: data[field.dFirstName],
     });
   }
 }
-
