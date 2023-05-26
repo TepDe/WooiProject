@@ -19,6 +19,8 @@ class FieldData {
   String dFirstName = "dFirstname";
   String dPhone = "dPhoneNumber";
   String senderPhone = "senderPhone";
+  String driverUID = "driverUID";
+  String ABACode = "ABACode";
 }
 
 
@@ -46,5 +48,6 @@ class FieldInfo {
   String recLongitude = "recLongitude";
   String returnDate = "returnDate";
   String returnNote = "returnNote";
+  String ABACode = "ABACode";
 }
 
