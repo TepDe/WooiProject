@@ -4,6 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
@@ -85,7 +86,7 @@ class _ReturnScreenState extends State<ReturnScreen> {
                           color: theme.black,
                         ),
                         label: Text(
-                          'Return',
+                          clsLan.returns,
                           style: TextStyle(
                               fontSize: 18,
                               color: theme.black,
@@ -107,10 +108,10 @@ class _ReturnScreenState extends State<ReturnScreen> {
                           controller: search,
                           decoration: InputDecoration(
                             filled: true,
-                            hintStyle: const TextStyle(fontSize: 12),
+                            hintStyle: const TextStyle(fontSize: 16),
 
                             fillColor: theme.midGrey,
-                            hintText: 'Search ID or Phone number',
+                            hintText: clsLan.searchIDorPhoneNumber,
                             border: OutlineInputBorder(
                               // borderSide:
                               //      BorderSide(color:theme.minGrey ,width: 0.0),
@@ -186,7 +187,9 @@ class _ReturnScreenState extends State<ReturnScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
-                      reUse.reUseText(content: 'Total : ${forDisplay.length}'),
+                      reUse.reUseText(
+                        size: 14.0,
+                          content: '${clsLan.totalPackage} : ${forDisplay.length}'),
                       const Flexible(child: Divider()),
                       // Container(
                       //   decoration: BoxDecoration(
@@ -242,9 +245,9 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                 children: [
                                   reUse.reUseText(
                                       weight: FontWeight.w400,
-                                      size: 12.0,
+                                      size: 16.0,
                                       color: theme.grey,
-                                      content: 'SHIPPING ID :'),
+                                      content: '${clsLan.packageID} :'),
                                   Row(
                                     children: [
                                       reUse.reUseText(
@@ -294,22 +297,25 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                   //     weight: FontWeight.w500),
                                   reUse.reUseColumnText(
                                       titleColor: theme.grey,
-                                      title: 'Destination',
+                                      title: clsLan.receiverLocation,
                                       size: 14.0,
+                                      lableSize: 14,
                                       color: theme.black,
                                       content: forDisplay[index]['location'],
                                       weight: FontWeight.w500),
                                   reUse.reUseColumnText(
+                                      lableSize: 14,
                                       titleColor: theme.grey,
-                                      title: 'Phone number',
+                                      title: clsLan.receiverPhoneNumber,
                                       size: 14.0,
                                       color: theme.black,
                                       content: forDisplay[index]['phoneNumber'],
                                       weight: FontWeight.w500),
                                   reUse.reUseColumnText(
                                       titleColor: theme.grey,
-                                      title: 'Qty',
+                                      title: clsLan.qty,
                                       size: 14.0,
+                                      lableSize: 14,
                                       color: theme.black,
                                       content: '1',
                                       weight: FontWeight.w500),
@@ -319,17 +325,31 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                 padding: const EdgeInsets.all(3.0),
                                 child: Row(
                                   children: [
-                                    reUse.reUseText(
-                                        weight: FontWeight.bold,
-                                        size: 12.0,
-                                        color: theme.darkGrey,
-                                        content: 'Price : '),
-                                    reUse.reUseText(
-                                        weight: FontWeight.bold,
-                                        size: 12.0,
-                                        color: theme.blue,
+                                    reUse.reUseColumnText(
+                                        lableSize: 14,
+                                        titleColor: theme.grey,
+                                        title: '',
+                                        size: 16.0,
+                                        color: theme.black,
+                                        content: '',
+                                        weight: FontWeight.w500),
+                                    reUse.reUseColumnText(
+                                        lableSize: 14,
+                                        titleColor: theme.grey,
+                                        title: '',
+                                        size: 16.0,
+                                        color: theme.black,
+                                        content: '',
+                                        weight: FontWeight.w500),
+                                    reUse.reUseColumnText(
+                                        lableSize: 14,
+                                        titleColor: theme.grey,
+                                        title: clsLan.price,
+                                        size: 16.0,
+                                        color: theme.black,
                                         content: forDisplay[index]['price'] ??
-                                            "No price"),
+                                            "No price",
+                                        weight: FontWeight.w500),
                                   ],
                                 ),
                               ),
@@ -337,10 +357,10 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   reUse.reUseText(
-                                      weight: FontWeight.bold,
-                                      size: 12.0,
-                                      color: theme.darkGrey,
-                                      content: 'Note :'),
+                                      weight: FontWeight.w500,
+                                      size: 14.0,
+                                      color: theme.grey,
+                                      content: '${clsLan.note} : '),
                                   Flexible(
                                     child: Container(
                                       width: Get.width,
@@ -352,7 +372,7 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                       child: reUse.reUseTextNote(
                                           weight: FontWeight.w400,
                                           size: 14.0,
-                                          color: theme.grey,
+                                          color: theme.black,
                                           content: forDisplay[index]['note'] ??
                                               "No reason"),
                                     ),
@@ -360,16 +380,55 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                 ],
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  reUse.reUseText(
-                                      weight: FontWeight.w400,
-                                      size: 12.0,
-                                      color: theme.darkGrey,
-                                      content: 'Return Time : '),
                                   reUse.reUseText(
                                       weight: FontWeight.bold,
                                       size: 14.0,
+                                      color: theme.grey,
+                                      content: '${clsLan.createDate} : '),
+                                  reUse.reUseText(
+                                      weight: FontWeight.bold,
+                                      size: 16.0,
+                                      color: theme.darkGrey,
+                                      content: forDisplay[index]['date']),
+                                ],
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  reUse.reUseText(
+                                      weight: FontWeight.bold,
+                                      size: 14.0,
+                                      color: theme.grey,
+                                      content: '${clsLan.returnReason} : '),
+                                  Flexible(
+                                    child: Container(
+                                      width: Get.width,
+                                      margin: const EdgeInsets.all(8.0),
+                                      padding: const EdgeInsets.all(8.0),
+                                      decoration: BoxDecoration(
+                                          border:
+                                              Border.all(color: theme.grey)),
+                                      child: reUse.reUseTextNote(
+                                          weight: FontWeight.w400,
+                                          size: 16.0,
+                                          color: theme.black,
+                                          content: forDisplay[index]['returnNote'] ??
+                                              "No reason"),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  reUse.reUseText(
+                                      weight: FontWeight.bold,
+                                      size: 14.0,
+                                      color: theme.grey,
+                                      content: '${clsLan.returnTime} : '),
+                                  reUse.reUseText(
+                                      weight: FontWeight.bold,
+                                      size: 16.0,
                                       color: theme.darkGrey,
                                       content: forDisplay[index]['date']),
                                 ],
@@ -389,25 +448,23 @@ class _ReturnScreenState extends State<ReturnScreen> {
     ));
   }
 
+  final clsLan = ClsLanguage();
   final field = FieldData();
   final fieldInfo = FieldInfo();
   DatabaseReference packageRequest =
-  FirebaseDatabase.instance.ref("PackageRequest");
-  DatabaseReference userReturn =
-  FirebaseDatabase.instance.ref("Return");
+      FirebaseDatabase.instance.ref("PackageRequest");
+  DatabaseReference userReturn = FirebaseDatabase.instance.ref("Return");
   DatabaseReference driverReturn =
-  FirebaseDatabase.instance.ref("DriverReturn");
+      FirebaseDatabase.instance.ref("DriverReturn");
+
   optionSelect({opt, data}) async {
     if (opt == 0) {
       await fetchUserInformation();
       await glb.backToReturn(data: data);
       // await glb.deletePackage(witchDataBase: packageRequest,data:data);
-      await glb.deleteFromDriver(data: data,witchDataBase: driverReturn);
-      await glb.deleteFromReturn(data: data,witchDataBase: userReturn);
-
-    }else{
-
-    }
+      await glb.deleteFromDriver(data: data, witchDataBase: driverReturn);
+      await glb.deleteFromReturn(data: data, witchDataBase: userReturn);
+    } else {}
   }
 
   String userName = "";
