@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/EditPackageScreen.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
@@ -26,6 +27,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
   List forDisplay = [];
   FirebaseAuth auth = FirebaseAuth.instance;
   bool isShow = false;
+  final clsLan = ClsLanguage();
 
   // totalListLength() async {
   //   DatabaseReference refs = FirebaseDatabase.instance
@@ -53,8 +55,10 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
     keyList = argumentData[1]['key'];
     totalListLength();
   }
+
   final field = FieldData();
   final fieldInfo = FieldInfo();
+
   totalListLength() async {
     try {
       DatabaseReference refs = FirebaseDatabase.instance
@@ -146,11 +150,11 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                     color: theme.black,
                                   )),
                             ),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 18.0),
+                             Padding(
+                              padding: const EdgeInsets.only(left: 18.0),
                               child: Text(
-                                'Package',
-                                style: TextStyle(
+                                clsLan.totalPackage,
+                                style: const TextStyle(
                                     fontSize: 18,
                                     // color: titleColor,
                                     fontWeight: FontWeight.bold),
@@ -176,9 +180,9 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                 controller: search,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  hintStyle: const TextStyle(fontSize: 12),
+                                  hintStyle: const TextStyle(fontSize: 16),
                                   fillColor: theme.midGrey,
-                                  hintText: 'Search ID or Phone number',
+                                  hintText: clsLan.searchIDorPhoneNumber,
                                   border: OutlineInputBorder(
                                     // borderSide:
                                     //      BorderSide(color:theme.minGrey ,width: 0.0),
@@ -245,7 +249,8 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                       Row(
                         children: [
                           reUse.reUseText(
-                              content: 'Total : ${forDisplay.length}'),
+                            size: 14.0,
+                              content: '${clsLan.totalPackage} : ${forDisplay.length}'),
                           const Flexible(child: Divider()),
                           Container(
                             decoration: BoxDecoration(
@@ -259,19 +264,19 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                               ),
                               itemBuilder: (BuildContext context) {
                                 return [
-                                  PopupMenuItem<String>(
+                                  const PopupMenuItem<String>(
                                     value: 'Request',
                                     child: Text('Request'),
                                   ),
-                                  PopupMenuItem<String>(
+                                  const PopupMenuItem<String>(
                                     value: 'Pending',
                                     child: Text('Pending'),
                                   ),
-                                  PopupMenuItem<String>(
+                                  const PopupMenuItem<String>(
                                     value: 'Complete',
                                     child: Text('Complete'),
                                   ),
-                                  PopupMenuItem<String>(
+                                  const PopupMenuItem<String>(
                                     value: 'Return',
                                     child: Text('Return'),
                                   ),
@@ -333,7 +338,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                               weight: FontWeight.w400,
                                               size: 12.0,
                                               color: theme.grey,
-                                              content: 'SHIPPING ID :'),
+                                              content: clsLan.packageID),
                                           Row(
                                             children: [
                                               reUse.reUseText(
@@ -396,25 +401,28 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                       children: [
                                         reUse.reUseColumnText(
                                             titleColor: theme.grey,
-                                            title: 'Destination',
-                                            size: 14.0,
+                                            title: clsLan.receiverLocation,
+                                            size: 16.0,
                                             color: theme.black,
+                                            lableSize: 12,
                                             content: forDisplay[index]
                                                 ['location'],
                                             weight: FontWeight.w500),
                                         reUse.reUseColumnText(
                                             titleColor: theme.grey,
-                                            title: 'Phone number',
-                                            size: 14.0,
+                                            title: clsLan.receiverPhoneNumber,
+                                            size: 16.0,
                                             color: theme.black,
+                                            lableSize: 12,
                                             content: forDisplay[index]
                                                 ['phoneNumber'],
                                             weight: FontWeight.w500),
                                         reUse.reUseColumnText(
                                             titleColor: theme.grey,
-                                            title: 'Qty',
-                                            size: 14.0,
+                                            title: clsLan.qty,
+                                            size: 16.0,
                                             color: theme.black,
+                                            lableSize: 12,
                                             content:
                                                 forDisplay[index]['qty'] ?? '1',
                                             weight: FontWeight.w500),
@@ -424,15 +432,23 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                       children: [
                                         reUse.reUseColumnText(
                                             titleColor: theme.grey,
-                                            title: 'Weight',
+                                            title: ' ',
                                             size: 14.0,
-                                            color: theme.black,
+                                            color: Colors.transparent,
                                             content: "1 KG",
                                             weight: FontWeight.w500),
                                         reUse.reUseColumnText(
                                             titleColor: theme.grey,
-                                            title: 'Price',
+                                            title: ' ',
                                             size: 14.0,
+                                            color: Colors.transparent,
+                                            content: "1 KG",
+                                            weight: FontWeight.w500),
+                                        reUse.reUseColumnText(
+                                            lableSize: 14,
+                                            titleColor: theme.grey,
+                                            title: clsLan.price,
+                                            size: 16.0,
                                             color: theme.black,
                                             content:
                                                 "${forDisplay[index]['price']} \$",
@@ -449,7 +465,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                 weight: FontWeight.bold,
                                                 size: 12.0,
                                                 color: theme.darkGrey,
-                                                content: 'Note :'),
+                                                content: '${clsLan.note} :'),
                                           ),
                                           Flexible(
                                             child: Container(
@@ -461,7 +477,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                               child: reUse.reUseTextNote(
                                                   weight: FontWeight.w400,
                                                   size: 14.0,
-                                                  color: theme.grey,
+                                                  color: theme.black,
                                                   content: forDisplay[index]
                                                           ['note'] ??
                                                       'No note'),
@@ -482,10 +498,10 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                   weight: FontWeight.w400,
                                                   size: 12.0,
                                                   color: theme.grey,
-                                                  content: 'Date : '),
+                                                  content: '${clsLan.createDate} : '),
                                               reUse.reUseText(
                                                   weight: FontWeight.w400,
-                                                  size: 12.0,
+                                                  size: 14.0,
                                                   color: theme.black,
                                                   content: forDisplay[index]
                                                       ['date']),
@@ -507,10 +523,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                   weight: FontWeight.bold,
                                                   size: 10.0,
                                                   color: theme.orange,
-                                                  content: forDisplay[index]
-                                                          ['status']
-                                                      .toString()
-                                                      .toUpperCase()),
+                                                  content: clsLan.stPend),
                                             )
                                           else if (forDisplay[index]
                                                   ['status'] ==
@@ -527,12 +540,9 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                       vertical: 4),
                                               child: reUse.reUseText(
                                                   weight: FontWeight.bold,
-                                                  size: 10.0,
-                                                  color: theme.liteGreen,
-                                                  content: forDisplay[index]
-                                                          ['status']
-                                                      .toString()
-                                                      .toUpperCase()),
+                                                  size: 12.0,
+                                                  color: theme.green,
+                                                  content: clsLan.stCom),
                                             )
                                           else if (forDisplay[index]
                                                   ['status'] ==
@@ -549,12 +559,9 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                       vertical: 4),
                                               child: reUse.reUseText(
                                                   weight: FontWeight.bold,
-                                                  size: 10.0,
+                                                  size: 12.0,
                                                   color: theme.liteRed,
-                                                  content: forDisplay[index]
-                                                          ['status']
-                                                      .toString()
-                                                      .toUpperCase()),
+                                                  content: clsLan.stReturn),
                                             )
                                           else
                                             Container(
@@ -569,12 +576,9 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                       vertical: 4),
                                               child: reUse.reUseText(
                                                   weight: FontWeight.bold,
-                                                  size: 10.0,
+                                                  size: 12.0,
                                                   color: theme.dirt,
-                                                  content: forDisplay[index]
-                                                          ['status']
-                                                      .toString()
-                                                      .toUpperCase()),
+                                                  content: clsLan.stReq),
                                             )
                                         ],
                                       ),
@@ -611,12 +615,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
     ));
   }
 
-  filterView(){
-
-
-
-
-  }
+  filterView() {}
 
   alertDialog() {
     return showDialog(
