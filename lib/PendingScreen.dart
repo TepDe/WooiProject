@@ -3,8 +3,10 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
+import 'package:wooiproject/ViewScreen.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
@@ -66,16 +68,11 @@ class _PendingScreenState extends State<PendingScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: const BoxDecoration(
-                //color: headercolor,
-                //borderRadius: BorderRadius.circular(6),
-                // boxShadow: [
-                //   BoxShadow(
-                //     color: theme.grey,
-                //     blurRadius: 4,
-                //     offset: Offset(0, 1), // Shadow position
-                //   ),
-                // ],
-                ),
+              image: DecorationImage(
+                image: AssetImage("assets/images/PendingHeadUser.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
             child: Column(
               children: [
                 Container(
@@ -104,16 +101,16 @@ class _PendingScreenState extends State<PendingScreen> {
                             },
                             icon: Icon(
                               Icons.arrow_back_ios_new_outlined,
-                              color: theme.black,
+                              color: theme.orange,
                             )),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 18.0),
+                        padding: const EdgeInsets.only(left: 18.0),
                         child: Text(
                           'Pending',
                           style: TextStyle(
                               fontSize: 18,
-                              //color: titleColor,
+                              color: theme.orange,
                               fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -137,10 +134,10 @@ class _PendingScreenState extends State<PendingScreen> {
                           controller: searchController,
                           decoration: InputDecoration(
                             filled: true,
-                            hintStyle: const TextStyle(fontSize: 12),
+                            hintStyle: const TextStyle(fontSize: 14),
 
-                            fillColor: theme.midGrey,
-                            hintText: 'Search ID or Phone number',
+                            fillColor: theme.white,
+                            hintText: clsLan.searchIDorPhoneNumber,
                             border: OutlineInputBorder(
                               // borderSide:
                               //      BorderSide(color:theme.minGrey ,width: 0.0),
@@ -177,7 +174,7 @@ class _PendingScreenState extends State<PendingScreen> {
                     ),
                     Container(
                       decoration: BoxDecoration(
-                        color: theme.liteBlue,
+                        color: theme.litestOrange,
                         borderRadius: BorderRadius.circular(6),
                         boxShadow: [
                           BoxShadow(
@@ -212,38 +209,12 @@ class _PendingScreenState extends State<PendingScreen> {
                           },
                           icon: Icon(
                             Icons.search,
-                            color: theme.blue,
+                            color: theme.deepOrange,
                           )),
                     )
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(padding),
-                        child: reUse.reUseText(
-                            content: 'Total : ${forDisplay.length}'),
-                      ),
 
-                      const Flexible(child: Divider()),
-                      // Container(
-                      //   decoration: BoxDecoration(
-                      //     color: theme.litestOrange,
-                      //     borderRadius: BorderRadius.circular(6),
-                      //   ),
-                      //   child: IconButton(
-                      //       splashRadius: 20,
-                      //       onPressed: () {},
-                      //       icon: Icon(
-                      //         Icons.filter_alt_outlined,
-                      //         color: theme.orange,
-                      //       )),
-                      // )
-                    ],
-                  ),
-                )
               ],
             ),
           ),
@@ -258,6 +229,33 @@ class _PendingScreenState extends State<PendingScreen> {
           //           ],
           //         ))
           //     : reUse.reUsePendingList(pkc: pendingList),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(padding),
+                  child: reUse.reUseText(
+                      content: 'Total : ${forDisplay.length}'),
+                ),
+
+                const Flexible(child: Divider()),
+                // Container(
+                //   decoration: BoxDecoration(
+                //     color: theme.litestOrange,
+                //     borderRadius: BorderRadius.circular(6),
+                //   ),
+                //   child: IconButton(
+                //       splashRadius: 20,
+                //       onPressed: () {},
+                //       icon: Icon(
+                //         Icons.filter_alt_outlined,
+                //         color: theme.orange,
+                //       )),
+                // )
+              ],
+            ),
+          ),
           Flexible(
             child: SingleChildScrollView(
               child: Column(
@@ -290,14 +288,14 @@ class _PendingScreenState extends State<PendingScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.only(top: 6, bottom: 6),
+                                  padding: const EdgeInsets.only(top: 6, bottom: 6),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       reUse.reUseText(
-                                          weight: FontWeight.w400,
-                                          size: 12.0,
+                                          weight: FontWeight.bold,
+                                          size: 14.0,
                                           color: theme.grey,
                                           content: 'SHIPPING ID :'),
                                       reUse.reUseText(
@@ -313,19 +311,22 @@ class _PendingScreenState extends State<PendingScreen> {
                                 Padding(
                                   padding: EdgeInsets.all(padding),
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       reUse.reUseColumnText(
                                           titleColor: theme.grey,
                                           title: 'Location',
+                                          lableSize: 12,
                                           size: 14.0,
                                           color: theme.black,
                                           content: forDisplay[index]
                                               ['location'],
                                           weight: FontWeight.w500),
                                       reUse.reUseColumnText(
+                                          lableSize: 12,
                                           titleColor: theme.grey,
                                           title: 'Phone Number',
                                           size: 14.0,
@@ -334,6 +335,7 @@ class _PendingScreenState extends State<PendingScreen> {
                                               ['phoneNumber'],
                                           weight: FontWeight.w500),
                                       reUse.reUseColumnText(
+                                          lableSize: 12,
                                           titleColor: theme.grey,
                                           title: 'Qty',
                                           size: 14.0,
@@ -344,16 +346,17 @@ class _PendingScreenState extends State<PendingScreen> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(top:6),
+                                  padding: const EdgeInsets.only(top: 6),
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       reUse.reUseColumnText(
+                                          lableSize: 12,
                                           titleColor: theme.grey,
                                           title: 'Assign by : ',
-                                          lableSize: 12,
                                           size: 0.0,
                                           color: theme.black,
                                           content: '',
@@ -369,6 +372,7 @@ class _PendingScreenState extends State<PendingScreen> {
                                       //             [field.dFirstName],
                                       //     weight: FontWeight.w500),
                                       reUse.reUseColumnText(
+                                          lableSize: 12,
                                           titleColor: theme.grey,
                                           title: 'Phone Number',
                                           size: 14.0,
@@ -377,20 +381,20 @@ class _PendingScreenState extends State<PendingScreen> {
                                               [field.dPhone],
                                           weight: FontWeight.w500),
                                       reUse.reUseColumnText(
+                                          lableSize: 12,
                                           titleColor: theme.grey,
                                           title: 'Driver Name',
                                           size: 14.0,
                                           color: theme.black,
                                           content: forDisplay[index]
-                                          [field.dLastName] +
+                                                  [field.dLastName] +
                                               ' ' +
                                               forDisplay[index]
-                                              [field.dFirstName],
+                                                  [field.dFirstName],
                                           weight: FontWeight.w500),
                                     ],
                                   ),
                                 ),
-                                Divider(color: theme.grey, height: 11),
                                 Padding(
                                   padding: EdgeInsets.all(padding),
                                   child: Row(
@@ -398,10 +402,10 @@ class _PendingScreenState extends State<PendingScreen> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       reUse.reUseText(
-                                          size: 12.0,
+                                          size: 14.0,
                                           weight: FontWeight.bold,
                                           color: theme.grey,
-                                          content: 'Status'),
+                                          content: clsLan.status),
                                       Container(
                                         decoration: BoxDecoration(
                                           color: theme.litestOrange,
@@ -412,11 +416,9 @@ class _PendingScreenState extends State<PendingScreen> {
                                             horizontal: 10, vertical: 4),
                                         child: reUse.reUseText(
                                             weight: FontWeight.bold,
-                                            size: 10.0,
+                                            size: 12.0,
                                             color: theme.orange,
-                                            content: 'PENDING'
-                                                .toString()
-                                                .toUpperCase()),
+                                            content: clsLan.stPend),
                                       ),
                                     ],
                                   ),
@@ -434,4 +436,6 @@ class _PendingScreenState extends State<PendingScreen> {
       ),
     ));
   }
+
+  final clsLan = ClsLanguage();
 }
