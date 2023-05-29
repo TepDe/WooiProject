@@ -21,12 +21,13 @@ class ThemesApp{
   var liteGreen = const Color(0xff00cc71);
   var darkGrey = const Color(0xff616161);
   var liteGrey = const Color(0xfff8f8f8);
-  var dirt = const Color(0xffe6bf83);
+  var dirt = const Color(0xfffae5d3);
   var white = const Color(0xffffffff);
   var liteBlue = const Color(0xffaed6f1);
   var blue = const Color(0xff1974d2);
   var hiLiteBlue = const Color(0xff306eff);
   var btnBlue = const Color(0xff1589ff);
+  var deepPumpkin = const Color(0xffe67e22);
 
 
 }
