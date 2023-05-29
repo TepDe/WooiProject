@@ -591,7 +591,7 @@ class GlobalController {
               field.price: price.toString(),
               field.recLatitude: latitude.toString(),
               field.recLongitude: longitude.toString(),
-              field.senderPhone: await fetchUserData(fieldInfo.phoneNumber),
+              field.senderPhone: await fetchUserData(fieldInfo.phoneNumber).toString(),
             }));
   }
 
@@ -600,7 +600,7 @@ class GlobalController {
         .child(uid)
         .child('package')
         .child(key)
-        .update({'status': status, field.packageID: auth.currentUser!.uid});
+        .update({'status': status, field.packageID: auth.currentUser!.uid.toString()});
   }
 
   Future<void> backToReturn({data}) async {
@@ -614,26 +614,26 @@ class GlobalController {
         .child('package')
         .child(data[field.pushKey])
         .update({
-      field.uid: data[field.uid],
-      field.location: data[field.location],
-      field.pushKey: data[field.pushKey],
-      field.phoneNumber: data[field.phoneNumber],
-      field.token: data[field.token],
-      field.chatid: data[field.chatid],
-      field.latitude: latitude,
-      field.longitude: longitude,
-      field.date: formattedDate,
-      field.qty: data[field.qty],
-      field.packageID: data[field.packageID],
-      field.note: data[field.note],
+      field.uid: data[field.uid].toString(),
+      field.location: data[field.location].toString(),
+      field.pushKey: data[field.pushKey].toString(),
+      field.phoneNumber: data[field.phoneNumber].toString(),
+      field.token: data[field.token].toString(),
+      field.chatid: data[field.chatid].toString(),
+      field.latitude: latitude.toString(),
+      field.longitude: longitude.toString(),
+      field.date: formattedDate.toString(),
+      field.qty: data[field.qty].toString(),
+      field.packageID: data[field.packageID].toString(),
+      field.note: data[field.note].toString(),
       field.status: 'request',
-      field.price: data[field.price],
-      field.recLatitude: data[field.recLatitude],
-      field.recLongitude: data[field.recLongitude],
-      field.senderPhone: data[field.senderPhone],
-      field.driverUID: data[field.driverUID],
-      field.dLastName: data[field.dLastName],
-      field.dFirstName: data[field.dFirstName],
+      field.price: data[field.price].toString(),
+      field.recLatitude: data[field.recLatitude].toString(),
+      field.recLongitude: data[field.recLongitude].toString(),
+      field.senderPhone: data[field.senderPhone].toString(),
+      field.driverUID: data[field.driverUID].toString(),
+      field.dLastName: data[field.dLastName].toString(),
+      field.dFirstName: data[field.dFirstName].toString(),
     });
   }
 }
