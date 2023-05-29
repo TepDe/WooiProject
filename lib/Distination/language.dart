@@ -16,8 +16,9 @@ class ClsLanguage{
   String stPend = 'កំពុងដឺកជញ្ជូន';
   String stReturn = 'ត្រឡប់';
   String note = 'ចំណាំ';
-  String createDate = 'កាលបរិច្ឆេទបង្កើត';
+  String createDate = 'បង្កើត';
   String searchIDorPhoneNumber = 'ស្វែងរកលេខសម្គាល់ ឬលេខទូរស័ព្ទ';
   String returnReason = 'មូលហេតុត្រឡប់';
   String returnTime = 'ពេលវេលាត្រឡប់';
+  String status = 'ស្ថានភាព';
 }
