@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
@@ -67,16 +68,11 @@ class _CompleteScreenState extends State<CompleteScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: const BoxDecoration(
-                //color: headercolor,
-                //borderRadius: BorderRadius.circular(6),
-                // boxShadow: [
-                //   BoxShadow(
-                //     color: theme.grey,
-                //     blurRadius: 4,
-                //     offset: Offset(0, 1), // Shadow position
-                //   ),
-                // ],
-                ),
+              image: DecorationImage(
+                image: AssetImage("assets/images/CompleteHead.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
             child: Column(
               children: [
                 Container(
@@ -105,7 +101,7 @@ class _CompleteScreenState extends State<CompleteScreen> {
                             },
                             icon: Icon(
                               Icons.arrow_back_ios_new_outlined,
-                              color: theme.black,
+                              color: theme.green,
                             )),
                       ),
                       Padding(
@@ -113,6 +109,7 @@ class _CompleteScreenState extends State<CompleteScreen> {
                         child: Text(
                           'Complete',
                           style: TextStyle(
+                              color: theme.green,
                               fontSize: 18,
                               // color: titleColor,
                               fontWeight: FontWeight.bold),
@@ -138,10 +135,9 @@ class _CompleteScreenState extends State<CompleteScreen> {
                           controller: search,
                           decoration: InputDecoration(
                             filled: true,
-                            hintStyle: const TextStyle(fontSize: 12),
-
-                            fillColor: theme.midGrey,
-                            hintText: 'Search ID or Phone number',
+                            hintStyle: const TextStyle(fontSize: 14),
+                            fillColor: theme.white,
+                            hintText: clsLan.searchIDorPhoneNumber,
                             border: OutlineInputBorder(
                               // borderSide:
                               //      BorderSide(color:theme.minGrey ,width: 0.0),
@@ -177,7 +173,7 @@ class _CompleteScreenState extends State<CompleteScreen> {
                     ),
                     Container(
                       decoration: BoxDecoration(
-                        color: theme.btnBlue,
+                        color: theme.litestGreen,
                         borderRadius: BorderRadius.circular(6),
                         boxShadow: [
                           BoxShadow(
@@ -210,33 +206,34 @@ class _CompleteScreenState extends State<CompleteScreen> {
                           },
                           icon: Icon(
                             Icons.search,
-                            color: theme.white,
+                            color: theme.green,
                           )),
                     )
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      reUse.reUseText(content: 'Total : ${forDisplay.length}'),
-                      const Flexible(child: Divider()),
-                      // Container(
-                      //   decoration: BoxDecoration(
-                      //     color: theme.litestOrange,
-                      //     borderRadius: BorderRadius.circular(6),
-                      //   ),
-                      //   child: IconButton(
-                      //       splashRadius: 20,
-                      //       onPressed: () {},
-                      //       icon: Icon(
-                      //         Icons.filter_alt_outlined,
-                      //         color: theme.orange,
-                      //       )),
-                      // )
-                    ],
-                  ),
-                )
+
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                reUse.reUseText(content: 'Total : ${forDisplay.length}'),
+                const Flexible(child: Divider()),
+                // Container(
+                //   decoration: BoxDecoration(
+                //     color: theme.litestOrange,
+                //     borderRadius: BorderRadius.circular(6),
+                //   ),
+                //   child: IconButton(
+                //       splashRadius: 20,
+                //       onPressed: () {},
+                //       icon: Icon(
+                //         Icons.filter_alt_outlined,
+                //         color: theme.orange,
+                //       )),
+                // )
               ],
             ),
           ),
@@ -414,6 +411,7 @@ class _CompleteScreenState extends State<CompleteScreen> {
       ),
     ));
   }
+  final clsLan = ClsLanguage();
 
   removeItem({keyIndex, listIndex}) async {
     DatabaseReference packageRequest =
