@@ -288,7 +288,7 @@ class ReUseWidget {
                   child: unitTwoText(
                       label: clsLan.totalPackage,
                       qty: totalLength.toString(),
-                      assetsIconColor: theme.dirt,
+                      assetsIconColor: theme.deepPumpkin,
                       assetsIcon: 'assets/images/box.png',
                       borderbottom: BorderSide(width: 1, color: theme.liteGrey),
                       borderright: BorderSide(width: 1, color: theme.liteGrey)),
