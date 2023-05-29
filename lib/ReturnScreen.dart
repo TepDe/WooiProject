@@ -38,6 +38,9 @@ class _ReturnScreenState extends State<ReturnScreen> {
     isShow = true;
   }
 
+  var labelSize = 11.0;
+  var valueSize = 14.0;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -60,16 +63,11 @@ class _ReturnScreenState extends State<ReturnScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: const BoxDecoration(
-                //color: headercolor,
-                //borderRadius: BorderRadius.circular(6),
-                // boxShadow: [
-                //   BoxShadow(
-                //     color: theme.grey,
-                //     blurRadius: 4,
-                //     offset: Offset(0, 1), // Shadow position
-                //   ),
-                // ],
-                ),
+              image: DecorationImage(
+                image: AssetImage("assets/images/ReturnHead.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
             child: Column(
               children: [
                 Container(
@@ -83,13 +81,13 @@ class _ReturnScreenState extends State<ReturnScreen> {
                         },
                         icon: Icon(
                           Icons.arrow_back_ios_new_outlined,
-                          color: theme.black,
+                          color: theme.red,
                         ),
                         label: Text(
                           clsLan.returns,
                           style: TextStyle(
                               fontSize: 18,
-                              color: theme.black,
+                              color: theme.red,
                               //color: titleColor,
                               fontWeight: FontWeight.bold),
                         ),
@@ -108,9 +106,9 @@ class _ReturnScreenState extends State<ReturnScreen> {
                           controller: search,
                           decoration: InputDecoration(
                             filled: true,
-                            hintStyle: const TextStyle(fontSize: 16),
+                            hintStyle: const TextStyle(fontSize: 14),
 
-                            fillColor: theme.midGrey,
+                            fillColor: theme.white,
                             hintText: clsLan.searchIDorPhoneNumber,
                             border: OutlineInputBorder(
                               // borderSide:
@@ -145,7 +143,7 @@ class _ReturnScreenState extends State<ReturnScreen> {
                     ),
                     Container(
                       decoration: BoxDecoration(
-                        color: theme.liteBlue,
+                        color: theme.litestRed,
                         borderRadius: BorderRadius.circular(6),
                         boxShadow: [
                           BoxShadow(
@@ -178,35 +176,35 @@ class _ReturnScreenState extends State<ReturnScreen> {
                           },
                           icon: Icon(
                             Icons.search,
-                            color: theme.blue,
+                            color: theme.red,
                           )),
                     )
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      reUse.reUseText(
-                        size: 14.0,
-                          content: '${clsLan.totalPackage} : ${forDisplay.length}'),
-                      const Flexible(child: Divider()),
-                      // Container(
-                      //   decoration: BoxDecoration(
-                      //     color: theme.litestOrange,
-                      //     borderRadius: BorderRadius.circular(6),
-                      //   ),
-                      //   child: IconButton(
-                      //       splashRadius: 20,
-                      //       onPressed: () {},
-                      //       icon: Icon(
-                      //         Icons.filter_alt_outlined,
-                      //         color: theme.orange,
-                      //       )),
-                      // )
-                    ],
-                  ),
-                )
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                reUse.reUseText(
+                    size: 14.0,
+                    content: '${clsLan.totalPackage} : ${forDisplay.length}'),
+                const Flexible(child: Divider()),
+                // Container(
+                //   decoration: BoxDecoration(
+                //     color: theme.litestOrange,
+                //     borderRadius: BorderRadius.circular(6),
+                //   ),
+                //   child: IconButton(
+                //       splashRadius: 20,
+                //       onPressed: () {},
+                //       icon: Icon(
+                //         Icons.filter_alt_outlined,
+                //         color: theme.orange,
+                //       )),
+                // )
               ],
             ),
           ),
@@ -298,24 +296,24 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                   reUse.reUseColumnText(
                                       titleColor: theme.grey,
                                       title: clsLan.receiverLocation,
-                                      size: 14.0,
-                                      lableSize: 14,
+                                      size: valueSize,
+                                      lableSize: labelSize,
                                       color: theme.black,
                                       content: forDisplay[index]['location'],
                                       weight: FontWeight.w500),
                                   reUse.reUseColumnText(
-                                      lableSize: 14,
+                                      lableSize: labelSize,
                                       titleColor: theme.grey,
                                       title: clsLan.receiverPhoneNumber,
-                                      size: 14.0,
+                                      size: valueSize,
                                       color: theme.black,
                                       content: forDisplay[index]['phoneNumber'],
                                       weight: FontWeight.w500),
                                   reUse.reUseColumnText(
                                       titleColor: theme.grey,
                                       title: clsLan.qty,
-                                      size: 14.0,
-                                      lableSize: 14,
+                                      size: valueSize,
+                                      lableSize: labelSize,
                                       color: theme.black,
                                       content: '1',
                                       weight: FontWeight.w500),
@@ -342,12 +340,13 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                         content: '',
                                         weight: FontWeight.w500),
                                     reUse.reUseColumnText(
-                                        lableSize: 14,
+                                        lableSize: labelSize,
                                         titleColor: theme.grey,
                                         title: clsLan.price,
-                                        size: 16.0,
+                                        size: valueSize,
                                         color: theme.black,
-                                        content: forDisplay[index]['price'] ??
+                                        content: forDisplay[index]['price'] +
+                                                " \$" ??
                                             "No price",
                                         weight: FontWeight.w500),
                                   ],
@@ -358,9 +357,14 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                 children: [
                                   reUse.reUseText(
                                       weight: FontWeight.w500,
-                                      size: 14.0,
+                                      size: labelSize,
                                       color: theme.grey,
                                       content: '${clsLan.note} : '),
+                                ],
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
                                   Flexible(
                                     child: Container(
                                       width: Get.width,
@@ -382,14 +386,14 @@ class _ReturnScreenState extends State<ReturnScreen> {
                               Row(
                                 children: [
                                   reUse.reUseText(
-                                      weight: FontWeight.bold,
-                                      size: 14.0,
+                                      weight: FontWeight.w400,
+                                      size: labelSize,
                                       color: theme.grey,
                                       content: '${clsLan.createDate} : '),
                                   reUse.reUseText(
                                       weight: FontWeight.bold,
-                                      size: 16.0,
-                                      color: theme.darkGrey,
+                                      size: valueSize,
+                                      color: theme.black,
                                       content: forDisplay[index]['date']),
                                 ],
                               ),
@@ -397,10 +401,15 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   reUse.reUseText(
-                                      weight: FontWeight.bold,
-                                      size: 14.0,
+                                      weight: FontWeight.w400,
+                                      size: labelSize,
                                       color: theme.grey,
                                       content: '${clsLan.returnReason} : '),
+                                ],
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
                                   Flexible(
                                     child: Container(
                                       width: Get.width,
@@ -411,9 +420,10 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                               Border.all(color: theme.grey)),
                                       child: reUse.reUseTextNote(
                                           weight: FontWeight.w400,
-                                          size: 16.0,
+                                          size: 14.0,
                                           color: theme.black,
-                                          content: forDisplay[index]['returnNote'] ??
+                                          content: forDisplay[index]
+                                                  ['returnNote'] ??
                                               "No reason"),
                                     ),
                                   ),
@@ -422,14 +432,14 @@ class _ReturnScreenState extends State<ReturnScreen> {
                               Row(
                                 children: [
                                   reUse.reUseText(
-                                      weight: FontWeight.bold,
-                                      size: 14.0,
+                                      weight: FontWeight.w400,
+                                      size: labelSize,
                                       color: theme.grey,
                                       content: '${clsLan.returnTime} : '),
                                   reUse.reUseText(
                                       weight: FontWeight.bold,
-                                      size: 16.0,
-                                      color: theme.darkGrey,
+                                      size: valueSize,
+                                      color: theme.black,
                                       content: forDisplay[index]['date']),
                                 ],
                               ),
@@ -464,6 +474,21 @@ class _ReturnScreenState extends State<ReturnScreen> {
       // await glb.deletePackage(witchDataBase: packageRequest,data:data);
       await glb.deleteFromDriver(data: data, witchDataBase: driverReturn);
       await glb.deleteFromReturn(data: data, witchDataBase: userReturn);
+      returnList.removeWhere((item) => item == data);
+      forDisplay.removeWhere((item) => item == data);
+      setState(() {});
+      reUse.reUseCircleDialog(
+          context: context,
+          icon: Icons.check_circle_rounded,
+          title: 'Success',
+          content: Center(
+            child: Text(
+              'Your package is successfully request',
+              style: TextStyle(
+                color: theme.black,
+              ),
+            ),
+          ));
     } else {}
   }
 
