@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
+import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
@@ -80,47 +81,38 @@ class _CompleteScreenState extends State<CompleteScreen> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        height: 40,
-                        width: 40,
-                        // decoration: BoxDecoration(
-                        //   color: theme.litestOrange,
-                        //   borderRadius: BorderRadius.circular(60),
-                        //   boxShadow: [
-                        //     BoxShadow(
-                        //       color: theme.minGrey,
-                        //       blurRadius: 6,
-                        //       offset: const Offset(0, 0), // Shadow position
-                        //     ),
-                        //   ],
-                        // ),
-                        child: IconButton(
-                            splashRadius: 25,
-                            onPressed: () {
-                              Get.back();
-                            },
-                            icon: Icon(
-                              Icons.arrow_back_ios_new_outlined,
-                              color: theme.green,
-                            )),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 18.0),
-                        child: Text(
-                          'Complete',
-                          style: TextStyle(
-                              color: theme.green,
-                              fontSize: 18,
-                              // color: titleColor,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.search,
-                            color: Colors.transparent,
-                          )),
+                      TextButton.icon(
+                           onPressed: () {
+                            Get.back();
+                          },
+                          icon: Icon(
+                            Icons.arrow_back_ios_new_outlined,
+                            color: theme.green,
+                          ), label:  Text(
+                        clsLan.stCom,
+                        style: TextStyle(
+                            color: theme.green,
+                            fontSize: 18,
+                            // color: titleColor,
+                            fontWeight: FontWeight.bold),
+                      ),),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(left: 18.0),
+                      //   child: Text(
+                      //     clsLan.stCom,
+                      //     style: TextStyle(
+                      //         color: theme.green,
+                      //         fontSize: 18,
+                      //         // color: titleColor,
+                      //         fontWeight: FontWeight.bold),
+                      //   ),
+                      // ),
+                      // IconButton(
+                      //     onPressed: () {},
+                      //     icon: const Icon(
+                      //       Icons.search,
+                      //       color: Colors.transparent,
+                      //     )),
                     ],
                   ),
                 ),
@@ -211,7 +203,6 @@ class _CompleteScreenState extends State<CompleteScreen> {
                     )
                   ],
                 ),
-
               ],
             ),
           ),
@@ -219,7 +210,8 @@ class _CompleteScreenState extends State<CompleteScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                reUse.reUseText(content: 'Total : ${forDisplay.length}'),
+                reUse.reUseText(
+                    content: '${clsLan.totalPackage} : ${forDisplay.length}'),
                 const Flexible(child: Divider()),
                 // Container(
                 //   decoration: BoxDecoration(
@@ -268,7 +260,7 @@ class _CompleteScreenState extends State<CompleteScreen> {
                                     weight: FontWeight.w400,
                                     size: 12.0,
                                     color: theme.grey,
-                                    content: 'SHIPPING ID :'),
+                                    content: clsLan.packageID),
                                 Row(
                                   children: [
                                     reUse.reUseText(
@@ -305,27 +297,10 @@ class _CompleteScreenState extends State<CompleteScreen> {
                               ],
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(3.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  reUse.reUseText(
-                                      weight: FontWeight.bold,
-                                      size: 12.0,
-                                      color: theme.grey,
-                                      content: 'Location'),
-                                  reUse.reUseText(
-                                      size: 12.0,
-                                      weight: FontWeight.bold,
-                                      color: theme.grey,
-                                      content: 'Phone number'),
-                                  reUse.reUseText(
-                                      size: 12.0,
-                                      weight: FontWeight.bold,
-                                      color: theme.grey,
-                                      content: 'Qty'),
-                                ],
+                              padding: const EdgeInsets.all(6.0),
+                              child: Divider(
+                                height: 1,
+                                color: theme.grey,
                               ),
                             ),
                             Padding(
@@ -334,25 +309,123 @@ class _CompleteScreenState extends State<CompleteScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  reUse.reUseText(
+                                  reUse.reUseColumnText(
+                                      titleColor: theme.grey,
+                                      title: clsLan.receiverLocation,
+                                      lableSize: 11,
                                       size: 14.0,
                                       color: theme.black,
                                       content: forDisplay[index]['location'],
                                       weight: FontWeight.w500),
-                                  reUse.reUseText(
+                                  reUse.reUseColumnText(
+                                      titleColor: theme.grey,
+                                      title: clsLan.receiverPhoneNumber,
+                                      lableSize: 11,
                                       size: 14.0,
                                       color: theme.black,
-                                      weight: FontWeight.w500,
-                                      content: forDisplay[index]
-                                          ['phoneNumber']),
-                                  reUse.reUseText(
-                                      size: 14.0,
-                                      color: theme.black,
-                                      content: '1',
+                                      content: forDisplay[index]['phoneNumber'],
                                       weight: FontWeight.w500),
+                                  reUse.reUseColumnText(
+                                      titleColor: theme.grey,
+                                      title: clsLan.qty,
+                                      lableSize: 11,
+                                      size: 14.0,
+                                      color: theme.black,
+                                      content: forDisplay[index]['qty'],
+                                      weight: FontWeight.w500),
+                                  // reUse.reUseText(
+                                  //     weight: FontWeight.bold,
+                                  //     size: 12.0,
+                                  //     color: theme.grey,
+                                  //     content: 'Location'),
+                                  // reUse.reUseText(
+                                  //     size: 12.0,
+                                  //     weight: FontWeight.bold,
+                                  //     color: theme.grey,
+                                  //     content: 'Phone number'),
+                                  // reUse.reUseText(
+                                  //     size: 12.0,
+                                  //     weight: FontWeight.bold,
+                                  //     color: theme.grey,
+                                  //     content: 'Qty'),
                                 ],
                               ),
                             ),
+                            // Padding(
+                            //   padding: const EdgeInsets.all(3.0),
+                            //   child: Row(
+                            //     mainAxisAlignment:
+                            //         MainAxisAlignment.spaceBetween,
+                            //     children: [
+                            //       reUse.reUseText(
+                            //           size: 14.0,
+                            //           color: theme.black,
+                            //           content: forDisplay[index]['location'],
+                            //           weight: FontWeight.w500),
+                            //       reUse.reUseText(
+                            //           size: 14.0,
+                            //           color: theme.black,
+                            //           weight: FontWeight.w500,
+                            //           content: forDisplay[index]
+                            //               ['phoneNumber']),
+                            //       reUse.reUseText(
+                            //           size: 14.0,
+                            //           color: theme.black,
+                            //           content: '1',
+                            //           weight: FontWeight.w500),
+                            //     ],
+                            //   ),
+                            // ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 6),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  reUse.reUseColumnText(
+                                      lableSize: 12,
+                                      titleColor: theme.grey,
+                                      title: clsLan.assignBy + " :",
+                                      size: 0.0,
+                                      color: theme.black,
+                                      content: '',
+                                      weight: FontWeight.w500),
+                                  // reUse.reUseColumnText(
+                                  //     title: 'Driver Name',
+                                  //     size: 14.0,
+                                  //     color: theme.black,
+                                  //     content: forDisplay[index]
+                                  //             [field.dLastName] +
+                                  //         ' ' +
+                                  //         forDisplay[index]
+                                  //             [field.dFirstName],
+                                  //     weight: FontWeight.w500),
+                                  // reUse.reUseColumnText(
+                                  //     lableSize: 12,
+                                  //     titleColor: theme.grey,
+                                  //     title: clsLan.driverPhone,
+                                  //     size: 14.0,
+                                  //     color: theme.black,
+                                  //     content: forDisplay[index]
+                                  //     [field.dPhone],
+                                  //     weight: FontWeight.w500),
+                                  // reUse.reUseColumnText(
+                                  //     lableSize: 12,
+                                  //     titleColor: theme.grey,
+                                  //     title: clsLan.driverName,
+                                  //     size: 14.0,
+                                  //     color: theme.black,
+                                  //     content: forDisplay[index]
+                                  //     [field.dLastName] +
+                                  //         ' ' +
+                                  //         forDisplay[index]
+                                  //         [field.dFirstName],
+                                  //     weight: FontWeight.w500),
+                                ],
+                              ),
+                            ),
+
                             Padding(
                               padding: const EdgeInsets.all(6.0),
                               child: Divider(
@@ -365,9 +438,24 @@ class _CompleteScreenState extends State<CompleteScreen> {
                               children: [
                                 reUse.reUseText(
                                     size: 12.0,
-                                    weight: FontWeight.bold,
+                                    weight: FontWeight.w400,
                                     color: theme.grey,
-                                    content: 'Status'),
+                                    content: clsLan.status),
+                                // Container(
+                                //   decoration: BoxDecoration(
+                                //     color: theme.litestGreen,
+                                //     borderRadius: BorderRadius.circular(6),
+                                //   ),
+                                //   padding: const EdgeInsets.symmetric(
+                                //       horizontal: 10, vertical: 4),
+                                //   child: reUse.reUseText(
+                                //       size: 10.0,
+                                //       color: theme.liteGreen,
+                                //       content: forDisplay[index]['status']
+                                //           .toString()
+                                //           .toUpperCase(),
+                                //       weight: FontWeight.w900),
+                                // ),
                                 Container(
                                   decoration: BoxDecoration(
                                     color: theme.litestGreen,
@@ -378,9 +466,7 @@ class _CompleteScreenState extends State<CompleteScreen> {
                                   child: reUse.reUseText(
                                       size: 10.0,
                                       color: theme.liteGreen,
-                                      content: forDisplay[index]['status']
-                                          .toString()
-                                          .toUpperCase(),
+                                      content: clsLan.stCom,
                                       weight: FontWeight.w900),
                                 ),
                               ],
@@ -390,9 +476,9 @@ class _CompleteScreenState extends State<CompleteScreen> {
                       );
                     })
                 : SizedBox(
-                  width: Get.width*1,
-                  height: Get.height*1,
-                  child: Column(
+                    width: Get.width * 1,
+                    height: Get.height * 1,
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -405,13 +491,15 @@ class _CompleteScreenState extends State<CompleteScreen> {
                         reUse.reUseText(content: "No Data"),
                       ],
                     ),
-                ),
+                  ),
           )
         ],
       ),
     ));
   }
+
   final clsLan = ClsLanguage();
+  final field = FieldData();
 
   removeItem({keyIndex, listIndex}) async {
     DatabaseReference packageRequest =
