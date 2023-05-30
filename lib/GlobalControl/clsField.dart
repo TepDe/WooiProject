@@ -21,6 +21,7 @@ class FieldData {
   String senderPhone = "senderPhone";
   String driverUID = "driverUID";
   String ABACode = "ABACode";
+  String assignBy = "assignBy";
 }
 
 
