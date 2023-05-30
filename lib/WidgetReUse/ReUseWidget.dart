@@ -832,6 +832,40 @@ class ReUseWidget {
       ),
     );
   }
+  reUseRowText(
+      {double? lableSize, content, size, weight, color, title, titleColor}) {
+    return Flexible(
+      child: SizedBox(
+        width: Get.width,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                softWrap: true,
+                maxLines: 2,
+                style: TextStyle(
+                    fontSize: lableSize ?? 10.0,
+                    color: titleColor ?? theme.black,
+                    fontWeight: weight ?? FontWeight.normal),
+              ),
+              Text(
+                content,
+                softWrap: true,
+                maxLines: 2,
+                style: TextStyle(
+                    fontSize: size ?? 12.0,
+                    color: color ?? theme.black,
+                    fontWeight: weight ?? FontWeight.normal),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   final gsc = Get.put(GlbSuperController());
 
