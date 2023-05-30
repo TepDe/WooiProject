@@ -13,7 +13,7 @@ class ClsLanguage{
   String receiverPhoneNumber = 'លេខទូរស័ព្ទអ្នកទទួល';
   String stCom = 'ជោគជ័យ';
   String stReq = 'កំពុងហៅ';
-  String stPend = 'កំពុងដឺកជញ្ជូន';
+  String stPend = 'កំពុងដឹកជញ្ជូន';
   String stReturn = 'ត្រឡប់';
   String note = 'ចំណាំ';
   String createDate = 'បង្កើត';
@@ -21,4 +21,11 @@ class ClsLanguage{
   String returnReason = 'មូលហេតុត្រឡប់';
   String returnTime = 'ពេលវេលាត្រឡប់';
   String status = 'ស្ថានភាព';
+  String driverPhone = 'លេខទូរសព្ទអ្នកដឹក';
+  String driverName = 'ឈ្មោះអ្នកដឹក';
+  String assignBy = 'ដឹកដោយ';
+  String requestAgain = 'ហៅម្តងទៀត';
+  String delete = 'លុប';
+  String edit = 'កែរ';
+  String all = 'ទាំងអស់';
 }
