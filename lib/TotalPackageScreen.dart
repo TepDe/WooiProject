@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -123,33 +124,15 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Container(
-                              height: 40,
-                              width: 40,
-                              // decoration: BoxDecoration(
-                              //   color: theme.litestOrange,
-                              //   borderRadius: BorderRadius.circular(60),
-                              //   boxShadow: [
-                              //     BoxShadow(
-                              //       color: theme.minGrey,
-                              //       blurRadius: 6,
-                              //       offset: const Offset(0, 0), // Shadow position
-                              //     ),
-                              //   ],
-                              // ),
-                              child: IconButton(
-                                  splashRadius: 25,
-                                  onPressed: () {
-                                    Get.back();
-                                  },
-                                  icon: Icon(
-                                    Icons.arrow_back_ios_new_outlined,
-                                    color: theme.deepPumpkin,
-                                  )),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 18.0),
-                              child: Text(
+                            TextButton.icon(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              icon: Icon(
+                                Icons.arrow_back_ios_new_outlined,
+                                color: theme.deepPumpkin,
+                              ),
+                              label: Text(
                                 clsLan.totalPackage,
                                 style: TextStyle(
                                     fontSize: 18,
@@ -157,12 +140,22 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
-                            IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.search,
-                                  color: Colors.transparent,
-                                )),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(left: 18.0),
+                            //   child: Text(
+                            //     clsLan.totalPackage,
+                            //     style: TextStyle(
+                            //         fontSize: 18,
+                            //         color: theme.deepPumpkin,
+                            //         fontWeight: FontWeight.bold),
+                            //   ),
+                            // ),
+                            // IconButton(
+                            //     onPressed: () {},
+                            //     icon: const Icon(
+                            //       Icons.search,
+                            //       color: Colors.transparent,
+                            //     )),
                           ],
                         ),
                       ),
@@ -267,21 +260,25 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                           ),
                           itemBuilder: (BuildContext context) {
                             return [
-                              const PopupMenuItem<String>(
+                               PopupMenuItem<String>(
+                                value: 'all',
+                                child: Text(clsLan.all ),
+                              ),
+                               PopupMenuItem<String>(
                                 value: 'request',
-                                child: Text('Request'),
+                                child: Text(clsLan.stReq),
                               ),
-                              const PopupMenuItem<String>(
+                               PopupMenuItem<String>(
                                 value: 'pending',
-                                child: Text('Pending'),
+                                child: Text(clsLan.stPend),
                               ),
-                              const PopupMenuItem<String>(
+                               PopupMenuItem<String>(
                                 value: 'complet',
-                                child: Text('Complete'),
+                                child: Text(clsLan.stCom),
                               ),
-                              const PopupMenuItem<String>(
+                               PopupMenuItem<String>(
                                 value: 'return',
-                                child: Text('Return'),
+                                child: Text(clsLan.stReturn),
                               ),
                             ];
                           },
@@ -343,12 +340,43 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                 weight: FontWeight.bold,
                                                 size: 16.0,
                                                 color: theme.blue,
-                                                content: (forDisplay[index]
-                                                        ['packageID'])
-                                                    .toString()),
+                                                content: "${forDisplay[index]['packageID']}"),
                                             if (forDisplay[index]['status'] ==
                                                 'pending')
                                               Container()
+                                            else if (forDisplay[index]
+                                                    ['status'] ==
+                                                'return')
+                                              SizedBox(
+                                                height: 40,
+                                                width: 40,
+                                                child: PopupMenuButton<int>(
+                                                  onSelected: (item) async {
+                                                    if (item == 0) {
+                                                      requestAgein(
+                                                          forDisplay[index]);
+                                                    } else {
+                                                      alertDialog();
+                                                      removeItem(
+                                                          keyIndex:
+                                                              keyList[index],
+                                                          listIndex: forDisplay[
+                                                              index]);
+                                                      Get.back();
+                                                    }
+                                                  },
+                                                  itemBuilder: (context) => [
+                                                    PopupMenuItem<int>(
+                                                        value: 0,
+                                                        child: Text(clsLan
+                                                            .requestAgain)),
+                                                    PopupMenuItem<int>(
+                                                        value: 1,
+                                                        child: Text(
+                                                            clsLan.delete)),
+                                                  ],
+                                                ),
+                                              )
                                             else
                                               SizedBox(
                                                 height: 40,
@@ -371,12 +399,14 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                     }
                                                   },
                                                   itemBuilder: (context) => [
-                                                    const PopupMenuItem<int>(
+                                                    PopupMenuItem<int>(
                                                         value: 0,
-                                                        child: Text('Edit')),
-                                                    const PopupMenuItem<int>(
+                                                        child:
+                                                            Text(clsLan.edit)),
+                                                    PopupMenuItem<int>(
                                                         value: 1,
-                                                        child: Text('Delete')),
+                                                        child: Text(
+                                                            clsLan.delete)),
                                                   ],
                                                 ),
                                               )
@@ -400,8 +430,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                           size: textSize,
                                           color: theme.black,
                                           lableSize: labelSize,
-                                          content: forDisplay[index]
-                                              ['location'],
+                                          content: "${forDisplay[index]['location']}",
                                           weight: FontWeight.w500),
                                       reUse.reUseColumnText(
                                           titleColor: theme.darkGrey,
@@ -409,8 +438,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                           size: textSize,
                                           color: theme.black,
                                           lableSize: labelSize,
-                                          content: forDisplay[index]
-                                              ['phoneNumber'],
+                                          content: "${forDisplay[index]['phoneNumber']}",
                                           weight: FontWeight.w500),
                                       reUse.reUseColumnText(
                                           titleColor: theme.darkGrey,
@@ -419,7 +447,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                           color: theme.black,
                                           lableSize: labelSize,
                                           content:
-                                              forDisplay[index]['qty'] ?? '1',
+                                              "${forDisplay[index]['qty']}",
                                           weight: FontWeight.w500),
                                     ],
                                   ),
@@ -524,7 +552,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                 content:
                                                     '${clsLan.createDate} : '),
                                             reUse.reUseText(
-                                                weight: FontWeight.bold,
+                                                weight: FontWeight.w400,
                                                 size: 14.0,
                                                 color: theme.black,
                                                 content: forDisplay[index]
@@ -628,15 +656,91 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
     ));
   }
 
+  String userName = "";
+  String phoneNumber = "";
+
+  fetchUserInformation() async {
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc(auth.currentUser!.uid)
+        .get()
+        .then((doc) async {
+      Map data = doc.data() as Map;
+      userName = data['firstname'] + ' ' + data['lastname'].toString();
+      phoneNumber = data['phoneNumber'].toString();
+      setState(() {});
+    });
+  }
+
+  DatabaseReference userReturn = FirebaseDatabase.instance.ref("Return");
+  DatabaseReference driverReturn =
+      FirebaseDatabase.instance.ref("DriverReturn");
+
+  requestAgein(data) async {
+    await fetchUserInformation();
+    await glb.backToReturn(data: data);
+    // await glb.deletePackage(witchDataBase: packageRequest,data:data);
+    await glb.deleteFromDriver(data: data, witchDataBase: driverReturn);
+    await glb.deleteFromReturn(data: data, witchDataBase: userReturn);
+    // totalList.removeWhere((item) => item == data);
+    // forDisplay.removeWhere((item) => item == data);
+    await refetchData();
+    // reUse.reUseCircleDialog(
+    //     context: context,
+    //     icon: Icons.check_circle_rounded,
+    //     title: 'Success',
+    //     content: Center(
+    //       child: Text(
+    //         'Your package is successfully request',
+    //         style: TextStyle(
+    //           color: theme.black,
+    //         ),
+    //       ),
+    //     ));
+    setState(() {
+
+    });
+   }
+
+  refetchData() async {
+    try {
+      DatabaseReference refs = FirebaseDatabase.instance
+          .ref('PackageRequest')
+          .child(auth.currentUser!.uid);
+      refs.onValue.listen((event) {
+        setState(() {});
+        totalList.clear();
+        forDisplay.clear();
+        DataSnapshot driver = event.snapshot;
+        Map values = driver.value as Map;
+        values.forEach((key, values) async {
+          Map data = await values as Map;
+          data.forEach((key, value) async {
+            totalList.add(value);
+            setState(() {});
+          });
+        });
+      });
+    } catch (e) {
+      print('totalListLength $e');
+    }
+    setState(() {
+      print(totalList);
+      forDisplay =totalList;
+    });
+  }
+
   filterView(String value) {
-    List results = totalList
-        .where((user) => user['status']
-        .toLowerCase()
-        .contains(value
-        .toString()
-        .toLowerCase()))
-        .toList();
-    forDisplay = results;
+    if(value == 'all'){
+      forDisplay = totalList;
+    }else{
+      List results = totalList
+          .where((user) => user['status']
+          .toLowerCase()
+          .contains(value.toString().toLowerCase()))
+          .toList();
+      forDisplay = results;
+    }
   }
 
   alertDialog() {
