@@ -19,7 +19,6 @@ class EditPackageScreen extends StatefulWidget {
 }
 
 class _EditPackageScreenState extends State<EditPackageScreen> {
-
   final reUse = ReUseWidget();
   final theme = ThemesApp();
   final glb = GlobalController();
@@ -70,6 +69,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
       setState(() {});
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -98,7 +98,8 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                         'Back',
                         style: TextStyle(color: theme.black),
                       ),
-                    ), TextButton.icon(
+                    ),
+                    TextButton.icon(
                       onPressed: () {
                         // Navigator.of(context).push(
                         //   MaterialPageRoute(
@@ -123,7 +124,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       reUse.reUseText(
-                        content: clsLan.packageID+' : ',
+                        content: clsLan.packageID + ' : ',
                         size: 16.0,
                         color: theme.grey,
                       ),
@@ -167,7 +168,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                     controller: phoneBox,
                     // keyboardType: inputType,
                     keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                        const TextInputType.numberWithOptions(decimal: true),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
                       FilteringTextInputFormatter.digitsOnly,
@@ -192,7 +193,8 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10),
                   child: reUse.reUseText(
-                      content: 'ទីតាំងអ្នកទទួល : ( សូមបញ្ចូលទីតាំងអ្នកទទួលជាអក្សរខ្មែរ )',
+                      content:
+                          'ទីតាំងអ្នកទទួល : ( សូមបញ្ចូលទីតាំងអ្នកទទួលជាអក្សរខ្មែរ )',
                       size: textSize,
                       weight: FontWeight.w500,
                       color: theme.black),
@@ -207,12 +209,12 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                     onChanged: (value) {
                       List results = clsDis.destination
                           .where((user) => user.toLowerCase().contains(
-                          locationBox.text.toString().toLowerCase()))
+                              locationBox.text.toString().toLowerCase()))
                           .toList();
                       if (results == null) {
                         results = eng_distin
                             .where((user) => user.toLowerCase().contains(
-                            locationBox.text.toString().toLowerCase()))
+                                locationBox.text.toString().toLowerCase()))
                             .toList();
                       }
                       print(results);
@@ -246,22 +248,22 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                   height: Get.height * 0.08,
                   child: forDisplay != []
                       ? ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.all(8),
-                      itemCount: forDisplay.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return SizedBox(
-                          child: TextButton(
-                            onPressed: () {
-                              locationBox.text = forDisplay[index]
-                                  .toString()
-                                  .trim()
-                                  .toLowerCase();
-                            },
-                            child: Text(forDisplay[index]),
-                          ),
-                        );
-                      })
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.all(8),
+                          itemCount: forDisplay.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return SizedBox(
+                              child: TextButton(
+                                onPressed: () {
+                                  locationBox.text = forDisplay[index]
+                                      .toString()
+                                      .trim()
+                                      .toLowerCase();
+                                },
+                                child: Text(forDisplay[index]),
+                              ),
+                            );
+                          })
                       : const SizedBox(),
                 ),
                 const SizedBox(
@@ -270,7 +272,8 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10, top: 10),
                   child: reUse.reUseText(
-                      content: clsLan.price+" : ( សូមបញ្ចូលតំលៃគិតជាដុល្លារ )",
+                      content:
+                          clsLan.price + " : ( សូមបញ្ចូលតំលៃគិតជាដុល្លារ )",
                       size: textSize,
                       weight: FontWeight.w500,
                       color: theme.black),
@@ -281,6 +284,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                     Flexible(
                       flex: 6,
                       child: reUse.reuseTextField(
+                          mixLength: 4,
                           controller: priceBox,
                           formater: [
                             FilteringTextInputFormatter.allow(
@@ -300,7 +304,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10, top: 10),
                   child: reUse.reUseText(
-                      content: clsLan.qty+" :",
+                      content: clsLan.qty + " :",
                       size: textSize,
                       weight: FontWeight.w500,
                       color: theme.black),
@@ -311,6 +315,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                     Flexible(
                       flex: 6,
                       child: reUse.reuseTextField(
+                          mixLength: 3,
                           controller: qtyBox,
                           formater: [
                             FilteringTextInputFormatter.allow(
@@ -344,13 +349,13 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                     decoration: InputDecoration(
                         border: const OutlineInputBorder(
                           borderSide:
-                          BorderSide(color: Colors.grey, width: 0.0),
+                              BorderSide(color: Colors.grey, width: 0.0),
                         ),
 
                         // hintText: "Enter Remarks",
                         focusedBorder: OutlineInputBorder(
                             borderSide:
-                            BorderSide(width: 1, color: theme.hiLiteBlue))),
+                                BorderSide(width: 1, color: theme.hiLiteBlue))),
                   ),
                 ),
                 const SizedBox(
@@ -423,20 +428,20 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                                 alertDialog(context);
                                 await glb
                                     .editPackage(
-                                  data: argumentData,
-                                    userName: userName.trim().toString(),
-                                    userPhoneNumber:
-                                    phoneNumber.trim().toString(),
-                                    tokenKey: getToken.trim().toString(),
-                                    chatid: chatid.trim().toString(),
-                                    price: priceBox.text.trim().toString(),
-                                    note: noteBox.text.toString(),
-                                    packageID: packageID.toString(),
-                                    qty: qtyBox.text.trim().toString(),
-                                    phoneNumber:
-                                    phoneBox.text.trim().toString(),
-                                    location:
-                                    locationBox.text.trim().toString())
+                                        data: argumentData,
+                                        userName: userName.trim().toString(),
+                                        userPhoneNumber:
+                                            phoneNumber.trim().toString(),
+                                        tokenKey: getToken.trim().toString(),
+                                        chatid: chatid.trim().toString(),
+                                        price: priceBox.text.trim().toString(),
+                                        note: noteBox.text.toString(),
+                                        packageID: packageID.toString(),
+                                        qty: qtyBox.text.trim().toString(),
+                                        phoneNumber:
+                                            phoneBox.text.trim().toString(),
+                                        location:
+                                            locationBox.text.trim().toString())
                                     .then((value) {
                                   // phoneBox.clear();
                                   // priceBox.clear();
@@ -486,7 +491,6 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                         ),
                       ),
                     ),
-
                   ],
                 ),
                 const SizedBox(
@@ -499,6 +503,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
       ),
     );
   }
+
   alertDialog(context) {
     return showDialog(
       barrierDismissible: false,
@@ -520,5 +525,4 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
       },
     );
   }
-
 }
