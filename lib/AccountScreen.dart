@@ -99,9 +99,9 @@ class _AccountScreenState extends State<AccountScreen> {
         getLastName = documentSnapshot['lastname'].toString();
         getFirstName = documentSnapshot['firstname'].toString();
         if (documentSnapshot['token'] == null) {
-          getToken='not have';
-          getChatId='not have';
-        }else{
+          getToken = 'not have';
+          getChatId = 'not have';
+        } else {
           getToken = documentSnapshot['token'].toString();
           getChatId = documentSnapshot['chatid'].toString();
         }
@@ -127,587 +127,570 @@ class _AccountScreenState extends State<AccountScreen> {
     var viewHeight2 = MediaQuery.of(context).size.height * 0.03;
     var padding = MediaQuery.of(context).size.height * 0.01;
     var textWidth = MediaQuery.of(context).size.width * 0.2;
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: theme.liteGrey,
-        body: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Center(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: viewHeight2,
-                    ),
-                    reUse.reUseText(
-                        content: 'Profile',
-                        weight: FontWeight.w500,
-                        size: 18.0),
-                    SizedBox(
-                      height: viewHeight2,
-                    ),
-                    Container(
-                      height: imageSize,
-                      width: imageSize,
-                      padding: const EdgeInsets.all(3.0),
-                      // decoration: BoxDecoration(
-                      //     borderRadius: BorderRadius.circular(50),
-                      //     border: Border.all(color: theme.orange, width: 1.5)),
+    return Scaffold(
+      backgroundColor: theme.liteGrey,
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Center(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: viewHeight2,
+                  ),
+                  reUse.reUseText(
+                      content: 'Profile', weight: FontWeight.w500, size: 18.0),
+                  SizedBox(
+                    height: viewHeight2,
+                  ),
+                  Container(
+                    height: imageSize,
+                    width: imageSize,
+                    padding: const EdgeInsets.all(3.0),
+                    // decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(50),
+                    //     border: Border.all(color: theme.orange, width: 1.5)),
+                    child: InkWell(
+                      onTap: (){
+                        phoneAuth();
+                      },
                       child: const CircleAvatar(
                         backgroundImage: NetworkImage(
                             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe1IKGF9z_2YNk4INs_zur1TjFIUtgpw_Ic2Jp2xxH5g&s"),
                       ),
                     ),
-                    SizedBox(
-                      height: viewHeight2,
+                  ),
+                  SizedBox(
+                    height: viewHeight2,
+                  ),
+                  reUse.reUseText(
+                      content: '$getFirstName $getLastName',
+                      weight: FontWeight.bold,
+                      size: 20.0,
+                      color: theme.black),
+                  reUse.reUseText(
+                      content: 'ID : $getUserID',
+                      weight: FontWeight.bold,
+                      size: 12.0,
+                      color: theme.grey),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: reUse.reUseBoxText(
+                            value: '12', title: clsLan.revenue),
+                      ),
+                      Flexible(
+                        child:
+                            reUse.reUseBoxText(value: '10', title: 'Earning'),
+                      ),
+                    ],
+                  ),
+                  // Padding(
+                  //   padding:  EdgeInsets.only(left:8.0,top:padding,bottom:padding),
+                  //   child: Align(
+                  //     alignment: Alignment.topLeft,
+                  //     child: reUse.reUseText(
+                  //         content: 'General',
+                  //         //weight: FontWeight.bold,
+                  //         size: 16.0,
+                  //         color: theme.black),
+                  //   ),
+                  // ),
+                  // InkWell(
+                  //     onTap: () {
+                  //       reUse.reUseCircleDialog(
+                  //           context: context,
+                  //           title: 'title',
+                  //           content: reUse.reUseTextFormField(),
+                  //           icon: Icons.password);
+                  //     },
+                  //     child: Material(
+                  //       color: Colors.transparent,
+                  //       child: reUse.reUseSettingItem(
+                  //           trailingIcon: Icon(Icons.visibility_off),
+                  //           title: Text('Pin Code'),
+                  //           context: context,
+                  //           leading: Icon(Icons.password)),
+                  //     )),
+                  // reUse.reUseSettingItem(
+                  //     trailingIcon: Switch(
+                  //       // This bool value toggles the switch.
+                  //       value: light,
+                  //       activeColor: theme.btnBlue,
+                  //       onChanged: (bool value) {
+                  //         // This is called when the user toggles the switch.
+                  //         setState(() {
+                  //           light = value;
+                  //         });
+                  //       },
+                  //     ),
+                  //     title: Text('Light Mode'),
+                  //     context: context,
+                  //     leading: Icon(Icons.sunny)),
+
+                  Padding(
+                    padding: EdgeInsets.all(padding),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: reUse.reUseText(
+                          content: 'Account',
+                          //weight: FontWeight.bold,
+                          size: 16.0,
+                          color: theme.black),
                     ),
-                    reUse.reUseText(
-                        content: '$getFirstName $getLastName',
-                        weight: FontWeight.bold,
-                        size: 20.0,
-                        color: theme.black),
-                    reUse.reUseText(
-                        content: 'ID : $getUserID',
-                        weight: FontWeight.bold,
-                        size: 12.0,
-                        color: theme.grey),
-                    Row(
-                      children: [
-                        Flexible(
-                          child: reUse.reUseBoxText(value: '12',title: clsLan.revenue),
-                        ),
-                        Flexible(
-                          child: reUse.reUseBoxText(value: '10',title: 'Earning'),
+                  ),
+                  reUse.reUseSettingItem(
+                      trailingIcon: Text(
+                        getEmail,
+                        style: TextStyle(color: theme.grey),
+                      ),
+                      title: Text('Email'),
+                      context: context,
+                      leading: Icon(Icons.email)),
+                  reUse.reUseSettingItem(
+                      trailingIcon: Text(
+                        getPassword ?? 'loading...',
+                        style: TextStyle(color: theme.grey),
+                      ),
+                      title: Text('Password'),
+                      context: context,
+                      leading: Icon(Icons.password_rounded)),
+                  // reUse.reUseSettingItem(
+                  //     function: 'token',
+                  //     trailingIcon: Text(
+                  //       '',
+                  //       style: TextStyle(color: theme.grey),
+                  //     ),
+                  //     title: Text('Telegram Token'),
+                  //     context: context,
+                  //     leading: Icon(Icons.telegram_outlined)),
+                  Container(
+                    height: 60,
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: theme.white,
+                      borderRadius: BorderRadius.circular(6),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.midGrey,
+                          blurRadius: 2,
+                          offset: const Offset(0, 0), // Shadow position
                         ),
                       ],
                     ),
-                    // Padding(
-                    //   padding:  EdgeInsets.only(left:8.0,top:padding,bottom:padding),
-                    //   child: Align(
-                    //     alignment: Alignment.topLeft,
-                    //     child: reUse.reUseText(
-                    //         content: 'General',
-                    //         //weight: FontWeight.bold,
-                    //         size: 16.0,
-                    //         color: theme.black),
-                    //   ),
-                    // ),
-                    // InkWell(
-                    //     onTap: () {
-                    //       reUse.reUseCircleDialog(
-                    //           context: context,
-                    //           title: 'title',
-                    //           content: reUse.reUseTextFormField(),
-                    //           icon: Icons.password);
-                    //     },
-                    //     child: Material(
-                    //       color: Colors.transparent,
-                    //       child: reUse.reUseSettingItem(
-                    //           trailingIcon: Icon(Icons.visibility_off),
-                    //           title: Text('Pin Code'),
-                    //           context: context,
-                    //           leading: Icon(Icons.password)),
-                    //     )),
-                    // reUse.reUseSettingItem(
-                    //     trailingIcon: Switch(
-                    //       // This bool value toggles the switch.
-                    //       value: light,
-                    //       activeColor: theme.btnBlue,
-                    //       onChanged: (bool value) {
-                    //         // This is called when the user toggles the switch.
-                    //         setState(() {
-                    //           light = value;
-                    //         });
-                    //       },
-                    //     ),
-                    //     title: Text('Light Mode'),
-                    //     context: context,
-                    //     leading: Icon(Icons.sunny)),
-                    Padding(
-                      padding: EdgeInsets.all(padding),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: reUse.reUseText(
-                            content: 'Account',
-                            //weight: FontWeight.bold,
-                            size: 16.0,
-                            color: theme.black),
-                      ),
-                    ),
-                    reUse.reUseSettingItem(
-                        trailingIcon: Text(
-                          getEmail,
-                          style: TextStyle(color: theme.grey),
-                        ),
-                        title: Text('Email'),
-                        context: context,
-                        leading: Icon(Icons.email)),
-                    reUse.reUseSettingItem(
-                        trailingIcon: Text(
-                          getPassword ?? 'loading...',
-                          style: TextStyle(color: theme.grey),
-                        ),
-                        title: Text('Password'),
-                        context: context,
-                        leading: Icon(Icons.password_rounded)),
-                    // reUse.reUseSettingItem(
-                    //     function: 'token',
-                    //     trailingIcon: Text(
-                    //       '',
-                    //       style: TextStyle(color: theme.grey),
-                    //     ),
-                    //     title: Text('Telegram Token'),
-                    //     context: context,
-                    //     leading: Icon(Icons.telegram_outlined)),
-                    Container(
-                      height: 60,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: theme.white,
-                        borderRadius: BorderRadius.circular(6),
-                        boxShadow: [
-                          BoxShadow(
-                            color: theme.midGrey,
-                            blurRadius: 2,
-                            offset: const Offset(0, 0), // Shadow position
-                          ),
-                        ],
-                      ),
-                      child: Material(
-                        color: theme.white,
-                        child: InkWell(
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return Dialog(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: Stack(
-                                    clipBehavior: Clip.none,
-                                    alignment: Alignment.topCenter,
-                                    children: [
-                                      Positioned(
-                                        top: -60.0,
-                                        child: CircleAvatar(
-                                          radius: 60.0,
-                                          backgroundColor: theme.white,
-                                          child: Icon(
-                                            Icons.telegram_rounded,
-                                            color: theme.orange,
-                                            size: 100.0,
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 80.0, left: 15, right: 15),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            reUse.reUseText(
-                                                content:
-                                                    'Insert your telegram token down here',
-                                                color: theme.grey,
-                                                weight: FontWeight.w500,
-                                                size: 14.0),
-                                            const SizedBox(height: 20.0),
-                                            // Text(
-                                            //   content,
-                                            //   textAlign: TextAlign.center,
-                                            //   style: const TextStyle(
-                                            //     fontSize: 16.0,
-                                            //   ),
-                                            // ),
-                                            Container(
-                                              height: 60,
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8,
-                                                      vertical: 3),
-                                              decoration: BoxDecoration(
-                                                color: theme.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: theme.midGrey,
-                                                    blurRadius: 2,
-                                                    offset: const Offset(0,
-                                                        0), // Shadow position
-                                                  ),
-                                                ],
-                                              ),
-                                              child: TextFormField(
-                                                controller: token,
-                                                decoration: InputDecoration(
-                                                  prefixIcon:
-                                                      Icon(Icons.key_rounded),
-                                                  suffixIcon: const Icon(
-                                                    Icons.search,
-                                                    color: Colors.transparent,
-                                                  ),
-                                                  filled: true,
-                                                  fillColor: theme.white,
-                                                  hintText: 'hintText',
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide:
-                                                        const BorderSide(
-                                                            color:
-                                                                Colors.white),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25.7),
-                                                  ),
-                                                  enabledBorder:
-                                                      UnderlineInputBorder(
-                                                    borderSide:
-                                                        const BorderSide(
-                                                            color:
-                                                                Colors.white),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25.7),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 20.0),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 10),
-                                              child: Flexible(
-                                                child: Container(
-                                                  height: 40,
-                                                  width: Get.width,
-                                                  decoration: BoxDecoration(
-                                                    color: theme.litestOrange,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            6),
-                                                    // boxShadow: [
-                                                    //   BoxShadow(
-                                                    //     color: Colors.grey,
-                                                    //     blurRadius: 1,
-                                                    //     //offset: Offset(4, 8), // Shadow position
-                                                    //   ),
-                                                    // ],
-                                                  ),
-                                                  child: Material(
-                                                    color: Colors.transparent,
-                                                    child: InkWell(
-                                                      onTap: () async {
-                                                        glb.insertTelegramToken(
-                                                            token: token.text);
-                                                      },
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    right: 8.0),
-                                                            child: Icon(
-                                                              null,
-                                                              color:
-                                                                  theme.orange,
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            'ok',
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                color:
-                                                                    theme.black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          child: Center(
-                            child: ListTile(
-                              title: Text('Telegram Token'),
-                              trailing: SizedBox(
-                                  width: textWidth,
-                                  child: Text(
-                                    getToken,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        color: theme.grey,
-                                        overflow: TextOverflow.ellipsis),
-                                  )),
-                              leading: Icon(Icons.telegram_rounded),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 60,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: theme.white,
-                        borderRadius: BorderRadius.circular(6),
-                        boxShadow: [
-                          BoxShadow(
-                            color: theme.midGrey,
-                            blurRadius: 2,
-                            offset: const Offset(0, 0), // Shadow position
-                          ),
-                        ],
-                      ),
-                      child: Material(
-                        color: theme.white,
-                        child: InkWell(
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return Dialog(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: Stack(
-                                    clipBehavior: Clip.none,
-                                    alignment: Alignment.topCenter,
-                                    children: [
-                                      Positioned(
-                                        top: -60.0,
-                                        child: CircleAvatar(
-                                          radius: 60.0,
-                                          backgroundColor: theme.white,
-                                          child: Icon(
-                                            Icons.telegram_rounded,
-                                            color: theme.orange,
-                                            size: 100.0,
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 80.0, left: 15, right: 15),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            reUse.reUseText(
-                                                content:
-                                                    'Insert your telegram token down here',
-                                                color: theme.grey,
-                                                weight: FontWeight.w500,
-                                                size: 14.0),
-                                            const SizedBox(height: 20.0),
-                                            // Text(
-                                            //   content,
-                                            //   textAlign: TextAlign.center,
-                                            //   style: const TextStyle(
-                                            //     fontSize: 16.0,
-                                            //   ),
-                                            // ),
-                                            Container(
-                                              height: 60,
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8,
-                                                      vertical: 3),
-                                              decoration: BoxDecoration(
-                                                color: theme.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: theme.midGrey,
-                                                    blurRadius: 2,
-                                                    offset: const Offset(0,
-                                                        0), // Shadow position
-                                                  ),
-                                                ],
-                                              ),
-                                              child: TextFormField(
-                                                controller: chatid,
-                                                decoration: InputDecoration(
-                                                  prefixIcon:
-                                                      Icon(Icons.key_rounded),
-                                                  suffixIcon: const Icon(
-                                                    Icons.search,
-                                                    color: Colors.transparent,
-                                                  ),
-                                                  filled: true,
-                                                  fillColor: theme.white,
-                                                  hintText: 'hintText',
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide:
-                                                        const BorderSide(
-                                                            color:
-                                                                Colors.white),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25.7),
-                                                  ),
-                                                  enabledBorder:
-                                                      UnderlineInputBorder(
-                                                    borderSide:
-                                                        const BorderSide(
-                                                            color:
-                                                                Colors.white),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25.7),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 20.0),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 10),
-                                              child: Flexible(
-                                                child: Container(
-                                                  height: 40,
-                                                  width: Get.width,
-                                                  decoration: BoxDecoration(
-                                                    color: theme.litestOrange,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            6),
-                                                    // boxShadow: [
-                                                    //   BoxShadow(
-                                                    //     color: Colors.grey,
-                                                    //     blurRadius: 1,
-                                                    //     //offset: Offset(4, 8), // Shadow position
-                                                    //   ),
-                                                    // ],
-                                                  ),
-                                                  child: Material(
-                                                    color: Colors.transparent,
-                                                    child: InkWell(
-                                                      onTap: () async {
-                                                        glb.insertTelegramChatID(
-                                                            chatid:
-                                                                chatid.text);
-                                                      },
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    right: 8.0),
-                                                            child: Icon(
-                                                              null,
-                                                              color:
-                                                                  theme.orange,
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            'ok',
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                color:
-                                                                    theme.black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          child: Center(
-                            child: ListTile(
-                              title: Text('Chat ID'),
-                              trailing: SizedBox(
-                                  width: textWidth,
-                                  child: Text(
-                                    getChatId,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        color: theme.grey,
-                                        overflow: TextOverflow.ellipsis),
-                                  )),
-                              leading: Icon(Icons.telegram_rounded),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.all(padding),
-                      width: Get.width,
-                      child: TextButton.icon(
-                        onPressed: () {
-                          reUse.reUseCircleDialog(
-                              context: context,
-                              function: 'logOut',
-                              icon: Icons.logout_rounded,
-                              title: 'Log out',
-                              content: Center(
-                                child: Text(
-                                  'Are sure you want to log out?',
-                                  style: TextStyle(
-                                    color: theme.black,
-                                  ),
+                    child: Material(
+                      color: theme.white,
+                      child: InkWell(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Dialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
-                              ));
+                                child: Stack(
+                                  clipBehavior: Clip.none,
+                                  alignment: Alignment.topCenter,
+                                  children: [
+                                    Positioned(
+                                      top: -60.0,
+                                      child: CircleAvatar(
+                                        radius: 60.0,
+                                        backgroundColor: theme.white,
+                                        child: Icon(
+                                          Icons.telegram_rounded,
+                                          color: theme.orange,
+                                          size: 100.0,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 80.0, left: 15, right: 15),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          reUse.reUseText(
+                                              content:
+                                                  'Insert your telegram token down here',
+                                              color: theme.grey,
+                                              weight: FontWeight.w500,
+                                              size: 14.0),
+                                          const SizedBox(height: 20.0),
+                                          // Text(
+                                          //   content,
+                                          //   textAlign: TextAlign.center,
+                                          //   style: const TextStyle(
+                                          //     fontSize: 16.0,
+                                          //   ),
+                                          // ),
+                                          Container(
+                                            height: 60,
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 8, vertical: 3),
+                                            decoration: BoxDecoration(
+                                              color: theme.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: theme.midGrey,
+                                                  blurRadius: 2,
+                                                  offset: const Offset(
+                                                      0, 0), // Shadow position
+                                                ),
+                                              ],
+                                            ),
+                                            child: TextFormField(
+                                              controller: token,
+                                              decoration: InputDecoration(
+                                                prefixIcon:
+                                                    Icon(Icons.key_rounded),
+                                                suffixIcon: const Icon(
+                                                  Icons.search,
+                                                  color: Colors.transparent,
+                                                ),
+                                                filled: true,
+                                                fillColor: theme.white,
+                                                hintText: 'hintText',
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Colors.white),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          25.7),
+                                                ),
+                                                enabledBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Colors.white),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          25.7),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 20.0),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 10),
+                                            child: Flexible(
+                                              child: Container(
+                                                height: 40,
+                                                width: Get.width,
+                                                decoration: BoxDecoration(
+                                                  color: theme.litestOrange,
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                  // boxShadow: [
+                                                  //   BoxShadow(
+                                                  //     color: Colors.grey,
+                                                  //     blurRadius: 1,
+                                                  //     //offset: Offset(4, 8), // Shadow position
+                                                  //   ),
+                                                  // ],
+                                                ),
+                                                child: Material(
+                                                  color: Colors.transparent,
+                                                  child: InkWell(
+                                                    onTap: () async {
+                                                      glb.insertTelegramToken(
+                                                          token: token.text);
+                                                    },
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  right: 8.0),
+                                                          child: Icon(
+                                                            null,
+                                                            color: theme.orange,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          'ok',
+                                                          style: TextStyle(
+                                                              fontSize: 14,
+                                                              color:
+                                                                  theme.black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
                         },
-                        icon: Icon(Icons.login_rounded),
-                        label: Text('Log Out'),
-                        style: TextButton.styleFrom(
-                          backgroundColor: theme.litestRed,
-                          foregroundColor: theme.red,
+                        child: Center(
+                          child: ListTile(
+                            title: Text('Telegram Token'),
+                            trailing: SizedBox(
+                                width: textWidth,
+                                child: Text(
+                                  getToken,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                      color: theme.grey,
+                                      overflow: TextOverflow.ellipsis),
+                                )),
+                            leading: Icon(Icons.telegram_rounded),
+                          ),
                         ),
                       ),
                     ),
-                  ],
-                ),
-              )
-            ],
-          ),
+                  ),
+                  Container(
+                    height: 60,
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: theme.white,
+                      borderRadius: BorderRadius.circular(6),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.midGrey,
+                          blurRadius: 2,
+                          offset: const Offset(0, 0), // Shadow position
+                        ),
+                      ],
+                    ),
+                    child: Material(
+                      color: theme.white,
+                      child: InkWell(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Dialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Stack(
+                                  clipBehavior: Clip.none,
+                                  alignment: Alignment.topCenter,
+                                  children: [
+                                    Positioned(
+                                      top: -60.0,
+                                      child: CircleAvatar(
+                                        radius: 60.0,
+                                        backgroundColor: theme.white,
+                                        child: Icon(
+                                          Icons.telegram_rounded,
+                                          color: theme.orange,
+                                          size: 100.0,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 80.0, left: 15, right: 15),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          reUse.reUseText(
+                                              content:
+                                                  'Insert your telegram token down here',
+                                              color: theme.grey,
+                                              weight: FontWeight.w500,
+                                              size: 14.0),
+                                          const SizedBox(height: 20.0),
+                                          // Text(
+                                          //   content,
+                                          //   textAlign: TextAlign.center,
+                                          //   style: const TextStyle(
+                                          //     fontSize: 16.0,
+                                          //   ),
+                                          // ),
+                                          Container(
+                                            height: 60,
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 8, vertical: 3),
+                                            decoration: BoxDecoration(
+                                              color: theme.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: theme.midGrey,
+                                                  blurRadius: 2,
+                                                  offset: const Offset(
+                                                      0, 0), // Shadow position
+                                                ),
+                                              ],
+                                            ),
+                                            child: TextFormField(
+                                              controller: chatid,
+                                              decoration: InputDecoration(
+                                                prefixIcon:
+                                                    Icon(Icons.key_rounded),
+                                                suffixIcon: const Icon(
+                                                  Icons.search,
+                                                  color: Colors.transparent,
+                                                ),
+                                                filled: true,
+                                                fillColor: theme.white,
+                                                hintText: 'hintText',
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Colors.white),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          25.7),
+                                                ),
+                                                enabledBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Colors.white),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          25.7),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 20.0),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 10),
+                                            child: Flexible(
+                                              child: Container(
+                                                height: 40,
+                                                width: Get.width,
+                                                decoration: BoxDecoration(
+                                                  color: theme.litestOrange,
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                  // boxShadow: [
+                                                  //   BoxShadow(
+                                                  //     color: Colors.grey,
+                                                  //     blurRadius: 1,
+                                                  //     //offset: Offset(4, 8), // Shadow position
+                                                  //   ),
+                                                  // ],
+                                                ),
+                                                child: Material(
+                                                  color: Colors.transparent,
+                                                  child: InkWell(
+                                                    onTap: () async {
+                                                      glb.insertTelegramChatID(
+                                                          chatid: chatid.text);
+                                                    },
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  right: 8.0),
+                                                          child: Icon(
+                                                            null,
+                                                            color: theme.orange,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          'ok',
+                                                          style: TextStyle(
+                                                              fontSize: 14,
+                                                              color:
+                                                                  theme.black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Center(
+                          child: ListTile(
+                            title: Text('Chat ID'),
+                            trailing: SizedBox(
+                                width: textWidth,
+                                child: Text(
+                                  getChatId,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                      color: theme.grey,
+                                      overflow: TextOverflow.ellipsis),
+                                )),
+                            leading: Icon(Icons.telegram_rounded),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(padding),
+                    width: Get.width,
+                    child: TextButton.icon(
+                      onPressed: () {
+                        reUse.reUseCircleDialog(
+                            context: context,
+                            function: 'logOut',
+                            icon: Icons.logout_rounded,
+                            title: 'Log out',
+                            content: Center(
+                              child: Text(
+                                'Are sure you want to log out?',
+                                style: TextStyle(
+                                  color: theme.black,
+                                ),
+                              ),
+                            ));
+                      },
+                      icon: Icon(Icons.login_rounded),
+                      label: Text('Log Out'),
+                      style: TextButton.styleFrom(
+                        backgroundColor: theme.litestRed,
+                        foregroundColor: theme.red,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -802,6 +785,33 @@ class _AccountScreenState extends State<AccountScreen> {
         );
       },
     );
+  }
+
+  Future<void> phoneAuth() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    await auth.verifyPhoneNumber(
+      phoneNumber: '+855 78 344 511',
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        // ANDROID ONLY!
+
+        // Sign the user in (or link) with the auto-generated credential
+        await auth.signInWithCredential(credential);
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+      verificationFailed: (FirebaseAuthException error) {},
+      codeSent: (String verificationId, int? forceResendingToken) {
+        String smsCode = ''; // Get the SMS code from the user.
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: verificationId,
+          smsCode: smsCode,
+        );
+        auth.signInWithCredential(credential);
+      },
+    );
+    setState(() {
+
+    });
   }
 
   reUseButton({data, key, icon, text, backgroundColor, textColor}) {
