@@ -18,6 +18,7 @@ import 'package:wooiproject/PendingScreen.dart';
 import 'package:wooiproject/ProfileScreen.dart';
 import 'package:wooiproject/RenderListDetail.dart';
 import 'package:wooiproject/ReturnScreen.dart';
+import 'package:wooiproject/RevenueList.dart';
 import 'package:wooiproject/TotalPackageScreen.dart';
 import 'package:wooiproject/ViewScreen.dart';
 import 'package:wooiproject/WidgetReUse/SuperController.dart';
@@ -125,8 +126,7 @@ class ReUseWidget {
           children: [
             Text(
               getTime,
-              style:
-                  TextStyle(color: theme.black, fontWeight: FontWeight.bold),
+              style: TextStyle(color: theme.black, fontWeight: FontWeight.bold),
             ),
             reUseText(
                 size: 20.0,
@@ -241,7 +241,9 @@ class ReUseWidget {
       color: theme.litestOrange,
     );
   }
+
   final clsLan = ClsLanguage();
+
   unitTwoHomeScreen(
       {int? totalLength,
       List? totalPackageData,
@@ -782,10 +784,10 @@ class ReUseWidget {
 
   reUseText({content, size, weight, color}) {
     return Text(
-      content,
+      content ?? '',
       maxLines: 2,
       style: TextStyle(
-          fontSize: size ?? 12.0,
+          fontSize: size ?? 12,
           color: color ?? theme.black,
           fontWeight: weight ?? FontWeight.normal),
     );
@@ -832,6 +834,7 @@ class ReUseWidget {
       ),
     );
   }
+
   reUseRowText(
       {double? lableSize, content, size, weight, color, title, titleColor}) {
     return Flexible(
@@ -840,7 +843,7 @@ class ReUseWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
-             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 title,
@@ -944,8 +947,8 @@ class ReUseWidget {
 
   reUseCreatePackage({context, padding, height}) {
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
-      height: Get.height *0.06,
+      margin: const EdgeInsets.only(bottom: 10),
+      height: Get.height * 0.06,
       width: Get.width,
       child: TextButton.icon(
         style: TextButton.styleFrom(backgroundColor: theme.litestOrange),
@@ -1100,7 +1103,8 @@ class ReUseWidget {
     );
   }
 
-  reuseTextField({mixLength,label, controller, textIcon, inputType, require, formater}) {
+  reuseTextField(
+      {mixLength, label, controller, textIcon, inputType, require, formater}) {
     return TextFormField(
       controller: controller ?? dialogPhoneNum,
       // keyboardType: inputType,
@@ -2084,11 +2088,10 @@ class ReUseWidget {
     );
   }
 
-  reUseBoxText({title, value}) {
+  reUseBoxText({title, value,data}) {
     return Container(
       height: Get.height * 0.1,
       width: Get.width,
-      padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: theme.white,
@@ -2101,25 +2104,37 @@ class ReUseWidget {
           ),
         ],
       ),
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: reUseText(
-                content: title,
-                size: 14.0,
-                weight: FontWeight.w500,
-                color: theme.darkGrey),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: () {
+            Get.to(const RevenueList(),arguments: data);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: reUseText(
+                      content: title,
+                      size: 14.0,
+                      weight: FontWeight.w500,
+                      color: theme.darkGrey),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: reUseText(
+                      content: value ?? "",
+                      size: 24.0,
+                      weight: FontWeight.bold,
+                      color: theme.darkGrey),
+                ),
+              ],
+            ),
           ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: reUseText(
-                content: value + ' \$',
-                size: 24.0,
-                weight: FontWeight.bold,
-                color: theme.darkGrey),
-          ),
-        ],
+        ),
       ),
     );
   }
