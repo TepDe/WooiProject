@@ -50,6 +50,7 @@ class _AccountScreenState extends State<AccountScreen> {
     super.initState();
     //fetchLocalStorage();
     fetchUserData();
+    completeListLength();
   }
 
   getDatsa(getUid) async {
@@ -151,7 +152,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     //     borderRadius: BorderRadius.circular(50),
                     //     border: Border.all(color: theme.orange, width: 1.5)),
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         phoneAuth();
                       },
                       child: const CircleAvatar(
@@ -177,7 +178,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     children: [
                       Flexible(
                         child: reUse.reUseBoxText(
-                            value: '12', title: clsLan.revenue),
+                          data: completeList,
+                            value: (price.toString()) + " \$", title: clsLan.revenue),
                       ),
                       Flexible(
                         child:
@@ -253,6 +255,14 @@ class _AccountScreenState extends State<AccountScreen> {
                         style: TextStyle(color: theme.grey),
                       ),
                       title: Text('Password'),
+                      context: context,
+                      leading: Icon(Icons.password_rounded)),
+                  reUse.reUseSettingItem(
+                      trailingIcon: Text(
+                        getPassword ?? 'loading...',
+                        style: TextStyle(color: theme.grey),
+                      ),
+                      title: Text('ABA Code'),
                       context: context,
                       leading: Icon(Icons.password_rounded)),
                   // reUse.reUseSettingItem(
@@ -809,9 +819,7 @@ class _AccountScreenState extends State<AccountScreen> {
         auth.signInWithCredential(credential);
       },
     );
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   reUseButton({data, key, icon, text, backgroundColor, textColor}) {
@@ -833,6 +841,32 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
       ),
     );
+  }
+
+  List completeList = [];
+  List totalPrice = [];
+  var price;
+
+  completeListLength() {
+    try {
+      DatabaseReference refs = FirebaseDatabase.instance
+          .ref('Complete')
+          .child(auth.currentUser!.uid);
+      refs.onValue.listen((event) {
+        setState(() {});
+        completeList.clear();
+        DataSnapshot driver = event.snapshot;
+        Map values = driver.value as Map;
+        values.forEach((key, value) {
+          completeList.add(value);
+          totalPrice.add(int.parse(value['price']));
+          price = totalPrice.reduce((a, b) => a + b);
+          setState(() {});
+        });
+      });
+    } catch (e) {
+      print('completeListLength $e');
+    }
   }
 }
 
