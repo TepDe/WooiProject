@@ -337,11 +337,11 @@ class _CompleteScreenState extends State<CompleteScreen> {
                                             weight: FontWeight.w500),
                                         reUse.reUseColumnText(
                                             titleColor: theme.grey,
-                                            title: clsLan.qty,
+                                            title: clsLan.price,
                                             lableSize: 11,
                                             size: 14.0,
                                             color: theme.black,
-                                            content: forDisplay[index]['qty'],
+                                            content: forDisplay[index]['price']+" \$",
                                             weight: FontWeight.w500),
                                         // reUse.reUseText(
                                         //     weight: FontWeight.bold,
