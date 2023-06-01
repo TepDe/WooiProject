@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooiproject/Distination/language.dart';
@@ -96,6 +97,7 @@ class _AccountScreenState extends State<AccountScreen> {
         getUid = documentSnapshot['uid'].toString();
         getEmail = documentSnapshot['email'].toString();
         getPassword = documentSnapshot['password'].toString();
+        getPhoneNumber = documentSnapshot['phoneNumber'].toString();
         getUserID = documentSnapshot['userID'].toString();
         getLastName = documentSnapshot['lastname'].toString();
         getFirstName = documentSnapshot['firstname'].toString();
@@ -153,7 +155,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     //     border: Border.all(color: theme.orange, width: 1.5)),
                     child: InkWell(
                       onTap: () {
-                        phoneAuth();
+                        verifyUserPhoneNumber();
                       },
                       child: const CircleAvatar(
                         backgroundImage: NetworkImage(
@@ -178,8 +180,9 @@ class _AccountScreenState extends State<AccountScreen> {
                     children: [
                       Flexible(
                         child: reUse.reUseBoxText(
-                          data: completeList,
-                            value: (price.toString()) + " \$", title: clsLan.revenue),
+                            data: completeList,
+                            value: (price.toString()) + " \$",
+                            title: clsLan.revenue),
                       ),
                       Flexible(
                         child:
@@ -246,25 +249,33 @@ class _AccountScreenState extends State<AccountScreen> {
                         getEmail,
                         style: TextStyle(color: theme.grey),
                       ),
-                      title: Text('Email'),
+                      title: const Text('Email'),
                       context: context,
-                      leading: Icon(Icons.email)),
+                      leading: const Icon(Icons.email)),
                   reUse.reUseSettingItem(
                       trailingIcon: Text(
                         getPassword ?? 'loading...',
                         style: TextStyle(color: theme.grey),
                       ),
-                      title: Text('Password'),
+                      title: const Text('Password'),
                       context: context,
-                      leading: Icon(Icons.password_rounded)),
+                      leading: const Icon(Icons.password_rounded)),
+                  reUse.reUseSettingItem(
+                      trailingIcon: Text(
+                        getPhoneNumber ?? 'loading...',
+                        style: TextStyle(color: theme.grey),
+                      ),
+                      title: const Text('Phone Number'),
+                      context: context,
+                      leading: const Icon(Icons.phone)),
                   reUse.reUseSettingItem(
                       trailingIcon: Text(
                         getPassword ?? 'loading...',
                         style: TextStyle(color: theme.grey),
                       ),
-                      title: Text('ABA Code'),
+                      title: const Text('ABA Code'),
                       context: context,
-                      leading: Icon(Icons.password_rounded)),
+                      leading: const Icon(Icons.password_rounded)),
                   // reUse.reUseSettingItem(
                   //     function: 'token',
                   //     trailingIcon: Text(
@@ -358,8 +369,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                             child: TextFormField(
                                               controller: token,
                                               decoration: InputDecoration(
-                                                prefixIcon:
-                                                    Icon(Icons.key_rounded),
+                                                prefixIcon: const Icon(
+                                                    Icons.key_rounded),
                                                 suffixIcon: const Icon(
                                                   Icons.search,
                                                   color: Colors.transparent,
@@ -456,7 +467,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         },
                         child: Center(
                           child: ListTile(
-                            title: Text('Telegram Token'),
+                            title: const Text('Telegram Token'),
                             trailing: SizedBox(
                                 width: textWidth,
                                 child: Text(
@@ -466,7 +477,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                       color: theme.grey,
                                       overflow: TextOverflow.ellipsis),
                                 )),
-                            leading: Icon(Icons.telegram_rounded),
+                            leading: const Icon(Icons.telegram_rounded),
                           ),
                         ),
                       ),
@@ -556,8 +567,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                             child: TextFormField(
                                               controller: chatid,
                                               decoration: InputDecoration(
-                                                prefixIcon:
-                                                    Icon(Icons.key_rounded),
+                                                prefixIcon: const Icon(
+                                                    Icons.key_rounded),
                                                 suffixIcon: const Icon(
                                                   Icons.search,
                                                   color: Colors.transparent,
@@ -654,7 +665,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         },
                         child: Center(
                           child: ListTile(
-                            title: Text('Chat ID'),
+                            title: const Text('Chat ID'),
                             trailing: SizedBox(
                                 width: textWidth,
                                 child: Text(
@@ -664,7 +675,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                       color: theme.grey,
                                       overflow: TextOverflow.ellipsis),
                                 )),
-                            leading: Icon(Icons.telegram_rounded),
+                            leading: const Icon(Icons.telegram_rounded),
                           ),
                         ),
                       ),
@@ -689,8 +700,8 @@ class _AccountScreenState extends State<AccountScreen> {
                               ),
                             ));
                       },
-                      icon: Icon(Icons.login_rounded),
-                      label: Text('Log Out'),
+                      icon: const Icon(Icons.login_rounded),
+                      label: const Text('Log Out'),
                       style: TextButton.styleFrom(
                         backgroundColor: theme.litestRed,
                         foregroundColor: theme.red,
@@ -797,29 +808,32 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 
-  Future<void> phoneAuth() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
+  var receivedID = '';
+  bool otpFieldVisibility = false;
+  String verificationId = '';
+  String phoneNumber = "+855 78 344 511";
+  String authStatus = "";
+  String otp = "";
 
-    await auth.verifyPhoneNumber(
-      phoneNumber: '+855 78 344 511',
+  Future<void> verifyUserPhoneNumber() async {
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
       verificationCompleted: (PhoneAuthCredential credential) async {
-        // ANDROID ONLY!
-
-        // Sign the user in (or link) with the auto-generated credential
+        await auth.signInWithCredential(credential);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        if (e.code == 'invalid-phone-number') {
+          print('The provided phone number is not valid.');
+        }
+      },
+      codeSent: (String verificationId, int? resendToken) async {
+        String smsCode = 'xxxx';
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(
+            verificationId: verificationId, smsCode: smsCode);
         await auth.signInWithCredential(credential);
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
-      verificationFailed: (FirebaseAuthException error) {},
-      codeSent: (String verificationId, int? forceResendingToken) {
-        String smsCode = ''; // Get the SMS code from the user.
-        PhoneAuthCredential credential = PhoneAuthProvider.credential(
-          verificationId: verificationId,
-          smsCode: smsCode,
-        );
-        auth.signInWithCredential(credential);
-      },
     );
-    setState(() {});
   }
 
   reUseButton({data, key, icon, text, backgroundColor, textColor}) {
@@ -831,7 +845,7 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
         onPressed: () async {
           FirebaseAuth.instance.signOut();
-          Get.to(LogInScreen());
+          Get.to(const LogInScreen());
           setState(() {});
         },
         child: Text(
