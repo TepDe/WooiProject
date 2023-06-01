@@ -326,43 +326,11 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                             size: valueSize,
                                             lableSize: labelSize,
                                             color: theme.black,
-                                            content: '1',
+                                            content: forDisplay[index]['price'] +" \$",
                                             weight: FontWeight.w500),
                                       ],
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(3.0),
-                                      child: Row(
-                                        children: [
-                                          reUse.reUseColumnText(
-                                              lableSize: 14,
-                                              titleColor: theme.grey,
-                                              title: '',
-                                              size: 16.0,
-                                              color: theme.black,
-                                              content: '',
-                                              weight: FontWeight.w500),
-                                          reUse.reUseColumnText(
-                                              lableSize: 14,
-                                              titleColor: theme.grey,
-                                              title: '',
-                                              size: 16.0,
-                                              color: theme.black,
-                                              content: '',
-                                              weight: FontWeight.w500),
-                                          reUse.reUseColumnText(
-                                              lableSize: labelSize,
-                                              titleColor: theme.grey,
-                                              title: clsLan.price,
-                                              size: valueSize,
-                                              color: theme.black,
-                                              content: forDisplay[index]['price'] +
-                                                      " \$" ??
-                                                  "No price",
-                                              weight: FontWeight.w500),
-                                        ],
-                                      ),
-                                    ),
+
                                     Divider(
                                       color: theme.grey,
                                     ),
