@@ -2088,7 +2088,7 @@ class ReUseWidget {
     );
   }
 
-  reUseBoxText({title, value,data}) {
+  reUseBoxText({title, value,data,witchClick}) {
     return Container(
       height: Get.height * 0.1,
       width: Get.width,
