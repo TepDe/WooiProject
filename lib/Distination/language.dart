@@ -1,4 +1,4 @@
-class ClsLanguage{
+class ClsLanguage {
   String totalPackage = 'ទំនិញសរុប';
   String pending = 'កំពុងដំណើរការ';
   String complete = 'បញ្ចប់';
@@ -28,4 +28,5 @@ class ClsLanguage{
   String delete = 'លុប';
   String edit = 'កែរ';
   String all = 'ទាំងអស់';
+  String paid = 'បានសង់';
 }
