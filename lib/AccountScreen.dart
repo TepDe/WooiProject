@@ -185,8 +185,10 @@ class _AccountScreenState extends State<AccountScreen> {
                             title: clsLan.revenue),
                       ),
                       Flexible(
-                        child:
-                            reUse.reUseBoxText(value: '10', title: 'Earning'),
+                        child: reUse.reUseBoxText(
+                            value: '10',
+                            title: clsLan.paid,
+                            data: completeList),
                       ),
                     ],
                   ),
@@ -275,7 +277,10 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
                       title: const Text('ABA Code'),
                       context: context,
-                      leading: const Icon(Icons.password_rounded)),
+                      leading: const Icon(
+                        Icons.onetwothree_rounded,
+                        size: 44,
+                      )),
                   // reUse.reUseSettingItem(
                   //     function: 'token',
                   //     trailingIcon: Text(
