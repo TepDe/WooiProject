@@ -29,10 +29,10 @@ class _LogInScreenState extends State<LogInScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: SafeArea(
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: Container(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage("assets/images/login_background.png"),
