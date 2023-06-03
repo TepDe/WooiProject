@@ -156,28 +156,29 @@ class _LogInScreenState extends State<LogInScreen> {
                           //             child: CircularProgressIndicator()));
                           //   },
                           // );
-                          if (userEmail.text.isEmpty) {
-                            onDialogOK(
-                                context: context,
-                                title: 'Not Found',
-                                content: 'Email is missing');
-                          } else if (userPassword.text.isEmpty) {
-                            onDialogOK(
-                                context: context,
-                                title: 'Not Found',
-                                content: 'Password is missing');
-                          } else {
-                            onUserSignIn(
-                                email: userEmail.text.trim(),
-                                // email: 'u3@gmail.com',
-                                password: userPassword.text.trim(),
-                                // password: '111111',
-                                context: context);
-                          }
+                          // if (userEmail.text.isEmpty) {
+                          //   onDialogOK(
+                          //       context: context,
+                          //       title: 'Not Found',
+                          //       content: 'Email is missing');
+                          // } else if (userPassword.text.isEmpty) {
+                          //   onDialogOK(
+                          //       context: context,
+                          //       title: 'Not Found',
+                          //       content: 'Password is missing');
+                          // } else {
+                          //   onUserSignIn(
+                          //       email: userEmail.text.trim(),
+                          //       // email: 'u3@gmail.com',
+                          //       password: userPassword.text.trim(),
+                          //       // password: '111111',
+                          //       context: context);
+                          // }
                           //reUse.alertDialog(context);
                           // password: '111111');
 
                           // lc._phoneVerify(context);
+                          phoneAuth();
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -236,6 +237,37 @@ class _LogInScreenState extends State<LogInScreen> {
   final textphone = TextEditingController();
   var userEmail = TextEditingController();
   var userPassword = TextEditingController();
+
+  phoneAuth() async {
+  final result =  await auth.verifyPhoneNumber(
+      phoneNumber: '+85578344511',
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await auth.signInWithCredential(credential);
+        Get.to(ViewScreen());
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        if (e.code == 'invalid-phone-number') {
+          print('The provided phone number is not valid.');
+        }
+      },
+      codeSent: (String verificationId, int? resendToken) async {
+        String smsCode = '124578';
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(
+            verificationId: verificationId, smsCode: smsCode);
+        await auth.signInWithCredential(credential);
+      },
+      codeAutoRetrievalTimeout: (String verificationId)async {
+        verificationId = verificationId;
+        print(verificationId);
+        print("Timout");
+      },
+    );
+
+    final r = result;
+    setState(() {
+
+    });
+  }
 
   onUserSignIn({email, password, context}) async {
     try {
