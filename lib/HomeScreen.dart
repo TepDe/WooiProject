@@ -219,11 +219,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     double btnHeight = MediaQuery.of(context).size.height * 0.06;
-    return WillPopScope(
-      onWillPop: () => exitApp(),
-      child: Scaffold(
-        backgroundColor: theme.liteGrey,
-        body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: theme.liteGrey,
+      body: WillPopScope(
+        onWillPop: () => exitApp(),
+
+        child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
