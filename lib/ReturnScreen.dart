@@ -44,403 +44,413 @@ class _ReturnScreenState extends State<ReturnScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-      body: Column(
-        children: [
-          // reUse.reUseHeader(
-          //     label: 'Return', title: 'Return', headercolor: theme.liteRed),
-          // returnList.isEmpty
-          //     ? Flexible(
-          //         flex: 3,
-          //         child: Column(
-          //           mainAxisAlignment: MainAxisAlignment.center,
-          //           children: [
-          //            Image.asset('assets/images/return-box.png',scale: 12,color: theme.grey,),
-          //             reUse.reUseText(content: 'No Return \n Available', color: theme.grey)
-          //           ],
-          //         ))
-          //     : reUse.reUseRerurnPackageList(returnData: returnList,pkc:returnList ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/ReturnHead.png"),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      TextButton.icon(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        icon: Icon(
-                          Icons.arrow_back_ios_new_outlined,
-                          color: theme.red,
-                        ),
-                        label: Text(
-                          clsLan.returns,
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: theme.red,
-                              //color: titleColor,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            // reUse.reUseHeader(
+            //     label: 'Return', title: 'Return', headercolor: theme.liteRed),
+            // returnList.isEmpty
+            //     ? Flexible(
+            //         flex: 3,
+            //         child: Column(
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           children: [
+            //            Image.asset('assets/images/return-box.png',scale: 12,color: theme.grey,),
+            //             reUse.reUseText(content: 'No Return \n Available', color: theme.grey)
+            //           ],
+            //         ))
+            //     : reUse.reUseRerurnPackageList(returnData: returnList,pkc:returnList ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/ReturnHead.png"),
+                  fit: BoxFit.cover,
                 ),
-                Row(
-                  children: [
-                    Flexible(
-                      flex: 5,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 12.0),
-                        child: TextFormField(
-                          autofocus: false,
-                          controller: search,
-                          decoration: InputDecoration(
-                            filled: true,
-                            hintStyle: const TextStyle(fontSize: 14),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        TextButton.icon(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          icon: Icon(
+                            Icons.arrow_back_ios_new_outlined,
+                            color: theme.red,
+                          ),
+                          label: Text(
+                            clsLan.returns,
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: theme.red,
+                                //color: titleColor,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Flexible(
+                        flex: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 12.0),
+                          child: TextFormField(
+                            autofocus: false,
+                            controller: search,
+                            decoration: InputDecoration(
+                              filled: true,
+                              hintStyle: const TextStyle(fontSize: 14),
 
-                            fillColor: theme.white,
-                            hintText: clsLan.searchIDorPhoneNumber,
-                            border: OutlineInputBorder(
-                              // borderSide:
-                              //      BorderSide(color:theme.minGrey ,width: 0.0),
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide.none,
-                            ),
-                            suffixIcon: IconButton(
-                              splashColor: Colors.transparent,
-                              onPressed: () => {
-                                search.clear(),
-                                //packageList!.clear(),
-                                FocusManager.instance.primaryFocus?.unfocus(),
-                              },
-                              icon: const Icon(Icons.close),
-                            ),
+                              fillColor: theme.white,
+                              hintText: clsLan.searchIDorPhoneNumber,
+                              border: OutlineInputBorder(
+                                // borderSide:
+                                //      BorderSide(color:theme.minGrey ,width: 0.0),
+                                borderRadius: BorderRadius.circular(10.0),
+                                borderSide: BorderSide.none,
+                              ),
+                              suffixIcon: IconButton(
+                                splashColor: Colors.transparent,
+                                onPressed: () => {
+                                  search.clear(),
+                                  //packageList!.clear(),
+                                  FocusManager.instance.primaryFocus?.unfocus(),
+                                },
+                                icon: const Icon(Icons.close),
+                              ),
 
-                            // contentPadding:
-                            // EdgeInsets.only(left: 14.0, bottom: 12.0, top: 12.0),
-                            // focusedBorder: OutlineInputBorder(
-                            //   borderSide: BorderSide(color: Colors.white),
-                            //   borderRadius: BorderRadius.circular(25.7),
-                            //
-                            // ),
-                            // enabledBorder: UnderlineInputBorder(
-                            //   borderSide: BorderSide(color: Colors.red),
-                            //   borderRadius: BorderRadius.circular(25.7),
-                            // ),
+                              // contentPadding:
+                              // EdgeInsets.only(left: 14.0, bottom: 12.0, top: 12.0),
+                              // focusedBorder: OutlineInputBorder(
+                              //   borderSide: BorderSide(color: Colors.white),
+                              //   borderRadius: BorderRadius.circular(25.7),
+                              //
+                              // ),
+                              // enabledBorder: UnderlineInputBorder(
+                              //   borderSide: BorderSide(color: Colors.red),
+                              //   borderRadius: BorderRadius.circular(25.7),
+                              // ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: theme.litestRed,
-                        borderRadius: BorderRadius.circular(6),
-                        boxShadow: [
-                          BoxShadow(
-                            color: theme.minGrey,
-                            blurRadius: 6,
-                            offset: const Offset(0, 0), // Shadow position
-                          ),
-                        ],
-                      ),
-                      child: IconButton(
-                          splashRadius: 20,
-                          onPressed: () {
-                            List results = returnList
-                                .where((user) => user['packageID']
-                                    .toLowerCase()
-                                    .contains(
-                                        search.text.toString().toLowerCase()))
-                                .toList();
-                            if (results == null || results.isEmpty) {
-                              results = returnList
-                                  .where((user) => user['phoneNumber']
+                      Container(
+                        decoration: BoxDecoration(
+                          color: theme.litestRed,
+                          borderRadius: BorderRadius.circular(6),
+                          boxShadow: [
+                            BoxShadow(
+                              color: theme.minGrey,
+                              blurRadius: 6,
+                              offset: const Offset(0, 0), // Shadow position
+                            ),
+                          ],
+                        ),
+                        child: IconButton(
+                            splashRadius: 20,
+                            onPressed: () {
+                              List results = returnList
+                                  .where((user) => user['packageID']
                                       .toLowerCase()
                                       .contains(
                                           search.text.toString().toLowerCase()))
                                   .toList();
-                            }
-                            forDisplay = results;
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            setState(() {});
-                          },
-                          icon: Icon(
-                            Icons.search,
-                            color: theme.red,
-                          )),
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                reUse.reUseText(
-                    size: 14.0,
-                    content: '${clsLan.totalPackage} : ${forDisplay.length}'),
-                const Flexible(child: Divider()),
-                // Container(
-                //   decoration: BoxDecoration(
-                //     color: theme.litestOrange,
-                //     borderRadius: BorderRadius.circular(6),
-                //   ),
-                //   child: IconButton(
-                //       splashRadius: 20,
-                //       onPressed: () {},
-                //       icon: Icon(
-                //         Icons.filter_alt_outlined,
-                //         color: theme.orange,
-                //       )),
-                // )
-              ],
-            ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.all(8),
-                      itemCount: forDisplay.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          width: Get.width,
-                          margin: const EdgeInsets.all(6),
-                          //padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: theme.liteGrey,
-                            borderRadius: BorderRadius.circular(6),
-                            boxShadow: [
-                              BoxShadow(
-                                color: theme.minGrey,
-                                blurRadius: 4,
-                                offset: const Offset(0, 0), // Shadow position
-                              ),
-                            ],
-                          ),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(6),
-
-                              onTap: (){
-                                Get.to(const ReturnDetail(),arguments: forDisplay[index]);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        reUse.reUseText(
-                                            weight: FontWeight.w400,
-                                            size: 16.0,
-                                            color: theme.grey,
-                                            content: '${clsLan.packageID} :'),
-                                        Row(
-                                          children: [
-                                            reUse.reUseText(
-                                                weight: FontWeight.bold,
-                                                size: 16.0,
-                                                color: theme.blue,
-                                                content: forDisplay[index]
-                                                        ['packageID'] ??
-                                                    "No ID"),
-                                            SizedBox(
-                                              height: 40,
-                                              width: 40,
-                                              child: PopupMenuButton<int>(
-                                                onSelected: (item) {
-                                                  optionSelect(
-                                                      opt: item,
-                                                      data: forDisplay[index]);
-                                                  setState(() {});
-                                                },
-                                                itemBuilder: (context) => [
-                                                  const PopupMenuItem<int>(
-                                                      value: 0,
-                                                      child: Text('Back to Request')),
-                                                  const PopupMenuItem<int>(
-                                                      value: 1,
-                                                      child: Text('Delete')),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    Divider(
-                                      color: theme.grey,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        // reUse.reSetUseText(
-                                        //     titleColor: theme.grey,
-                                        //     title: 'Destination',
-                                        //     size: 14.0,
-                                        //     color: theme.black,
-                                        //     content: forDisplay[index]['location'],
-                                        //     weight: FontWeight.w500),
-                                        reUse.reUseColumnText(
-                                            titleColor: theme.grey,
-                                            title: clsLan.receiverLocation,
-                                            size: valueSize,
-                                            lableSize: labelSize,
-                                            color: theme.black,
-                                            content: forDisplay[index]['location'],
-                                            weight: FontWeight.w500),
-                                        reUse.reUseColumnText(
-                                            lableSize: labelSize,
-                                            titleColor: theme.grey,
-                                            title: clsLan.receiverPhoneNumber,
-                                            size: valueSize,
-                                            color: theme.black,
-                                            content: forDisplay[index]['phoneNumber'],
-                                            weight: FontWeight.w500),
-                                        reUse.reUseColumnText(
-                                            titleColor: theme.grey,
-                                            title: clsLan.qty,
-                                            size: valueSize,
-                                            lableSize: labelSize,
-                                            color: theme.black,
-                                            content: forDisplay[index]['price'] +" \$",
-                                            weight: FontWeight.w500),
-                                      ],
-                                    ),
-
-                                    Divider(
-                                      color: theme.grey,
-                                    ),
-                                    // Row(
-                                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                                    //   children: [
-                                    //     reUse.reUseText(
-                                    //         weight: FontWeight.w500,
-                                    //         size: labelSize,
-                                    //         color: theme.grey,
-                                    //         content: '${clsLan.note} : '),
-                                    //   ],
-                                    // ),
-                                    // Row(
-                                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                                    //   children: [
-                                    //     Flexible(
-                                    //       child: Container(
-                                    //         width: Get.width,
-                                    //         margin: const EdgeInsets.all(8.0),
-                                    //         padding: const EdgeInsets.all(8.0),
-                                    //         decoration: BoxDecoration(
-                                    //             border:
-                                    //                 Border.all(color: theme.grey)),
-                                    //         child: reUse.reUseTextNote(
-                                    //             weight: FontWeight.w400,
-                                    //             size: 14.0,
-                                    //             color: theme.black,
-                                    //             content: forDisplay[index]['note'] ??
-                                    //                 "No reason"),
-                                    //       ),
-                                    //     ),
-                                    //   ],
-                                    // ),
-                                    // Row(
-                                    //   children: [
-                                    //     reUse.reUseText(
-                                    //         weight: FontWeight.w400,
-                                    //         size: labelSize,
-                                    //         color: theme.grey,
-                                    //         content: '${clsLan.createDate} : '),
-                                    //     reUse.reUseText(
-                                    //         weight: FontWeight.bold,
-                                    //         size: valueSize,
-                                    //         color: theme.black,
-                                    //         content: forDisplay[index]['date']),
-                                    //   ],
-                                    // ),
-                                    // Row(
-                                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                                    //   children: [
-                                    //     reUse.reUseText(
-                                    //         weight: FontWeight.w400,
-                                    //         size: labelSize,
-                                    //         color: theme.grey,
-                                    //         content: '${clsLan.returnReason} : '),
-                                    //   ],
-                                    // ),
-                                    // Row(
-                                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                                    //   children: [
-                                    //     Flexible(
-                                    //       child: Container(
-                                    //         width: Get.width,
-                                    //         margin: const EdgeInsets.all(8.0),
-                                    //         padding: const EdgeInsets.all(8.0),
-                                    //         decoration: BoxDecoration(
-                                    //             border:
-                                    //                 Border.all(color: theme.grey)),
-                                    //         child: reUse.reUseTextNote(
-                                    //             weight: FontWeight.w400,
-                                    //             size: 14.0,
-                                    //             color: theme.black,
-                                    //             content: forDisplay[index]
-                                    //                     ['returnNote'] ??
-                                    //                 "No reason"),
-                                    //       ),
-                                    //     ),
-                                    //   ],
-                                    // ),
-                                    Row(
-                                      children: [
-                                        reUse.reUseText(
-                                            weight: FontWeight.w400,
-                                            size: labelSize,
-                                            color: theme.grey,
-                                            content: '${clsLan.returnTime} : '),
-                                        reUse.reUseText(
-                                            weight: FontWeight.bold,
-                                            size: valueSize,
-                                            color: theme.black,
-                                            content: forDisplay[index]['date']),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                              if (results == null || results.isEmpty) {
+                                results = returnList
+                                    .where((user) => user['phoneNumber']
+                                        .toLowerCase()
+                                        .contains(search.text
+                                            .toString()
+                                            .toLowerCase()))
+                                    .toList();
+                              }
+                              forDisplay = results;
+                              FocusManager.instance.primaryFocus?.unfocus();
+                              setState(() {});
+                            },
+                            icon: Icon(
+                              Icons.search,
+                              color: theme.red,
+                            )),
+                      )
+                    ],
                   ),
                 ],
               ),
             ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  reUse.reUseText(
+                      size: 14.0,
+                      content: '${clsLan.totalPackage} : ${forDisplay.length}'),
+                  const Flexible(child: Divider()),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     color: theme.litestOrange,
+                  //     borderRadius: BorderRadius.circular(6),
+                  //   ),
+                  //   child: IconButton(
+                  //       splashRadius: 20,
+                  //       onPressed: () {},
+                  //       icon: Icon(
+                  //         Icons.filter_alt_outlined,
+                  //         color: theme.orange,
+                  //       )),
+                  // )
+                ],
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(8),
+                        itemCount: forDisplay.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Container(
+                            width: Get.width,
+                            margin: const EdgeInsets.all(6),
+                            //padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: theme.liteGrey,
+                              borderRadius: BorderRadius.circular(6),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: theme.minGrey,
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 0), // Shadow position
+                                ),
+                              ],
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(6),
+                                onTap: () {
+                                  Get.to(const ReturnDetail(),
+                                      arguments: forDisplay[index]);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          reUse.reUseText(
+                                              weight: FontWeight.w400,
+                                              size: 16.0,
+                                              color: theme.grey,
+                                              content: '${clsLan.packageID} :'),
+                                          Row(
+                                            children: [
+                                              reUse.reUseText(
+                                                  weight: FontWeight.bold,
+                                                  size: 16.0,
+                                                  color: theme.blue,
+                                                  content: forDisplay[index]
+                                                          ['packageID'] ??
+                                                      "No ID"),
+                                              SizedBox(
+                                                height: 40,
+                                                width: 40,
+                                                child: PopupMenuButton<int>(
+                                                  onSelected: (item) {
+                                                    optionSelect(
+                                                        opt: item,
+                                                        data:
+                                                            forDisplay[index]);
+                                                    setState(() {});
+                                                  },
+                                                  itemBuilder: (context) => [
+                                                    const PopupMenuItem<int>(
+                                                        value: 0,
+                                                        child: Text(
+                                                            'Back to Request')),
+                                                    const PopupMenuItem<int>(
+                                                        value: 1,
+                                                        child: Text('Delete')),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      Divider(
+                                        color: theme.grey,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          // reUse.reSetUseText(
+                                          //     titleColor: theme.grey,
+                                          //     title: 'Destination',
+                                          //     size: 14.0,
+                                          //     color: theme.black,
+                                          //     content: forDisplay[index]['location'],
+                                          //     weight: FontWeight.w500),
+                                          reUse.reUseColumnText(
+                                              titleColor: theme.grey,
+                                              title: clsLan.receiverLocation,
+                                              size: valueSize,
+                                              lableSize: labelSize,
+                                              color: theme.black,
+                                              content: forDisplay[index]
+                                                  ['location'],
+                                              weight: FontWeight.w500),
+                                          reUse.reUseColumnText(
+                                              lableSize: labelSize,
+                                              titleColor: theme.grey,
+                                              title: clsLan.receiverPhoneNumber,
+                                              size: valueSize,
+                                              color: theme.black,
+                                              content: forDisplay[index]
+                                                  ['phoneNumber'],
+                                              weight: FontWeight.w500),
+                                          reUse.reUseColumnText(
+                                              titleColor: theme.grey,
+                                              title: clsLan.qty,
+                                              size: valueSize,
+                                              lableSize: labelSize,
+                                              color: theme.black,
+                                              content: forDisplay[index]
+                                                      ['price'] +
+                                                  " \$",
+                                              weight: FontWeight.w500),
+                                        ],
+                                      ),
+
+                                      Divider(
+                                        color: theme.grey,
+                                      ),
+                                      // Row(
+                                      //   crossAxisAlignment: CrossAxisAlignment.start,
+                                      //   children: [
+                                      //     reUse.reUseText(
+                                      //         weight: FontWeight.w500,
+                                      //         size: labelSize,
+                                      //         color: theme.grey,
+                                      //         content: '${clsLan.note} : '),
+                                      //   ],
+                                      // ),
+                                      // Row(
+                                      //   crossAxisAlignment: CrossAxisAlignment.start,
+                                      //   children: [
+                                      //     Flexible(
+                                      //       child: Container(
+                                      //         width: Get.width,
+                                      //         margin: const EdgeInsets.all(8.0),
+                                      //         padding: const EdgeInsets.all(8.0),
+                                      //         decoration: BoxDecoration(
+                                      //             border:
+                                      //                 Border.all(color: theme.grey)),
+                                      //         child: reUse.reUseTextNote(
+                                      //             weight: FontWeight.w400,
+                                      //             size: 14.0,
+                                      //             color: theme.black,
+                                      //             content: forDisplay[index]['note'] ??
+                                      //                 "No reason"),
+                                      //       ),
+                                      //     ),
+                                      //   ],
+                                      // ),
+                                      // Row(
+                                      //   children: [
+                                      //     reUse.reUseText(
+                                      //         weight: FontWeight.w400,
+                                      //         size: labelSize,
+                                      //         color: theme.grey,
+                                      //         content: '${clsLan.createDate} : '),
+                                      //     reUse.reUseText(
+                                      //         weight: FontWeight.bold,
+                                      //         size: valueSize,
+                                      //         color: theme.black,
+                                      //         content: forDisplay[index]['date']),
+                                      //   ],
+                                      // ),
+                                      // Row(
+                                      //   crossAxisAlignment: CrossAxisAlignment.start,
+                                      //   children: [
+                                      //     reUse.reUseText(
+                                      //         weight: FontWeight.w400,
+                                      //         size: labelSize,
+                                      //         color: theme.grey,
+                                      //         content: '${clsLan.returnReason} : '),
+                                      //   ],
+                                      // ),
+                                      // Row(
+                                      //   crossAxisAlignment: CrossAxisAlignment.start,
+                                      //   children: [
+                                      //     Flexible(
+                                      //       child: Container(
+                                      //         width: Get.width,
+                                      //         margin: const EdgeInsets.all(8.0),
+                                      //         padding: const EdgeInsets.all(8.0),
+                                      //         decoration: BoxDecoration(
+                                      //             border:
+                                      //                 Border.all(color: theme.grey)),
+                                      //         child: reUse.reUseTextNote(
+                                      //             weight: FontWeight.w400,
+                                      //             size: 14.0,
+                                      //             color: theme.black,
+                                      //             content: forDisplay[index]
+                                      //                     ['returnNote'] ??
+                                      //                 "No reason"),
+                                      //       ),
+                                      //     ),
+                                      //   ],
+                                      // ),
+                                      Row(
+                                        children: [
+                                          reUse.reUseText(
+                                              weight: FontWeight.w400,
+                                              size: labelSize,
+                                              color: theme.grey,
+                                              content:
+                                                  '${clsLan.returnTime} : '),
+                                          reUse.reUseText(
+                                              weight: FontWeight.bold,
+                                              size: valueSize,
+                                              color: theme.black,
+                                              content: forDisplay[index]
+                                                  ['date']),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
-    ));
+    );
   }
 
   final clsLan = ClsLanguage();
