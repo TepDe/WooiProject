@@ -9,11 +9,17 @@ import 'package:wooiproject/ViewScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-  );
-  runApp(  GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyApp()));
+  await Firebase.initializeApp();
+  // await Firebase.initializeApp(
+  //     options: const FirebaseOptions(
+  //         authDomain: 'wooi-c715e.web.app',
+  //         databaseURL: "https://wooi-c715e-default-rtdb.firebaseio.com",
+  //         apiKey: 'AIzaSyCXD78daMICVTVAXsmzNTvlk5TjDAgGdNQ',
+  //         appId: '1:1093614007557:android:9efb550fcadd369394f36c',
+  //         messagingSenderId: '1093614007557',
+  //         projectId: 'wooi-c715e'));
+
+  runApp(GetMaterialApp(debugShowCheckedModeBanner: false, home: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -28,11 +34,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-
-      home:  mc.isSignIn.value == true ? LogInScreen() : ViewScreen(),
+      home: mc.isSignIn.value == true ? LogInScreen() : ViewScreen(),
     );
   }
 }
+
 class MainController extends GetxController {
   @override
   void onInit() async {
@@ -41,8 +47,8 @@ class MainController extends GetxController {
     await onAlreadySignIn();
     await request();
     await requestUserPermissionLocation();
-
   }
+
   Future<Position> requestUserPermissionLocation() async {
     await Geolocator.requestPermission()
         .then((value) {})
