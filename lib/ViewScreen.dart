@@ -16,7 +16,7 @@ class _ViewScreenState extends State<ViewScreen> {
     const HomeScreen(),
     //ActivityScreen(),
     //NotificationScreen(),
-     AccountScreen(),
+    AccountScreen(),
   ];
 
   final themes = ThemesApp();
@@ -29,9 +29,10 @@ class _ViewScreenState extends State<ViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return Scaffold(
+        body: SafeArea(
       child: WillPopScope(
-        onWillPop:  () async => false,
+        onWillPop: () async => false,
         child: Scaffold(
             resizeToAvoidBottomInset: false,
             bottomNavigationBar: BottomNavigationBar(
@@ -93,10 +94,14 @@ class _ViewScreenState extends State<ViewScreen> {
               ],
               iconSize: 60,
               unselectedFontSize: 12,
-              unselectedLabelStyle:
-                  TextStyle(color: themes.deepOrange, fontSize: 12, fontWeight: FontWeight.bold),
-              selectedLabelStyle:
-                  TextStyle(color: themes.deepOrange, fontSize: 12, fontWeight: FontWeight.bold),
+              unselectedLabelStyle: TextStyle(
+                  color: themes.deepOrange,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold),
+              selectedLabelStyle: TextStyle(
+                  color: themes.deepOrange,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold),
               selectedItemColor: themes.deepOrange,
               unselectedItemColor: themes.grey,
               currentIndex: selectedIndex,
@@ -116,7 +121,7 @@ class _ViewScreenState extends State<ViewScreen> {
             ),
             body: viewScreen[selectedIndex]),
       ),
-    );
+    ));
   }
 
   int selectedIndex = 0;
