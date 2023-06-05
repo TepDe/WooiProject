@@ -156,29 +156,29 @@ class _LogInScreenState extends State<LogInScreen> {
                           //             child: CircularProgressIndicator()));
                           //   },
                           // );
-                          // if (userEmail.text.isEmpty) {
-                          //   onDialogOK(
-                          //       context: context,
-                          //       title: 'Not Found',
-                          //       content: 'Email is missing');
-                          // } else if (userPassword.text.isEmpty) {
-                          //   onDialogOK(
-                          //       context: context,
-                          //       title: 'Not Found',
-                          //       content: 'Password is missing');
-                          // } else {
-                          //   onUserSignIn(
-                          //       email: userEmail.text.trim(),
-                          //       // email: 'u3@gmail.com',
-                          //       password: userPassword.text.trim(),
-                          //       // password: '111111',
-                          //       context: context);
-                          // }
-                          //reUse.alertDialog(context);
+                          if (userEmail.text.isEmpty) {
+                            onDialogOK(
+                                context: context,
+                                title: 'Not Found',
+                                content: 'Email is missing');
+                          } else if (userPassword.text.isEmpty) {
+                            onDialogOK(
+                                context: context,
+                                title: 'Not Found',
+                                content: 'Password is missing');
+                          } else {
+                            onUserSignIn(
+                                email: userEmail.text.trim(),
+                                // email: 'u3@gmail.com',
+                                password: userPassword.text.trim(),
+                                // password: '111111',
+                                context: context);
+                          }
+                          reUse.alertDialog(context);
                           // password: '111111');
 
                           // lc._phoneVerify(context);
-                          phoneAuth();
+                          // phoneAuth();
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -239,7 +239,7 @@ class _LogInScreenState extends State<LogInScreen> {
   var userPassword = TextEditingController();
 
   phoneAuth() async {
-  final result =  await auth.verifyPhoneNumber(
+  await auth.verifyPhoneNumber(
       phoneNumber: '+85578344511',
       verificationCompleted: (PhoneAuthCredential credential) async {
         await auth.signInWithCredential(credential);
@@ -262,11 +262,6 @@ class _LogInScreenState extends State<LogInScreen> {
         print("Timout");
       },
     );
-
-    final r = result;
-    setState(() {
-
-    });
   }
 
   onUserSignIn({email, password, context}) async {
