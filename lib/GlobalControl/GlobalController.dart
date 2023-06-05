@@ -346,6 +346,7 @@ class GlobalController {
               field.recLatitude: latitude.toString(),
               field.recLongitude: longitude.toString(),
               field.senderPhone: await fetchUserData(fieldInfo.phoneNumber),
+              field.senderName: userName,
             }));
   }
 
