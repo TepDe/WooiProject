@@ -166,6 +166,11 @@ class _LogInScreenState extends State<LogInScreen> {
                                 context: context,
                                 title: 'Not Found',
                                 content: 'Password is missing');
+                          }else if (userPassword.text.isEmpty&&userEmail.text.isEmpty) {
+                            onDialogOK(
+                                context: context,
+                                title: 'Not Found',
+                                content: 'Email and Password is missing');
                           } else {
                             onUserSignIn(
                                 email: userEmail.text.trim(),
