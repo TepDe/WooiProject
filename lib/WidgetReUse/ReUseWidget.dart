@@ -2088,9 +2088,8 @@ class ReUseWidget {
     );
   }
 
-  reUseBoxText({title, value,data,witchClick}) {
+  reUseBoxText({title, value,data,witchClick,assetImage, textColor}) {
     return Container(
-      height: Get.height * 0.1,
       width: Get.width,
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -2103,6 +2102,10 @@ class ReUseWidget {
             //offset: Offset(4, 8), // Shadow position
           ),
         ],
+        image: DecorationImage(
+          image: AssetImage(assetImage??""),
+          fit: BoxFit.cover,
+        ),
       ),
       child: Material(
         color: Colors.transparent,
@@ -2113,23 +2116,24 @@ class ReUseWidget {
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Stack(
+            child: Column(
               children: [
                 Align(
                   alignment: Alignment.topLeft,
                   child: reUseText(
                       content: title??"",
-                      size: 14.0,
-                      weight: FontWeight.w500,
-                      color: theme.darkGrey),
+                      size: 16.0,
+                      weight: FontWeight.bold,
+                      color: textColor??theme.darkGrey),
                 ),
+                SizedBox(height: Get.height*0.01,),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: reUseText(
                       content: value ?? "",
                       size: 24.0,
                       weight: FontWeight.bold,
-                      color: theme.darkGrey),
+                      color: textColor??theme.darkGrey),
                 ),
               ],
             ),
