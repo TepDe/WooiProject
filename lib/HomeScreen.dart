@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,8 +27,14 @@ class _HomeScreenState extends State<HomeScreen> {
   final reUse = ReUseWidget();
   final theme = ThemesApp();
 
+  int doubleClick = 0;
+
   exitApp() {
-    SystemNavigator.pop();
+    doubleClick += 1;
+    if (doubleClick == 2) {
+      exit(0);
+    }
+    return true;
   }
 
   final glb = GlobalController();
@@ -218,83 +226,80 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    FocusManager.instance.primaryFocus?.unfocus();
     double btnHeight = MediaQuery.of(context).size.height * 0.06;
     return Scaffold(
       backgroundColor: theme.liteGrey,
-      body: WillPopScope(
-        onWillPop: () => exitApp(),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding:
+                  EdgeInsets.only(top: 40, right: paddings, left: paddings),
+              child: reUse.unitOneHomeScreen(
+                  getTime: greeting,
+                  userID: 'ID $getUserID',
+                  context: context),
+            ),
 
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding:
-                    EdgeInsets.only(top: 40, right: paddings, left: paddings),
-                child: reUse.unitOneHomeScreen(
-                    getTime: greeting,
-                    userID: 'ID $getUserID',
-                    context: context),
-              ),
+            Padding(
+              padding: EdgeInsets.all(paddings),
+              child: reUse.unitTwoHomeScreen(
+                  context: context,
+                  totalPackageDataKey: totalPackageIndex,
+                  totalPackageData: driverList,
+                  returnData: returnData,
+                  completeData: completeList,
+                  returnLength: returnData.length,
+                  completeLength: completeList.length,
+                  pendingData: pendingList,
+                  totalLength: driverList.length,
+                  pendingLength: pendingList.length),
+            ),
 
-              Padding(
-                padding: EdgeInsets.all(paddings),
-                child: reUse.unitTwoHomeScreen(
-                    context: context,
-                    totalPackageDataKey: totalPackageIndex,
-                    totalPackageData: driverList,
-                    returnData: returnData,
-                    completeData: completeList,
-                    returnLength: returnData.length,
-                    completeLength: completeList.length,
-                    pendingData: pendingList,
-                    totalLength: driverList.length,
-                    pendingLength: pendingList.length),
-              ),
+            //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
+            // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
+            //reUse.renderListView(),
+            Padding(
+              padding: EdgeInsets.all(paddings),
+              child: reUse.reUseCreatePackage(
+                  context: context, padding: paddings, height: btnHeight),
+            ),
 
-              //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
-              // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
-              //reUse.renderListView(),
-              Padding(
-                padding: EdgeInsets.all(paddings),
-                child: reUse.reUseCreatePackage(
-                    context: context, padding: paddings, height: btnHeight),
-              ),
-
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child:
-                        reUse.reUseText(content: 'Activity', color: theme.grey),
+            Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child:
+                      reUse.reUseText(content: 'Activity', color: theme.grey),
+                ),
+                Flexible(
+                  child: Divider(
+                    height: 1,
+                    color: theme.grey,
                   ),
-                  Flexible(
-                    child: Divider(
-                      height: 1,
-                      color: theme.grey,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
+            ),
 
-              // Row(
-              //   children: [
-              //     Flexible(
-              //       flex: 1,
-              //       child: ListView.builder(
-              //           padding: const EdgeInsets.all(8),
-              //           itemCount: distince.length,
-              //           itemBuilder: (BuildContext context, int index) {
-              //             return Container(
-              //               height: 50,
-              //               child: Center(child: Text('Entry ${distince[index]}')),
-              //             );
-              //           }),
-              //     )
-              //   ],
-              // ),
-            ],
-          ),
+            // Row(
+            //   children: [
+            //     Flexible(
+            //       flex: 1,
+            //       child: ListView.builder(
+            //           padding: const EdgeInsets.all(8),
+            //           itemCount: distince.length,
+            //           itemBuilder: (BuildContext context, int index) {
+            //             return Container(
+            //               height: 50,
+            //               child: Center(child: Text('Entry ${distince[index]}')),
+            //             );
+            //           }),
+            //     )
+            //   ],
+            // ),
+          ],
         ),
       ),
     );
