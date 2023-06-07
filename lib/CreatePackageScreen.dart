@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:wooiproject/Distination/clsDistin.dart';
 import 'package:wooiproject/Distination/language.dart';
+import 'package:wooiproject/GlobalControl/clsField.dart';
 
 import 'GlobalControl/GlobalController.dart';
 import 'ViewScreen.dart';
@@ -46,6 +47,8 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
 
   String userName = '';
   String phoneNumber = '';
+  String abaCode = '';
+  final inFor = FieldInfo();
 
   fetchUserInformation() async {
     FirebaseFirestore.instance
@@ -56,6 +59,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
       Map data = doc.data() as Map;
       userName = data['firstname'] + ' ' + data['lastname'].toString();
       phoneNumber = data['phoneNumber'].toString();
+      abaCode = data[inFor.ABACode];
       setState(() {});
     });
   }
@@ -110,7 +114,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
   final clsDis = ClsDestination();
 
   bool _validateInput(String input) {
-    RegExp regExp = new RegExp(r'^[^0]\d*');
+    RegExp regExp = RegExp(r'^[^0]\d*');
     return regExp.hasMatch(input);
   }
 
@@ -231,21 +235,15 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                     //keyboardType: inputType,
                     //inputFormatters: formater,
                     onChanged: (value) {
-                      print(value);
-                      print(distince);
-                      print(distince);
                       List results = clsDis.destination
                           .where((user) => user.toLowerCase().contains(
                               locationBox.text.toString().toLowerCase()))
                           .toList();
-                      if (results == null) {
-                        results = eng_distin
-                            .where((user) => user.toLowerCase().contains(
-                                locationBox.text.toString().toLowerCase()))
-                            .toList();
-                      }
-                      print(results);
-                      print(results);
+                      results ??= eng_distin
+                          .where((user) => user.toLowerCase().contains(
+                              locationBox.text.toString().toLowerCase()))
+                          .toList();
+
                       forDisplay = results;
                       setState(() {});
                     },
@@ -299,7 +297,8 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10, top: 10),
                   child: reUse.reUseText(
-                      content: clsLan.price + " : ( សូមបញ្ចូលតំលៃគិតជាដុល្លារ )",
+                      content:
+                          clsLan.price + " : ( សូមបញ្ចូលតំលៃគិតជាដុល្លារ )",
                       size: textSize,
                       weight: FontWeight.w500,
                       color: theme.black),
@@ -313,7 +312,8 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                           controller: priceBox,
                           mixLength: 4,
                           formater: [
-                            FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
+                            FilteringTextInputFormatter.allow(
+                                RegExp('[0-9.,]+')),
                           ],
                           inputType: const TextInputType.numberWithOptions(
                               decimal: true),
@@ -343,7 +343,8 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                           mixLength: 3,
                           controller: qtyBox,
                           formater: [
-                            FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
+                            FilteringTextInputFormatter.allow(
+                                RegExp('[0-9.,]+')),
                           ],
                           inputType: const TextInputType.numberWithOptions(
                               decimal: true),
@@ -362,7 +363,9 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       reUse.reUseText(
-                          content: 'ចំណាំ :', size: textSize, color: theme.black),
+                          content: 'ចំណាំ :',
+                          size: textSize,
+                          color: theme.black),
                       Container(
                         alignment: Alignment.center,
                         child: TextFormField(
@@ -438,7 +441,8 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                         ),
                                       ),
                                     ));
-                              } else if (priceBox.text.trim().toString() == '') {
+                              } else if (priceBox.text.trim().toString() ==
+                                  '') {
                                 await reUse.reUseCircleDialog(
                                     context: context,
                                     icon: Icons.monetization_on,
@@ -452,45 +456,75 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                       ),
                                     ));
                               } else {
-                                alertDialog(context);
-                                await glb
-                                    .createPackage(
-                                        userName: userName.trim().toString(),
-                                        userPhoneNumber:
-                                            phoneNumber.trim().toString(),
-                                        tokenKey: getToken.trim().toString(),
-                                        chatid: chatid.trim().toString(),
-                                        price: priceBox.text.trim().toString(),
-                                        note: noteBox.text.trim().toString(),
-                                        packageID: packageID.toString(),
-                                        qty: qtyBox.text.trim().toString() ?? '1',
-                                        phoneNumber:
-                                            phoneBox.text.trim().toString(),
-                                        location:
-                                            locationBox.text.trim().toString())
-                                    .then((value) {
-                                  phoneBox.clear();
-                                  priceBox.clear();
-                                  locationBox.clear();
-                                  qtyBox.clear();
-                                  noteBox.clear();
-                                });
-                                Get.back();
-                                reUse.reUseCircleDialog(
-                                    context: context,
-                                    icon: Icons.check_circle_rounded,
-                                    title: 'Success',
-                                    content: Center(
-                                      child: Text(
-                                        'Your package is successfully request',
-                                        style: TextStyle(
-                                          color: theme.black,
+                                if(abaCode.isEmpty){
+                                  await reUse.reUseCircleDialog(
+                                      context: context,
+                                      icon: Icons.code,
+                                      title: 'Error',
+                                      content: Center(
+                                        child: Text(
+                                          clsLan.noABA,
+                                          style: TextStyle(
+                                            color: theme.black,
+                                          ),
                                         ),
-                                      ),
-                                    ));
-                                setState(() {
-                                  packageID = glb.generatePackageID();
-                                });
+                                      ));
+                                }else if( userName.isEmpty){
+                                  await reUse.reUseCircleDialog(
+                                      context: context,
+                                      icon: Icons.account_circle,
+                                      title: 'Error',
+                                      content: Center(
+                                        child: Text(
+                                          clsLan.noName,
+                                          style: TextStyle(
+                                            color: theme.black,
+                                          ),
+                                        ),
+                                      ));
+                                }else{
+                                  alertDialog(context);
+                                  await glb
+                                      .createPackage(
+                                      abaCode: abaCode.toString(),
+                                      userName: userName.trim().toString(),
+                                      userPhoneNumber:
+                                      phoneNumber.trim().toString(),
+                                      tokenKey: getToken.trim().toString(),
+                                      chatid: chatid.trim().toString(),
+                                      price: priceBox.text.trim().toString(),
+                                      note: noteBox.text.trim().toString(),
+                                      packageID: packageID.toString(),
+                                      qty: qtyBox.text.trim().toString() ??
+                                          '1',
+                                      phoneNumber:
+                                      phoneBox.text.trim().toString(),
+                                      location:
+                                      locationBox.text.trim().toString())
+                                      .then((value) {
+                                    phoneBox.clear();
+                                    priceBox.clear();
+                                    locationBox.clear();
+                                    qtyBox.clear();
+                                    noteBox.clear();
+                                  });
+                                  Get.back();
+                                  reUse.reUseCircleDialog(
+                                      context: context,
+                                      icon: Icons.check_circle_rounded,
+                                      title: 'Success',
+                                      content: Center(
+                                        child: Text(
+                                          'Your package is successfully request',
+                                          style: TextStyle(
+                                            color: theme.black,
+                                          ),
+                                        ),
+                                      ));
+                                  setState(() {
+                                    packageID = glb.generatePackageID();
+                                  });
+                                }
                               }
                             },
                             child: Row(
@@ -519,7 +553,6 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                     ),
                   ],
                 ),
-
               ],
             ),
           ),
