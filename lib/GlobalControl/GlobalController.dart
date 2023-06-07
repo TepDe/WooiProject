@@ -307,6 +307,7 @@ class GlobalController {
       location,
       qty,
       tokenKey,
+        abaCode,
       chatid,
       data}) async {
     DateTime now = DateTime.now();
@@ -347,6 +348,7 @@ class GlobalController {
               field.recLongitude: longitude.toString(),
               field.senderPhone: await fetchUserData(fieldInfo.phoneNumber),
               field.senderName: userName,
+              field.ABACode: userName,
             }));
   }
 
@@ -491,6 +493,16 @@ class GlobalController {
   insertTelegramToken({token}) async {
     users.doc(auth.currentUser!.uid).update({
       'token': token,
+    }).then((value) {
+      print("User Added");
+      FocusManager.instance.primaryFocus?.unfocus();
+      Get.back();
+    }).catchError((error) => print("Failed to add user: $error"));
+  }
+
+  insertABACode({abaCode}) async {
+    users.doc(auth.currentUser!.uid).update({
+      fieldInfo.ABACode: abaCode.toString(),
     }).then((value) {
       print("User Added");
       FocusManager.instance.primaryFocus?.unfocus();
