@@ -2118,7 +2118,7 @@ class ReUseWidget {
                 Align(
                   alignment: Alignment.topLeft,
                   child: reUseText(
-                      content: title,
+                      content: title??"",
                       size: 14.0,
                       weight: FontWeight.w500,
                       color: theme.darkGrey),
