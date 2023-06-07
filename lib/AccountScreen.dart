@@ -11,7 +11,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
+import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/LoginScreen.dart';
+import 'package:wooiproject/SetUpScreen.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 import 'package:http/http.dart' as http;
@@ -85,32 +87,34 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   var fetch = FirebaseFirestore.instance.collection('Users');
+  var userData = {};
 
   fetchUserData() async {
     fetch
         .doc(auth.currentUser!.uid.toString())
         .get()
         .then((DocumentSnapshot documentSnapshot) async {
-      try {
-        getLatitude = documentSnapshot['latitude'].toString();
-        getLongitude = documentSnapshot['longitude'].toString();
-        getUid = documentSnapshot['uid'].toString();
-        getEmail = documentSnapshot['email'].toString();
-        getPassword = documentSnapshot['password'].toString();
-        getPhoneNumber = documentSnapshot['phoneNumber'].toString();
-        getUserID = documentSnapshot['userID'].toString();
-        getLastName = documentSnapshot['lastname'].toString();
-        getFirstName = documentSnapshot['firstname'].toString();
-        if (documentSnapshot['token'] == null) {
-          getToken = 'not have';
-          getChatId = 'not have';
-        } else {
-          getToken = documentSnapshot['token'].toString();
-          getChatId = documentSnapshot['chatid'].toString();
-        }
-      } catch (e) {
-        print(e);
-      }
+      userData = documentSnapshot.data() as Map<String, dynamic>;
+      // try {
+      //   getLatitude = documentSnapshot['latitude'].toString();
+      //   getLongitude = documentSnapshot['longitude'].toString();
+      //   getUid = documentSnapshot['uid'].toString();
+      //   getEmail = documentSnapshot['email'].toString();
+      //   getPassword = documentSnapshot['password'].toString();
+      //   getPhoneNumber = documentSnapshot['phoneNumber'].toString();
+      //   getUserID = documentSnapshot['userID'].toString();
+      //   getLastName = documentSnapshot['lastname'].toString();
+      //   getFirstName = documentSnapshot['firstname'].toString();
+      //   if (documentSnapshot['token'] == null) {
+      //     getToken = 'not have';
+      //     getChatId = 'not have';
+      //   } else {
+      //     getToken = documentSnapshot['token'].toString();
+      //     getChatId = documentSnapshot['chatid'].toString();
+      //   }
+      // } catch (e) {
+      //   print(e);
+      // }
       setState(() {});
     });
     setState(() {});
@@ -119,10 +123,13 @@ class _AccountScreenState extends State<AccountScreen> {
   final reUse = ReUseWidget();
   final theme = ThemesApp();
   bool light = false;
+  final fieldInfo = FieldInfo();
 
   final token = TextEditingController();
   final chatid = TextEditingController();
   final clsLan = ClsLanguage();
+
+  bool hindPassowrd = true;
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +162,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     //     border: Border.all(color: theme.orange, width: 1.5)),
                     child: InkWell(
                       onTap: () {
-                        verifyUserPhoneNumber();
+                        Get.to(SetUpScreen());
                       },
                       child: const CircleAvatar(
                         backgroundImage: NetworkImage(
@@ -167,12 +174,13 @@ class _AccountScreenState extends State<AccountScreen> {
                     height: viewHeight2,
                   ),
                   reUse.reUseText(
-                      content: '$getFirstName $getLastName',
+                      content:
+                          '${userData[fieldInfo.firstName].toString()} ${userData[fieldInfo.lastName]}',
                       weight: FontWeight.bold,
                       size: 20.0,
                       color: theme.black),
                   reUse.reUseText(
-                      content: 'ID : $getUserID',
+                      content: 'ID : ${userData[fieldInfo.userID]}',
                       weight: FontWeight.bold,
                       size: 12.0,
                       color: theme.grey),
@@ -237,34 +245,65 @@ class _AccountScreenState extends State<AccountScreen> {
 
                   Padding(
                     padding: EdgeInsets.all(padding),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: reUse.reUseText(
-                          content: 'Account',
-                          //weight: FontWeight.bold,
-                          size: 16.0,
-                          color: theme.black),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        reUse.reUseText(
+                            content: 'Account',
+                            //weight: FontWeight.bold,
+                            size: 16.0,
+                            color: theme.black),
+                        TextButton.icon(
+                          onPressed: () {},
+                          icon: Icon(Icons.edit, color: theme.darkGrey),
+                          label: reUse.reUseText(
+                              content: 'Edit',
+                              size: 16.0,
+                              color: theme.darkGrey),
+                        )
+                      ],
                     ),
                   ),
                   reUse.reUseSettingItem(
                       trailingIcon: Text(
-                        getEmail,
+                        userData[fieldInfo.email] ?? 'loading...',
                         style: TextStyle(color: theme.grey),
                       ),
                       title: const Text('Email'),
                       context: context,
                       leading: const Icon(Icons.email)),
                   reUse.reUseSettingItem(
-                      trailingIcon: Text(
-                        getPassword ?? 'loading...',
-                        style: TextStyle(color: theme.grey),
-                      ),
+                      trailingIcon: hindPassowrd == true
+                          ? IconButton(
+                              onPressed: () {
+                                if (hindPassowrd == true) {
+                                  hindPassowrd = false;
+                                } else {
+                                  hindPassowrd = true;
+                                }
+                                setState(() {});
+                              },
+                              icon: Icon(Icons.visibility_off))
+                          : InkWell(
+                              onTap: () {
+                                if (hindPassowrd == false) {
+                                  hindPassowrd = true;
+                                } else {
+                                  hindPassowrd = false;
+                                }
+                                setState(() {});
+                              },
+                              child: Text(
+                                (userData[fieldInfo.password] ?? 'loading...'),
+                                style: TextStyle(color: theme.grey),
+                              ),
+                            ),
                       title: const Text('Password'),
                       context: context,
                       leading: const Icon(Icons.password_rounded)),
                   reUse.reUseSettingItem(
                       trailingIcon: Text(
-                        getPhoneNumber ?? 'loading...',
+                        userData[fieldInfo.phoneNumber] ?? 'loading...',
                         style: TextStyle(color: theme.grey),
                       ),
                       title: const Text('Phone Number'),
@@ -272,7 +311,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       leading: const Icon(Icons.phone)),
                   reUse.reUseSettingItem(
                       trailingIcon: Text(
-                        getPassword ?? 'loading...',
+                        userData[fieldInfo.ABACode] ?? 'Not include',
                         style: TextStyle(color: theme.grey),
                       ),
                       title: const Text('ABA Code'),
@@ -476,7 +515,8 @@ class _AccountScreenState extends State<AccountScreen> {
                             trailing: SizedBox(
                                 width: textWidth,
                                 child: Text(
-                                  getToken,
+                                  userData[fieldInfo.token] ??
+                                      "Not Include Yet",
                                   maxLines: 1,
                                   style: TextStyle(
                                       color: theme.grey,
@@ -674,7 +714,8 @@ class _AccountScreenState extends State<AccountScreen> {
                             trailing: SizedBox(
                                 width: textWidth,
                                 child: Text(
-                                  getChatId,
+                                  userData[fieldInfo.chatid] ??
+                                      "Not Include Yet",
                                   maxLines: 1,
                                   style: TextStyle(
                                       color: theme.grey,
