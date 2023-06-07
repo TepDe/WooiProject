@@ -82,13 +82,14 @@ class _RevenueListState extends State<RevenueList> {
                       TextButton.icon(
                         onPressed: () {
                           Get.back();
+                          setState(() {});
                         },
                         icon: Icon(
                           Icons.arrow_back_ios_new_outlined,
                           color: theme.blue,
                         ),
                         label: Text(
-                          "Revenue",
+                          clsLan.revenue,
                           style: TextStyle(
                               color: theme.blue,
                               fontSize: 18,
@@ -344,7 +345,9 @@ class _RevenueListState extends State<RevenueList> {
                                             lableSize: 11,
                                             size: 14.0,
                                             color: theme.black,
-                                            content: forDisplay[index]['price']+" \$",
+                                            content: forDisplay[index]
+                                                    ['price'] +
+                                                " \$",
                                             weight: FontWeight.w500),
                                         // reUse.reUseText(
                                         //     weight: FontWeight.bold,
