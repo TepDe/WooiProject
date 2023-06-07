@@ -29,4 +29,12 @@ class ClsLanguage {
   String edit = 'កែរ';
   String all = 'ទាំងអស់';
   String paid = 'បានសង់';
+  String fname = 'ត្រកូល';
+  String lname = 'ឈ្មោះ';
+  String phoneNumber = "លេខទូរស័ព្ទ";
+  String abaNumber = "លេខ ABA ទទួលលុយ";
+  String continues = "បន្តរ";
+  String register = "បង្កើតគណនី";
+  String fillRequirement = "សូមបំពេញព័ត៌មានខាងក្រោមនេះ";
+  String inputName = "* សូមបញ្ចូលព័ត៌មានរបស់អ្នកអោយដូចគ្នានឹងគណនី ABA របស់អ្នក";
 }
