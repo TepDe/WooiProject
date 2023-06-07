@@ -28,7 +28,7 @@ class ClsLanguage {
   String delete = 'លុប';
   String edit = 'កែរ';
   String all = 'ទាំងអស់';
-  String paid = 'បានសង់';
+  String paid = 'ទឹកប្រាក់បានសង';
   String fname = 'ត្រកូល';
   String lname = 'ឈ្មោះ';
   String phoneNumber = "លេខទូរស័ព្ទ";
@@ -37,4 +37,9 @@ class ClsLanguage {
   String register = "បង្កើតគណនី";
   String fillRequirement = "សូមបំពេញព័ត៌មានខាងក្រោមនេះ";
   String inputName = "* សូមបញ្ចូលព័ត៌មានរបស់អ្នកអោយដូចគ្នានឹងគណនី ABA របស់អ្នក";
+  String noABA = "អ្នកមិនទាន់បញ្ចូលលេខកូដ ABA នៅឡើយទេ";
+  String noName = "អ្នកមិនទាន់បញ្ចូលលេខកូដឈ្មោះនៅឡើយទេ";
+  String abaCode = "លេខកូត ABA";
+  String insertAbaDec = "បញ្ចូលលេខកូដ ABA របស់អ្នកនៅទីនេះ";
+  String insert = "បញ្ចូល";
 }
