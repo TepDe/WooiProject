@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wooiproject/AccountScreen.dart';
 import 'package:wooiproject/HomeScreen.dart';
 import 'package:wooiproject/NotificationScreen.dart';
@@ -27,12 +30,33 @@ class _ViewScreenState extends State<ViewScreen> {
     super.initState();
   }
 
+  late DateTime currentBackPressTime;
+
+  bool onWillPop() {
+    return true;
+  }
+
+  int doubleClick = 0;
+  var ctime;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
       child: WillPopScope(
-        onWillPop: () async => false,
+        onWillPop: () async {
+          DateTime now = DateTime.now();
+          if (ctime == null || now.difference(ctime) > Duration(seconds: 2)) {
+            //add duration of press gap
+            ctime = now;
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Press Back Button Again to Exit'))
+            ); //scaffold message, you can show Toast message too.
+            return Future.value(false);
+          }
+
+          return Future.value(true);
+        },
         child: Scaffold(
             resizeToAvoidBottomInset: false,
             bottomNavigationBar: BottomNavigationBar(
