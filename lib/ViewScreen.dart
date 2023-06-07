@@ -16,7 +16,7 @@ class _ViewScreenState extends State<ViewScreen> {
     const HomeScreen(),
     //ActivityScreen(),
     //NotificationScreen(),
-    AccountScreen(),
+    const AccountScreen(),
   ];
 
   final themes = ThemesApp();
