@@ -234,24 +234,41 @@ class _CompleteDetailState extends State<CompleteDetail> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        reUse.reUseColumnText(
-                            lableSize: labelSize,
+                        reUse.reUseRowText(
                             titleColor: theme.grey,
                             title: clsLan.driverName,
                             size: valueSize,
-                            color: theme.black,
-                            content: forDisplay[field.assignBy] ?? "No price",
-                            weight: FontWeight.w500),
-                        reUse.reUseColumnText(
                             lableSize: labelSize,
-                            titleColor: theme.grey,
-                            title: clsLan.driverPhone,
-                            size: valueSize,
                             color: theme.black,
-                            content: forDisplay[field.dPhone]?? "No Phone",
+                            content: forDisplay[field.assignBy],
                             weight: FontWeight.w500),
+                        reUse.reUseRowText(
+                            titleColor: theme.grey,
+                            title: clsLan.driverName,
+                            size: valueSize,
+                            lableSize: labelSize,
+                            color: theme.black,
+                            content:  forDisplay[field.dPhone]?? "No Phone",
+                            weight: FontWeight.w500),
+                        // reUse.reUseColumnText(
+                        //     lableSize: labelSize,
+                        //     titleColor: theme.grey,
+                        //     title: clsLan.driverName,
+                        //     size: valueSize,
+                        //     color: theme.black,
+                        //     content: forDisplay[field.assignBy] ?? "No price",
+                        //     weight: FontWeight.w500),
+                        // reUse.reUseColumnText(
+                        //     lableSize: labelSize,
+                        //     titleColor: theme.grey,
+                        //     title: clsLan.driverPhone,
+                        //     size: valueSize,
+                        //     color: theme.black,
+                        //     content: forDisplay[field.dPhone]?? "No Phone",
+                        //     weight: FontWeight.w500),
                         // reUse.reUseColumnText(
                         //     lableSize: labelSize,
                         //     titleColor: theme.grey,
