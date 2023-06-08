@@ -42,4 +42,6 @@ class ClsLanguage {
   String abaCode = "លេខកូត ABA";
   String insertAbaDec = "បញ្ចូលលេខកូដ ABA របស់អ្នកនៅទីនេះ";
   String insert = "បញ្ចូល";
+  String insertTelegramToken = "បញ្ចូលលេខកូដ Telegram Token របស់អ្នកនៅទីនេះ";
+  String insertTelegramChatID = "បញ្ចូលលេខកូដ Chat ID របស់អ្នកនៅទីនេះ";
 }
