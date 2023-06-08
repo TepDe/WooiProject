@@ -53,7 +53,7 @@ class _AccountScreenState extends State<AccountScreen> {
     super.initState();
     //fetchLocalStorage();
     fetchUserData();
-    completeListLength();
+    totalRevenue();
   }
 
   getDatsa(getUid) async {
@@ -191,14 +191,14 @@ class _AccountScreenState extends State<AccountScreen> {
                       child: reUse.reUseBoxText(
                           assetImage: "assets/images/RevenueBtn.png",
                           data: completeList,
-                          value: (price ?? "0") + " \$",
+                          value: (revenue ?? "0") + " \$",
                           textColor: theme.blue,
                           title: clsLan.revenue),
                     ),
                     Flexible(
                       child: reUse.reUseBoxText(
                           assetImage: "assets/images/TotalPaidBtn.png",
-                          value: (price ?? "0") + " \$",
+                          value:   " \$",
                           title: clsLan.paid,
                           textColor: theme.deepOrange,
                           data: completeList),
@@ -549,10 +549,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                           CrossAxisAlignment.center,
                                       children: [
                                         reUse.reUseText(
-                                            content:
-                                                'Insert your telegram token down here',
-                                            color: theme.grey,
-                                            weight: FontWeight.w500,
+                                            content: clsLan.insertTelegramToken,
+                                            color: theme.black,
+                                            weight: FontWeight.w400,
                                             size: 14.0),
                                         const SizedBox(height: 20.0),
                                         // Text(
@@ -627,39 +626,23 @@ class _AccountScreenState extends State<AccountScreen> {
                                                 //   ),
                                                 // ],
                                               ),
-                                              child: Material(
-                                                color: Colors.transparent,
-                                                child: InkWell(
-                                                  onTap: () async {
+                                              child: TextButton(
+                                                onPressed: () async {
+                                                  if (token.text.isEmpty) {
+                                                    Get.back();
+                                                  } else {
                                                     glb.insertTelegramToken(
                                                         token: token.text);
-                                                  },
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                right: 8.0),
-                                                        child: Icon(
-                                                          null,
-                                                          color: theme.orange,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        'ok',
-                                                        style: TextStyle(
-                                                            fontSize: 14,
-                                                            color: theme.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal),
-                                                      )
-                                                    ],
-                                                  ),
+                                                  }
+                                                  setState(() {});
+                                                },
+                                                child: Text(
+                                                  clsLan.insert,
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: theme.orange,
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
                                               ),
                                             ),
@@ -744,9 +727,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                       children: [
                                         reUse.reUseText(
                                             content:
-                                                'Insert your telegram token down here',
-                                            color: theme.grey,
-                                            weight: FontWeight.w500,
+                                                clsLan.insertTelegramChatID,
+                                            color: theme.black,
+                                            weight: FontWeight.w400,
                                             size: 14.0),
                                         const SizedBox(height: 20.0),
                                         // Text(
@@ -821,39 +804,23 @@ class _AccountScreenState extends State<AccountScreen> {
                                                 //   ),
                                                 // ],
                                               ),
-                                              child: Material(
-                                                color: Colors.transparent,
-                                                child: InkWell(
-                                                  onTap: () async {
+                                              child: TextButton(
+                                                onPressed: () {
+                                                  if (token.text.isEmpty) {
+                                                    Get.back();
+                                                  } else {
                                                     glb.insertTelegramChatID(
                                                         chatid: chatid.text);
-                                                  },
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                right: 8.0),
-                                                        child: Icon(
-                                                          null,
-                                                          color: theme.orange,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        'ok',
-                                                        style: TextStyle(
-                                                            fontSize: 14,
-                                                            color: theme.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal),
-                                                      )
-                                                    ],
-                                                  ),
+                                                  }
+                                                  setState(() {});
+                                                },
+                                                child: Text(
+                                                  clsLan.insert,
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: theme.orange,
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
                                               ),
                                             ),
@@ -1063,9 +1030,9 @@ class _AccountScreenState extends State<AccountScreen> {
 
   List completeList = [];
   List totalPrice = [];
-  var price;
+  String revenue='0';
 
-  completeListLength() {
+  totalRevenue() {
     try {
       DatabaseReference refs = FirebaseDatabase.instance
           .ref('Complete')
@@ -1078,7 +1045,29 @@ class _AccountScreenState extends State<AccountScreen> {
         values.forEach((key, value) {
           completeList.add(value);
           totalPrice.add(int.parse(value['price']));
-          price = totalPrice.reduce((a, b) => a + b);
+          revenue = totalPrice.reduce((a, b) => a + b).toString();
+          setState(() {});
+        });
+      });
+    } catch (e) {
+      print('completeListLength $e');
+    }
+  }
+
+  totalPaid() {
+    try {
+      DatabaseReference refs = FirebaseDatabase.instance
+          .ref('Complete')
+          .child(auth.currentUser!.uid);
+      refs.onValue.listen((event) {
+        setState(() {});
+        completeList.clear();
+        DataSnapshot driver = event.snapshot;
+        Map values = driver.value as Map;
+        values.forEach((key, value) {
+          completeList.add(value);
+          totalPrice.add(int.parse(value['price']));
+          revenue = totalPrice.reduce((a, b) => a + b).toString();
           setState(() {});
         });
       });
