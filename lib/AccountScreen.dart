@@ -163,7 +163,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   //     border: Border.all(color: theme.orange, width: 1.5)),
                   child: InkWell(
                     onTap: () {
-                      Get.to(SetUpScreen());
+                      Get.to(const SetUpScreen());
                     },
                     child: const CircleAvatar(
                       backgroundImage: NetworkImage(
@@ -198,7 +198,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     Flexible(
                       child: reUse.reUseBoxText(
                           assetImage: "assets/images/TotalPaidBtn.png",
-                          value:   " \$",
+                          value: " \$",
                           title: clsLan.paid,
                           textColor: theme.deepOrange,
                           data: completeList),
@@ -286,7 +286,7 @@ class _AccountScreenState extends State<AccountScreen> {
                               }
                               setState(() {});
                             },
-                            icon: Icon(Icons.visibility_off))
+                            icon: const Icon(Icons.visibility_off))
                         : InkWell(
                             onTap: () {
                               if (hindPassowrd == false) {
@@ -340,6 +340,9 @@ class _AccountScreenState extends State<AccountScreen> {
                     color: theme.white,
                     child: InkWell(
                       onTap: () {
+                        if (userData[fieldInfo.ABACode].isNotEmpty) {
+                          abaCode.text = userData[fieldInfo.ABACode];
+                        }
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -406,9 +409,15 @@ class _AccountScreenState extends State<AccountScreen> {
                                             decoration: InputDecoration(
                                               prefixIcon:
                                                   const Icon(Icons.key_rounded),
-                                              suffixIcon: const Icon(
-                                                Icons.search,
-                                                color: Colors.transparent,
+                                              suffixIcon: InkWell(
+                                                onTap: () {
+                                                  abaCode.clear();
+                                                  setState(() {});
+                                                },
+                                                child: const Icon(
+                                                  Icons.clear,
+                                                  color: Colors.grey,
+                                                ),
                                               ),
                                               filled: true,
                                               fillColor: theme.white,
@@ -453,8 +462,15 @@ class _AccountScreenState extends State<AccountScreen> {
                                                 color: Colors.transparent,
                                                 child: TextButton(
                                                   onPressed: () async {
-                                                    glb.insertABACode(
-                                                        abaCode: abaCode.text);
+                                                    if (abaCode.text ==
+                                                        userData[fieldInfo
+                                                            .ABACode]) {
+                                                      Get.back();
+                                                    } else {
+                                                      await glb.insertABACode(
+                                                          abaCode:
+                                                              abaCode.text);
+                                                    }
                                                     setState(() {});
                                                   },
                                                   child: Text(
@@ -1030,7 +1046,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   List completeList = [];
   List totalPrice = [];
-  String revenue='0';
+  String revenue = '0';
 
   totalRevenue() {
     try {
