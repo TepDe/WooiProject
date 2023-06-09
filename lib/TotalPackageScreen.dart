@@ -344,6 +344,9 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                           if (forDisplay[index]['status'] ==
                                               'pending')
                                             Container()
+                                          else if (forDisplay[index]['status'] ==
+                                              'complete')
+                                            Container()
                                           else if (forDisplay[index]
                                                   ['status'] ==
                                               'return')
