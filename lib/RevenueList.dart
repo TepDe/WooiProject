@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:wooiproject/CompleteDetail.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
@@ -66,12 +67,13 @@ class _RevenueListState extends State<RevenueList> {
           //     : reUse.reCompletePackageListview(pkc: completeList),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            // decoration: const BoxDecoration(
-            //   image: DecorationImage(
-            //     image: AssetImage("assets/images/CompleteHead.png"),
-            //     fit: BoxFit.cover,
-            //   ),
-            // ),
+            decoration: BoxDecoration(
+              color: theme.liteBlue,
+              // image: DecorationImage(
+              //   image: AssetImage("assets/images/CompleteHead.png"),
+              //   fit: BoxFit.cover,
+              // ),
+            ),
             child: Column(
               children: [
                 Container(
@@ -166,11 +168,11 @@ class _RevenueListState extends State<RevenueList> {
                     ),
                     Container(
                       decoration: BoxDecoration(
-                        color: theme.litestGreen,
+                        color: theme.btnBlue,
                         borderRadius: BorderRadius.circular(6),
                         boxShadow: [
                           BoxShadow(
-                            color: theme.minGrey,
+                            color: theme.btnBlue,
                             blurRadius: 6,
                             offset: const Offset(0, 0), // Shadow position
                           ),
@@ -199,7 +201,7 @@ class _RevenueListState extends State<RevenueList> {
                           },
                           icon: Icon(
                             Icons.search,
-                            color: theme.green,
+                            color: theme.white,
                           )),
                     )
                   ],
@@ -256,7 +258,7 @@ class _RevenueListState extends State<RevenueList> {
                           child: InkWell(
                             borderRadius: BorderRadius.circular(6),
                             onTap: () {
-                              //Get.to(const CompleteDetail(),arguments:  forDisplay[index]);
+                              Get.to(const CompleteDetail(),arguments:  forDisplay[index]);
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
