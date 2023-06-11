@@ -16,6 +16,8 @@ import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 
+import 'GlobalControl/createModule.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -50,6 +52,15 @@ class _HomeScreenState extends State<HomeScreen> {
     completeListLength();
     returnListLength();
     currentTime();
+    testObj();
+  }
+
+  testObj (){
+    var create = createModule();
+    create.ABACode = "abaCode.toString()";
+    var test  =jsonEncode(create);
+    print( create);
+
   }
 
   // suggestionLocation()async{
