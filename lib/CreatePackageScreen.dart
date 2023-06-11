@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:wooiproject/Distination/clsDistin.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
+import 'package:wooiproject/GlobalControl/createModule.dart';
 
 import 'GlobalControl/GlobalController.dart';
 import 'ViewScreen.dart';
@@ -59,7 +60,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
       Map data = doc.data() as Map;
       userName = data['firstname'] + ' ' + data['lastname'].toString();
       phoneNumber = data['phoneNumber'].toString();
-      abaCode = data[inFor.ABACode];
+      abaCode = data[inFor.ABACode].toString();
       setState(() {});
     });
   }
@@ -500,7 +501,8 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                       phoneNumber:
                                       phoneBox.text.trim().toString(),
                                       location:
-                                      locationBox.text.trim().toString())
+                                      locationBox.text.trim().toString(),
+                                  )
                                       .then((value) {
                                     phoneBox.clear();
                                     priceBox.clear();
