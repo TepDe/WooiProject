@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
     completeListLength();
     returnListLength();
     currentTime();
-    testObj();
+    //testObj();
   }
 
   testObj (){
