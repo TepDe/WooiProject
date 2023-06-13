@@ -812,7 +812,7 @@ class ReUseWidget {
         child: Column(
           children: [
             Text(
-              title,
+              title??"",
               softWrap: true,
               maxLines: 2,
               style: TextStyle(
@@ -821,7 +821,7 @@ class ReUseWidget {
                   fontWeight: weight ?? FontWeight.normal),
             ),
             Text(
-              content,
+              content??"",
               softWrap: true,
               maxLines: 2,
               style: TextStyle(
@@ -2088,12 +2088,12 @@ class ReUseWidget {
     );
   }
 
-  reUseBoxText({title, value,data,witchClick,assetImage, textColor}) {
+  reUseBoxText({title, value,data,witchClick,assetImage, textColor,backgroundColor}) {
     return Container(
       width: Get.width,
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: theme.white,
+        color: backgroundColor ?? theme.white,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
@@ -2102,10 +2102,10 @@ class ReUseWidget {
             //offset: Offset(4, 8), // Shadow position
           ),
         ],
-        image: DecorationImage(
-          image: AssetImage(assetImage??""),
-          fit: BoxFit.cover,
-        ),
+        // image: DecorationImage(
+        //   image: AssetImage(assetImage??""),
+        //   fit: BoxFit.cover,
+        // ),
       ),
       child: Material(
         color: Colors.transparent,
