@@ -393,167 +393,170 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                 const SizedBox(
                   height: 18,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Flexible(
-                      child: Container(
-                        height: 50,
-                        width: Get.width,
-                        decoration: BoxDecoration(
-                          color: theme.orange,
-                          borderRadius: BorderRadius.circular(12),
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //     color: Colors.grey,
-                          //     blurRadius: 1,
-                          //     //offset: Offset(4, 8), // Shadow position
-                          //   ),
-                          // ],
-                        ),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () async {
-                              if (phoneBox.text.trim().toString() == '') {
-                                await reUse.reUseCircleDialog(
-                                    context: context,
-                                    icon: Icons.phone,
-                                    title: 'Error',
-                                    content: Center(
-                                      child: Text(
-                                        'Phone Number Must Include',
-                                        style: TextStyle(
-                                          color: theme.black,
-                                        ),
-                                      ),
-                                    ));
-                              } else if (locationBox.text.trim().toString() ==
-                                  '') {
-                                await reUse.reUseCircleDialog(
-                                    context: context,
-                                    icon: Icons.location_on_rounded,
-                                    title: 'Error',
-                                    content: Center(
-                                      child: Text(
-                                        'Location Must Include',
-                                        style: TextStyle(
-                                          color: theme.black,
-                                        ),
-                                      ),
-                                    ));
-                              } else if (priceBox.text.trim().toString() ==
-                                  '') {
-                                await reUse.reUseCircleDialog(
-                                    context: context,
-                                    icon: Icons.monetization_on,
-                                    title: 'Error',
-                                    content: Center(
-                                      child: Text(
-                                        'Price Must Include',
-                                        style: TextStyle(
-                                          color: theme.black,
-                                        ),
-                                      ),
-                                    ));
-                              } else {
-                                if(abaCode.isEmpty){
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Flexible(
+                        child: Container(
+                          height: 50,
+                          width: Get.width,
+                          decoration: BoxDecoration(
+                            color: theme.orange,
+                            borderRadius: BorderRadius.circular(12),
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     color: Colors.grey,
+                            //     blurRadius: 1,
+                            //     //offset: Offset(4, 8), // Shadow position
+                            //   ),
+                            // ],
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () async {
+                                if (phoneBox.text.trim().toString() == '') {
                                   await reUse.reUseCircleDialog(
                                       context: context,
-                                      icon: Icons.code,
+                                      icon: Icons.phone,
                                       title: 'Error',
                                       content: Center(
                                         child: Text(
-                                          clsLan.noABA,
+                                          'Phone Number Must Include',
                                           style: TextStyle(
                                             color: theme.black,
                                           ),
                                         ),
                                       ));
-                                }else if( userName.isEmpty){
+                                } else if (locationBox.text.trim().toString() ==
+                                    '') {
                                   await reUse.reUseCircleDialog(
                                       context: context,
-                                      icon: Icons.account_circle,
+                                      icon: Icons.location_on_rounded,
                                       title: 'Error',
                                       content: Center(
                                         child: Text(
-                                          clsLan.noName,
+                                          'Location Must Include',
                                           style: TextStyle(
                                             color: theme.black,
                                           ),
                                         ),
                                       ));
-                                }else{
-                                  alertDialog(context);
-                                  await glb
-                                      .createPackage(
-                                      abaCode: abaCode.toString(),
-                                      userName: userName.trim().toString(),
-                                      userPhoneNumber:
-                                      phoneNumber.trim().toString(),
-                                      tokenKey: getToken.trim().toString(),
-                                      chatid: chatid.trim().toString(),
-                                      price: priceBox.text.trim().toString(),
-                                      note: noteBox.text.trim().toString(),
-                                      packageID: packageID.toString(),
-                                      qty: qtyBox.text.trim().toString() ??
-                                          '1',
-                                      phoneNumber:
-                                      phoneBox.text.trim().toString(),
-                                      location:
-                                      locationBox.text.trim().toString(),
-                                  )
-                                      .then((value) {
-                                    phoneBox.clear();
-                                    priceBox.clear();
-                                    locationBox.clear();
-                                    qtyBox.clear();
-                                    noteBox.clear();
-                                  });
-                                  Get.back();
-                                  reUse.reUseCircleDialog(
+                                } else if (priceBox.text.trim().toString() ==
+                                    '') {
+                                  await reUse.reUseCircleDialog(
                                       context: context,
-                                      icon: Icons.check_circle_rounded,
-                                      title: 'Success',
+                                      icon: Icons.monetization_on,
+                                      title: 'Error',
                                       content: Center(
                                         child: Text(
-                                          'Your package is successfully request',
+                                          'Price Must Include',
                                           style: TextStyle(
                                             color: theme.black,
                                           ),
                                         ),
                                       ));
-                                  setState(() {
-                                    packageID = glb.generatePackageID();
-                                  });
+                                } else {
+                                  if(abaCode.isEmpty){
+                                    await reUse.reUseCircleDialog(
+                                        context: context,
+                                        icon: Icons.code,
+                                        title: 'Error',
+                                        content: Center(
+                                          child: Text(
+                                            clsLan.noABA,
+                                            style: TextStyle(
+                                              color: theme.black,
+                                            ),
+                                          ),
+                                        ));
+                                  }else if( userName.isEmpty){
+                                    await reUse.reUseCircleDialog(
+                                        context: context,
+                                        icon: Icons.account_circle,
+                                        title: 'Error',
+                                        content: Center(
+                                          child: Text(
+                                            clsLan.noName,
+                                            style: TextStyle(
+                                              color: theme.black,
+                                            ),
+                                          ),
+                                        ));
+                                  }else{
+                                    alertDialog(context);
+                                    await glb
+                                        .createPackage(
+                                        abaCode: abaCode.toString(),
+                                        userName: userName.trim().toString(),
+                                        userPhoneNumber:
+                                        phoneNumber.trim().toString(),
+                                        tokenKey: getToken.trim().toString(),
+                                        chatid: chatid.trim().toString(),
+                                        price: priceBox.text.trim().toString(),
+                                        note: noteBox.text.trim().toString(),
+                                        packageID: packageID.toString(),
+                                        qty: qtyBox.text.trim().toString() ??
+                                            '1',
+                                        phoneNumber:
+                                        phoneBox.text.trim().toString(),
+                                        location:
+                                        locationBox.text.trim().toString(),
+                                    )
+                                        .then((value) {
+                                      phoneBox.clear();
+                                      priceBox.clear();
+                                      locationBox.clear();
+                                      qtyBox.clear();
+                                      noteBox.clear();
+                                    });
+                                    Get.back();
+                                    reUse.reUseCircleDialog(
+                                        context: context,
+                                        icon: Icons.check_circle_rounded,
+                                        title: 'Success',
+                                        content: Center(
+                                          child: Text(
+                                            'Your package is successfully request',
+                                            style: TextStyle(
+                                              color: theme.black,
+                                            ),
+                                          ),
+                                        ));
+                                    setState(() {
+                                      packageID = glb.generatePackageID();
+                                    });
+                                  }
                                 }
-                              }
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                // Padding(
-                                //   padding: const EdgeInsets.only(right: 8.0),
-                                //   child: Icon(
-                                //     Icons,
-                                //     color: iconcolor,
-                                //   ),
-                                // ),
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // Padding(
+                                  //   padding: const EdgeInsets.only(right: 8.0),
+                                  //   child: Icon(
+                                  //     Icons,
+                                  //     color: iconcolor,
+                                  //   ),
+                                  // ),
 
-                                Text(
-                                  'OK',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: theme.white,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
+                                  Text(
+                                    'OK',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: theme.white,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
