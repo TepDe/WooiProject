@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -48,13 +50,24 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
     super.initState();
     print(argumentData);
     print(argumentData);
-    phoneBox.text = argumentData[fieldData.phoneNumber];
-    locationBox.text = argumentData[fieldData.location];
-    priceBox.text = argumentData[fieldData.price];
-    qtyBox.text = argumentData[fieldData.qty];
-    noteBox.text = argumentData[fieldData.note];
-    packageID = argumentData[fieldData.packageID];
+    phoneBox.text = argumentData[fieldData.phoneNumber] ?? clsLan.notIncludeYet;
+    locationBox.text = argumentData[fieldData.location] ?? clsLan.notIncludeYet;
+    priceBox.text = argumentData[fieldData.price] ?? clsLan.notIncludeYet;
+    qtyBox.text = argumentData[fieldData.qty] ?? clsLan.notIncludeYet;
+    noteBox.text = argumentData[fieldData.note] ?? clsLan.notIncludeYet;
+    packageID = argumentData[fieldData.packageID] ?? clsLan.notIncludeYet;
+    if (packageID == "") {
+      generatePackageID();
+    } else {}
+    setState(() {});
     fetchUserInformation();
+  }
+
+  generatePackageID() {
+    Random random = Random();
+    int randomNumber = random.nextInt(9999);
+    String format = 'PK00';
+    packageID = format + randomNumber.toString();
   }
 
   fetchUserInformation() async {
@@ -425,46 +438,69 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                                       ),
                                     ));
                               } else {
-                                alertDialog(context);
-                                await glb
-                                    .editPackage(
-                                        data: argumentData,
-                                        userName: userName.trim().toString(),
-                                        userPhoneNumber:
-                                            phoneNumber.trim().toString(),
-                                        tokenKey: getToken.trim().toString(),
-                                        chatid: chatid.trim().toString(),
-                                        price: priceBox.text.trim().toString(),
-                                        note: noteBox.text.toString(),
-                                        packageID: packageID.toString(),
-                                        qty: qtyBox.text.trim().toString(),
-                                        phoneNumber:
-                                            phoneBox.text.trim().toString(),
-                                        location:
-                                            locationBox.text.trim().toString())
-                                    .then((value) {
-                                  // phoneBox.clear();
-                                  // priceBox.clear();
-                                  // locationBox.clear();
-                                  // qtyBox.clear();
-                                  // noteBox.clear();
-                                });
-                                Get.back();
-                                reUse.reUseCircleDialog(
-                                    context: context,
-                                    icon: Icons.check_circle_rounded,
-                                    title: 'Success',
-                                    content: Center(
-                                      child: Text(
-                                        'Your package is successfully request',
-                                        style: TextStyle(
-                                          color: theme.black,
-                                        ),
-                                      ),
-                                    ));
-                                setState(() {
-                                  packageID = glb.generatePackageID();
-                                });
+                                if (hasNullValues(argumentData)) {
+                                  Get.back();
+                                  setState(() {});
+                                } else {
+                                  if (phoneBox.text ==
+                                          argumentData[fieldData.phoneNumber] &&
+                                      locationBox.text ==
+                                          argumentData[fieldData.location] &&
+                                      priceBox.text ==
+                                          argumentData[fieldData.price] &&
+                                      qtyBox.text ==
+                                          argumentData[fieldData.qty] &&
+                                      noteBox.text ==
+                                          argumentData[fieldData.note]) {
+                                    Get.back();
+                                    setState(() {});
+                                  } else {
+                                    alertDialog(context);
+                                    await glb
+                                        .editPackage(
+                                            data: argumentData,
+                                            userName:
+                                                userName.trim().toString(),
+                                            userPhoneNumber:
+                                                phoneNumber.trim().toString(),
+                                            tokenKey:
+                                                getToken.trim().toString(),
+                                            chatid: chatid.trim().toString(),
+                                            price:
+                                                priceBox.text.trim().toString(),
+                                            note: noteBox.text.toString(),
+                                            packageID: packageID.toString(),
+                                            qty: qtyBox.text.trim().toString(),
+                                            phoneNumber:
+                                                phoneBox.text.trim().toString(),
+                                            location: locationBox.text
+                                                .trim()
+                                                .toString())
+                                        .then((value) {
+                                      // phoneBox.clear();
+                                      // priceBox.clear();
+                                      // locationBox.clear();
+                                      // qtyBox.clear();
+                                      // noteBox.clear();
+                                    });
+                                    Get.back();
+                                    reUse.reUseCircleDialog(
+                                        context: context,
+                                        icon: Icons.check_circle_rounded,
+                                        title: 'Success',
+                                        content: Center(
+                                          child: Text(
+                                            'Your package is successfully request',
+                                            style: TextStyle(
+                                              color: theme.black,
+                                            ),
+                                          ),
+                                        ));
+                                    setState(() {
+                                      packageID = glb.generatePackageID();
+                                    });
+                                  }
+                                }
                               }
                             },
                             child: Row(
@@ -502,6 +538,19 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
         ),
       ),
     );
+  }
+
+  bool hasNullValues(obj) {
+    if (obj == null) return true;
+
+    return [
+      obj[fieldData.phoneNumber],
+      obj[fieldData.location],
+      obj[fieldData.price],
+      obj[fieldData.qty],
+      obj[fieldData.note],
+      obj[fieldData.packageID]
+    ].any((value) => value == null);
   }
 
   alertDialog(context) {
