@@ -44,4 +44,6 @@ class ClsLanguage {
   String insert = "បញ្ចូល";
   String insertTelegramToken = "បញ្ចូលលេខកូដ Telegram Token របស់អ្នកនៅទីនេះ";
   String insertTelegramChatID = "បញ្ចូលលេខកូដ Chat ID របស់អ្នកនៅទីនេះ";
+  String backMessage = "ចុចម្តងទៀតដើម្បីចាកចេញ";
+  String notIncludeYet = "មិនទាន់បញ្ចូល";
 }
