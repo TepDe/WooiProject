@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wooiproject/AccountScreen.dart';
+import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/HomeScreen.dart';
 import 'package:wooiproject/NotificationScreen.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
@@ -38,6 +39,7 @@ class _ViewScreenState extends State<ViewScreen> {
 
   int doubleClick = 0;
   var ctime;
+  final clsLan = ClsLanguage();
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +51,17 @@ class _ViewScreenState extends State<ViewScreen> {
           if (ctime == null || now.difference(ctime) > Duration(seconds: 2)) {
             //add duration of press gap
             ctime = now;
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Press Back Button Again to Exit'))
-            ); //scaffold message, you can show Toast message too.
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //     SnackBar(content: Text('Press Back Button Again to Exit'))
+            // ); //scaffold message, you can show Toast message too.
+            Fluttertoast.showToast(
+                msg: clsLan.backMessage,
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                textColor: Colors.white,
+                fontSize: 16.0
+            );
             return Future.value(false);
           }
 
