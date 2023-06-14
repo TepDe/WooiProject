@@ -513,7 +513,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                         color: theme.white,
                                                         content:
                                                             (forDisplay[index]
-                                                            ['price'] ?? "No Data") +" \$" )),
+                                                            ['price'] ?? "0") +" \$" )),
                                               ),
                                             ],
                                           ),
