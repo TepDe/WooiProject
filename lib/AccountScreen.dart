@@ -195,10 +195,12 @@ class _AccountScreenState extends State<AccountScreen> {
                             data: completeList,
                             value: (revenue ?? "0") + " \$",
                             textColor: theme.blue,
+                            witchClick: "revenue",
                             title: clsLan.revenue),
                       ),
                       Flexible(
                         child: reUse.reUseBoxText(
+                          witchClick: "paid",
                             backgroundColor: theme.litestOrange,
                             assetImage: "assets/images/TotalPaidBtn.png",
                             value: " \$",
