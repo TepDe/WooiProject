@@ -14,6 +14,7 @@ import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/HomeScreen.dart';
 import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/MapScreen.dart';
+import 'package:wooiproject/PaidScreen.dart';
 import 'package:wooiproject/PendingScreen.dart';
 import 'package:wooiproject/ProfileScreen.dart';
 import 'package:wooiproject/RenderListDetail.dart';
@@ -812,7 +813,7 @@ class ReUseWidget {
         child: Column(
           children: [
             Text(
-              title??"",
+              title ?? "",
               softWrap: true,
               maxLines: 2,
               style: TextStyle(
@@ -821,7 +822,7 @@ class ReUseWidget {
                   fontWeight: weight ?? FontWeight.normal),
             ),
             Text(
-              content??"",
+              content ?? "",
               softWrap: true,
               maxLines: 2,
               style: TextStyle(
@@ -2088,7 +2089,14 @@ class ReUseWidget {
     );
   }
 
-  reUseBoxText({title, value,data,witchClick,assetImage, textColor,backgroundColor}) {
+  reUseBoxText(
+      {title,
+      value,
+      data,
+      witchClick,
+      assetImage,
+      textColor,
+      backgroundColor}) {
     return Container(
       width: Get.width,
       margin: const EdgeInsets.all(10),
@@ -2112,7 +2120,11 @@ class ReUseWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
           onTap: () {
-            Get.to(const RevenueList(),arguments: data);
+            if (witchClick == "revenue") {
+              Get.to(const RevenueList(), arguments: data);
+            } else {
+              Get.to(const PaidScreen(), arguments: data);
+            }
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -2121,19 +2133,21 @@ class ReUseWidget {
                 Align(
                   alignment: Alignment.topLeft,
                   child: reUseText(
-                      content: title??"",
+                      content: title ?? "",
                       size: 16.0,
                       weight: FontWeight.bold,
-                      color: textColor??theme.darkGrey),
+                      color: textColor ?? theme.darkGrey),
                 ),
-                SizedBox(height: Get.height*0.01,),
+                SizedBox(
+                  height: Get.height * 0.01,
+                ),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: reUseText(
                       content: value ?? "",
                       size: 24.0,
                       weight: FontWeight.bold,
-                      color: textColor??theme.darkGrey),
+                      color: textColor ?? theme.darkGrey),
                 ),
               ],
             ),
