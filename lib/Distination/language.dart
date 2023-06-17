@@ -46,4 +46,7 @@ class ClsLanguage {
   String insertTelegramChatID = "បញ្ចូលលេខកូដ Chat ID របស់អ្នកនៅទីនេះ";
   String backMessage = "ចុចម្តងទៀតដើម្បីចាកចេញ";
   String notIncludeYet = "មិនទាន់បញ្ចូល";
+  String noPhone = "សូមបញ្ចូលលេខទូរស័ព្ទអ្នកទទួល";
+  String noRecLocation = "សូមបញ្ចូលទីតាំងអ្នកទទួល";
+  String noPrice = "សូមបញ្ចូលតម្លៃទំនិញ";
 }
