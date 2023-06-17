@@ -32,7 +32,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
   final phoneBox = TextEditingController();
   final locationBox = TextEditingController();
   final priceBox = TextEditingController();
-  final qtyBox = TextEditingController();
+  final qtyBox = TextEditingController(text: "1");
   final noteBox = TextEditingController();
   double textSize = 14;
   String packageID = '';
@@ -424,7 +424,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                       title: 'Error',
                                       content: Center(
                                         child: Text(
-                                          'Phone Number Must Include',
+                                          clsLan.noPhone,
                                           style: TextStyle(
                                             color: theme.black,
                                           ),
@@ -438,7 +438,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                       title: 'Error',
                                       content: Center(
                                         child: Text(
-                                          'Location Must Include',
+                                          clsLan.noRecLocation,
                                           style: TextStyle(
                                             color: theme.black,
                                           ),
@@ -452,7 +452,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                       title: 'Error',
                                       content: Center(
                                         child: Text(
-                                          'Price Must Include',
+                                          clsLan.noPrice,
                                           style: TextStyle(
                                             color: theme.black,
                                           ),
@@ -498,8 +498,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                         price: priceBox.text.trim().toString(),
                                         note: noteBox.text.trim().toString(),
                                         packageID: packageID.toString(),
-                                        qty: qtyBox.text.trim().toString() ??
-                                            '1',
+                                        qty: qtyBox.text.trim().toString(),
                                         phoneNumber:
                                         phoneBox.text.trim().toString(),
                                         location:
