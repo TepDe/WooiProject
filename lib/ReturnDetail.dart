@@ -85,84 +85,40 @@ class _ReturnDetailState extends State<ReturnDetail> {
               borderRadius: BorderRadius.circular(6),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      reUse.reUseText(
-                          weight: FontWeight.w400,
-                          size: 16.0,
-                          color: theme.grey,
-                          content: '${clsLan.packageID} :'),
-                      Row(
-                        children: [
-                          reUse.reUseText(
-                              weight: FontWeight.bold,
-                              size: 16.0,
-                              color: theme.blue,
-                              content: forDisplay['packageID']),
-                          SizedBox(
-                            height: 40,
-                            width: 40,
-                            child: PopupMenuButton<int>(
-                              onSelected: (item) {
-                                // optionSelect(
-                                //     opt: item,
-                                //     data: forDisplay[index]);
-                                setState(() {});
-                              },
-                              itemBuilder: (context) => [
-                                const PopupMenuItem<int>(
-                                    value: 0, child: Text('Back to Request')),
-                                const PopupMenuItem<int>(
-                                    value: 1, child: Text('Delete')),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Divider(
-                    color: theme.grey,
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // reUse.reSetUseText(
-                      //     titleColor: theme.grey,
-                      //     title: 'Destination',
-                      //     size: 14.0,
-                      //     color: theme.black,
-                      //     content: forDisplay[index]['location'],
-                      //     weight: FontWeight.w500),
-                      reUse.reUseRowText(
-                          titleColor: theme.grey,
-                          title: clsLan.receiverLocation,
-                          size: valueSize,
-                          lableSize: labelSize,
-                          color: theme.black,
-                          content: forDisplay['location'],
-                          weight: FontWeight.w500),
-                      reUse.reUseRowText(
-                          lableSize: labelSize,
-                          titleColor: theme.grey,
-                          title: clsLan.receiverPhoneNumber,
-                          size: valueSize,
-                          color: theme.black,
-                          content: forDisplay['phoneNumber'],
-                          weight: FontWeight.w500),
-                      reUse.reUseRowText(
-                          titleColor: theme.grey,
-                          title: clsLan.qty,
-                          size: valueSize,
-                          lableSize: labelSize,
-                          color: theme.black,
-                          content: forDisplay['price'],
-                          weight: FontWeight.w500),
-                    ],
-                  ),
+                  reUse.reUseRowText(
+                      titleColor: theme.grey,
+                      title: clsLan.packageID,
+                      size: valueSize,
+                      lableSize: labelSize,
+                      color: theme.blue,
+                      content: forDisplay['packageID'],
+                      weight: FontWeight.w500),
+                  reUse.reUseRowText(
+                      titleColor: theme.grey,
+                      title: clsLan.receiverLocation,
+                      size: valueSize,
+                      lableSize: labelSize,
+                      color: theme.black,
+                      content: forDisplay['location'],
+                      weight: FontWeight.w500),
+                  reUse.reUseRowText(
+                      lableSize: labelSize,
+                      titleColor: theme.grey,
+                      title: clsLan.receiverPhoneNumber,
+                      size: valueSize,
+                      color: theme.black,
+                      content: forDisplay['phoneNumber'],
+                      weight: FontWeight.w500),
+                  reUse.reUseRowText(
+                      titleColor: theme.grey,
+                      title: clsLan.qty,
+                      size: valueSize,
+                      lableSize: labelSize,
+                      color: theme.black,
+                      content: forDisplay['price'],
+                      weight: FontWeight.w500),
                   Padding(
-                    padding: const EdgeInsets.all(3.0),
+                    padding: const EdgeInsets.all(0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -173,7 +129,7 @@ class _ReturnDetailState extends State<ReturnDetail> {
                             content: clsLan.price),
                         Container(
                           margin: EdgeInsets.all(8),
-                           decoration: BoxDecoration(
+                          decoration: BoxDecoration(
                             color: theme.blue,
                             borderRadius: BorderRadius.circular(6),
                           ),
@@ -207,8 +163,8 @@ class _ReturnDetailState extends State<ReturnDetail> {
                           width: Get.width,
                           margin: const EdgeInsets.all(8.0),
                           padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                              border: Border.all(color: theme.grey)),
+                          // decoration: BoxDecoration(
+                          //     border: Border.all(color: theme.grey)),
                           child: reUse.reUseTextNote(
                               weight: FontWeight.w400,
                               size: 14.0,
@@ -218,51 +174,30 @@ class _ReturnDetailState extends State<ReturnDetail> {
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      reUse.reUseText(
-                          weight: FontWeight.w400,
-                          size: labelSize,
-                          color: theme.grey,
-                          content: '${clsLan.createDate} : '),
-                      reUse.reUseText(
-                          weight: FontWeight.bold,
-                          size: valueSize,
-                          color: theme.black,
-                          content: forDisplay['date']),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      children: [
-                        reUse.reUseColumnText(
-                            lableSize: labelSize,
-                            titleColor: theme.grey,
-                            title: clsLan.driverName,
-                            size: valueSize,
-                            color: theme.black,
-                            content: forDisplay[field.assignBy] ?? "No price",
-                            weight: FontWeight.w500),
-                        reUse.reUseColumnText(
-                            lableSize: labelSize,
-                            titleColor: theme.grey,
-                            title: clsLan.driverPhone,
-                            size: valueSize,
-                            color: theme.black,
-                            content: forDisplay[field.dPhone]?? "No Phone",
-                            weight: FontWeight.w500),
-                        // reUse.reUseColumnText(
-                        //     lableSize: labelSize,
-                        //     titleColor: theme.grey,
-                        //     title: clsLan.price,
-                        //     size: valueSize,
-                        //     color: theme.black,
-                        //     content: forDisplay['price'] + " \$" ?? "No price",
-                        //     weight: FontWeight.w500),
-                      ],
-                    ),
-                  ),
+                  reUse.reUseRowText(
+                      titleColor: theme.grey,
+                      title: clsLan.createDate,
+                      size: valueSize,
+                      lableSize: labelSize,
+                      color: theme.black,
+                      content: forDisplay['date'],
+                      weight: FontWeight.w500),
+                  reUse.reUseRowText(
+                      titleColor: theme.grey,
+                      title: clsLan.driverName,
+                      size: valueSize,
+                      lableSize: labelSize,
+                      color: theme.black,
+                      content: forDisplay[field.assignBy],
+                      weight: FontWeight.w500),
+                  reUse.reUseRowText(
+                      titleColor: theme.grey,
+                      title: clsLan.driverPhone,
+                      size: valueSize,
+                      lableSize: labelSize,
+                      color: theme.black,
+                      content: forDisplay[field.dPhone],
+                      weight: FontWeight.w500),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -281,8 +216,8 @@ class _ReturnDetailState extends State<ReturnDetail> {
                           width: Get.width,
                           margin: const EdgeInsets.all(8.0),
                           padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                              border: Border.all(color: theme.grey)),
+                          // decoration: BoxDecoration(
+                          //     border: Border.all(color: theme.grey)),
                           child: reUse.reUseTextNote(
                               weight: FontWeight.w400,
                               size: 14.0,
@@ -292,43 +227,14 @@ class _ReturnDetailState extends State<ReturnDetail> {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            reUse.reUseText(
-                                weight: FontWeight.w400,
-                                size: labelSize,
-                                color: theme.grey,
-                                content: '${clsLan.returnTime} : '),
-                            reUse.reUseText(
-                                weight: FontWeight.bold,
-                                size: valueSize,
-                                color: theme.black,
-                                content: forDisplay['date']),
-
-                          ],
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: theme.litestRed,
-                            borderRadius:
-                            BorderRadius.circular(6),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 4),
-                          child: reUse.reUseText(
-                              weight: FontWeight.bold,
-                              size: 12.0,
-                              color: theme.liteRed,
-                              content: clsLan.stReturn),
-                        )
-                      ],
-                    ),
-                  ),
+                  reUse.reUseRowText(
+                      titleColor: theme.grey,
+                      title: clsLan.returnTime,
+                      size: valueSize,
+                      lableSize: labelSize,
+                      color: theme.black,
+                      content: forDisplay['date'],
+                      weight: FontWeight.w500),
                 ],
               ),
             ),
