@@ -395,53 +395,53 @@ class _RevenueListState extends State<RevenueList> {
                                   //   ),
                                   // ),
 
-                                  Padding(
-                                    padding: const EdgeInsets.all(6.0),
-                                    child: Divider(
-                                      height: 1,
-                                      color: theme.grey,
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      reUse.reUseText(
-                                          size: 12.0,
-                                          weight: FontWeight.w400,
-                                          color: theme.grey,
-                                          content: clsLan.status),
-                                      // Container(
-                                      //   decoration: BoxDecoration(
-                                      //     color: theme.litestGreen,
-                                      //     borderRadius: BorderRadius.circular(6),
-                                      //   ),
-                                      //   padding: const EdgeInsets.symmetric(
-                                      //       horizontal: 10, vertical: 4),
-                                      //   child: reUse.reUseText(
-                                      //       size: 10.0,
-                                      //       color: theme.liteGreen,
-                                      //       content: forDisplay[index]['status']
-                                      //           .toString()
-                                      //           .toUpperCase(),
-                                      //       weight: FontWeight.w900),
-                                      // ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: theme.litestGreen,
-                                          borderRadius:
-                                              BorderRadius.circular(6),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 4),
-                                        child: reUse.reUseText(
-                                            size: 10.0,
-                                            color: theme.liteGreen,
-                                            content: clsLan.stCom,
-                                            weight: FontWeight.w900),
-                                      ),
-                                    ],
-                                  ),
+                                  // Padding(
+                                  //   padding: const EdgeInsets.all(6.0),
+                                  //   child: Divider(
+                                  //     height: 1,
+                                  //     color: theme.grey,
+                                  //   ),
+                                  // ),
+                                  // Row(
+                                  //   mainAxisAlignment:
+                                  //       MainAxisAlignment.spaceBetween,
+                                  //   children: [
+                                  //     reUse.reUseText(
+                                  //         size: 12.0,
+                                  //         weight: FontWeight.w400,
+                                  //         color: theme.grey,
+                                  //         content: clsLan.status),
+                                  //     // Container(
+                                  //     //   decoration: BoxDecoration(
+                                  //     //     color: theme.litestGreen,
+                                  //     //     borderRadius: BorderRadius.circular(6),
+                                  //     //   ),
+                                  //     //   padding: const EdgeInsets.symmetric(
+                                  //     //       horizontal: 10, vertical: 4),
+                                  //     //   child: reUse.reUseText(
+                                  //     //       size: 10.0,
+                                  //     //       color: theme.liteGreen,
+                                  //     //       content: forDisplay[index]['status']
+                                  //     //           .toString()
+                                  //     //           .toUpperCase(),
+                                  //     //       weight: FontWeight.w900),
+                                  //     // ),
+                                  //     Container(
+                                  //       decoration: BoxDecoration(
+                                  //         color: theme.litestGreen,
+                                  //         borderRadius:
+                                  //             BorderRadius.circular(6),
+                                  //       ),
+                                  //       padding: const EdgeInsets.symmetric(
+                                  //           horizontal: 10, vertical: 4),
+                                  //       child: reUse.reUseText(
+                                  //           size: 10.0,
+                                  //           color: theme.liteGreen,
+                                  //           content: clsLan.stCom,
+                                  //           weight: FontWeight.w900),
+                                  //     ),
+                                  //   ],
+                                  // ),
                                 ],
                               ),
                             ),
