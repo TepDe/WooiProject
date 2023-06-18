@@ -796,7 +796,7 @@ class ReUseWidget {
 
   reUseTextNote({content, size, weight, color}) {
     return Text(
-      content,
+      content??"",
       maxLines: 5,
       style: TextStyle(
           fontSize: size ?? 12,
@@ -842,7 +842,7 @@ class ReUseWidget {
       child: SizedBox(
         width: Get.width,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only( top:8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
