@@ -43,6 +43,7 @@ class _CompleteDetailState extends State<CompleteDetail> {
     return  SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: theme.litestGreen, //<-- SEE HERE
           automaticallyImplyLeading: false,
           elevation: 0,
           title: TextButton.icon(
@@ -51,18 +52,17 @@ class _CompleteDetailState extends State<CompleteDetail> {
             },
             icon: Icon(
               Icons.arrow_back_ios_new_outlined,
-              color: theme.black,
+              color: theme.green,
             ),
             label: Text(
               clsLan.returns,
               style: TextStyle(
                   fontSize: 18,
-                  color: theme.black,
+                  color: theme.green,
                   //color: titleColor,
                   fontWeight: FontWeight.bold),
             ),
           ),
-          backgroundColor: Colors.transparent,
         ),
         body: Container(
           width: Get.width,
@@ -97,34 +97,34 @@ class _CompleteDetailState extends State<CompleteDetail> {
                         children: [
                           reUse.reUseText(
                               weight: FontWeight.bold,
-                              size: 16.0,
+                              size: 20.0,
                               color: theme.blue,
                               content: forDisplay['packageID']),
-                          SizedBox(
-                            height: 40,
-                            width: 40,
-                            child: PopupMenuButton<int>(
-                              onSelected: (item) {
-                                // optionSelect(
-                                //     opt: item,
-                                //     data: forDisplay[index]);
-                                setState(() {});
-                              },
-                              itemBuilder: (context) => [
-                                const PopupMenuItem<int>(
-                                    value: 0, child: Text('Back to Request')),
-                                const PopupMenuItem<int>(
-                                    value: 1, child: Text('Delete')),
-                              ],
-                            ),
-                          ),
+                          // SizedBox(
+                          //   height: 40,
+                          //   width: 40,
+                          //   child: PopupMenuButton<int>(
+                          //     onSelected: (item) {
+                          //       // optionSelect(
+                          //       //     opt: item,
+                          //       //     data: forDisplay[index]);
+                          //       setState(() {});
+                          //     },
+                          //     itemBuilder: (context) => [
+                          //       const PopupMenuItem<int>(
+                          //           value: 0, child: Text('Back to Request')),
+                          //       const PopupMenuItem<int>(
+                          //           value: 1, child: Text('Delete')),
+                          //     ],
+                          //   ),
+                          // ),
                         ],
                       ),
                     ],
                   ),
-                  Divider(
-                    color: theme.grey,
-                  ),
+                  // Divider(
+                  //   color: theme.grey,
+                  // ),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -150,6 +150,14 @@ class _CompleteDetailState extends State<CompleteDetail> {
                           size: valueSize,
                           color: theme.black,
                           content: forDisplay['phoneNumber'],
+                          weight: FontWeight.w500),
+                      reUse.reUseRowText(
+                          lableSize: labelSize,
+                          titleColor: theme.grey,
+                          title: clsLan.abaCode,
+                          size: valueSize,
+                          color: theme.black,
+                          content: forDisplay[field.ABACode],
                           weight: FontWeight.w500),
                       reUse.reUseRowText(
                           titleColor: theme.grey,
@@ -207,13 +215,13 @@ class _CompleteDetailState extends State<CompleteDetail> {
                           width: Get.width,
                           margin: const EdgeInsets.all(8.0),
                           padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                              border: Border.all(color: theme.grey)),
+                          // decoration: BoxDecoration(
+                          //     border: Border.all(color: theme.grey)),
                           child: reUse.reUseTextNote(
                               weight: FontWeight.w400,
                               size: 14.0,
                               color: theme.black,
-                              content: forDisplay['note'] ?? "No reason"),
+                              content:  forDisplay['note']??"" ),
                         ),
                       ),
                     ],
