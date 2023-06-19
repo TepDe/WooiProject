@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
+import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 
@@ -53,14 +55,14 @@ class _HomeScreenState extends State<HomeScreen> {
     returnListLength();
     currentTime();
     //testObj();
+    alertNoIntenet();
   }
 
-  testObj (){
+  testObj() {
     var create = createModule();
     create.ABACode = "abaCode.toString()";
-    var test  =jsonEncode(create);
-    print( create);
-
+    var test = jsonEncode(create);
+    print(create);
   }
 
   // suggestionLocation()async{
@@ -85,11 +87,29 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  _HomeScreenState() {
-    totalListLength();
-    pendingListLength();
-    completeListLength();
-    returnListLength();
+  alertNoIntenet() async {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+      }
+    } on SocketException catch (_) {
+      reUse.reUseCircleDialog(
+          function: 'nointernet',
+          disposeAllow: false,
+          context: context,
+          icon: Icons.wifi,
+          title: 'Connection Lost',
+          content: Center(
+            child: Text(
+              'No internet connection please try again',
+              style: TextStyle(
+                color: theme.black,
+              ),
+            ),
+          ));
+      setState(() {});
+    }
   }
 
   String getUserID = '';
@@ -122,6 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List totalPackageIndex = [];
   List completeList = [];
   List returnData = [];
+  final field = FieldData();
 
   totalListLength() async {
     try {
@@ -149,6 +170,21 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  onGetLocalStorage(cantOrNot) async {
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(str.cantEdit, findObject(driverList));
+    setState(() {
+    });
+  }
+
+  bool findObject(List objects) {
+    // Filter the list to include only objects where `stringValue` is equal to `searchString`
+    List filteredList = objects.where((obj) => obj.stringValue == 'request').toList();
+
+    // Check if only one object was found with the specified string value
+    return filteredList.length == 1 && filteredList[0].booleanValue == true;
+  }
   List pendingList = [];
 
   pendingListLength() {
@@ -249,9 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding:
                   EdgeInsets.only(top: 40, right: paddings, left: paddings),
               child: reUse.unitOneHomeScreen(
-                  getTime: greeting,
-                  userID: 'ID $getUserID',
-                  context: context),
+                  getTime: greeting, userID: 'ID $getUserID', context: context),
             ),
 
             Padding(
