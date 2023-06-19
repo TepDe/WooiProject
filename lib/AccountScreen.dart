@@ -47,6 +47,7 @@ class _AccountScreenState extends State<AccountScreen> {
   String getLocation = '';
   String getQty = '';
 
+  bool cantEdit = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -54,6 +55,13 @@ class _AccountScreenState extends State<AccountScreen> {
     //fetchLocalStorage();
     fetchUserData();
     totalRevenue();
+
+
+  }
+
+  onGetLocalStorage() async {
+    final prefs = await SharedPreferences.getInstance();
+    cantEdit = (await prefs.getBool(str.cantEdit))!;
   }
 
   getDatsa(getUid) async {
@@ -124,6 +132,7 @@ class _AccountScreenState extends State<AccountScreen> {
   final theme = ThemesApp();
   bool light = false;
   final fieldInfo = FieldInfo();
+  final field = FieldData();
 
   final token = TextEditingController();
   final abaCode = TextEditingController();
@@ -203,7 +212,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           witchClick: "paid",
                             backgroundColor: theme.litestOrange,
                             assetImage: "assets/images/TotalPaidBtn.png",
-                            value: " \$",
+                            value: "${paid} \$",
                             title: clsLan.paid,
                             textColor: theme.deepOrange,
                             data: completeList),
@@ -264,7 +273,10 @@ class _AccountScreenState extends State<AccountScreen> {
                             size: 16.0,
                             color: theme.black),
                         TextButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            reUse.reUseEditProfile(context);
+
+                          },
                           icon: Icon(Icons.edit, color: theme.darkGrey),
                           label: reUse.reUseText(
                               content: 'Edit',
@@ -952,6 +964,7 @@ class _AccountScreenState extends State<AccountScreen> {
     });
   }
 
+
   reUseCircleDialog({data, context, icon, title, content, function}) {
     return showDialog(
       context: context,
@@ -1066,7 +1079,9 @@ class _AccountScreenState extends State<AccountScreen> {
 
   List completeList = [];
   List totalPrice = [];
+  List paidList = [];
   String revenue = '0';
+  String paid = '0';
 
   totalRevenue() {
     try {
@@ -1074,7 +1089,6 @@ class _AccountScreenState extends State<AccountScreen> {
           .ref('Complete')
           .child(auth.currentUser!.uid);
       refs.onValue.listen((event) {
-        setState(() {});
         completeList.clear();
         DataSnapshot driver = event.snapshot;
         Map values = driver.value as Map;
@@ -1082,6 +1096,10 @@ class _AccountScreenState extends State<AccountScreen> {
           completeList.add(value);
           totalPrice.add(int.parse(value['price']));
           revenue = totalPrice.reduce((a, b) => a + b).toString();
+          if(value[field.paidStatus] == "paid"){
+            paidList.add(value);
+            paid = paidList.reduce((a, b) => a + b).toString();
+          }
           setState(() {});
         });
       });
