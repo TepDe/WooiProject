@@ -12,4 +12,5 @@ class StorageKey {
   String totalPackage = 'totalPackage';
   String pendingPackage = 'pendingPackage';
   String password = 'password';
+  String cantEdit = 'cantEdit';
 }
