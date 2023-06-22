@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,6 +16,7 @@ import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/SetUpScreen.dart';
+import 'package:wooiproject/WidgetReUse/Themes.dart';
 
 import '../ViewScreen.dart';
 import '../WidgetReUse/ReUseWidget.dart';
@@ -649,5 +651,31 @@ class GlobalController {
       field.dLastName: data[field.dLastName].toString(),
       field.dFirstName: data[field.dFirstName].toString(),
     });
+  }
+
+  alertNoInternet(context) async {
+    final reUse = ReUseWidget();
+    final theme = ThemesApp();
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+      }
+    } on SocketException catch (_) {
+      reUse.reUseCircleDialog(
+          function: 'nointernet',
+          disposeAllow: false,
+          context: context,
+          icon: Icons.wifi,
+          title: 'Connection Lost',
+          content: Center(
+            child: Text(
+              'No internet connection please try again',
+              style: TextStyle(
+                color: theme.black,
+              ),
+            ),
+          ));
+     }
   }
 }
