@@ -17,7 +17,8 @@ import 'package:wooiproject/SetUpScreen.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 import 'package:http/http.dart' as http;
-
+import 'dart:io';
+import 'package:flutter/material.dart';
 class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);
 
@@ -48,6 +49,7 @@ class _AccountScreenState extends State<AccountScreen> {
   String getQty = '';
 
   bool cantEdit = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -55,8 +57,6 @@ class _AccountScreenState extends State<AccountScreen> {
     //fetchLocalStorage();
     fetchUserData();
     totalRevenue();
-
-
   }
 
   onGetLocalStorage() async {
@@ -201,21 +201,21 @@ class _AccountScreenState extends State<AccountScreen> {
                         child: reUse.reUseBoxText(
                             backgroundColor: theme.liteBlue,
                             assetImage: "assets/images/RevenueBtn.png",
-                            data: completeList,
-                            value: (revenue ?? "0") + " \$",
+                            data: revenuePrice,
+                            value: "$revenue \$",
                             textColor: theme.blue,
                             witchClick: "revenue",
                             title: clsLan.revenue),
                       ),
                       Flexible(
                         child: reUse.reUseBoxText(
-                          witchClick: "paid",
+                            witchClick: "paid",
                             backgroundColor: theme.litestOrange,
                             assetImage: "assets/images/TotalPaidBtn.png",
-                            value: "${paid} \$",
+                            value: "$paid \$",
                             title: clsLan.paid,
                             textColor: theme.deepOrange,
-                            data: completeList),
+                            data: revenuePrice),
                       ),
                     ],
                   ),
@@ -275,7 +275,6 @@ class _AccountScreenState extends State<AccountScreen> {
                         TextButton.icon(
                           onPressed: () {
                             reUse.reUseEditProfile(context);
-
                           },
                           icon: Icon(Icons.edit, color: theme.darkGrey),
                           label: reUse.reUseText(
@@ -964,7 +963,6 @@ class _AccountScreenState extends State<AccountScreen> {
     });
   }
 
-
   reUseCircleDialog({data, context, icon, title, content, function}) {
     return showDialog(
       context: context,
@@ -1077,61 +1075,46 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 
-  List completeList = [];
-  List totalPrice = [];
-  List paidList = [];
-  String revenue = '0';
-  String paid = '0';
+  List revenuePrice = [];
+  List paidPrice = [];
+  double revenue = 0.0;
+  double paid = 0.0;
 
   totalRevenue() {
+    List mainData =[];
     try {
       DatabaseReference refs = FirebaseDatabase.instance
           .ref('Complete')
           .child(auth.currentUser!.uid);
       refs.onValue.listen((event) {
-        completeList.clear();
+        revenuePrice.clear();
+        paidPrice.clear();
         DataSnapshot driver = event.snapshot;
         Map values = driver.value as Map;
         values.forEach((key, value) {
-          completeList.add(value);
-          totalPrice.add(int.parse(value['price']));
-          revenue = totalPrice.reduce((a, b) => a + b).toString();
-          if(value[field.paidStatus] == "paid"){
-            paidList.add(value);
-            paid = paidList.reduce((a, b) => a + b).toString();
+          mainData.add(value);
+          if (value[field.paidStatus] == 'paid') {
+            paidPrice.add(value);
+          } else {
+            revenuePrice.add(value);
           }
-          setState(() {});
         });
+        calculation(mainData);
       });
     } catch (e) {
       print('completeListLength $e');
     }
   }
 
-  totalPaid() {
-    try {
-      DatabaseReference refs = FirebaseDatabase.instance
-          .ref('Complete')
-          .child(auth.currentUser!.uid);
-      refs.onValue.listen((event) {
-        setState(() {});
-        completeList.clear();
-        DataSnapshot driver = event.snapshot;
-        Map values = driver.value as Map;
-        values.forEach((key, value) {
-          completeList.add(value);
-          totalPrice.add(int.parse(value['price']));
-          revenue = totalPrice.reduce((a, b) => a + b).toString();
-          setState(() {});
-        });
-      });
-    } catch (e) {
-      print('completeListLength $e');
+  calculation(data) {
+    for (int a = 0; a < data.length; a++) {
+      if (data[a][field.paidStatus] == 'paid') {
+        paid += double.parse(data[a][field.price]);
+      } else {
+        revenue += double.parse(data[a][field.price]);
+      }
     }
+    setState(() {});
   }
-}
 
-class driverData {
-  double latitude = 0;
-  double longitude = 0;
 }
