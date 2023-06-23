@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooiproject/Distination/language.dart';
@@ -16,9 +15,6 @@ import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/SetUpScreen.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
-import 'package:http/http.dart' as http;
-import 'dart:io';
-import 'package:flutter/material.dart';
 class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);
 
@@ -61,7 +57,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   onGetLocalStorage() async {
     final prefs = await SharedPreferences.getInstance();
-    cantEdit = (await prefs.getBool(str.cantEdit))!;
+    cantEdit = (prefs.getBool(str.cantEdit))!;
   }
 
   getDatsa(getUid) async {
