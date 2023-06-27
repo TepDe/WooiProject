@@ -100,7 +100,7 @@ class _AccountScreenState extends State<AccountScreen> {
         .get()
         .then((DocumentSnapshot documentSnapshot) async {
       userData = documentSnapshot.data() as Map<String, dynamic>;
-      // try {
+       // try {
       //   getLatitude = documentSnapshot['latitude'].toString();
       //   getLongitude = documentSnapshot['longitude'].toString();
       //   getUid = documentSnapshot['uid'].toString();
@@ -199,7 +199,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             backgroundColor: theme.liteBlue,
                             assetImage: "assets/images/RevenueBtn.png",
                             data: revenuePrice,
-                            value: "$revenue \$",
+                            value: "${revenue.toStringAsFixed(2)} \$",
                             textColor: theme.blue,
                             witchClick: "revenue",
                             title: clsLan.revenue),
@@ -209,7 +209,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             witchClick: "paid",
                             backgroundColor: theme.litestOrange,
                             assetImage: "assets/images/TotalPaidBtn.png",
-                            value: "$paid \$",
+                            value: "${paid.toStringAsFixed(2)} \$",
                             title: clsLan.paid,
                             textColor: theme.deepOrange,
                             data: revenuePrice),
@@ -271,7 +271,9 @@ class _AccountScreenState extends State<AccountScreen> {
                             color: theme.black),
                         TextButton.icon(
                           onPressed: () {
-                            Get.to(const EditProfileScreen());
+                            print(userData);
+                            print(userData);
+                            Get.to(const EditProfileScreen(),arguments:userData );
                             setState(() {
 
                             });
@@ -1089,6 +1091,8 @@ class _AccountScreenState extends State<AccountScreen> {
       refs.onValue.listen((event) {
         revenuePrice.clear();
         paidPrice.clear();
+        revenue = 0;
+        paid = 0;
         DataSnapshot driver = event.snapshot;
         Map values = driver.value as Map;
         values.forEach((key, value) {
