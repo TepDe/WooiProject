@@ -74,6 +74,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
     fetchUserInformation();
     fetchToken();
     distince = clsDis.destination;
+    forDisplay = clsDis.destination;
   }
 
   final clsLan = ClsLanguage();
@@ -173,7 +174,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   height: 25,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, bottom: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 15),
                   child: reUse.reUseText(
                       content: 'លេខទូរស័ព្ទអ្នកទទួល :',
                       size: textSize,
@@ -192,7 +193,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                 //       controller: phoneBox),
                 // ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 15),
                   child: TextFormField(
                     controller: phoneBox,
                     // keyboardType: inputType,
@@ -220,7 +221,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   height: 18,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, bottom: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 15),
                   child: reUse.reUseText(
                       content:
                           'ទីតាំងអ្នកទទួល : ( សូមបញ្ចូលទីតាំងអ្នកទទួលជាអក្សរខ្មែរ )',
@@ -229,7 +230,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                       color: theme.black),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 15),
                   child: TextFormField(
                     controller: locationBox,
                     // keyboardType: inputType,
@@ -296,7 +297,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   height: 18,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, bottom: 10, top: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 15),
                   child: reUse.reUseText(
                       content:
                           clsLan.price + " : ( សូមបញ្ចូលតំលៃគិតជាដុល្លារ )",
@@ -304,29 +305,23 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                       weight: FontWeight.w500,
                       color: theme.black),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Flexible(
-                      flex: 6,
-                      child: reUse.reuseTextField(
-                          controller: priceBox,
-                          mixLength: 4,
-                          formater: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp('[0-9.,]+')),
-                          ],
-                          inputType: const TextInputType.numberWithOptions(
-                              decimal: true),
-                          label: ' ',
-                          textIcon: Icons.location_on),
-                    ),
-                    Flexible(
-                      flex: 1,
-                      child: reUse.reUseText(content: '\$', size: 20.0),
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+                  child:  reUse.reuseTextField(
+                      controller: priceBox,
+                      mixLength: 4,
+                      prefixIconColor: theme.darkGrey,
+                      prefixIcon: Icons.attach_money,
+                      formater: [
+                        FilteringTextInputFormatter.allow(
+                            RegExp('[0-9.,]+')),
+                      ],
+                      inputType: const TextInputType.numberWithOptions(
+                          decimal: true),
+                      label: ' ',
+                      textIcon: Icons.location_on),
                 ),
+
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10, top: 10),
                   child: reUse.reUseText(
@@ -459,7 +454,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                         ),
                                       ));
                                 } else {
-                                  if(abaCode.isEmpty){
+                                  if (abaCode.isEmpty) {
                                     await reUse.reUseCircleDialog(
                                         context: context,
                                         icon: Icons.code,
@@ -472,7 +467,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                             ),
                                           ),
                                         ));
-                                  }else if( userName.isEmpty){
+                                  } else if (userName.isEmpty) {
                                     await reUse.reUseCircleDialog(
                                         context: context,
                                         icon: Icons.account_circle,
@@ -485,24 +480,24 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                             ),
                                           ),
                                         ));
-                                  }else{
+                                  } else {
                                     alertDialog(context);
                                     await glb
                                         .createPackage(
-                                        abaCode: abaCode.toString(),
-                                        userName: userName.trim().toString(),
-                                        userPhoneNumber:
-                                        phoneNumber.trim().toString(),
-                                        tokenKey: getToken.trim().toString(),
-                                        chatid: chatid.trim().toString(),
-                                        price: priceBox.text.trim().toString(),
-                                        note: noteBox.text.trim().toString(),
-                                        packageID: packageID.toString(),
-                                        qty: qtyBox.text.trim().toString(),
-                                        phoneNumber:
-                                        phoneBox.text.trim().toString(),
-                                        location:
-                                        locationBox.text.trim().toString(),
+                                      abaCode: abaCode.toString(),
+                                      userName: userName.trim().toString(),
+                                      userPhoneNumber:
+                                          phoneNumber.trim().toString(),
+                                      tokenKey: getToken.trim().toString(),
+                                      chatid: chatid.trim().toString(),
+                                      price: priceBox.text.trim().toString(),
+                                      note: noteBox.text.trim().toString(),
+                                      packageID: packageID.toString(),
+                                      qty: qtyBox.text.trim().toString(),
+                                      phoneNumber:
+                                          phoneBox.text.trim().toString(),
+                                      location:
+                                          locationBox.text.trim().toString(),
                                     )
                                         .then((value) {
                                       phoneBox.clear();
