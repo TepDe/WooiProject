@@ -179,8 +179,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                 // password: '111111',
                                 context: context);
                           }
-                          reUse.alertDialog(context);
-                          // password: '111111');
+                           // password: '111111');
 
                           // lc._phoneVerify(context);
                           // phoneAuth();
