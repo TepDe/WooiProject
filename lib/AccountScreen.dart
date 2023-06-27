@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooiproject/Distination/language.dart';
+import 'package:wooiproject/EditProfileScreen.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
@@ -270,7 +271,10 @@ class _AccountScreenState extends State<AccountScreen> {
                             color: theme.black),
                         TextButton.icon(
                           onPressed: () {
-                            reUse.reUseEditProfile(context);
+                            Get.to(const EditProfileScreen());
+                            setState(() {
+
+                            });
                           },
                           icon: Icon(Icons.edit, color: theme.darkGrey),
                           label: reUse.reUseText(
