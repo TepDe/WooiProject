@@ -349,57 +349,17 @@ class _PaidScreenState extends State<PaidScreen> {
                                             ['price'] +
                                                 " \$",
                                             weight: FontWeight.w500),
-                                        // reUse.reUseText(
-                                        //     weight: FontWeight.bold,
-                                        //     size: 12.0,
-                                        //     color: theme.grey,
-                                        //     content: 'Location'),
-                                        // reUse.reUseText(
-                                        //     size: 12.0,
-                                        //     weight: FontWeight.bold,
-                                        //     color: theme.grey,
-                                        //     content: 'Phone number'),
-                                        // reUse.reUseText(
-                                        //     size: 12.0,
-                                        //     weight: FontWeight.bold,
-                                        //     color: theme.grey,
-                                        //     content: 'Qty'),
+
                                       ],
                                     ),
                                   ),
                                   // Padding(
-                                  //   padding: const EdgeInsets.all(3.0),
-                                  //   child: Row(
-                                  //     mainAxisAlignment:
-                                  //         MainAxisAlignment.spaceBetween,
-                                  //     children: [
-                                  //       reUse.reUseText(
-                                  //           size: 14.0,
-                                  //           color: theme.black,
-                                  //           content: forDisplay[index]['location'],
-                                  //           weight: FontWeight.w500),
-                                  //       reUse.reUseText(
-                                  //           size: 14.0,
-                                  //           color: theme.black,
-                                  //           weight: FontWeight.w500,
-                                  //           content: forDisplay[index]
-                                  //               ['phoneNumber']),
-                                  //       reUse.reUseText(
-                                  //           size: 14.0,
-                                  //           color: theme.black,
-                                  //           content: '1',
-                                  //           weight: FontWeight.w500),
-                                  //     ],
+                                  //   padding: const EdgeInsets.all(6.0),
+                                  //   child: Divider(
+                                  //     height: 1,
+                                  //     color: theme.grey,
                                   //   ),
                                   // ),
-
-                                  Padding(
-                                    padding: const EdgeInsets.all(6.0),
-                                    child: Divider(
-                                      height: 1,
-                                      color: theme.grey,
-                                    ),
-                                  ),
                                   Row(
                                     mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -409,21 +369,7 @@ class _PaidScreenState extends State<PaidScreen> {
                                           weight: FontWeight.w400,
                                           color: theme.grey,
                                           content: clsLan.status),
-                                      // Container(
-                                      //   decoration: BoxDecoration(
-                                      //     color: theme.litestGreen,
-                                      //     borderRadius: BorderRadius.circular(6),
-                                      //   ),
-                                      //   padding: const EdgeInsets.symmetric(
-                                      //       horizontal: 10, vertical: 4),
-                                      //   child: reUse.reUseText(
-                                      //       size: 10.0,
-                                      //       color: theme.liteGreen,
-                                      //       content: forDisplay[index]['status']
-                                      //           .toString()
-                                      //           .toUpperCase(),
-                                      //       weight: FontWeight.w900),
-                                      // ),
+
                                       Container(
                                         decoration: BoxDecoration(
                                           color: theme.litestGreen,
@@ -433,10 +379,10 @@ class _PaidScreenState extends State<PaidScreen> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 10, vertical: 4),
                                         child: reUse.reUseText(
-                                            size: 10.0,
+                                            size: 12.0,
                                             color: theme.liteGreen,
-                                            content: clsLan.stCom,
-                                            weight: FontWeight.w900),
+                                            content: clsLan.readyPaid,
+                                            weight: FontWeight.w600),
                                       ),
                                     ],
                                   ),
