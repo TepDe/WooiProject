@@ -789,9 +789,11 @@ class ReUseWidget {
     return Text(
       content ?? '',
       maxLines: 2,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
           fontSize: size ?? 12,
           color: color ?? theme.black,
+          overflow: TextOverflow.ellipsis,
           fontWeight: weight ?? FontWeight.normal),
     );
   }
@@ -1125,7 +1127,15 @@ class ReUseWidget {
   }
 
   reuseTextField(
-      {mixLength, label, controller, textIcon, inputType, require, formater}) {
+      {mixLength,
+      prefixIcon,
+      prefixIconColor,
+      label,
+      controller,
+      textIcon,
+      inputType,
+      require,
+      formater}) {
     return TextFormField(
       controller: controller ?? dialogPhoneNum,
       // keyboardType: inputType,
@@ -1134,6 +1144,10 @@ class ReUseWidget {
       inputFormatters: formater,
       // onChanged: (value) => doubleVar = double.parse(value),
       decoration: InputDecoration(
+        prefixIcon: Icon(
+          prefixIcon ?? Icons.help_outline,
+          color: prefixIconColor ?? Colors.transparent,
+        ),
         //icon: Icon(textIcon ?? null),
         // fillColor: theme.liteGrey,
         border: OutlineInputBorder(
