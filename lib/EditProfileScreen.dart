@@ -23,8 +23,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final glb = GlobalController();
   final clsDis = ClsDestination();
   final clsLan = ClsLanguage();
-  final phoneBox = TextEditingController(text: '0');
-  final locationBox = TextEditingController();
+  final firstName = TextEditingController();
+  final lastName = TextEditingController();
   final priceBox = TextEditingController();
   final qtyBox = TextEditingController();
   final noteBox = TextEditingController();
@@ -37,16 +37,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String phoneNumber = '';
   String getToken = '';
   String chatid = '';
+  var mainData = {};
   var argumentData = Get.arguments;
   final fieldData = FieldData();
+  final fieldInfo = FieldInfo();
   FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    mainData = argumentData;
+    firstName.text = mainData[fieldInfo.firstName] ?? '';
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +80,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         style: TextStyle(color: theme.black),
                       ),
                     ),
-
                   ],
                 ),
 
@@ -87,7 +89,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10),
                   child: reUse.reUseText(
-                      content: 'លេខទូរស័ព្ទអ្នកទទួល :',
+                      content: clsLan.fname,
                       size: textSize,
                       weight: FontWeight.w500,
                       color: theme.black),
@@ -106,25 +108,33 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: TextFormField(
-                    controller: phoneBox,
+                    controller: firstName,
                     // keyboardType: inputType,
                     keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                        const TextInputType.numberWithOptions(decimal: true),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
                       FilteringTextInputFormatter.digitsOnly,
                     ],
                     maxLength: 10,
                     onChanged: (value) async {},
+
                     decoration: InputDecoration(
                       //icon: Icon(textIcon ?? null),
                       // fillColor: theme.liteGrey,
+                      hintText: mainData[fieldInfo.firstName],
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                       //border: InputBorder.none,
-
-                      hintStyle: const TextStyle(fontSize: 12),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          firstName.clear();
+                          setState(() {});
+                        },
+                        icon: const Icon(Icons.close),
+                      ),
+                      hintStyle: const TextStyle(fontSize: 20),
                     ),
                   ),
                 ),
@@ -134,8 +144,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10),
                   child: reUse.reUseText(
-                      content:
-                      'ទីតាំងអ្នកទទួល : ( សូមបញ្ចូលទីតាំងអ្នកទទួលជាអក្សរខ្មែរ )',
+                      content: clsLan.lname,
                       size: textSize,
                       weight: FontWeight.w500,
                       color: theme.black),
@@ -143,19 +152,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: TextFormField(
-                    controller: locationBox,
+                    controller: lastName,
                     // keyboardType: inputType,
                     //keyboardType: inputType,
                     //inputFormatters: formater,
                     onChanged: (value) {
                       List results = clsDis.destination
-                          .where((user) => user.toLowerCase().contains(
-                          locationBox.text.toString().toLowerCase()))
+                          .where((user) => user
+                              .toLowerCase()
+                              .contains(lastName.text.toString().toLowerCase()))
                           .toList();
                       if (results == null) {
                         results = eng_distin
                             .where((user) => user.toLowerCase().contains(
-                            locationBox.text.toString().toLowerCase()))
+                                lastName.text.toString().toLowerCase()))
                             .toList();
                       }
                       print(results);
@@ -164,15 +174,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       setState(() {});
                     },
                     decoration: InputDecoration(
+                      hintText: mainData[fieldInfo.lastName],
                       suffixIcon: IconButton(
                         onPressed: () {
-                          locationBox.clear();
-                          locationBox.text = '';
+                          lastName.clear();
                           setState(() {});
                         },
                         icon: const Icon(Icons.close),
                       ),
-                      hintText: locationBox.text.toString() ?? '',
                       //icon: Icon(textIcon ?? null),
                       // fillColor: theme.liteGrey,
                       border: OutlineInputBorder(
@@ -180,7 +189,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       //border: InputBorder.none,
 
-                      hintStyle: const TextStyle(fontSize: 12),
+                      hintStyle: const TextStyle(fontSize: 20),
                     ),
                   ),
                 ),
@@ -189,22 +198,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   height: Get.height * 0.08,
                   child: forDisplay != []
                       ? ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.all(8),
-                      itemCount: forDisplay.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return SizedBox(
-                          child: TextButton(
-                            onPressed: () {
-                              locationBox.text = forDisplay[index]
-                                  .toString()
-                                  .trim()
-                                  .toLowerCase();
-                            },
-                            child: Text(forDisplay[index]),
-                          ),
-                        );
-                      })
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.all(8),
+                          itemCount: forDisplay.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return SizedBox(
+                              child: TextButton(
+                                onPressed: () {
+                                  lastName.text = forDisplay[index]
+                                      .toString()
+                                      .trim()
+                                      .toLowerCase();
+                                },
+                                child: Text(forDisplay[index]),
+                              ),
+                            );
+                          })
                       : const SizedBox(),
                 ),
                 const SizedBox(
@@ -214,7 +223,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   padding: const EdgeInsets.only(left: 20, bottom: 10, top: 10),
                   child: reUse.reUseText(
                       content:
-                      clsLan.price + " : ( សូមបញ្ចូលតំលៃគិតជាដុល្លារ )",
+                          clsLan.price + " : ( សូមបញ្ចូលតំលៃគិតជាដុល្លារ )",
                       size: textSize,
                       weight: FontWeight.w500,
                       color: theme.black),
@@ -290,13 +299,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     decoration: InputDecoration(
                         border: const OutlineInputBorder(
                           borderSide:
-                          BorderSide(color: Colors.grey, width: 0.0),
+                              BorderSide(color: Colors.grey, width: 0.0),
                         ),
 
                         // hintText: "Enter Remarks",
                         focusedBorder: OutlineInputBorder(
                             borderSide:
-                            BorderSide(width: 1, color: theme.hiLiteBlue))),
+                                BorderSide(width: 1, color: theme.hiLiteBlue))),
                   ),
                 ),
                 const SizedBox(
@@ -324,7 +333,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           color: Colors.transparent,
                           child: InkWell(
                             onTap: () async {
-                              if (phoneBox.text.trim().toString() == '') {
+                              if (firstName.text.trim().toString() == '') {
                                 await reUse.reUseCircleDialog(
                                     context: context,
                                     icon: Icons.phone,
@@ -337,7 +346,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         ),
                                       ),
                                     ));
-                              } else if (locationBox.text.trim().toString() ==
+                              } else if (lastName.text.trim().toString() ==
                                   '') {
                                 await reUse.reUseCircleDialog(
                                     context: context,
@@ -370,9 +379,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   Get.back();
                                   setState(() {});
                                 } else {
-                                  if (phoneBox.text ==
-                                      argumentData[fieldData.phoneNumber] &&
-                                      locationBox.text ==
+                                  if (firstName.text ==
+                                          argumentData[fieldData.phoneNumber] &&
+                                      lastName.text ==
                                           argumentData[fieldData.location] &&
                                       priceBox.text ==
                                           argumentData[fieldData.price] &&
@@ -386,24 +395,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     alertDialog(context);
                                     await glb
                                         .editPackage(
-                                        data: argumentData,
-                                        userName:
-                                        userName.trim().toString(),
-                                        userPhoneNumber:
-                                        phoneNumber.trim().toString(),
-                                        tokenKey:
-                                        getToken.trim().toString(),
-                                        chatid: chatid.trim().toString(),
-                                        price:
-                                        priceBox.text.trim().toString(),
-                                        note: noteBox.text.toString(),
-                                        packageID: packageID.toString(),
-                                        qty: qtyBox.text.trim().toString(),
-                                        phoneNumber:
-                                        phoneBox.text.trim().toString(),
-                                        location: locationBox.text
-                                            .trim()
-                                            .toString())
+                                            data: argumentData,
+                                            userName:
+                                                userName.trim().toString(),
+                                            userPhoneNumber:
+                                                phoneNumber.trim().toString(),
+                                            tokenKey:
+                                                getToken.trim().toString(),
+                                            chatid: chatid.trim().toString(),
+                                            price:
+                                                priceBox.text.trim().toString(),
+                                            note: noteBox.text.toString(),
+                                            packageID: packageID.toString(),
+                                            qty: qtyBox.text.trim().toString(),
+                                            phoneNumber: firstName.text
+                                                .trim()
+                                                .toString(),
+                                            location:
+                                                lastName.text.trim().toString())
                                         .then((value) {
                                       // phoneBox.clear();
                                       // priceBox.clear();
@@ -467,6 +476,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
     );
   }
+
   alertDialog(context) {
     return showDialog(
       barrierDismissible: false,
@@ -488,6 +498,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       },
     );
   }
+
   bool hasNullValues(obj) {
     if (obj == null) return true;
 
