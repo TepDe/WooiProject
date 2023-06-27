@@ -49,4 +49,6 @@ class ClsLanguage {
   String noPhone = "សូមបញ្ចូលលេខទូរស័ព្ទអ្នកទទួល";
   String noRecLocation = "សូមបញ្ចូលទីតាំងអ្នកទទួល";
   String noPrice = "សូមបញ្ចូលតម្លៃទំនិញ";
+  String notPaidYet = "មិនទាន់សង";
+  String readyPaid = "បងរួចរាល់";
 }
