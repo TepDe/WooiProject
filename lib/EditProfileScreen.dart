@@ -49,6 +49,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     super.initState();
     mainData = argumentData;
     firstName.text = mainData[fieldInfo.firstName] ?? '';
+    lastName.text = mainData[fieldInfo.lastName] ?? '';
   }
 
   @override
@@ -82,29 +83,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ],
                 ),
-
-                const SizedBox(
-                  height: 25,
-                ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, bottom: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: reUse.reUseText(
                       content: clsLan.fname,
                       size: textSize,
                       weight: FontWeight.w500,
                       color: theme.black),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 10),
-                //   child: reUse.reuseTextField(
-                //       formater: [
-                //         FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
-                //       ],
-                //       inputType: TextInputType.numberWithOptions(decimal: true),
-                //       textIcon: Icons.phone,
-                //       label: 'Receiver Phone Number',
-                //       controller: phoneBox),
-                // ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: TextFormField(
@@ -138,11 +125,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 18,
-                ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, bottom: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: reUse.reUseText(
                       content: clsLan.lname,
                       size: textSize,
@@ -193,34 +178,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  //color: theme.red,
-                  height: Get.height * 0.08,
-                  child: forDisplay != []
-                      ? ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.all(8),
-                          itemCount: forDisplay.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return SizedBox(
-                              child: TextButton(
-                                onPressed: () {
-                                  lastName.text = forDisplay[index]
-                                      .toString()
-                                      .trim()
-                                      .toLowerCase();
-                                },
-                                child: Text(forDisplay[index]),
-                              ),
-                            );
-                          })
-                      : const SizedBox(),
-                ),
-                const SizedBox(
-                  height: 18,
-                ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, bottom: 10, top: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: reUse.reUseText(
                       content:
                           clsLan.price + " : ( សូមបញ្ចូលតំលៃគិតជាដុល្លារ )",
@@ -228,88 +188,42 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       weight: FontWeight.w500,
                       color: theme.black),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Flexible(
-                      flex: 6,
-                      child: reUse.reuseTextField(
-                          mixLength: 4,
-                          controller: priceBox,
-                          formater: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp('[0-9.,]+')),
-                          ],
-                          inputType: const TextInputType.numberWithOptions(
-                              decimal: true),
-                          label: ' ',
-                          textIcon: Icons.location_on),
-                    ),
-                    Flexible(
-                      flex: 1,
-                      child: reUse.reUseText(content: '\$', size: 20.0),
-                    ),
-                  ],
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: reUse.reuseTextField(
+                      mixLength: 4,
+                      controller: priceBox,
+                      formater: [
+                        FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
+                      ],
+                      inputType:
+                          const TextInputType.numberWithOptions(decimal: true),
+                      label: ' ',
+                      textIcon: Icons.location_on),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, bottom: 10, top: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: reUse.reUseText(
                       content: clsLan.qty + " :",
                       size: textSize,
                       weight: FontWeight.w500,
                       color: theme.black),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Flexible(
-                      flex: 6,
-                      child: reUse.reuseTextField(
-                          mixLength: 3,
-                          controller: qtyBox,
-                          formater: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp('[0-9.,]+')),
-                          ],
-                          inputType: const TextInputType.numberWithOptions(
-                              decimal: true),
-                          label: ' ',
-                          textIcon: Icons.location_on),
-                    ),
-                    Flexible(
-                      flex: 1,
-                      child: reUse.reUseText(content: '', size: 20.0),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 18,
-                ),
-                const SizedBox(
-                  height: 18,
-                ),
-                reUse.reUseText(
-                    content: 'ចំណាំ :', size: textSize, color: theme.black),
-                Container(
-                  alignment: Alignment.center,
-                  child: TextField(
-                    controller: noteBox,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: 3,
-                    decoration: InputDecoration(
-                        border: const OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 0.0),
-                        ),
-
-                        // hintText: "Enter Remarks",
-                        focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 1, color: theme.hiLiteBlue))),
-                  ),
-                ),
-                const SizedBox(
-                  height: 18,
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: reUse.reuseTextField(
+                      mixLength: 3,
+                      controller: qtyBox,
+                      formater: [
+                        FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
+                      ],
+                      inputType:
+                          const TextInputType.numberWithOptions(decimal: false),
+                      label: ' ',
+                      textIcon: Icons.location_on),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
