@@ -1,10 +1,77 @@
 {
   "project_info": {
     "project_number": "1093614007557",
+    "firebase_url": "https://wooi-c715e-default-rtdb.firebaseio.com",
     "project_id": "wooi-c715e",
     "storage_bucket": "wooi-c715e.appspot.com"
   },
   "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1093614007557:android:1add398bbf11edb394f36c",
+        "android_client_info": {
+          "package_name": "com.example.macaw_admin_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1093614007557-t715icjjkmoptfmb5onajm72rmmjmsk1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0iIWHxmEJkY2qe-ADQXPpuq_4gNAUz7o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1093614007557-rbsrp98t0e3p47mv5qbmb4caarg0kk0u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1093614007557:android:353aae1c4ba2222994f36c",
+        "android_client_info": {
+          "package_name": "com.example.wooidriver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1093614007557-n9lh2djrhe85ifa9fjdkofkqpj35vnhv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.wooidriver",
+            "certificate_hash": "91b349d78de32649d040319689674d475a873fba"
+          }
+        },
+        {
+          "client_id": "1093614007557-t715icjjkmoptfmb5onajm72rmmjmsk1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0iIWHxmEJkY2qe-ADQXPpuq_4gNAUz7o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1093614007557-rbsrp98t0e3p47mv5qbmb4caarg0kk0u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
     {
       "client_info": {
         "mobilesdk_app_id": "1:1093614007557:android:9efb550fcadd369394f36c",
@@ -14,7 +81,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "1093614007557-rbsrp98t0e3p47mv5qbmb4caarg0kk0u.apps.googleusercontent.com",
+          "client_id": "1093614007557-kf2tnbhmgbec5e908n9iflveo41jbrb6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.wooiproject",
+            "certificate_hash": "91b349d78de32649d040319689674d475a873fba"
+          }
+        },
+        {
+          "client_id": "1093614007557-t715icjjkmoptfmb5onajm72rmmjmsk1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
