@@ -25,8 +25,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final clsLan = ClsLanguage();
   final firstName = TextEditingController();
   final lastName = TextEditingController();
-  final priceBox = TextEditingController();
-  final qtyBox = TextEditingController();
+  final phoneBox = TextEditingController();
+  final bankCode = TextEditingController();
   final noteBox = TextEditingController();
   String packageID = '';
   double textSize = 14;
@@ -50,6 +50,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     mainData = argumentData;
     firstName.text = mainData[fieldInfo.firstName] ?? '';
     lastName.text = mainData[fieldInfo.lastName] ?? '';
+    phoneBox.text = mainData[fieldInfo.phoneNumber] ?? '';
+    bankCode.text = mainData[fieldInfo.ABACode] ?? '';
   }
 
   @override
@@ -182,8 +184,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: reUse.reUseText(
-                      content:
-                          clsLan.price + " : ( សូមបញ្ចូលតំលៃគិតជាដុល្លារ )",
+                      content: clsLan.phoneNumber,
                       size: textSize,
                       weight: FontWeight.w500,
                       color: theme.black),
@@ -192,8 +193,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: reUse.reuseTextField(
-                      mixLength: 4,
-                      controller: priceBox,
+                      prefixIconColor: theme.grey,
+                      prefixIcon: Icons.phone,
+                      controller: phoneBox,
                       formater: [
                         FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
                       ],
@@ -206,7 +208,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: reUse.reUseText(
-                      content: clsLan.qty + " :",
+                      content: clsLan.receiveMoneyNumber + " :",
                       size: textSize,
                       weight: FontWeight.w500,
                       color: theme.black),
@@ -215,8 +217,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: reUse.reuseTextField(
-                      mixLength: 3,
-                      controller: qtyBox,
+                      prefixIconColor: theme.grey,
+                      prefixIcon: Icons.onetwothree_rounded,
+                      controller: bankCode,
                       formater: [
                         FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
                       ],
@@ -225,6 +228,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       label: ' ',
                       textIcon: Icons.location_on),
                 ),
+                reUse.reUseRowTextFieldText(label: clsLan.insertTelegramToken),
+                reUse.reUseRowTextFieldText(label: clsLan.insertTelegramChatID),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -247,111 +252,36 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           color: Colors.transparent,
                           child: InkWell(
                             onTap: () async {
-                              if (firstName.text.trim().toString() == '') {
-                                await reUse.reUseCircleDialog(
-                                    context: context,
-                                    icon: Icons.phone,
-                                    title: 'Error',
-                                    content: Center(
-                                      child: Text(
-                                        'Phone Number Must Include',
-                                        style: TextStyle(
-                                          color: theme.black,
-                                        ),
-                                      ),
-                                    ));
-                              } else if (lastName.text.trim().toString() ==
-                                  '') {
-                                await reUse.reUseCircleDialog(
-                                    context: context,
-                                    icon: Icons.location_on_rounded,
-                                    title: 'Error',
-                                    content: Center(
-                                      child: Text(
-                                        'Location Must Include',
-                                        style: TextStyle(
-                                          color: theme.black,
-                                        ),
-                                      ),
-                                    ));
-                              } else if (priceBox.text.trim().toString() ==
-                                  '') {
-                                await reUse.reUseCircleDialog(
-                                    context: context,
-                                    icon: Icons.monetization_on,
-                                    title: 'Error',
-                                    content: Center(
-                                      child: Text(
-                                        'Price Must Include',
-                                        style: TextStyle(
-                                          color: theme.black,
-                                        ),
-                                      ),
-                                    ));
+                              if (firstName.text ==
+                                      argumentData[fieldInfo.firstName] &&
+                                  lastName.text ==
+                                      argumentData[fieldInfo.lastName] &&
+                                  phoneBox.text ==
+                                      argumentData[fieldInfo.phoneNumber] &&
+                                  bankCode.text == argumentData[fieldData.qty] &&
+                                  noteBox.text ==
+                                      argumentData[fieldData.note]) {
+                                Get.back();
+                                setState(() {});
                               } else {
-                                if (hasNullValues(argumentData)) {
-                                  Get.back();
-                                  setState(() {});
-                                } else {
-                                  if (firstName.text ==
-                                          argumentData[fieldData.phoneNumber] &&
-                                      lastName.text ==
-                                          argumentData[fieldData.location] &&
-                                      priceBox.text ==
-                                          argumentData[fieldData.price] &&
-                                      qtyBox.text ==
-                                          argumentData[fieldData.qty] &&
-                                      noteBox.text ==
-                                          argumentData[fieldData.note]) {
-                                    Get.back();
-                                    setState(() {});
-                                  } else {
-                                    alertDialog(context);
-                                    await glb
-                                        .editPackage(
-                                            data: argumentData,
-                                            userName:
-                                                userName.trim().toString(),
-                                            userPhoneNumber:
-                                                phoneNumber.trim().toString(),
-                                            tokenKey:
-                                                getToken.trim().toString(),
-                                            chatid: chatid.trim().toString(),
-                                            price:
-                                                priceBox.text.trim().toString(),
-                                            note: noteBox.text.toString(),
-                                            packageID: packageID.toString(),
-                                            qty: qtyBox.text.trim().toString(),
-                                            phoneNumber: firstName.text
-                                                .trim()
-                                                .toString(),
-                                            location:
-                                                lastName.text.trim().toString())
-                                        .then((value) {
-                                      // phoneBox.clear();
-                                      // priceBox.clear();
-                                      // locationBox.clear();
-                                      // qtyBox.clear();
-                                      // noteBox.clear();
-                                    });
-                                    Get.back();
-                                    reUse.reUseCircleDialog(
-                                        context: context,
-                                        icon: Icons.check_circle_rounded,
-                                        title: 'Success',
-                                        content: Center(
-                                          child: Text(
-                                            'Your package is successfully request',
-                                            style: TextStyle(
-                                              color: theme.black,
-                                            ),
-                                          ),
-                                        ));
-                                    setState(() {
-                                      packageID = glb.generatePackageID();
-                                    });
-                                  }
-                                }
+                                alertDialog(context);
+                                await glb
+                                    .editPackage(
+                                        data: argumentData,
+                                        userName: userName.trim().toString(),
+                                        userPhoneNumber:
+                                            phoneNumber.trim().toString(),
+                                        tokenKey: getToken.trim().toString(),
+                                        chatid: chatid.trim().toString(),
+                                        price: phoneBox.text.trim().toString(),
+                                        note: noteBox.text.toString(),
+                                        packageID: packageID.toString(),
+                                        qty: bankCode.text.trim().toString(),
+                                        phoneNumber:
+                                            firstName.text.trim().toString(),
+                                        location:
+                                            lastName.text.trim().toString())
+                                    .then((value) {});
                               }
                             },
                             child: Row(
@@ -380,8 +310,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 18,
+                SizedBox(
+                  height: Get.height * 0.5,
                 ),
               ],
             ),
