@@ -1160,58 +1160,6 @@ class ReUseWidget {
     );
   }
 
-  reUseRowTextFieldText(
-      {mixLength,
-      prefixIcon,
-      prefixIconColor,
-      label,
-      controller,
-      textIcon,
-      inputType,
-      require,
-      textSize,
-      formater}) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10.0),
-            child: reUseText(
-                content:  label == null ? "": "$label :",
-                size: textSize?? 14.0,
-                weight: FontWeight.w500,
-                color: theme.black),
-          ),
-          TextFormField(
-            controller: controller ?? dialogPhoneNum,
-            // keyboardType: inputType,
-            maxLength: mixLength,
-            keyboardType: inputType,
-            inputFormatters: formater,
-            // onChanged: (value) => doubleVar = double.parse(value),
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                prefixIcon ?? Icons.help_outline,
-                color: prefixIconColor ?? Colors.transparent,
-              ),
-              //icon: Icon(textIcon ?? null),
-              // fillColor: theme.liteGrey,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-              ),
-              //border: InputBorder.none,
-
-              hintStyle: const TextStyle(fontSize: 12),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   reUseTextField({label, controller, textIcon}) {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
