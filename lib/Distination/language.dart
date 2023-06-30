@@ -51,5 +51,4 @@ class ClsLanguage {
   String noPrice = "សូមបញ្ចូលតម្លៃទំនិញ";
   String notPaidYet = "មិនទាន់សង";
   String readyPaid = "បងរួចរាល់";
-  String receiveMoneyNumber = "លេខកុងទទួលលុយ";
 }
