@@ -54,6 +54,5 @@ class FieldInfo {
   String returnDate = "returnDate";
   String returnNote = "returnNote";
   String ABACode = "ABACode";
-  String receiveMoneyCode = "receiveMoneyCode";
 }
 
