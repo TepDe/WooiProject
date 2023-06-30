@@ -212,7 +212,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             value: "${paid.toStringAsFixed(2)} \$",
                             title: clsLan.paid,
                             textColor: theme.deepOrange,
-                            data: revenuePrice),
+                            data: paidPrice),
                       ),
                     ],
                   ),
@@ -356,184 +356,20 @@ class _AccountScreenState extends State<AccountScreen> {
                         ),
                       ],
                     ),
-                    child: Material(
-                      color: theme.white,
-                      child: InkWell(
-                        onTap: () {
-                          if (userData[fieldInfo.ABACode].isNotEmpty) {
-                            abaCode.text = userData[fieldInfo.ABACode];
-                          }
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Dialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: Stack(
-                                  clipBehavior: Clip.none,
-                                  alignment: Alignment.topCenter,
-                                  children: [
-                                    Positioned(
-                                      top: -60.0,
-                                      child: CircleAvatar(
-                                        radius: 60.0,
-                                        backgroundColor: theme.white,
-                                        child: Icon(
-                                          Icons.telegram_rounded,
-                                          color: theme.orange,
-                                          size: 100.0,
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 80.0, left: 15, right: 15),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          reUse.reUseText(
-                                              content: clsLan.insertAbaDec,
-                                              color: theme.black,
-                                              weight: FontWeight.w400,
-                                              size: 14.0),
-                                          const SizedBox(height: 20.0),
-                                          // Text(
-                                          //   content,
-                                          //   textAlign: TextAlign.center,
-                                          //   style: const TextStyle(
-                                          //     fontSize: 16.0,
-                                          //   ),
-                                          // ),
-                                          Container(
-                                            height: 60,
-                                            margin: const EdgeInsets.symmetric(
-                                                horizontal: 8, vertical: 3),
-                                            decoration: BoxDecoration(
-                                              color: theme.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(6),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: theme.midGrey,
-                                                  blurRadius: 2,
-                                                  offset: const Offset(
-                                                      0, 0), // Shadow position
-                                                ),
-                                              ],
-                                            ),
-                                            child: TextFormField(
-                                              controller: abaCode,
-                                              decoration: InputDecoration(
-                                                prefixIcon: const Icon(
-                                                    Icons.key_rounded),
-                                                suffixIcon: InkWell(
-                                                  onTap: () {
-                                                    abaCode.clear();
-                                                    setState(() {});
-                                                  },
-                                                  child: const Icon(
-                                                    Icons.clear,
-                                                    color: Colors.grey,
-                                                  ),
-                                                ),
-                                                filled: true,
-                                                fillColor: theme.white,
-                                                hintText: clsLan.insertAbaDec,
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Colors.white),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          25.7),
-                                                ),
-                                                enabledBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Colors.white),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          25.7),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(height: 20.0),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10, vertical: 10),
-                                            child: Flexible(
-                                              child: Container(
-                                                height: 40,
-                                                width: Get.width,
-                                                decoration: BoxDecoration(
-                                                  color: theme.litestOrange,
-                                                  borderRadius:
-                                                      BorderRadius.circular(6),
-                                                  // boxShadow: [
-                                                  //   BoxShadow(
-                                                  //     color: Colors.grey,
-                                                  //     blurRadius: 1,
-                                                  //     //offset: Offset(4, 8), // Shadow position
-                                                  //   ),
-                                                  // ],
-                                                ),
-                                                child: Material(
-                                                  color: Colors.transparent,
-                                                  child: TextButton(
-                                                    onPressed: () async {
-                                                      if (abaCode.text ==
-                                                          userData[fieldInfo
-                                                              .ABACode]) {
-                                                        Get.back();
-                                                      } else {
-                                                        await glb.insertABACode(
-                                                            abaCode:
-                                                                abaCode.text);
-                                                      }
-                                                      setState(() {});
-                                                    },
-                                                    child: Text(
-                                                      clsLan.insert,
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          color: theme.orange,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          );
-                        },
-                        child: Center(
-                          child: ListTile(
-                            title: Text(clsLan.abaCode),
-                            trailing: SizedBox(
-                                width: textWidth,
-                                child: Text(
-                                  userData[fieldInfo.ABACode] ??
-                                      "Not Include Yet",
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      color: theme.grey,
-                                      overflow: TextOverflow.ellipsis),
-                                )),
-                            leading: const Text("ABA"),
-                          ),
-                        ),
+                    child: Center(
+                      child: ListTile(
+                        title: Text(clsLan.receiveMoneyNumber),
+                        trailing: SizedBox(
+                            width: textWidth,
+                            child: Text(
+                              userData[fieldInfo.ABACode] ??
+                                  "Not Include Yet",
+                              maxLines: 1,
+                              style: TextStyle(
+                                  color: theme.grey,
+                                  overflow: TextOverflow.ellipsis),
+                            )),
+                        leading: const Text("123"),
                       ),
                     ),
                   ),
@@ -552,170 +388,20 @@ class _AccountScreenState extends State<AccountScreen> {
                         ),
                       ],
                     ),
-                    child: Material(
-                      color: theme.white,
-                      child: InkWell(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Dialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: Stack(
-                                  clipBehavior: Clip.none,
-                                  alignment: Alignment.topCenter,
-                                  children: [
-                                    Positioned(
-                                      top: -60.0,
-                                      child: CircleAvatar(
-                                        radius: 60.0,
-                                        backgroundColor: theme.white,
-                                        child: Icon(
-                                          Icons.telegram_rounded,
-                                          color: theme.orange,
-                                          size: 100.0,
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 80.0, left: 15, right: 15),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          reUse.reUseText(
-                                              content:
-                                                  clsLan.insertTelegramToken,
-                                              color: theme.black,
-                                              weight: FontWeight.w400,
-                                              size: 14.0),
-                                          const SizedBox(height: 20.0),
-                                          // Text(
-                                          //   content,
-                                          //   textAlign: TextAlign.center,
-                                          //   style: const TextStyle(
-                                          //     fontSize: 16.0,
-                                          //   ),
-                                          // ),
-                                          Container(
-                                            height: 60,
-                                            margin: const EdgeInsets.symmetric(
-                                                horizontal: 8, vertical: 3),
-                                            decoration: BoxDecoration(
-                                              color: theme.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(6),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: theme.midGrey,
-                                                  blurRadius: 2,
-                                                  offset: const Offset(
-                                                      0, 0), // Shadow position
-                                                ),
-                                              ],
-                                            ),
-                                            child: TextFormField(
-                                              controller: token,
-                                              decoration: InputDecoration(
-                                                prefixIcon: const Icon(
-                                                    Icons.key_rounded),
-                                                suffixIcon: const Icon(
-                                                  Icons.search,
-                                                  color: Colors.transparent,
-                                                ),
-                                                filled: true,
-                                                fillColor: theme.white,
-                                                hintText: 'hintText',
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Colors.white),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          25.7),
-                                                ),
-                                                enabledBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Colors.white),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          25.7),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(height: 20.0),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10, vertical: 10),
-                                            child: Flexible(
-                                              child: Container(
-                                                height: 40,
-                                                width: Get.width,
-                                                decoration: BoxDecoration(
-                                                  color: theme.litestOrange,
-                                                  borderRadius:
-                                                      BorderRadius.circular(6),
-                                                  // boxShadow: [
-                                                  //   BoxShadow(
-                                                  //     color: Colors.grey,
-                                                  //     blurRadius: 1,
-                                                  //     //offset: Offset(4, 8), // Shadow position
-                                                  //   ),
-                                                  // ],
-                                                ),
-                                                child: TextButton(
-                                                  onPressed: () async {
-                                                    if (token.text.isEmpty) {
-                                                      Get.back();
-                                                    } else {
-                                                      glb.insertTelegramToken(
-                                                          token: token.text);
-                                                    }
-                                                    setState(() {});
-                                                  },
-                                                  child: Text(
-                                                    clsLan.insert,
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: theme.orange,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          );
-                        },
-                        child: Center(
-                          child: ListTile(
-                            title: const Text('Telegram Token'),
-                            trailing: SizedBox(
-                                width: textWidth,
-                                child: Text(
-                                  userData[fieldInfo.token] ??
-                                      "Not Include Yet",
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      color: theme.grey,
-                                      overflow: TextOverflow.ellipsis),
-                                )),
-                            leading: const Icon(Icons.telegram_rounded),
-                          ),
-                        ),
+                    child: Center(
+                      child: ListTile(
+                        title: const Text('Telegram Token'),
+                        trailing: SizedBox(
+                            width: textWidth,
+                            child: Text(
+                              userData[fieldInfo.token] ??
+                                  "Not Include Yet",
+                              maxLines: 1,
+                              style: TextStyle(
+                                  color: theme.grey,
+                                  overflow: TextOverflow.ellipsis),
+                            )),
+                        leading: const Icon(Icons.telegram_rounded),
                       ),
                     ),
                   ),
@@ -734,170 +420,20 @@ class _AccountScreenState extends State<AccountScreen> {
                         ),
                       ],
                     ),
-                    child: Material(
-                      color: theme.white,
-                      child: InkWell(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Dialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: Stack(
-                                  clipBehavior: Clip.none,
-                                  alignment: Alignment.topCenter,
-                                  children: [
-                                    Positioned(
-                                      top: -60.0,
-                                      child: CircleAvatar(
-                                        radius: 60.0,
-                                        backgroundColor: theme.white,
-                                        child: Icon(
-                                          Icons.telegram_rounded,
-                                          color: theme.orange,
-                                          size: 100.0,
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 80.0, left: 15, right: 15),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          reUse.reUseText(
-                                              content:
-                                                  clsLan.insertTelegramChatID,
-                                              color: theme.black,
-                                              weight: FontWeight.w400,
-                                              size: 14.0),
-                                          const SizedBox(height: 20.0),
-                                          // Text(
-                                          //   content,
-                                          //   textAlign: TextAlign.center,
-                                          //   style: const TextStyle(
-                                          //     fontSize: 16.0,
-                                          //   ),
-                                          // ),
-                                          Container(
-                                            height: 60,
-                                            margin: const EdgeInsets.symmetric(
-                                                horizontal: 8, vertical: 3),
-                                            decoration: BoxDecoration(
-                                              color: theme.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(6),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: theme.midGrey,
-                                                  blurRadius: 2,
-                                                  offset: const Offset(
-                                                      0, 0), // Shadow position
-                                                ),
-                                              ],
-                                            ),
-                                            child: TextFormField(
-                                              controller: chatid,
-                                              decoration: InputDecoration(
-                                                prefixIcon: const Icon(
-                                                    Icons.key_rounded),
-                                                suffixIcon: const Icon(
-                                                  Icons.search,
-                                                  color: Colors.transparent,
-                                                ),
-                                                filled: true,
-                                                fillColor: theme.white,
-                                                hintText: 'hintText',
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Colors.white),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          25.7),
-                                                ),
-                                                enabledBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Colors.white),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          25.7),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(height: 20.0),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10, vertical: 10),
-                                            child: Flexible(
-                                              child: Container(
-                                                height: 40,
-                                                width: Get.width,
-                                                decoration: BoxDecoration(
-                                                  color: theme.litestOrange,
-                                                  borderRadius:
-                                                      BorderRadius.circular(6),
-                                                  // boxShadow: [
-                                                  //   BoxShadow(
-                                                  //     color: Colors.grey,
-                                                  //     blurRadius: 1,
-                                                  //     //offset: Offset(4, 8), // Shadow position
-                                                  //   ),
-                                                  // ],
-                                                ),
-                                                child: TextButton(
-                                                  onPressed: () {
-                                                    if (token.text.isEmpty) {
-                                                      Get.back();
-                                                    } else {
-                                                      glb.insertTelegramChatID(
-                                                          chatid: chatid.text);
-                                                    }
-                                                    setState(() {});
-                                                  },
-                                                  child: Text(
-                                                    clsLan.insert,
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: theme.orange,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          );
-                        },
-                        child: Center(
-                          child: ListTile(
-                            title: const Text('Chat ID'),
-                            trailing: SizedBox(
-                                width: textWidth,
-                                child: Text(
-                                  userData[fieldInfo.chatid] ??
-                                      "Not Include Yet",
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      color: theme.grey,
-                                      overflow: TextOverflow.ellipsis),
-                                )),
-                            leading: const Icon(Icons.telegram_rounded),
-                          ),
-                        ),
+                    child: Center(
+                      child: ListTile(
+                        title: const Text('Chat ID'),
+                        trailing: SizedBox(
+                            width: textWidth,
+                            child: Text(
+                              userData[fieldInfo.chatid] ??
+                                  "Not Include Yet",
+                              maxLines: 1,
+                              style: TextStyle(
+                                  color: theme.grey,
+                                  overflow: TextOverflow.ellipsis),
+                            )),
+                        leading: const Icon(Icons.telegram_rounded),
                       ),
                     ),
                   ),
