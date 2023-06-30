@@ -166,11 +166,11 @@ class _PaidScreenState extends State<PaidScreen> {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            color: theme.btnBlue,
+                            color: theme.liteOrange,
                             borderRadius: BorderRadius.circular(6),
                             boxShadow: [
                               BoxShadow(
-                                color: theme.btnBlue,
+                                color: theme.liteOrange,
                                 blurRadius: 6,
                                 offset: const Offset(0, 0), // Shadow position
                               ),
@@ -199,7 +199,7 @@ class _PaidScreenState extends State<PaidScreen> {
                               },
                               icon: Icon(
                                 Icons.search,
-                                color: theme.white,
+                                color: theme.deepPumpkin,
                               )),
                         )
                       ],
@@ -372,7 +372,7 @@ class _PaidScreenState extends State<PaidScreen> {
 
                                       Container(
                                         decoration: BoxDecoration(
-                                          color: theme.litestGreen,
+                                          color: theme.litestOrange,
                                           borderRadius:
                                           BorderRadius.circular(6),
                                         ),
@@ -380,7 +380,7 @@ class _PaidScreenState extends State<PaidScreen> {
                                             horizontal: 10, vertical: 4),
                                         child: reUse.reUseText(
                                             size: 12.0,
-                                            color: theme.liteGreen,
+                                            color: theme.deepPumpkin,
                                             content: clsLan.readyPaid,
                                             weight: FontWeight.w600),
                                       ),
