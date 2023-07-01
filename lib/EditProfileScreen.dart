@@ -149,12 +149,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               .toLowerCase()
                               .contains(lastName.text.toString().toLowerCase()))
                           .toList();
-                      if (results == null) {
-                        results = eng_distin
+                      results ??= eng_distin
                             .where((user) => user.toLowerCase().contains(
                                 lastName.text.toString().toLowerCase()))
                             .toList();
-                      }
                       print(results);
                       print(results);
                       forDisplay = results;
@@ -230,6 +228,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 reUse.reUseRowTextFieldText(),
                 reUse.reUseRowTextFieldText(),
+                SizedBox(height: Get.height*0.01),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
