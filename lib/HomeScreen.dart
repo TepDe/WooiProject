@@ -54,20 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
     alertNoIntenet();
   }
 
-  testObj() {
-    var create = createModule();
-    create.ABACode = "abaCode.toString()";
-    var test = jsonEncode(create);
-    print(create);
-  }
-
-  // suggestionLocation()async{
-  //   String data = await rootBundle.loadString('assets/Distination/distination.json');
-  //   var jsonResult =await json.decode(data);
-  //   print(data);
-  //   print(data);
-  // }
-
   List distince = [];
 
   Future<void> suggestionLocation() async {
@@ -167,20 +153,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   onGetLocalStorage(cantOrNot) async {
-
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(str.cantEdit, findObject(driverList));
-    setState(() {
-    });
+    setState(() {});
   }
 
   bool findObject(List objects) {
     // Filter the list to include only objects where `stringValue` is equal to `searchString`
-    List filteredList = objects.where((obj) => obj.stringValue == 'request').toList();
+    List filteredList =
+        objects.where((obj) => obj.stringValue == 'request').toList();
 
     // Check if only one object was found with the specified string value
     return filteredList.length == 1 && filteredList[0].booleanValue == true;
   }
+
   List pendingList = [];
 
   pendingListLength() {
@@ -258,6 +244,8 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (hours >= 16 && hours <= 21) {
       greeting = "សាយ័ណ សួរស្តី";
     } else if (hours >= 21 && hours <= 24) {
+      greeting = "រាត្រី សួស្តី";
+    } else {
       greeting = "រាត្រី សួស្តី";
     }
     setState(() {});
