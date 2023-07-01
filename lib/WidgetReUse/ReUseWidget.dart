@@ -1171,39 +1171,43 @@ class ReUseWidget {
       require,
       textSize,
       formater}) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: reUseText(
-              content: clsLan.receiveMoneyNumber + " :",
-              size: textSize,
-              weight: FontWeight.w500,
-              color: theme.black),
-        ),
-        TextFormField(
-          controller: controller ?? dialogPhoneNum,
-          // keyboardType: inputType,
-          maxLength: mixLength,
-          keyboardType: inputType,
-          inputFormatters: formater,
-          // onChanged: (value) => doubleVar = double.parse(value),
-          decoration: InputDecoration(
-            prefixIcon: Icon(
-              prefixIcon ?? Icons.help_outline,
-              color: prefixIconColor ?? Colors.transparent,
-            ),
-            //icon: Icon(textIcon ?? null),
-            // fillColor: theme.liteGrey,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5.0),
-            ),
-            //border: InputBorder.none,
-
-            hintStyle: const TextStyle(fontSize: 12),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: reUseText(
+                content: clsLan.receiveMoneyNumber + " :",
+                size: textSize??14.0,
+                weight: FontWeight.w500,
+                color: theme.black),
           ),
-        ),
-      ],
+          TextFormField(
+            controller: controller ?? dialogPhoneNum,
+            // keyboardType: inputType,
+            maxLength: mixLength,
+            keyboardType: inputType,
+            inputFormatters: formater,
+            // onChanged: (value) => doubleVar = double.parse(value),
+            decoration: InputDecoration(
+              prefixIcon: Icon(
+                prefixIcon ?? Icons.help_outline,
+                color: prefixIconColor ?? Colors.transparent,
+              ),
+              //icon: Icon(textIcon ?? null),
+              // fillColor: theme.liteGrey,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              //border: InputBorder.none,
+
+              hintStyle: const TextStyle(fontSize: 12),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -2179,6 +2183,8 @@ class ReUseWidget {
       data,
       witchClick,
       assetImage,
+        valueTextSize,
+        labelTextSize,
       textColor,
       backgroundColor}) {
     return Container(
@@ -2218,7 +2224,7 @@ class ReUseWidget {
                   alignment: Alignment.topLeft,
                   child: reUseText(
                       content: title ?? "",
-                      size: 16.0,
+                      size:labelTextSize?? 16.0,
                       weight: FontWeight.bold,
                       color: textColor ?? theme.darkGrey),
                 ),
@@ -2229,7 +2235,7 @@ class ReUseWidget {
                   alignment: Alignment.bottomRight,
                   child: reUseText(
                       content: value ?? "",
-                      size: 24.0,
+                      size: valueTextSize??24.0,
                       weight: FontWeight.bold,
                       color: textColor ?? theme.darkGrey),
                 ),
