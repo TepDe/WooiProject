@@ -1170,6 +1170,7 @@ class ReUseWidget {
       inputType,
       require,
       textSize,
+      suffixTap,
       formater}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -1179,8 +1180,8 @@ class ReUseWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: reUseText(
-                content: clsLan.receiveMoneyNumber + " :",
-                size: textSize??14.0,
+                content: label ?? "",
+                size: textSize ?? 14.0,
                 weight: FontWeight.w500,
                 color: theme.black),
           ),
@@ -1192,6 +1193,10 @@ class ReUseWidget {
             inputFormatters: formater,
             // onChanged: (value) => doubleVar = double.parse(value),
             decoration: InputDecoration(
+              suffixIcon: IconButton(
+                onPressed: suffixTap,
+                icon: const Icon(Icons.close),
+              ),
               prefixIcon: Icon(
                 prefixIcon ?? Icons.help_outline,
                 color: prefixIconColor ?? Colors.transparent,
@@ -2183,9 +2188,10 @@ class ReUseWidget {
       data,
       witchClick,
       assetImage,
-        valueTextSize,
-        labelTextSize,
+      valueTextSize,
+      labelTextSize,
       textColor,
+      valueColor,
       backgroundColor}) {
     return Container(
       width: Get.width,
@@ -2195,9 +2201,10 @@ class ReUseWidget {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: theme.midGrey,
-            blurRadius: 1,
-            //offset: Offset(4, 8), // Shadow position
+            color: theme.minGrey,
+            blurRadius: 5,
+            spreadRadius: 1,
+            offset: Offset(3, 5), // Shadow position
           ),
         ],
         // image: DecorationImage(
@@ -2219,26 +2226,21 @@ class ReUseWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: reUseText(
-                      content: title ?? "",
-                      size:labelTextSize?? 16.0,
-                      weight: FontWeight.bold,
-                      color: textColor ?? theme.darkGrey),
-                ),
+                reUseText(
+                    content: title ?? "",
+                    size: labelTextSize ?? 16.0,
+                    weight: FontWeight.bold,
+                    color: valueColor ?? theme.black),
                 SizedBox(
-                  height: Get.height * 0.01,
+                  height: Get.height * 0.02,
                 ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: reUseText(
-                      content: value ?? "",
-                      size: valueTextSize??24.0,
-                      weight: FontWeight.bold,
-                      color: textColor ?? theme.darkGrey),
-                ),
+                reUseText(
+                    content: value ?? "",
+                    size: valueTextSize ?? 24.0,
+                    weight: FontWeight.bold,
+                    color: textColor ?? theme.black),
               ],
             ),
           ),
@@ -2383,6 +2385,48 @@ class ReUseWidget {
           ),
         );
       },
+    );
+  }
+
+  reUseColumnTextField(
+      {hintText, controller, labelSize, label, VoidCallback? suffixTap}) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: reUseText(
+              content: label ?? "",
+              size: labelSize ?? 14.0,
+              weight: FontWeight.w500,
+              color: theme.black),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: TextFormField(
+            controller: controller,
+            // keyboardType: inputType,
+            //keyboardType: inputType,
+            //inputFormatters: formater,
+            onChanged: (value) {},
+            decoration: InputDecoration(
+              hintText: hintText ?? "",
+              suffixIcon: IconButton(
+                onPressed: suffixTap,
+                icon: const Icon(Icons.close),
+              ),
+              //icon: Icon(textIcon ?? null),
+              // fillColor: theme.liteGrey,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              //border: InputBorder.none,
+              hintStyle: const TextStyle(fontSize: 20),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
