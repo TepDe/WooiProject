@@ -27,7 +27,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final lastName = TextEditingController();
   final phoneBox = TextEditingController();
   final bankCode = TextEditingController();
-  final noteBox = TextEditingController();
+  final telegramToken = TextEditingController();
+  final chatID = TextEditingController();
   String packageID = '';
   double textSize = 14;
   List distince = [];
@@ -77,158 +78,62 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         // );
                         Navigator.pop(context);
                       },
-                      icon: Icon(Icons.arrow_back_rounded, color: theme.black),
-                      label: Text(
-                        'Back',
-                        style: TextStyle(color: theme.black),
-                      ),
+                      icon: Icon(Icons.arrow_back_rounded,
+                          color: theme.black, size: 30),
+                      label: reUse.reUseText(
+                          content: "Back", size: 20.0, weight: FontWeight.w500),
                     ),
                   ],
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: reUse.reUseText(
-                      content: clsLan.fname,
-                      size: textSize,
-                      weight: FontWeight.w500,
-                      color: theme.black),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: TextFormField(
-                    controller: firstName,
-                    // keyboardType: inputType,
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    maxLength: 10,
-                    onChanged: (value) async {},
-
-                    decoration: InputDecoration(
-                      //icon: Icon(textIcon ?? null),
-                      // fillColor: theme.liteGrey,
-                      hintText: mainData[fieldInfo.firstName],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      //border: InputBorder.none,
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          firstName.clear();
-                          setState(() {});
-                        },
-                        icon: const Icon(Icons.close),
-                      ),
-                      hintStyle: const TextStyle(fontSize: 20),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: reUse.reUseText(
-                      content: clsLan.lname,
-                      size: textSize,
-                      weight: FontWeight.w500,
-                      color: theme.black),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: TextFormField(
-                    controller: lastName,
-                    // keyboardType: inputType,
-                    //keyboardType: inputType,
-                    //inputFormatters: formater,
-                    onChanged: (value) {
-                      List results = clsDis.destination
-                          .where((user) => user
-                              .toLowerCase()
-                              .contains(lastName.text.toString().toLowerCase()))
-                          .toList();
-                      results ??= eng_distin
-                            .where((user) => user.toLowerCase().contains(
-                                lastName.text.toString().toLowerCase()))
-                            .toList();
-                      print(results);
-                      print(results);
-                      forDisplay = results;
+                reUse.reUseColumnTextField(
+                    suffixTap: () {
+                      firstName.clear();
                       setState(() {});
                     },
-                    decoration: InputDecoration(
-                      hintText: mainData[fieldInfo.lastName],
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          lastName.clear();
-                          setState(() {});
-                        },
-                        icon: const Icon(Icons.close),
-                      ),
-                      //icon: Icon(textIcon ?? null),
-                      // fillColor: theme.liteGrey,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      //border: InputBorder.none,
-
-                      hintStyle: const TextStyle(fontSize: 20),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: reUse.reUseText(
-                      content: clsLan.phoneNumber,
-                      size: textSize,
-                      weight: FontWeight.w500,
-                      color: theme.black),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: reUse.reuseTextField(
-                      prefixIconColor: theme.grey,
-                      prefixIcon: Icons.phone,
-                      controller: phoneBox,
-                      formater: [
-                        FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
-                      ],
-                      inputType:
-                          const TextInputType.numberWithOptions(decimal: true),
-                      label: ' ',
-                      textIcon: Icons.location_on),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: reUse.reUseText(
-                      content: clsLan.receiveMoneyNumber + " :",
-                      size: textSize,
-                      weight: FontWeight.w500,
-                      color: theme.black),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: reUse.reuseTextField(
-                      prefixIconColor: theme.grey,
-                      prefixIcon: Icons.onetwothree_rounded,
-                      controller: bankCode,
-                      formater: [
-                        FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
-                      ],
-                      inputType:
-                          const TextInputType.numberWithOptions(decimal: false),
-                      label: ' ',
-                      textIcon: Icons.location_on),
-                ),
-                reUse.reUseRowTextFieldText(),
-                reUse.reUseRowTextFieldText(),
-                SizedBox(height: Get.height*0.01),
+                    label: clsLan.fname,
+                    controller: firstName,
+                    hintText: ""),
+                reUse.reUseColumnTextField(
+                    suffixTap: () {
+                      lastName.clear();
+                      setState(() {});
+                    },
+                    label: clsLan.lname,
+                    controller: lastName,
+                    hintText: ""),
+                reUse.reUseColumnTextField(
+                    suffixTap: () {
+                      firstName.clear();
+                      setState(() {});
+                    },
+                    label: clsLan.phoneNumber,
+                    controller: firstName,
+                    hintText: ""),
+                reUse.reUseColumnTextField(
+                    suffixTap: () {
+                      lastName.clear();
+                      setState(() {});
+                    },
+                    label: clsLan.receiveMoneyNumber,
+                    controller: lastName,
+                    hintText: ""),
+                reUse.reUseColumnTextField(
+                    suffixTap: () {
+                      lastName.clear();
+                      setState(() {});
+                    },
+                    label: clsLan.insertTelegramToken,
+                    controller: telegramToken,
+                    hintText: ""),
+                reUse.reUseColumnTextField(
+                    suffixTap: () {
+                      lastName.clear();
+                      setState(() {});
+                    },
+                    label: clsLan.insertTelegramChatID,
+                    controller: chatID,
+                    hintText: ""),
+                SizedBox(height: Get.height * 0.01),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -257,9 +162,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       argumentData[fieldInfo.lastName] &&
                                   phoneBox.text ==
                                       argumentData[fieldInfo.phoneNumber] &&
-                                  bankCode.text == argumentData[fieldData.qty] &&
-                                  noteBox.text ==
-                                      argumentData[fieldData.note]) {
+                                  bankCode.text ==
+                                      argumentData[fieldData.qty] &&
+                                  chatID.text == argumentData[fieldData.note]) {
                                 Get.back();
                                 setState(() {});
                               } else {
@@ -273,7 +178,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         tokenKey: getToken.trim().toString(),
                                         chatid: chatid.trim().toString(),
                                         price: phoneBox.text.trim().toString(),
-                                        note: noteBox.text.toString(),
+                                        note: chatID.text.toString(),
                                         packageID: packageID.toString(),
                                         qty: bankCode.text.trim().toString(),
                                         phoneNumber:
