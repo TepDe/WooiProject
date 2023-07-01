@@ -16,6 +16,7 @@ import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/SetUpScreen.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
+
 class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);
 
@@ -100,7 +101,7 @@ class _AccountScreenState extends State<AccountScreen> {
         .get()
         .then((DocumentSnapshot documentSnapshot) async {
       userData = documentSnapshot.data() as Map<String, dynamic>;
-       // try {
+      // try {
       //   getLatitude = documentSnapshot['latitude'].toString();
       //   getLongitude = documentSnapshot['longitude'].toString();
       //   getUid = documentSnapshot['uid'].toString();
@@ -202,6 +203,8 @@ class _AccountScreenState extends State<AccountScreen> {
                             value: "${revenue.toStringAsFixed(2)} \$",
                             textColor: theme.blue,
                             witchClick: "revenue",
+                            valueTextSize: 20.0,
+                            labelTextSize: 14.0,
                             title: clsLan.revenue),
                       ),
                       Flexible(
@@ -211,6 +214,8 @@ class _AccountScreenState extends State<AccountScreen> {
                             assetImage: "assets/images/TotalPaidBtn.png",
                             value: "${paid.toStringAsFixed(2)} \$",
                             title: clsLan.paid,
+                            valueTextSize: 20.0,
+                            labelTextSize: 14.0,
                             textColor: theme.deepOrange,
                             data: paidPrice),
                       ),
@@ -273,10 +278,9 @@ class _AccountScreenState extends State<AccountScreen> {
                           onPressed: () {
                             print(userData);
                             print(userData);
-                            Get.to(const EditProfileScreen(),arguments:userData );
-                            setState(() {
-
-                            });
+                            Get.to(const EditProfileScreen(),
+                                arguments: userData);
+                            setState(() {});
                           },
                           icon: Icon(Icons.edit, color: theme.darkGrey),
                           label: reUse.reUseText(
@@ -362,8 +366,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         trailing: SizedBox(
                             width: textWidth,
                             child: Text(
-                              userData[fieldInfo.ABACode] ??
-                                  "Not Include Yet",
+                              userData[fieldInfo.ABACode] ?? "Not Include Yet",
                               maxLines: 1,
                               style: TextStyle(
                                   color: theme.grey,
@@ -394,8 +397,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         trailing: SizedBox(
                             width: textWidth,
                             child: Text(
-                              userData[fieldInfo.token] ??
-                                  "Not Include Yet",
+                              userData[fieldInfo.token] ?? "Not Include Yet",
                               maxLines: 1,
                               style: TextStyle(
                                   color: theme.grey,
@@ -426,8 +428,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         trailing: SizedBox(
                             width: textWidth,
                             child: Text(
-                              userData[fieldInfo.chatid] ??
-                                  "Not Include Yet",
+                              userData[fieldInfo.chatid] ?? "Not Include Yet",
                               maxLines: 1,
                               style: TextStyle(
                                   color: theme.grey,
@@ -619,7 +620,7 @@ class _AccountScreenState extends State<AccountScreen> {
   double paid = 0.0;
 
   totalRevenue() {
-    List mainData =[];
+    List mainData = [];
     try {
       DatabaseReference refs = FirebaseDatabase.instance
           .ref('Complete')
@@ -656,5 +657,4 @@ class _AccountScreenState extends State<AccountScreen> {
     }
     setState(() {});
   }
-
 }
