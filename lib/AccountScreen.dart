@@ -184,7 +184,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                   reUse.reUseText(
                       content:
-                          '${userData[fieldInfo.firstName].toString()} ${userData[fieldInfo.lastName]}',
+                          '${userData[fieldInfo.firstName] ?? "loading"} ${userData[fieldInfo.lastName] ?? "loading"}',
                       weight: FontWeight.bold,
                       size: 20.0,
                       color: theme.black),
@@ -197,73 +197,32 @@ class _AccountScreenState extends State<AccountScreen> {
                     children: [
                       Flexible(
                         child: reUse.reUseBoxText(
-                            backgroundColor: theme.liteBlue,
+                            backgroundColor: theme.white,
                             assetImage: "assets/images/RevenueBtn.png",
                             data: revenuePrice,
-                            value: "${revenue.toStringAsFixed(2)} \$",
-                            textColor: theme.blue,
+                            value: "\$ ${revenue.toStringAsFixed(2)}",
+                            textColor: theme.black,
                             witchClick: "revenue",
                             valueTextSize: 20.0,
                             labelTextSize: 14.0,
+                            valueColor: theme.grey,
                             title: clsLan.revenue),
                       ),
                       Flexible(
                         child: reUse.reUseBoxText(
                             witchClick: "paid",
-                            backgroundColor: theme.litestOrange,
+                            backgroundColor: theme.white,
                             assetImage: "assets/images/TotalPaidBtn.png",
-                            value: "${paid.toStringAsFixed(2)} \$",
+                            value: "\$ ${paid.toStringAsFixed(2)}",
                             title: clsLan.paid,
                             valueTextSize: 20.0,
                             labelTextSize: 14.0,
-                            textColor: theme.deepOrange,
+                            valueColor: theme.grey,
+                            textColor: theme.black,
                             data: paidPrice),
                       ),
                     ],
                   ),
-                  // Padding(
-                  //   padding:  EdgeInsets.only(left:8.0,top:padding,bottom:padding),
-                  //   child: Align(
-                  //     alignment: Alignment.topLeft,
-                  //     child: reUse.reUseText(
-                  //         content: 'General',
-                  //         //weight: FontWeight.bold,
-                  //         size: 16.0,
-                  //         color: theme.black),
-                  //   ),
-                  // ),
-                  // InkWell(
-                  //     onTap: () {
-                  //       reUse.reUseCircleDialog(
-                  //           context: context,
-                  //           title: 'title',
-                  //           content: reUse.reUseTextFormField(),
-                  //           icon: Icons.password);
-                  //     },
-                  //     child: Material(
-                  //       color: Colors.transparent,
-                  //       child: reUse.reUseSettingItem(
-                  //           trailingIcon: Icon(Icons.visibility_off),
-                  //           title: Text('Pin Code'),
-                  //           context: context,
-                  //           leading: Icon(Icons.password)),
-                  //     )),
-                  // reUse.reUseSettingItem(
-                  //     trailingIcon: Switch(
-                  //       // This bool value toggles the switch.
-                  //       value: light,
-                  //       activeColor: theme.btnBlue,
-                  //       onChanged: (bool value) {
-                  //         // This is called when the user toggles the switch.
-                  //         setState(() {
-                  //           light = value;
-                  //         });
-                  //       },
-                  //     ),
-                  //     title: Text('Light Mode'),
-                  //     context: context,
-                  //     leading: Icon(Icons.sunny)),
-
                   Padding(
                     padding: EdgeInsets.all(padding),
                     child: Row(
@@ -276,8 +235,6 @@ class _AccountScreenState extends State<AccountScreen> {
                             color: theme.black),
                         TextButton.icon(
                           onPressed: () {
-                            print(userData);
-                            print(userData);
                             Get.to(const EditProfileScreen(),
                                 arguments: userData);
                             setState(() {});
@@ -336,15 +293,6 @@ class _AccountScreenState extends State<AccountScreen> {
                       title: const Text('Phone Number'),
                       context: context,
                       leading: const Icon(Icons.phone)),
-                  // reUse.reUseSettingItem(
-                  //     function: 'token',
-                  //     trailingIcon: Text(
-                  //       '',
-                  //       style: TextStyle(color: theme.grey),
-                  //     ),
-                  //     title: Text('Telegram Token'),
-                  //     context: context,
-                  //     leading: Icon(Icons.telegram_outlined)),
                   Container(
                     height: 60,
                     margin:
