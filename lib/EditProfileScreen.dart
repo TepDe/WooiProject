@@ -25,6 +25,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final clsLan = ClsLanguage();
   final firstName = TextEditingController();
   final lastName = TextEditingController();
+  final receiveCode = TextEditingController();
   final phoneBox = TextEditingController();
   final bankCode = TextEditingController();
   final telegramToken = TextEditingController();
@@ -107,7 +108,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       setState(() {});
                     },
                     label: clsLan.phoneNumber,
-                    controller: firstName,
+                    controller: phoneBox,
                     hintText: ""),
                 reUse.reUseColumnTextField(
                     suffixTap: () {
@@ -115,7 +116,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       setState(() {});
                     },
                     label: clsLan.receiveMoneyNumber,
-                    controller: lastName,
+                    controller: receiveCode,
                     hintText: ""),
                 reUse.reUseColumnTextField(
                     suffixTap: () {
@@ -162,31 +163,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       argumentData[fieldInfo.lastName] &&
                                   phoneBox.text ==
                                       argumentData[fieldInfo.phoneNumber] &&
-                                  bankCode.text ==
-                                      argumentData[fieldData.qty] &&
-                                  chatID.text == argumentData[fieldData.note]) {
+                                  receiveCode.text ==
+                                      argumentData[fieldData.receiveCode] &&
+                                  chatID.text == argumentData[fieldData.chatID]) {
                                 Get.back();
                                 setState(() {});
-                              } else {
-                                alertDialog(context);
-                                await glb
-                                    .editPackage(
-                                        data: argumentData,
-                                        userName: userName.trim().toString(),
-                                        userPhoneNumber:
-                                            phoneNumber.trim().toString(),
-                                        tokenKey: getToken.trim().toString(),
-                                        chatid: chatid.trim().toString(),
-                                        price: phoneBox.text.trim().toString(),
-                                        note: chatID.text.toString(),
-                                        packageID: packageID.toString(),
-                                        qty: bankCode.text.trim().toString(),
-                                        phoneNumber:
-                                            firstName.text.trim().toString(),
-                                        location:
-                                            lastName.text.trim().toString())
-                                    .then((value) {});
-                              }
+                              } else {}
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
