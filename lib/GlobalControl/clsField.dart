@@ -26,6 +26,8 @@ class FieldData {
   String senderLname = "senderLname";
   String senderName = "senderName";
   String paidStatus = "paidStatus";
+  String receiveCode = "receiveCode";
+  String chatID = "chatID";
 }
 
 
