@@ -126,7 +126,7 @@ class _SetUpScreenState extends State<SetUpScreen> {
                         reUse.ruTextBox(
                           controller: abaNumber,
                           keyboardType: TextInputType.number,
-                          hind: clsLan.abaNumber,
+                          hind: clsLan.receiveCode,
                         ),
                         SizedBox(
                           height: Get.height * 0.03,
@@ -214,9 +214,6 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                       phoneNumber: phoneNumber.text.trim(),
                                       firstname: firstName.text.trim(),
                                       lastname: lastName.text.trim());
-                                  setState(() {
-                                    Get.to(const ViewScreen());
-                                  });
                                 }
 
                                 // await glb.setUpInfor(
