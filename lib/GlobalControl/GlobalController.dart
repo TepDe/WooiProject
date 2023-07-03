@@ -309,7 +309,7 @@ class GlobalController {
       location,
       qty,
       tokenKey,
-        abaCode,
+      abaCode,
       chatid,
       data}) async {
     DateTime now = DateTime.now();
@@ -530,12 +530,14 @@ class GlobalController {
         .child(witchPushKey)
         .remove();
   }
+
   deleteFromDriver({witchDataBase, data, witchUID, witchPushKey}) async {
     await witchDataBase
         .child(data[field.driverUID])
         .child(data[field.pushKey])
         .remove();
   }
+
   deleteFromReturn({witchDataBase, data, witchUID, witchPushKey}) async {
     await witchDataBase
         .child(data[field.uid])
@@ -548,16 +550,22 @@ class GlobalController {
   }
 
   storeSetUpAccount({phoneNumber, firstname, lastname}) async {
-    users
-        .doc(auth.currentUser!.uid)
-        .update({
-          'phoneNumber': phoneNumber,
-          'firstname': firstname,
-          'lastname': lastname,
-        })
-        .then((value) => print("User's Property Deleted"))
-        .catchError(
-            (error) => print("Failed to delete user's property: $error"));
+    try {
+      users
+          .doc(auth.currentUser!.uid)
+          .update({
+            'phoneNumber': phoneNumber,
+            'firstname': firstname,
+            'lastname': lastname,
+          })
+          .then((value) => print("User's Property Deleted"))
+          .catchError(
+              (error) => print("Failed to delete user's property: $error"));
+      Get.to(const ViewScreen());
+    } catch (e) {
+      final reUse = ReUseWidget();
+      reUse.reUseCircleDialog(function: 'error',content: Text("error"));
+    }
   }
 
   Future<void> editPackage(
@@ -607,16 +615,14 @@ class GlobalController {
               field.price: price.toString(),
               field.recLatitude: latitude.toString(),
               field.recLongitude: longitude.toString(),
-              field.senderPhone: await fetchUserData(fieldInfo.phoneNumber).toString(),
+              field.senderPhone:
+                  await fetchUserData(fieldInfo.phoneNumber).toString(),
             }));
   }
 
   updateStatus({uid, key, status}) async {
-    await packageRequest
-        .child(uid)
-        .child('package')
-        .child(key)
-        .update({'status': status, field.packageID: auth.currentUser!.uid.toString()});
+    await packageRequest.child(uid).child('package').child(key).update(
+        {'status': status, field.packageID: auth.currentUser!.uid.toString()});
   }
 
   Future<void> backToReturn({data}) async {
@@ -676,6 +682,6 @@ class GlobalController {
               ),
             ),
           ));
-     }
+    }
   }
 }
