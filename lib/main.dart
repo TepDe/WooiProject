@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:wooiproject/LoginScreen.dart';
+import 'package:wooiproject/SetUpScreen.dart';
 import 'package:wooiproject/ViewScreen.dart';
 
 void main() async {
