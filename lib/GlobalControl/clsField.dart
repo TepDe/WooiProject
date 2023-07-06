@@ -57,5 +57,6 @@ class FieldInfo {
   String returnNote = "returnNote";
   String ABACode = "ABACode";
   String receiveMoneyCode = "receiveMoneyCode";
+  String chatID = "chatID";
 }
 
