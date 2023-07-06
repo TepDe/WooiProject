@@ -25,7 +25,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final clsLan = ClsLanguage();
   final firstName = TextEditingController();
   final lastName = TextEditingController();
-  final receiveCode = TextEditingController();
+  final receiveMoneyCode = TextEditingController();
   final phoneBox = TextEditingController();
   final bankCode = TextEditingController();
   final telegramToken = TextEditingController();
@@ -116,7 +116,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       setState(() {});
                     },
                     label: clsLan.receiveMoneyNumber,
-                    controller: receiveCode,
+                    controller: receiveMoneyCode,
                     hintText: ""),
                 reUse.reUseColumnTextField(
                     suffixTap: () {
@@ -161,26 +161,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       argumentData[fieldInfo.firstName] &&
                                   lastName.text ==
                                       argumentData[fieldInfo.lastName] &&
+                                  receiveMoneyCode.text ==
+                                      argumentData[
+                                          fieldInfo.receiveMoneyCode] &&
                                   phoneBox.text ==
                                       argumentData[fieldInfo.phoneNumber] &&
-                                  receiveCode.text ==
-                                      argumentData[fieldData.receiveCode] &&
-                                  chatID.text == argumentData[fieldData.chatID]) {
-                                Get.back();
-                                setState(() {});
+                                  telegramToken.text ==
+                                      argumentData[fieldInfo.token] &&
+                                  chatID.text ==
+                                      argumentData[fieldInfo.chatid]) {
                               } else {}
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                // Padding(
-                                //   padding: const EdgeInsets.only(right: 8.0),
-                                //   child: Icon(
-                                //     Icons,
-                                //     color: iconcolor,
-                                //   ),
-                                // ),
-
                                 Text(
                                   'UPDATE',
                                   style: TextStyle(
