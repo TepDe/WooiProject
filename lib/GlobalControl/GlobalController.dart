@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
@@ -683,5 +686,85 @@ class GlobalController {
             ),
           ));
     }
+  }
+
+  var showPrefix = false;
+  var isLogin = true;
+  var otp = "";
+  var isOtpSent = false;
+  var resendAfter = 30;
+  var resendOTP = false;
+  var firebaseVerificationId = "";
+  var statusMessage = "".obs;
+  var statusMessageColor = Colors.black;
+  late Timer timer;
+
+
+  String phoneNumber ='+85578344511';
+
+  getOtp() async {
+    try{
+      FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber:phoneNumber,
+        verificationCompleted: (PhoneAuthCredential credential) {},
+        verificationFailed: (FirebaseAuthException e) {},
+        codeSent: (String verificationId, int? resendToken) {
+          firebaseVerificationId = verificationId;
+          isOtpSent = true;
+          statusMessage.value = "OTP sent to " + phoneNumber;
+          startResendOtpTimer();
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      );
+    }catch(e){
+      if (e is FirebaseAuthException) {
+        print(e);
+      }
+    }
+
+  }
+
+  resendOtp() async {
+    resendOTP = false;
+    FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: '+91' + phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) {},
+      verificationFailed: (FirebaseAuthException e) {},
+      codeSent: (String verificationId, int? resendToken) {
+        firebaseVerificationId = verificationId;
+        isOtpSent= true;
+        statusMessage.value = "OTP re-sent to +91" + phoneNumber;
+        startResendOtpTimer();
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+  }
+
+  verifyOTP() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    try {
+      statusMessage.value = "Verifying... " + otp;
+      // Create a PhoneAuthCredential with the code
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: firebaseVerificationId, smsCode: otp);
+      // Sign the user in (or link) with the credential
+      await auth.signInWithCredential(credential);
+
+    } catch (e) {
+      statusMessage.value = "Invalid  OTP";
+      statusMessageColor = Colors.red;
+    }
+  }
+
+  startResendOtpTimer() {
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (resendAfter!= 0) {
+        resendAfter--;
+      } else {
+        resendAfter= 30;
+        resendOTP = true;
+        timer.cancel();
+      }
+    });
   }
 }
