@@ -101,26 +101,6 @@ class _AccountScreenState extends State<AccountScreen> {
         .get()
         .then((DocumentSnapshot documentSnapshot) async {
       userData = documentSnapshot.data() as Map<String, dynamic>;
-      // try {
-      //   getLatitude = documentSnapshot['latitude'].toString();
-      //   getLongitude = documentSnapshot['longitude'].toString();
-      //   getUid = documentSnapshot['uid'].toString();
-      //   getEmail = documentSnapshot['email'].toString();
-      //   getPassword = documentSnapshot['password'].toString();
-      //   getPhoneNumber = documentSnapshot['phoneNumber'].toString();
-      //   getUserID = documentSnapshot['userID'].toString();
-      //   getLastName = documentSnapshot['lastname'].toString();
-      //   getFirstName = documentSnapshot['firstname'].toString();
-      //   if (documentSnapshot['token'] == null) {
-      //     getToken = 'not have';
-      //     getChatId = 'not have';
-      //   } else {
-      //     getToken = documentSnapshot['token'].toString();
-      //     getChatId = documentSnapshot['chatid'].toString();
-      //   }
-      // } catch (e) {
-      //   print(e);
-      // }
       setState(() {});
     });
     setState(() {});
