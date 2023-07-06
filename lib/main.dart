@@ -79,7 +79,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: mc.isSignIn.value == true ? LogInScreen() : ViewScreen(),
+      home: mc.isSignIn.value == true ? const LogInScreen() : const ViewScreen(),
     );
   }
 }
