@@ -1,7 +1,10 @@
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:wooiproject/AccountScreen.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/HomeScreen.dart';
@@ -29,6 +32,109 @@ class _ViewScreenState extends State<ViewScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage? message) {
+      if (message != null) {
+        // Handle the initial message when the app is launched from a notification
+        _handleMessage(message);
+      }
+    });
+  }
+
+  Future<void> showNotification() async {
+    try{
+      AndroidNotificationDetails androidPlatformChannelSpecifics = const AndroidNotificationDetails(
+        'channel_id', 'channel_name',
+        importance: Importance.max,
+        priority: Priority.high,
+        ticker: 'ticker',
+        styleInformation: BigTextStyleInformation(''),
+      );
+
+      NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+      await flutterLocalNotificationsPlugin.show(
+        0, 'Notification Title', 'Notification Body', platformChannelSpecifics,
+      );
+      setState(() {
+
+      });
+    }catch(e){
+      print(e);
+    }
+
+  }
+
+  Future<void> requestNotificationPermissions() async {
+    final PermissionStatus status = await Permission.notification.request();
+    final PermissionStatus statusSms = await Permission.sms.request();
+    if (status.isGranted) {
+      // Notification permissions granted
+    } else if (status.isDenied) {
+      // Notification permissions denied
+    } else if (status.isPermanentlyDenied) {
+      // Notification permissions permanently denied, open app settings
+      await openAppSettings();
+    }
+    if (statusSms.isDenied) {
+
+      // We didn't ask for permission yet or the permission has been denied before but not permanently.
+
+      await Permission.sms.request();
+
+    }
+  }
+  final _localNotifications = FlutterLocalNotificationsPlugin();
+
+  Future<NotificationDetails> _notificationDetails() async {
+
+
+    AndroidNotificationDetails androidPlatformChannelSpecifics =
+    const AndroidNotificationDetails(
+      '3213213',
+      'channel name',
+      groupKey: 'com.example.flutter_push_notifications',
+      channelDescription: 'channel description',
+      importance: Importance.max,
+      priority: Priority.max,
+      playSound: true,
+      ticker: 'ticker',
+      largeIcon: DrawableResourceAndroidBitmap('justwater'),
+      color: Color(0xff2196f3),
+    );
+
+    NotificationDetails platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics);
+
+    return platformChannelSpecifics;
+  }
+
+  void _handleMessage(RemoteMessage message) {
+    print('Message received: ${message.notification?.body}');
+    // Add your custom logic to handle the message here
+  }
+
+  Future<void> _onSelectNotification(String? payload) async {
+    // Handle notification selection here
+  }
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+       FlutterLocalNotificationsPlugin();
+
+  Future<void> _showNotification() async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails('your_channel_id', 'your_channel_name',
+            importance: Importance.max, priority: Priority.high);
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'Database Updated',
+      'New data has been added to the database.',
+      platformChannelSpecifics,
+      payload: 'Default_Sound',
+    );
   }
 
   late DateTime currentBackPressTime;
@@ -48,7 +154,7 @@ class _ViewScreenState extends State<ViewScreen> {
       child: WillPopScope(
         onWillPop: () async {
           DateTime now = DateTime.now();
-          if (ctime == null || now.difference(ctime) > Duration(seconds: 2)) {
+          if (ctime == null || now.difference(ctime) > const Duration(seconds: 2)) {
             //add duration of press gap
             ctime = now;
             // ScaffoldMessenger.of(context).showSnackBar(
@@ -60,8 +166,7 @@ class _ViewScreenState extends State<ViewScreen> {
                 gravity: ToastGravity.CENTER,
                 timeInSecForIosWeb: 1,
                 textColor: Colors.white,
-                fontSize: 16.0
-            );
+                fontSize: 16.0);
             return Future.value(false);
           }
 
