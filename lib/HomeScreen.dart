@@ -52,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
     currentTime();
     //testObj();
     alertNoIntenet();
+    glb.getOtp();
   }
 
   List distince = [];
