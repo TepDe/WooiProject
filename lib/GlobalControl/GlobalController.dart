@@ -63,7 +63,7 @@ class GlobalController {
 
   DatabaseReference goOnline = FirebaseDatabase.instance.ref("Driver");
   CollectionReference userSign =
-      FirebaseFirestore.instance.collection('UserSign');
+  FirebaseFirestore.instance.collection('UserSign');
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -101,7 +101,7 @@ class GlobalController {
   onCreatePackage() {}
   final str = StorageKey();
   CollectionReference documentStream =
-      FirebaseFirestore.instance.collection('Users');
+  FirebaseFirestore.instance.collection('Users');
 
   Future<void> storeUser({email, password, uid}) async {
     position = await GeolocatorPlatform.instance.getCurrentPosition();
@@ -187,15 +187,15 @@ class GlobalController {
 
   globalSetData({email, password, uid}) {
     var documentStream =
-        FirebaseFirestore.instance.collection('Users').doc(uid);
+    FirebaseFirestore.instance.collection('Users').doc(uid);
     documentStream
         .set({
-          'email': email,
-          'password': password,
-          'uid': uid,
-          'longitude': longitude,
-          'latitude': latitude
-        })
+      'email': email,
+      'password': password,
+      'uid': uid,
+      'longitude': longitude,
+      'latitude': latitude
+    })
         .then((value) => print("User Added"))
         .catchError((error) => print("Failed to add user: $error"));
   }
@@ -235,16 +235,15 @@ class GlobalController {
     print(getUserID);
   }
 
-  Future<SharedPreferences> onSaveLocalStorage(
-      {latitude,
-      longitude,
-      isGoOnline,
-      phoneNumber,
-      email,
-      password,
-      userID,
-      userName,
-      uid}) async {
+  Future<SharedPreferences> onSaveLocalStorage({latitude,
+    longitude,
+    isGoOnline,
+    phoneNumber,
+    email,
+    password,
+    userID,
+    userName,
+    uid}) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setDouble(str.latitude, latitude ?? 0.0);
     await prefs.setDouble(str.longitude, longitude ?? 0.0);
@@ -296,25 +295,24 @@ class GlobalController {
   //   });
   // }
   DatabaseReference packageRequest =
-      FirebaseDatabase.instance.ref("PackageRequest");
+  FirebaseDatabase.instance.ref("PackageRequest");
 
   final field = FieldData();
   final fieldInfo = FieldInfo();
 
-  Future<void> createPackage(
-      {price,
-      userName,
-      userPhoneNumber,
-      note,
-      packageID,
-      uid,
-      phoneNumber,
-      location,
-      qty,
-      tokenKey,
-      abaCode,
-      chatid,
-      data}) async {
+  Future<void> createPackage({price,
+    userName,
+    userPhoneNumber,
+    note,
+    packageID,
+    uid,
+    phoneNumber,
+    location,
+    qty,
+    tokenKey,
+    abaCode,
+    chatid,
+    data}) async {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
     position = await GeolocatorPlatform.instance.getCurrentPosition();
@@ -324,42 +322,47 @@ class GlobalController {
     String pushKey = generatePushKey();
     await packageRequest
         .child(auth.currentUser!.uid)
-        //.child(getUserID.toString())
+    //.child(getUserID.toString())
         .update({
       "userName": userName,
       "userPhoneNumber": userPhoneNumber,
       "uLatitude": latitude.toString(),
       "uLongitude": longitude.toString(),
-    }).then((value) async => packageRequest
-                .child(auth.currentUser!.uid)
-                .child('package')
-                .child(pushKey)
-                .update({
-              field.uid: auth.currentUser!.uid.toString(),
-              field.location: location.toString(),
-              field.pushKey: pushKey.toString(),
-              field.phoneNumber: phoneNumber.toString(),
-              field.token: tokenKey.toString(),
-              field.chatid: chatid.toString(),
-              field.latitude: latitude.toString(),
-              field.longitude: longitude.toString(),
-              field.date: formattedDate.toString(),
-              field.qty: qty.toString(),
-              field.packageID: packageID.toString(),
-              field.note: note.toString(),
-              field.status: 'request',
-              field.price: price.toString(),
-              field.recLatitude: latitude.toString(),
-              field.recLongitude: longitude.toString(),
-              field.senderPhone: await fetchUserData(fieldInfo.phoneNumber),
-              field.senderName: userName,
-              field.ABACode: abaCode,
-              field.paidStatus: "",
-            }));
+    }).then((value) async =>
+        packageRequest
+            .child(auth.currentUser!.uid)
+            .child('package')
+            .child(pushKey)
+            .update({
+          field.uid: auth.currentUser!.uid.toString(),
+          field.location: location.toString(),
+          field.pushKey: pushKey.toString(),
+          field.phoneNumber: phoneNumber.toString(),
+          field.token: tokenKey.toString(),
+          field.chatid: chatid.toString(),
+          field.latitude: latitude.toString(),
+          field.longitude: longitude.toString(),
+          field.date: formattedDate.toString(),
+          field.qty: qty.toString(),
+          field.packageID: packageID.toString(),
+          field.note: note.toString(),
+          field.status: 'request',
+          field.price: price.toString(),
+          field.recLatitude: latitude.toString(),
+          field.recLongitude: longitude.toString(),
+          field.senderPhone: await fetchUserData(fieldInfo.phoneNumber),
+          field.senderName: userName,
+          field.ABACode: abaCode,
+          field.paidStatus: "",
+        }));
   }
 
   String generatePushKey() {
-    String pushKey = packageRequest.push().key.toString().trim();
+    String pushKey = packageRequest
+        .push()
+        .key
+        .toString()
+        .trim();
     return pushKey;
   }
 
@@ -424,7 +427,7 @@ class GlobalController {
 
   returnListLength() async {
     DatabaseReference refs =
-        FirebaseDatabase.instance.ref('Return').child(auth.currentUser!.uid);
+    FirebaseDatabase.instance.ref('Return').child(auth.currentUser!.uid);
     refs.onValue.listen((event) async {
       returnData.clear();
       DataSnapshot driver = event.snapshot;
@@ -438,7 +441,7 @@ class GlobalController {
 
   completeListLength() async {
     DatabaseReference refs =
-        FirebaseDatabase.instance.ref('Complete').child(auth.currentUser!.uid);
+    FirebaseDatabase.instance.ref('Complete').child(auth.currentUser!.uid);
     refs.onValue.listen((event) async {
       completeList.clear();
       DataSnapshot driver = event.snapshot;
@@ -557,33 +560,32 @@ class GlobalController {
       users
           .doc(auth.currentUser!.uid)
           .update({
-            'phoneNumber': phoneNumber,
-            'firstname': firstname,
-            'lastname': lastname,
-          })
+        'phoneNumber': phoneNumber,
+        'firstname': firstname,
+        'lastname': lastname,
+      })
           .then((value) => print("User's Property Deleted"))
           .catchError(
               (error) => print("Failed to delete user's property: $error"));
       Get.to(const ViewScreen());
     } catch (e) {
       final reUse = ReUseWidget();
-      reUse.reUseCircleDialog(function: 'error',content: Text("error"));
+      reUse.reUseCircleDialog(function: 'error', content: const Text("error"));
     }
   }
 
-  Future<void> editPackage(
-      {price,
-      data,
-      userName,
-      userPhoneNumber,
-      note,
-      packageID,
-      uid,
-      phoneNumber,
-      location,
-      qty,
-      tokenKey,
-      chatid}) async {
+  Future<void> editPackage({price,
+    data,
+    userName,
+    userPhoneNumber,
+    note,
+    packageID,
+    uid,
+    phoneNumber,
+    location,
+    qty,
+    tokenKey,
+    chatid}) async {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
     position = await GeolocatorPlatform.instance.getCurrentPosition();
@@ -591,36 +593,37 @@ class GlobalController {
     longitude = position.longitude;
     await packageRequest
         .child(auth.currentUser!.uid)
-        //.child(getUserID.toString())
+    //.child(getUserID.toString())
         .update({
       "userName": userName,
       "userPhoneNumber": userPhoneNumber,
       "uLatitude": latitude.toString(),
       "uLongitude": longitude.toString(),
-    }).then((value) async => packageRequest
-                .child(auth.currentUser!.uid)
-                .child('package')
-                .child(data[field.pushKey])
-                .update({
-              field.uid: auth.currentUser!.uid.toString(),
-              field.location: location.toString(),
-              field.pushKey: data[field.pushKey].toString(),
-              field.phoneNumber: phoneNumber.toString(),
-              field.token: tokenKey.toString(),
-              field.chatid: chatid.toString(),
-              field.latitude: latitude.toString(),
-              field.longitude: longitude.toString(),
-              field.date: formattedDate.toString(),
-              field.qty: qty.toString(),
-              field.packageID: packageID.toString(),
-              field.note: note.toString(),
-              field.status: 'request',
-              field.price: price.toString(),
-              field.recLatitude: latitude.toString(),
-              field.recLongitude: longitude.toString(),
-              field.senderPhone:
-                  await fetchUserData(fieldInfo.phoneNumber).toString(),
-            }));
+    }).then((value) async =>
+        packageRequest
+            .child(auth.currentUser!.uid)
+            .child('package')
+            .child(data[field.pushKey])
+            .update({
+          field.uid: auth.currentUser!.uid.toString(),
+          field.location: location.toString(),
+          field.pushKey: data[field.pushKey].toString(),
+          field.phoneNumber: phoneNumber.toString(),
+          field.token: tokenKey.toString(),
+          field.chatid: chatid.toString(),
+          field.latitude: latitude.toString(),
+          field.longitude: longitude.toString(),
+          field.date: formattedDate.toString(),
+          field.qty: qty.toString(),
+          field.packageID: packageID.toString(),
+          field.note: note.toString(),
+          field.status: 'request',
+          field.price: price.toString(),
+          field.recLatitude: latitude.toString(),
+          field.recLongitude: longitude.toString(),
+          field.senderPhone:
+          await fetchUserData(fieldInfo.phoneNumber).toString(),
+        }));
   }
 
   updateStatus({uid, key, status}) async {
@@ -700,12 +703,12 @@ class GlobalController {
   late Timer timer;
 
 
-  String phoneNumber ='+85578344511';
+  String phoneNumber = '+85578344511';
 
   getOtp() async {
-    try{
+    try {
       FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber:phoneNumber,
+        phoneNumber: phoneNumber,
         verificationCompleted: (PhoneAuthCredential credential) {},
         verificationFailed: (FirebaseAuthException e) {},
         codeSent: (String verificationId, int? resendToken) {
@@ -716,12 +719,11 @@ class GlobalController {
         },
         codeAutoRetrievalTimeout: (String verificationId) {},
       );
-    }catch(e){
+    } catch (e) {
       if (e is FirebaseAuthException) {
         print(e);
       }
     }
-
   }
 
   resendOtp() async {
@@ -732,7 +734,7 @@ class GlobalController {
       verificationFailed: (FirebaseAuthException e) {},
       codeSent: (String verificationId, int? resendToken) {
         firebaseVerificationId = verificationId;
-        isOtpSent= true;
+        isOtpSent = true;
         statusMessage.value = "OTP re-sent to +91" + phoneNumber;
         startResendOtpTimer();
       },
@@ -749,7 +751,6 @@ class GlobalController {
           verificationId: firebaseVerificationId, smsCode: otp);
       // Sign the user in (or link) with the credential
       await auth.signInWithCredential(credential);
-
     } catch (e) {
       statusMessage.value = "Invalid  OTP";
       statusMessageColor = Colors.red;
@@ -757,14 +758,147 @@ class GlobalController {
   }
 
   startResendOtpTimer() {
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (resendAfter!= 0) {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (resendAfter != 0) {
         resendAfter--;
       } else {
-        resendAfter= 30;
+        resendAfter = 30;
         resendOTP = true;
         timer.cancel();
       }
+    });
+  }
+
+  editProfile({value}) {
+    try {
+      var documentStream =
+      FirebaseFirestore.instance.collection('Users').doc(auth.currentUser!.uid);
+      documentStream
+          .set({
+        value[fieldInfo.firstName]: value[fieldInfo.firstName],
+        value[fieldInfo.lastName]: value[fieldInfo.lastName],
+        value[fieldInfo.phoneNumber]: value[fieldInfo.phoneNumber],
+        value[fieldInfo.token]: value[fieldInfo.token],
+        value[fieldInfo.chatid]: value[fieldInfo.chatid],
+        value[fieldInfo.receiveMoneyCode]: value[fieldInfo.receiveMoneyCode],
+      })
+          .then((value) => print("User Updated"))
+          .catchError((error) => print("Failed to add user: $error"));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  permissionMessage() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    print('User granted permission: ${settings.authorizationStatus}');
+  }
+
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  void configureFirebaseMessaging(BuildContext context) {
+    final theme = ThemesApp();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            actions: [
+              Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.topCenter,
+                children: [
+                  Positioned(
+                    top: -60.0,
+                    child: CircleAvatar(
+                      radius: 60.0,
+                      backgroundColor: theme.white,
+                      child: Icon(
+                        Icons.confirmation_num_sharp,
+                        color: theme.orange,
+                        size: 100.0,
+                      ),
+                    ),
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: Get.height * 0.08, left: 4, right: 4),
+                        child: Text(
+                          title ?? "",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20.0),
+                      // Text(
+                      //   content,
+                      //   textAlign: TextAlign.center,
+                      //   style: const TextStyle(
+                      //     fontSize: 16.0,
+                      //   ),
+                      // ),
+                      Text('dkbsbdbjdfgn'),
+                      const SizedBox(height: 20.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        child: ElevatedButton(
+                          child: const Text('Close'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Get.to(const ViewScreen());
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      );
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Notification'),
+            content: Text(message.notification?.body ?? 'No message body'),
+            actions: [
+              ElevatedButton(
+                child: const Text('Close'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Get.to(const ViewScreen());
+                },
+              ),
+            ],
+          );
+        },
+      );
     });
   }
 }
