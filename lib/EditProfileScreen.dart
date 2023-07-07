@@ -53,6 +53,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     firstName.text = mainData[fieldInfo.firstName] ?? '';
     lastName.text = mainData[fieldInfo.lastName] ?? '';
     phoneBox.text = mainData[fieldInfo.phoneNumber] ?? '';
+    receiveMoneyCode.text = mainData[fieldInfo.ABACode] ?? '';
+    telegramToken.text = mainData[fieldInfo.token] ?? '';
+    chatID.text = mainData[fieldInfo.chatid] ?? '';
     bankCode.text = mainData[fieldInfo.ABACode] ?? '';
   }
 
@@ -104,7 +107,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     hintText: ""),
                 reUse.reUseColumnTextField(
                     suffixTap: () {
-                      firstName.clear();
+                      phoneBox.clear();
                       setState(() {});
                     },
                     label: clsLan.phoneNumber,
@@ -112,7 +115,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     hintText: ""),
                 reUse.reUseColumnTextField(
                     suffixTap: () {
-                      lastName.clear();
+                      receiveMoneyCode.clear();
                       setState(() {});
                     },
                     label: clsLan.receiveMoneyNumber,
@@ -120,7 +123,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     hintText: ""),
                 reUse.reUseColumnTextField(
                     suffixTap: () {
-                      lastName.clear();
+                      telegramToken.clear();
                       setState(() {});
                     },
                     label: clsLan.insertTelegramToken,
@@ -128,7 +131,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     hintText: ""),
                 reUse.reUseColumnTextField(
                     suffixTap: () {
-                      lastName.clear();
+                      chatID.clear();
                       setState(() {});
                     },
                     label: clsLan.insertTelegramChatID,
@@ -157,20 +160,38 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           color: Colors.transparent,
                           child: InkWell(
                             onTap: () async {
+                              final profile = FieldInfo();
+                              profile.firstName = firstName.text.trim().toString();
+                              profile.lastName = lastName.text.trim().toString();
+                              profile.phoneNumber = phoneBox.text.trim().toString();
+                              profile.receiveMoneyCode = receiveMoneyCode.text.trim().toString();
+                              profile.token = telegramToken.text.trim().toString();
+                              profile.chatid = chatID.text.trim().toString();
+                              profile.ABACode = bankCode.text.trim().toString();
+                              print(profile);
+                              print(profile);
                               if (firstName.text ==
-                                      argumentData[fieldInfo.firstName] &&
+                                      mainData[fieldInfo.firstName] &&
                                   lastName.text ==
-                                      argumentData[fieldInfo.lastName] &&
-                                  receiveMoneyCode.text ==
-                                      argumentData[
-                                          fieldInfo.receiveMoneyCode] &&
+                                      mainData[fieldInfo.lastName] &&
                                   phoneBox.text ==
-                                      argumentData[fieldInfo.phoneNumber] &&
+                                      mainData[fieldInfo.phoneNumber] &&
+                                  receiveMoneyCode.text ==
+                                      mainData[fieldInfo.ABACode] &&
                                   telegramToken.text ==
-                                      argumentData[fieldInfo.token] &&
-                                  chatID.text ==
-                                      argumentData[fieldInfo.chatid]) {
-                              } else {}
+                                      mainData[fieldInfo.token] &&
+                                  chatID.text == mainData[fieldInfo.chatid] &&
+                                  bankCode.text ==
+                                      mainData[fieldInfo.ABACode]) {
+                                Get.back();
+                              } else {
+                                reUse.reUseOKCancelDialog(
+                                    data: profile,
+                                    icon: Icons.account_circle,
+                                    content: Text(clsLan.changeInfo),
+                                    context: context,
+                                    title: clsLan.change);
+                              }
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -235,4 +256,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       obj[fieldData.packageID]
     ].any((value) => value == null);
   }
+}
+
+class UpdateProfile {
+  String firstName = '';
+  String lastName = '';
+  String phoneBox = '';
+  String receiveMoneyCode = '';
+  String telegramToken = '';
+  String chatID = '';
+  String bankCode = '';
 }
