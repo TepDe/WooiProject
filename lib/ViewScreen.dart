@@ -7,8 +7,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wooiproject/AccountScreen.dart';
 import 'package:wooiproject/Distination/language.dart';
+import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/HomeScreen.dart';
 import 'package:wooiproject/NotificationScreen.dart';
+import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
 class ViewScreen extends StatefulWidget {
@@ -28,6 +30,7 @@ class _ViewScreenState extends State<ViewScreen> {
 
   final themes = ThemesApp();
 
+  final glb = GlobalController();
   @override
   void initState() {
     // TODO: implement initState
@@ -111,6 +114,14 @@ class _ViewScreenState extends State<ViewScreen> {
 
   void _handleMessage(RemoteMessage message) {
     print('Message received: ${message.notification?.body}');
+
+
+    final reUse = ReUseWidget();
+    reUse.reUseCircleDialog(content: Text("${message.notification?.title}"));
+    setState(() {
+
+    });
+    // Handle the message when the app is opened from a notification
     // Add your custom logic to handle the message here
   }
 
@@ -149,6 +160,7 @@ class _ViewScreenState extends State<ViewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    glb.configureFirebaseMessaging(context);
     return Scaffold(
         body: SafeArea(
       child: WillPopScope(
