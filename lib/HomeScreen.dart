@@ -5,8 +5,12 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
@@ -52,9 +56,30 @@ class _HomeScreenState extends State<HomeScreen> {
     currentTime();
     //testObj();
     alertNoIntenet();
-    glb.getOtp();
+    // glb.getOtp();
+    showNotification();
   }
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
+  Future<void> showNotification() async {
+    try{
+      AndroidNotificationDetails androidPlatformChannelSpecifics = const AndroidNotificationDetails(
+        'channel_id', 'channel_name',
+        importance: Importance.max,
+        priority: Priority.high,
+        ticker: 'ticker',
+        styleInformation: BigTextStyleInformation(''),
+      );
+
+      NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+      await flutterLocalNotificationsPlugin.show(
+        0, 'Notification Title', 'Notification Body', platformChannelSpecifics,
+      );
+    }catch(e){
+      print(e);
+    }
+
+  }
   List distince = [];
 
   Future<void> suggestionLocation() async {
@@ -258,8 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    FocusManager.instance.primaryFocus?.unfocus();
-    double btnHeight = MediaQuery.of(context).size.height * 0.06;
+    showNotification();
     return Scaffold(
       backgroundColor: theme.liteGrey,
       body: SingleChildScrollView(
@@ -294,13 +318,15 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: EdgeInsets.all(paddings),
               child: reUse.reUseCreatePackage(
-                  context: context, padding: paddings, height: btnHeight),
+                  context: context,
+                  padding: paddings,
+                  height: Get.height * 0.02),
             ),
 
             Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child:
                       reUse.reUseText(content: 'Activity', color: theme.grey),
                 ),
@@ -356,4 +382,5 @@ class _HomeScreenState extends State<HomeScreen> {
     await checkid();
     setState(() {});
   }
+
 }
