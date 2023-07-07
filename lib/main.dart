@@ -9,6 +9,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/ViewScreen.dart';
 import 'dart:async';
+
+import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print('Handling a background message: ${message.notification?.body}');
@@ -26,9 +28,18 @@ void requestNotificationPermission() async {
 }
 void configureFirebaseMessaging() {
   FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
-  FirebaseMessaging.onMessage.listen(_handleMessage);
-  FirebaseMessaging.onMessageOpenedApp.listen(_handleMessageOpenedApp);
-}
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Received message: ${message.notification?.title}');
+    final reUse = ReUseWidget();
+    reUse.reUseCircleDialog(content: Text("${message.notification?.title}"));
+    // Handle the message when the app is in the foreground
+  });
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    print('Opened app from notification: ${message.notification?.title}');
+    final reUse = ReUseWidget();
+    reUse.reUseCircleDialog(content: Text("${message.notification?.title}"));
+    // Handle the message when the app is opened from a notification
+  });}
 
 Future<void> _handleBackgroundMessage(RemoteMessage message) async {
   print('Received background message: ${message.notification?.title}');
