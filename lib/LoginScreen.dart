@@ -156,29 +156,30 @@ class _LogInScreenState extends State<LogInScreen> {
                           //             child: CircularProgressIndicator()));
                           //   },
                           // );
-                          if (userEmail.text.isEmpty) {
-                            onDialogOK(
-                                context: context,
-                                title: 'Not Found',
-                                content: 'Email is missing');
-                          } else if (userPassword.text.isEmpty) {
-                            onDialogOK(
-                                context: context,
-                                title: 'Not Found',
-                                content: 'Password is missing');
-                          }else if (userPassword.text.isEmpty&&userEmail.text.isEmpty) {
-                            onDialogOK(
-                                context: context,
-                                title: 'Not Found',
-                                content: 'Email and Password is missing');
-                          } else {
-                            onUserSignIn(
-                                email: userEmail.text.trim(),
-                                // email: 'u3@gmail.com',
-                                password: userPassword.text.trim(),
-                                // password: '111111',
-                                context: context);
-                          }
+                          // if (userEmail.text.isEmpty) {
+                          //   onDialogOK(
+                          //       context: context,
+                          //       title: 'Not Found',
+                          //       content: 'Email is missing');
+                          // } else if (userPassword.text.isEmpty) {
+                          //   onDialogOK(
+                          //       context: context,
+                          //       title: 'Not Found',
+                          //       content: 'Password is missing');
+                          // }else if (userPassword.text.isEmpty&&userEmail.text.isEmpty) {
+                          //   onDialogOK(
+                          //       context: context,
+                          //       title: 'Not Found',
+                          //       content: 'Email and Password is missing');
+                          // } else {
+                          //
+                          // }
+                          onUserSignIn(
+                            // email: userEmail.text.trim(),
+                              email: 'u3@gmail.com',
+                              // password: userPassword.text.trim(),
+                              password: '111111',
+                              context: context);
                            // password: '111111');
 
                           // lc._phoneVerify(context);
@@ -281,7 +282,7 @@ class _LogInScreenState extends State<LogInScreen> {
           email: email.toString(),
           password: password.toString(),
         );
-        reUse.alertDialog(context);
+        // reUse.alertDialog(context);
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'wrong-password') {
