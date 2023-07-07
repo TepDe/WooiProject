@@ -156,31 +156,32 @@ class _LogInScreenState extends State<LogInScreen> {
                           //             child: CircularProgressIndicator()));
                           //   },
                           // );
-                          // if (userEmail.text.isEmpty) {
-                          //   onDialogOK(
-                          //       context: context,
-                          //       title: 'Not Found',
-                          //       content: 'Email is missing');
-                          // } else if (userPassword.text.isEmpty) {
-                          //   onDialogOK(
-                          //       context: context,
-                          //       title: 'Not Found',
-                          //       content: 'Password is missing');
-                          // }else if (userPassword.text.isEmpty&&userEmail.text.isEmpty) {
-                          //   onDialogOK(
-                          //       context: context,
-                          //       title: 'Not Found',
-                          //       content: 'Email and Password is missing');
-                          // } else {
-                          //
-                          // }
-                          onUserSignIn(
-                            // email: userEmail.text.trim(),
-                              email: 'u3@gmail.com',
-                              // password: userPassword.text.trim(),
-                              password: '111111',
-                              context: context);
-                           // password: '111111');
+                          if (userEmail.text.isEmpty) {
+                            onDialogOK(
+                                context: context,
+                                title: 'Not Found',
+                                content: 'Email is missing');
+                          } else if (userPassword.text.isEmpty) {
+                            onDialogOK(
+                                context: context,
+                                title: 'Not Found',
+                                content: 'Password is missing');
+                          } else if (userPassword.text.isEmpty &&
+                              userEmail.text.isEmpty) {
+                            onDialogOK(
+                                context: context,
+                                title: 'Not Found',
+                                content: 'Email and Password is missing');
+                          } else {
+                            onUserSignIn(
+                                email: userEmail.text.trim(),
+                                // email: 'u3@gmail.com',
+                                password: userPassword.text.trim(),
+                                // password: '111111',
+                                context: context);
+                          }
+
+                          // password: '111111');
 
                           // lc._phoneVerify(context);
                           // phoneAuth();
@@ -244,7 +245,7 @@ class _LogInScreenState extends State<LogInScreen> {
   var userPassword = TextEditingController();
 
   phoneAuth() async {
-  await auth.verifyPhoneNumber(
+    await auth.verifyPhoneNumber(
       phoneNumber: '+85578344511',
       verificationCompleted: (PhoneAuthCredential credential) async {
         await auth.signInWithCredential(credential);
@@ -261,7 +262,7 @@ class _LogInScreenState extends State<LogInScreen> {
             verificationId: verificationId, smsCode: smsCode);
         await auth.signInWithCredential(credential);
       },
-      codeAutoRetrievalTimeout: (String verificationId)async {
+      codeAutoRetrievalTimeout: (String verificationId) async {
         verificationId = verificationId;
         print(verificationId);
         print("Timout");
@@ -282,6 +283,7 @@ class _LogInScreenState extends State<LogInScreen> {
           email: email.toString(),
           password: password.toString(),
         );
+        setState(() {});
         // reUse.alertDialog(context);
       }
     } on FirebaseAuthException catch (e) {
