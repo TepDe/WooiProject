@@ -12,6 +12,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
@@ -59,27 +60,35 @@ class _HomeScreenState extends State<HomeScreen> {
     // glb.getOtp();
     showNotification();
   }
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   Future<void> showNotification() async {
-    try{
-      AndroidNotificationDetails androidPlatformChannelSpecifics = const AndroidNotificationDetails(
-        'channel_id', 'channel_name',
+    try {
+      AndroidNotificationDetails androidPlatformChannelSpecifics =
+          const AndroidNotificationDetails(
+        'channel_id',
+        'channel_name',
         importance: Importance.max,
         priority: Priority.high,
         ticker: 'ticker',
         styleInformation: BigTextStyleInformation(''),
       );
 
-      NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+      NotificationDetails platformChannelSpecifics =
+          NotificationDetails(android: androidPlatformChannelSpecifics);
       await flutterLocalNotificationsPlugin.show(
-        0, 'Notification Title', 'Notification Body', platformChannelSpecifics,
+        0,
+        'Notification Title',
+        'Notification Body',
+        platformChannelSpecifics,
       );
-    }catch(e){
+    } catch (e) {
       print(e);
     }
-
   }
+
   List distince = [];
 
   Future<void> suggestionLocation() async {
@@ -280,6 +289,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool circleIndicator = false;
 
   double paddings = 10.0;
+  final clsLan = ClsLanguage();
 
   @override
   Widget build(BuildContext context) {
@@ -315,13 +325,13 @@ class _HomeScreenState extends State<HomeScreen> {
             //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
             // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
             //reUse.renderListView(),
-            Padding(
-              padding: EdgeInsets.all(paddings),
-              child: reUse.reUseCreatePackage(
-                  context: context,
-                  padding: paddings,
-                  height: Get.height * 0.02),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.all(paddings),
+            //   child: reUse.reUseCreatePackage(
+            //       context: context,
+            //       padding: paddings,
+            //       height: Get.height * 0.02),
+            // ),
 
             Row(
               children: [
@@ -382,5 +392,4 @@ class _HomeScreenState extends State<HomeScreen> {
     await checkid();
     setState(() {});
   }
-
 }
