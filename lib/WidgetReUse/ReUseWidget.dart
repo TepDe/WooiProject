@@ -89,11 +89,11 @@ class ReUseWidget {
   }
 
   topBarHomeScreen() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+    return const Padding(
+      padding: EdgeInsets.only(left: 20, right: 20, top: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
+        children: [
           // IconButton(
           //     iconSize: 40,
           //     splashRadius: 30,
@@ -559,7 +559,7 @@ class ReUseWidget {
           ),
         ),
         // reuseTextField(label: 'Phone Number'),
-        reuseButton(label: 'Confirm', function: 'storeUserLogin')
+        reUseButton(label: 'Confirm', function: 'storeUserLogin')
       ],
     );
   }
@@ -877,7 +877,7 @@ class ReUseWidget {
 
   final gsc = Get.put(GlbSuperController());
 
-  reuseButton({label, function}) {
+  reUseButton({label, function}) {
     return Container(
       width: Get.width,
       child: ElevatedButton(
@@ -961,7 +961,7 @@ class ReUseWidget {
           try {
             final result = await InternetAddress.lookup('example.com');
             if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-              Get.to(CreatePackageScreen());
+              Get.to(const CreatePackageScreen());
             }
           } on SocketException catch (_) {
             final reUse = ReUseWidget();
@@ -1055,6 +1055,11 @@ class ReUseWidget {
             } else if (function == 'logOut') {
               FirebaseAuth.instance.signOut();
               Get.to(const LogInScreen());
+            } else if (function == 'editPro') {
+              glb.editProfile(value: value);
+            } else if (function == '') {
+              Get.back();
+              FocusManager.instance.primaryFocus?.unfocus();
             } else {
               Get.back();
               FocusManager.instance.primaryFocus?.unfocus();
@@ -1086,43 +1091,94 @@ class ReUseWidget {
     );
   }
 
-  reUseOKCancelDialog(context) {
+  reUseOKCancelDialog(
+      {disposeAllow, data, context, icon, title, content, function}) {
     return showDialog(
+      barrierDismissible: disposeAllow ?? true,
       context: context,
-      builder: (context) => AlertDialog(
-        title: reUseText(
-            content: 'Create Package', weight: FontWeight.bold, size: 18.0),
-        // content: Text('Result is'),
-        actions: [
-          reUseText(content: 'Are you sure you want to delete this package'),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Cancel')),
-              ElevatedButton(
-                  onPressed: () async {
-                    await glb
-                        .createPackage(
-                            //qty: qtyBox.text.trim().toString(),
-                            phoneNumber: phoneBox.text.trim().toString(),
-                            location: locationBox.text.trim().toString())
-                        .then((value) {
-                      //qtyBox.clear();
-                      phoneBox.clear();
-                      locationBox.clear();
-                    });
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          actions: [
+            Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.topCenter,
+              children: [
+                Positioned(
+                  top: -60.0,
+                  child: CircleAvatar(
+                    radius: 60.0,
+                    backgroundColor: theme.white,
+                    child: Icon(
+                      icon,
+                      color: theme.orange,
+                      size: 100.0,
+                    ),
+                  ),
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: Get.height * 0.08, left: 4, right: 4),
+                      child: Text(
+                        title ?? "",
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20.0),
+                    // Text(
+                    //   content,
+                    //   textAlign: TextAlign.center,
+                    //   style: const TextStyle(
+                    //     fontSize: 16.0,
+                    //   ),
+                    // ),
+                    content ?? Container(),
+                    const SizedBox(height: 20.0),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: reUseCustomizeButton(
+                              value: data,
+                              function: "",
+                              textcolor: theme.orange,
+                              weight: FontWeight.bold,
+                              text: "Cancel",
+                              fontsize: 16.0,
+                              isBcColor: true,
 
-                    Navigator.pop(context);
-                  },
-                  child: const Text('OK')),
-            ],
-          )
-        ],
-      ),
+                          ),
+                        ),
+                        Flexible(
+                          child: reUseCustomizeButton(
+                              value: data,
+                              function: "editPro",
+                              textcolor: theme.orange,
+                              weight: FontWeight.bold,
+                              text: "OK",
+                              fontsize: 16.0,
+                              isBcColor: true,
+                              colorBC: theme.litestOrange),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -2160,7 +2216,7 @@ class ReUseWidget {
     );
   }
 
-  alertDialog(context) {
+  waitingDialog(context) {
     return showDialog(
       barrierDismissible: false,
       context: context,
@@ -2204,7 +2260,7 @@ class ReUseWidget {
             color: theme.midGrey,
             blurRadius: 5,
             spreadRadius: 1,
-            offset: Offset(2, 2), // Shadow position
+            offset: const Offset(2, 2), // Shadow position
           ),
         ],
         // image: DecorationImage(
