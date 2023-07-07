@@ -199,7 +199,7 @@ class _MapScreenState extends State<MapScreen> {
                       ),
                       Align(
                         alignment: Alignment.bottomCenter,
-                        child: wr.reuseButton(
+                        child: wr.reUseButton(
                             function: 'requestDriver',
                             label: gsc.requestStatus),
                       ),
