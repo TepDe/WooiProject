@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -63,7 +64,7 @@ class GlobalController {
 
   DatabaseReference goOnline = FirebaseDatabase.instance.ref("Driver");
   CollectionReference userSign =
-  FirebaseFirestore.instance.collection('UserSign');
+      FirebaseFirestore.instance.collection('UserSign');
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -101,7 +102,7 @@ class GlobalController {
   onCreatePackage() {}
   final str = StorageKey();
   CollectionReference documentStream =
-  FirebaseFirestore.instance.collection('Users');
+      FirebaseFirestore.instance.collection('Users');
 
   Future<void> storeUser({email, password, uid}) async {
     position = await GeolocatorPlatform.instance.getCurrentPosition();
@@ -187,15 +188,15 @@ class GlobalController {
 
   globalSetData({email, password, uid}) {
     var documentStream =
-    FirebaseFirestore.instance.collection('Users').doc(uid);
+        FirebaseFirestore.instance.collection('Users').doc(uid);
     documentStream
         .set({
-      'email': email,
-      'password': password,
-      'uid': uid,
-      'longitude': longitude,
-      'latitude': latitude
-    })
+          'email': email,
+          'password': password,
+          'uid': uid,
+          'longitude': longitude,
+          'latitude': latitude
+        })
         .then((value) => print("User Added"))
         .catchError((error) => print("Failed to add user: $error"));
   }
@@ -235,15 +236,16 @@ class GlobalController {
     print(getUserID);
   }
 
-  Future<SharedPreferences> onSaveLocalStorage({latitude,
-    longitude,
-    isGoOnline,
-    phoneNumber,
-    email,
-    password,
-    userID,
-    userName,
-    uid}) async {
+  Future<SharedPreferences> onSaveLocalStorage(
+      {latitude,
+      longitude,
+      isGoOnline,
+      phoneNumber,
+      email,
+      password,
+      userID,
+      userName,
+      uid}) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setDouble(str.latitude, latitude ?? 0.0);
     await prefs.setDouble(str.longitude, longitude ?? 0.0);
@@ -295,24 +297,25 @@ class GlobalController {
   //   });
   // }
   DatabaseReference packageRequest =
-  FirebaseDatabase.instance.ref("PackageRequest");
+      FirebaseDatabase.instance.ref("PackageRequest");
 
   final field = FieldData();
   final fieldInfo = FieldInfo();
 
-  Future<void> createPackage({price,
-    userName,
-    userPhoneNumber,
-    note,
-    packageID,
-    uid,
-    phoneNumber,
-    location,
-    qty,
-    tokenKey,
-    abaCode,
-    chatid,
-    data}) async {
+  Future<void> createPackage(
+      {price,
+      userName,
+      userPhoneNumber,
+      note,
+      packageID,
+      uid,
+      phoneNumber,
+      location,
+      qty,
+      tokenKey,
+      abaCode,
+      chatid,
+      data}) async {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
     position = await GeolocatorPlatform.instance.getCurrentPosition();
@@ -322,47 +325,42 @@ class GlobalController {
     String pushKey = generatePushKey();
     await packageRequest
         .child(auth.currentUser!.uid)
-    //.child(getUserID.toString())
+        //.child(getUserID.toString())
         .update({
       "userName": userName,
       "userPhoneNumber": userPhoneNumber,
       "uLatitude": latitude.toString(),
       "uLongitude": longitude.toString(),
-    }).then((value) async =>
-        packageRequest
-            .child(auth.currentUser!.uid)
-            .child('package')
-            .child(pushKey)
-            .update({
-          field.uid: auth.currentUser!.uid.toString(),
-          field.location: location.toString(),
-          field.pushKey: pushKey.toString(),
-          field.phoneNumber: phoneNumber.toString(),
-          field.token: tokenKey.toString(),
-          field.chatid: chatid.toString(),
-          field.latitude: latitude.toString(),
-          field.longitude: longitude.toString(),
-          field.date: formattedDate.toString(),
-          field.qty: qty.toString(),
-          field.packageID: packageID.toString(),
-          field.note: note.toString(),
-          field.status: 'request',
-          field.price: price.toString(),
-          field.recLatitude: latitude.toString(),
-          field.recLongitude: longitude.toString(),
-          field.senderPhone: await fetchUserData(fieldInfo.phoneNumber),
-          field.senderName: userName,
-          field.ABACode: abaCode,
-          field.paidStatus: "",
-        }));
+    }).then((value) async => packageRequest
+                .child(auth.currentUser!.uid)
+                .child('package')
+                .child(pushKey)
+                .update({
+              field.uid: auth.currentUser!.uid.toString(),
+              field.location: location.toString(),
+              field.pushKey: pushKey.toString(),
+              field.phoneNumber: phoneNumber.toString(),
+              field.token: tokenKey.toString(),
+              field.chatid: chatid.toString(),
+              field.latitude: latitude.toString(),
+              field.longitude: longitude.toString(),
+              field.date: formattedDate.toString(),
+              field.qty: qty.toString(),
+              field.packageID: packageID.toString(),
+              field.note: note.toString(),
+              field.status: 'request',
+              field.price: price.toString(),
+              field.recLatitude: latitude.toString(),
+              field.recLongitude: longitude.toString(),
+              field.senderPhone: await fetchUserData(fieldInfo.phoneNumber),
+              field.senderName: userName,
+              field.ABACode: abaCode,
+              field.paidStatus: "",
+            }));
   }
 
   String generatePushKey() {
-    String pushKey = packageRequest
-        .push()
-        .key
-        .toString()
-        .trim();
+    String pushKey = packageRequest.push().key.toString().trim();
     return pushKey;
   }
 
@@ -427,7 +425,7 @@ class GlobalController {
 
   returnListLength() async {
     DatabaseReference refs =
-    FirebaseDatabase.instance.ref('Return').child(auth.currentUser!.uid);
+        FirebaseDatabase.instance.ref('Return').child(auth.currentUser!.uid);
     refs.onValue.listen((event) async {
       returnData.clear();
       DataSnapshot driver = event.snapshot;
@@ -441,7 +439,7 @@ class GlobalController {
 
   completeListLength() async {
     DatabaseReference refs =
-    FirebaseDatabase.instance.ref('Complete').child(auth.currentUser!.uid);
+        FirebaseDatabase.instance.ref('Complete').child(auth.currentUser!.uid);
     refs.onValue.listen((event) async {
       completeList.clear();
       DataSnapshot driver = event.snapshot;
@@ -560,10 +558,10 @@ class GlobalController {
       users
           .doc(auth.currentUser!.uid)
           .update({
-        'phoneNumber': phoneNumber,
-        'firstname': firstname,
-        'lastname': lastname,
-      })
+            'phoneNumber': phoneNumber,
+            'firstname': firstname,
+            'lastname': lastname,
+          })
           .then((value) => print("User's Property Deleted"))
           .catchError(
               (error) => print("Failed to delete user's property: $error"));
@@ -574,18 +572,19 @@ class GlobalController {
     }
   }
 
-  Future<void> editPackage({price,
-    data,
-    userName,
-    userPhoneNumber,
-    note,
-    packageID,
-    uid,
-    phoneNumber,
-    location,
-    qty,
-    tokenKey,
-    chatid}) async {
+  Future<void> editPackage(
+      {price,
+      data,
+      userName,
+      userPhoneNumber,
+      note,
+      packageID,
+      uid,
+      phoneNumber,
+      location,
+      qty,
+      tokenKey,
+      chatid}) async {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
     position = await GeolocatorPlatform.instance.getCurrentPosition();
@@ -593,37 +592,36 @@ class GlobalController {
     longitude = position.longitude;
     await packageRequest
         .child(auth.currentUser!.uid)
-    //.child(getUserID.toString())
+        //.child(getUserID.toString())
         .update({
       "userName": userName,
       "userPhoneNumber": userPhoneNumber,
       "uLatitude": latitude.toString(),
       "uLongitude": longitude.toString(),
-    }).then((value) async =>
-        packageRequest
-            .child(auth.currentUser!.uid)
-            .child('package')
-            .child(data[field.pushKey])
-            .update({
-          field.uid: auth.currentUser!.uid.toString(),
-          field.location: location.toString(),
-          field.pushKey: data[field.pushKey].toString(),
-          field.phoneNumber: phoneNumber.toString(),
-          field.token: tokenKey.toString(),
-          field.chatid: chatid.toString(),
-          field.latitude: latitude.toString(),
-          field.longitude: longitude.toString(),
-          field.date: formattedDate.toString(),
-          field.qty: qty.toString(),
-          field.packageID: packageID.toString(),
-          field.note: note.toString(),
-          field.status: 'request',
-          field.price: price.toString(),
-          field.recLatitude: latitude.toString(),
-          field.recLongitude: longitude.toString(),
-          field.senderPhone:
-          await fetchUserData(fieldInfo.phoneNumber).toString(),
-        }));
+    }).then((value) async => packageRequest
+                .child(auth.currentUser!.uid)
+                .child('package')
+                .child(data[field.pushKey])
+                .update({
+              field.uid: auth.currentUser!.uid.toString(),
+              field.location: location.toString(),
+              field.pushKey: data[field.pushKey].toString(),
+              field.phoneNumber: phoneNumber.toString(),
+              field.token: tokenKey.toString(),
+              field.chatid: chatid.toString(),
+              field.latitude: latitude.toString(),
+              field.longitude: longitude.toString(),
+              field.date: formattedDate.toString(),
+              field.qty: qty.toString(),
+              field.packageID: packageID.toString(),
+              field.note: note.toString(),
+              field.status: 'request',
+              field.price: price.toString(),
+              field.recLatitude: latitude.toString(),
+              field.recLongitude: longitude.toString(),
+              field.senderPhone:
+                  await fetchUserData(fieldInfo.phoneNumber).toString(),
+            }));
   }
 
   updateStatus({uid, key, status}) async {
@@ -702,7 +700,6 @@ class GlobalController {
   var statusMessageColor = Colors.black;
   late Timer timer;
 
-
   String phoneNumber = '+85578344511';
 
   getOtp() async {
@@ -769,21 +766,34 @@ class GlobalController {
     });
   }
 
-  editProfile({value}) {
+  editProfile({value}) async {
+    print(value);
+    print(value);
+    final fieldInfo = FieldInfo();
+    jsonEncode(value);
     try {
-      var documentStream =
-      FirebaseFirestore.instance.collection('Users').doc(auth.currentUser!.uid);
-      documentStream
-          .set({
-        value[fieldInfo.firstName]: value[fieldInfo.firstName],
-        value[fieldInfo.lastName]: value[fieldInfo.lastName],
-        value[fieldInfo.phoneNumber]: value[fieldInfo.phoneNumber],
-        value[fieldInfo.token]: value[fieldInfo.token],
-        value[fieldInfo.chatid]: value[fieldInfo.chatid],
-        value[fieldInfo.receiveMoneyCode]: value[fieldInfo.receiveMoneyCode],
-      })
-          .then((value) => print("User Updated"))
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('Users');
+      users
+          .doc()
+          .update({
+            fieldInfo.firstName.toString(): value[fieldInfo.firstName],
+            fieldInfo.lastName.toString(): value[fieldInfo.lastName],
+            fieldInfo.phoneNumber.toString(): value[fieldInfo.phoneNumber],
+            fieldInfo.token.toString(): value[fieldInfo.token],
+            fieldInfo.chatid.toString(): value[fieldInfo.chatid],
+            fieldInfo.ABACode.toString(): value[fieldInfo.ABACode],
+          })
+          .then((value) => print("User Added"))
           .catchError((error) => print("Failed to add user: $error"));
+      // FirebaseFirestore.instance
+      //     .collection('Users')
+      //     .doc(auth.currentUser!.uid)
+      //     .update({
+      //
+      //     })
+      //     .then((value) => print("User Updated"))
+      //     .catchError((error) => print("Failed to add user: $error"));
     } catch (e) {
       print(e);
     }
@@ -805,6 +815,7 @@ class GlobalController {
   }
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+
   void configureFirebaseMessaging(BuildContext context) {
     final theme = ThemesApp();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
