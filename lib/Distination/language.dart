@@ -52,4 +52,6 @@ class ClsLanguage {
   String notPaidYet = "មិនទាន់សង";
   String readyPaid = "បងរួចរាល់";
   String receiveMoneyNumber = "លេខកុងទទួលលុយ";
+  String changeInfo = "តើអ្នកពិតជាចង់ផ្លាស់ប្តូរព័ត៌មានរបស់អ្នកមែនទេ?";
+  String change = "ផ្លាស់ប្តូរ";
 }
