@@ -63,11 +63,7 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   getDatsa(getUid) async {
-    FirebaseFirestore.instance
-        .collection('Users')
-        .doc(getUid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
+    FirebaseFirestore.instance.collection('Users').doc(getUid).get().then((DocumentSnapshot documentSnapshot) {
       getUserID = documentSnapshot['qty'];
       getToken = documentSnapshot['token'];
       getChatId = documentSnapshot['chatid'];
@@ -75,11 +71,7 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   Future<void> insertTelegramToken() async {
-    FirebaseFirestore.instance
-        .collection('Users')
-        .doc(auth.currentUser!.uid)
-        .get()
-        .then((value) {
+    FirebaseFirestore.instance.collection('Users').doc(auth.currentUser!.uid).get().then((value) {
       print(value);
       print(value);
       if (value.data()?.containsKey('telegramToken') == true) {
@@ -96,10 +88,7 @@ class _AccountScreenState extends State<AccountScreen> {
   var userData = {};
 
   fetchUserData() async {
-    fetch
-        .doc(auth.currentUser!.uid.toString())
-        .get()
-        .then((DocumentSnapshot documentSnapshot) async {
+    fetch.doc(auth.currentUser!.uid.toString()).get().then((DocumentSnapshot documentSnapshot) async {
       userData = documentSnapshot.data() as Map<String, dynamic>;
       setState(() {});
     });
@@ -137,8 +126,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   SizedBox(
                     height: viewHeight2,
                   ),
-                  reUse.reUseText(
-                      content: 'Profile', weight: FontWeight.w500, size: 18.0),
+                  reUse.reUseText(content: 'Profile', weight: FontWeight.w500, size: 18.0),
                   SizedBox(
                     height: viewHeight2,
                   ),
@@ -154,8 +142,8 @@ class _AccountScreenState extends State<AccountScreen> {
                         Get.to(const SetUpScreen());
                       },
                       child: const CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe1IKGF9z_2YNk4INs_zur1TjFIUtgpw_Ic2Jp2xxH5g&s"),
+                        backgroundImage:
+                            NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe1IKGF9z_2YNk4INs_zur1TjFIUtgpw_Ic2Jp2xxH5g&s"),
                       ),
                     ),
                   ),
@@ -163,16 +151,11 @@ class _AccountScreenState extends State<AccountScreen> {
                     height: viewHeight2,
                   ),
                   reUse.reUseText(
-                      content:
-                          '${userData[fieldInfo.firstName] ?? "loading"} ${userData[fieldInfo.lastName] ?? "loading"}',
+                      content: "${userData[fieldInfo.firstName]??" "} ${userData[fieldInfo.lastName]??" "}",
                       weight: FontWeight.bold,
                       size: 20.0,
                       color: theme.black),
-                  reUse.reUseText(
-                      content: 'ID : ${userData[fieldInfo.userID]}',
-                      weight: FontWeight.bold,
-                      size: 12.0,
-                      color: theme.grey),
+                  reUse.reUseText(content: 'ID : ${userData[fieldInfo.userID]}', weight: FontWeight.bold, size: 12.0, color: theme.grey),
                   Row(
                     children: [
                       Flexible(
@@ -215,15 +198,11 @@ class _AccountScreenState extends State<AccountScreen> {
                             color: theme.black),
                         TextButton.icon(
                           onPressed: () {
-                            Get.to(const EditProfileScreen(),
-                                arguments: userData);
+                            Get.to(const EditProfileScreen(), arguments: userData);
                             setState(() {});
                           },
                           icon: Icon(Icons.edit, color: theme.darkGrey),
-                          label: reUse.reUseText(
-                              content: 'Edit',
-                              size: 16.0,
-                              color: theme.darkGrey),
+                          label: reUse.reUseText(content: 'Edit', size: 16.0, color: theme.darkGrey),
                         )
                       ],
                     ),
@@ -275,8 +254,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       leading: const Icon(Icons.phone)),
                   Container(
                     height: 60,
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
                       color: theme.white,
                       borderRadius: BorderRadius.circular(6),
@@ -296,9 +274,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             child: Text(
                               userData[fieldInfo.ABACode] ?? "Not Include Yet",
                               maxLines: 1,
-                              style: TextStyle(
-                                  color: theme.grey,
-                                  overflow: TextOverflow.ellipsis),
+                              style: TextStyle(color: theme.grey, overflow: TextOverflow.ellipsis),
                             )),
                         leading: const Text("123"),
                       ),
@@ -306,8 +282,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                   Container(
                     height: 60,
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
                       color: theme.white,
                       borderRadius: BorderRadius.circular(6),
@@ -327,9 +302,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             child: Text(
                               userData[fieldInfo.token] ?? "Not Include Yet",
                               maxLines: 1,
-                              style: TextStyle(
-                                  color: theme.grey,
-                                  overflow: TextOverflow.ellipsis),
+                              style: TextStyle(color: theme.grey, overflow: TextOverflow.ellipsis),
                             )),
                         leading: const Icon(Icons.telegram_rounded),
                       ),
@@ -337,8 +310,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                   Container(
                     height: 60,
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
                       color: theme.white,
                       borderRadius: BorderRadius.circular(6),
@@ -358,9 +330,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             child: Text(
                               userData[fieldInfo.chatid] ?? "Not Include Yet",
                               maxLines: 1,
-                              style: TextStyle(
-                                  color: theme.grey,
-                                  overflow: TextOverflow.ellipsis),
+                              style: TextStyle(color: theme.grey, overflow: TextOverflow.ellipsis),
                             )),
                         leading: const Icon(Icons.telegram_rounded),
                       ),
@@ -479,8 +449,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     content,
                     const SizedBox(height: 20.0),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       child: reUseButton(text: "OK"),
                     ),
                   ],
@@ -513,8 +482,7 @@ class _AccountScreenState extends State<AccountScreen> {
       },
       codeSent: (String verificationId, int? resendToken) async {
         String smsCode = 'xxxx';
-        PhoneAuthCredential credential = PhoneAuthProvider.credential(
-            verificationId: verificationId, smsCode: smsCode);
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
         await auth.signInWithCredential(credential);
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
@@ -535,8 +503,7 @@ class _AccountScreenState extends State<AccountScreen> {
         },
         child: Text(
           text,
-          style: TextStyle(
-              color: textColor, fontWeight: FontWeight.bold, fontSize: 14),
+          style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 14),
         ),
       ),
     );
@@ -550,9 +517,7 @@ class _AccountScreenState extends State<AccountScreen> {
   totalRevenue() {
     List mainData = [];
     try {
-      DatabaseReference refs = FirebaseDatabase.instance
-          .ref('Complete')
-          .child(auth.currentUser!.uid);
+      DatabaseReference refs = FirebaseDatabase.instance.ref('Complete').child(auth.currentUser!.uid);
       refs.onValue.listen((event) {
         revenuePrice.clear();
         paidPrice.clear();
