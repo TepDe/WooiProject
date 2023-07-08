@@ -325,13 +325,13 @@ class _HomeScreenState extends State<HomeScreen> {
             //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
             // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
             //reUse.renderListView(),
-            // Padding(
-            //   padding: EdgeInsets.all(paddings),
-            //   child: reUse.reUseCreatePackage(
-            //       context: context,
-            //       padding: paddings,
-            //       height: Get.height * 0.02),
-            // ),
+            Padding(
+              padding: EdgeInsets.all(paddings),
+              child: reUse.reUseCreatePackage(
+                  context: context,
+                  padding: paddings,
+                  height: Get.height * 0.02),
+            ),
 
             Row(
               children: [
