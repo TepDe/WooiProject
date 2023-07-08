@@ -1056,7 +1056,7 @@ class ReUseWidget {
               FirebaseAuth.instance.signOut();
               Get.to(const LogInScreen());
             } else if (function == 'editPro') {
-              glb.editProfile(value: value);
+              glb.editProfile(value: value,context: context);
             } else if (function == '') {
               Get.back();
               FocusManager.instance.primaryFocus?.unfocus();
