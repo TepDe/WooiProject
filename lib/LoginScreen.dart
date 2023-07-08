@@ -145,17 +145,6 @@ class _LogInScreenState extends State<LogInScreen> {
                           ),
                         ),
                         onPressed: () async {
-                          // showDialog(
-                          //   context: context,
-                          //   builder: (BuildContext context) {
-                          //     return const SizedBox(
-                          //         height: 60,
-                          //         width: 60,
-                          //         child: Align(
-                          //             alignment: Alignment.center,
-                          //             child: CircularProgressIndicator()));
-                          //   },
-                          // );
                           if (userEmail.text.isEmpty) {
                             onDialogOK(
                                 context: context,
@@ -284,7 +273,7 @@ class _LogInScreenState extends State<LogInScreen> {
           password: password.toString(),
         );
         setState(() {});
-        // reUse.alertDialog(context);
+        reUse.waitingDialog(context);
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'wrong-password') {
