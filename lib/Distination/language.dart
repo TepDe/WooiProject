@@ -54,4 +54,7 @@ class ClsLanguage {
   String receiveMoneyNumber = "លេខកុងទទួលលុយ";
   String changeInfo = "តើអ្នកពិតជាចង់ផ្លាស់ប្តូរព័ត៌មានរបស់អ្នកមែនទេ?";
   String change = "ផ្លាស់ប្តូរ";
+  String empty = "ទទេ";
+  String emptyFill = "សូមបំពេញព័ត៌មានដែលខ្វះខាត";
+
 }
