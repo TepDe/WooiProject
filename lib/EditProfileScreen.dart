@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:wooiproject/AccountScreen.dart';
 import 'package:wooiproject/Distination/clsDistin.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
@@ -66,7 +67,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return SafeArea(
       child: WillPopScope(
         onWillPop: () async {
-          Get.back();
+          Get.to(const AccountScreen());
           setState(() {});
           return true;
         },
@@ -88,7 +89,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           //     builder: (context) => const ViewScreen(),
                           //   ),
                           // );
-                          Navigator.pop(context);
+                          Get.to(const AccountScreen());
+                          setState(() {});
                         },
                         icon: Icon(Icons.arrow_back_rounded, color: theme.black, size: 30),
                         label: reUse.reUseText(content: "Back", size: 20.0, weight: FontWeight.w500),
@@ -184,6 +186,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     telegramToken.text == mainData[fieldInfo.token] &&
                                     chatID.text == mainData[fieldInfo.chatid]) {
                                   Get.back();
+                                } else if (firstName.text.isEmpty ||
+                                    lastName.text.isEmpty ||
+                                    phoneBox.text.isEmpty ||
+                                    receiveMoneyCode.text.isEmpty ||
+                                    telegramToken.text.isEmpty ||
+                                    chatID.text.isEmpty) {
+                                  await reUse.reUseCircleDialog(
+                                      function: '',
+                                      context: context,
+                                      icon: Icons.back_hand_rounded,
+                                      title: clsLan.empty,
+                                      content: Center(
+                                        child: Text(
+                                          clsLan.emptyFill,
+                                          style: TextStyle(
+                                            color: theme.black,
+                                          ),
+                                        ),
+                                      ));
                                 } else {
                                   await reUse.reUseOKCancelDialog(
                                       data: profile,
