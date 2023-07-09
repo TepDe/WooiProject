@@ -49,18 +49,11 @@ class _SetUpScreenState extends State<SetUpScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(
-                        top: Get.height * 0.15,
-                        left: Get.width * 0.05,
-                        right: Get.width * 0.05),
+                    padding: EdgeInsets.only(top: Get.height * 0.15, left: Get.width * 0.05, right: Get.width * 0.05),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        reUse.reUseText(
-                            content: clsLan.register,
-                            color: theme.black,
-                            size: 25.0,
-                            weight: FontWeight.bold),
+                        reUse.reUseText(content: clsLan.register, color: theme.black, size: 25.0, weight: FontWeight.bold),
                         reUse.reUseText(
                           content: clsLan.fillRequirement,
                           size: 12.0,
@@ -121,6 +114,20 @@ class _SetUpScreenState extends State<SetUpScreen> {
                           hind: clsLan.phoneNumber,
                         ),
                         SizedBox(
+                          height: 100,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.all(8),
+                            children: <Widget>[
+                              Container(
+                                height: Get.width * 0.2,
+                                color: Colors.amber[600],
+                                child: const Center(child: Text('Entry A')),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
                           height: Get.height * 0.03,
                         ),
                         reUse.ruTextBox(
@@ -158,8 +165,7 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                           ),
                                         ),
                                       ));
-                                } else if (lastName.text.trim().toString() ==
-                                    '') {
+                                } else if (lastName.text.trim().toString() == '') {
                                   await reUse.reUseCircleDialog(
                                       context: context,
                                       icon: Icons.account_circle_rounded,
@@ -172,8 +178,7 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                           ),
                                         ),
                                       ));
-                                } else if (phoneNumber.text.trim().toString() ==
-                                    '') {
+                                } else if (phoneNumber.text.trim().toString() == '') {
                                   await reUse.reUseCircleDialog(
                                       context: context,
                                       icon: Icons.phone_rounded,
@@ -198,11 +203,7 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                           backgroundColor: Colors.transparent,
                                           actions: [
                                             Center(
-                                              child: SizedBox(
-                                                  height: 40,
-                                                  width: 40,
-                                                  child:
-                                                      CircularProgressIndicator()),
+                                              child: SizedBox(height: 40, width: 40, child: CircularProgressIndicator()),
                                             )
                                           ],
                                         ),
@@ -211,9 +212,7 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                   );
 
                                   glb.storeSetUpAccount(
-                                      phoneNumber: phoneNumber.text.trim(),
-                                      firstname: firstName.text.trim(),
-                                      lastname: lastName.text.trim());
+                                      phoneNumber: phoneNumber.text.trim(), firstname: firstName.text.trim(), lastname: lastName.text.trim());
                                 }
 
                                 // await glb.setUpInfor(
@@ -229,9 +228,7 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                 children: [
                                   Text(
                                     clsLan.continues,
-                                    style: TextStyle(
-                                        color: theme.white,
-                                        fontWeight: FontWeight.w700),
+                                    style: TextStyle(color: theme.white, fontWeight: FontWeight.w700),
                                   ),
                                   const Icon(Icons.navigate_next_rounded),
                                 ],
