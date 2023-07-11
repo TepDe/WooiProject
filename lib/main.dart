@@ -60,11 +60,9 @@ void main() async {
   AndroidInitializationSettings androidInitializationSettings = const AndroidInitializationSettings('app_icon');
   InitializationSettings initializationSettings = InitializationSettings(android: androidInitializationSettings);
   flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  WidgetsFlutterBinding.ensureInitialized();
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   requestNotificationPermission();
   configureFirebaseMessaging();
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   // await Firebase.initializeApp(
   //     options: const FirebaseOptions(
