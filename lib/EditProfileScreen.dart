@@ -65,175 +65,168 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: WillPopScope(
-        onWillPop: () async {
-          Get.to(const AccountScreen());
-          setState(() {});
-          return true;
-        },
-        child: Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton.icon(
-                        onPressed: () {
-                          // Navigator.of(context).push(
-                          //   MaterialPageRoute(
-                          //     builder: (context) => const ViewScreen(),
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton.icon(
+                      onPressed: () {
+                        // Navigator.of(context).push(
+                        //   MaterialPageRoute(
+                        //     builder: (context) => const ViewScreen(),
+                        //   ),
+                        // );
+                        Get.back();
+                        setState(() {});
+                      },
+                      icon: Icon(Icons.arrow_back_rounded, color: theme.black, size: 30),
+                      label: reUse.reUseText(content: "Back", size: 20.0, weight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+                reUse.reUseColumnTextField(
+                    suffixTap: () {
+                      firstName.clear();
+                      setState(() {});
+                    },
+                    label: clsLan.fname,
+                    controller: firstName,
+                    hintText: ""),
+                reUse.reUseColumnTextField(
+                    suffixTap: () {
+                      lastName.clear();
+                      setState(() {});
+                    },
+                    label: clsLan.lname,
+                    controller: lastName,
+                    hintText: ""),
+                reUse.reUseColumnTextField(
+                    suffixTap: () {
+                      phoneBox.clear();
+                      setState(() {});
+                    },
+                    label: clsLan.phoneNumber,
+                    controller: phoneBox,
+                    hintText: ""),
+                reUse.reUseColumnTextField(
+                    suffixTap: () {
+                      receiveMoneyCode.clear();
+                      setState(() {});
+                    },
+                    label: clsLan.receiveMoneyNumber,
+                    controller: receiveMoneyCode,
+                    hintText: ""),
+                reUse.reUseColumnTextField(
+                    suffixTap: () {
+                      telegramToken.clear();
+                      setState(() {});
+                    },
+                    label: clsLan.insertTelegramToken,
+                    controller: telegramToken,
+                    hintText: ""),
+                reUse.reUseColumnTextField(
+                    suffixTap: () {
+                      chatID.clear();
+                      setState(() {});
+                    },
+                    label: clsLan.insertTelegramChatID,
+                    controller: chatID,
+                    hintText: ""),
+                SizedBox(height: Get.height * 0.01),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Flexible(
+                      child: Container(
+                        height: 50,
+                        width: Get.width,
+                        decoration: BoxDecoration(
+                          color: theme.orange,
+                          borderRadius: BorderRadius.circular(12),
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: Colors.grey,
+                          //     blurRadius: 1,
+                          //     //offset: Offset(4, 8), // Shadow position
                           //   ),
-                          // );
-                          Get.to(const AccountScreen());
-                          setState(() {});
-                        },
-                        icon: Icon(Icons.arrow_back_rounded, color: theme.black, size: 30),
-                        label: reUse.reUseText(content: "Back", size: 20.0, weight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                  reUse.reUseColumnTextField(
-                      suffixTap: () {
-                        firstName.clear();
-                        setState(() {});
-                      },
-                      label: clsLan.fname,
-                      controller: firstName,
-                      hintText: ""),
-                  reUse.reUseColumnTextField(
-                      suffixTap: () {
-                        lastName.clear();
-                        setState(() {});
-                      },
-                      label: clsLan.lname,
-                      controller: lastName,
-                      hintText: ""),
-                  reUse.reUseColumnTextField(
-                      suffixTap: () {
-                        phoneBox.clear();
-                        setState(() {});
-                      },
-                      label: clsLan.phoneNumber,
-                      controller: phoneBox,
-                      hintText: ""),
-                  reUse.reUseColumnTextField(
-                      suffixTap: () {
-                        receiveMoneyCode.clear();
-                        setState(() {});
-                      },
-                      label: clsLan.receiveMoneyNumber,
-                      controller: receiveMoneyCode,
-                      hintText: ""),
-                  reUse.reUseColumnTextField(
-                      suffixTap: () {
-                        telegramToken.clear();
-                        setState(() {});
-                      },
-                      label: clsLan.insertTelegramToken,
-                      controller: telegramToken,
-                      hintText: ""),
-                  reUse.reUseColumnTextField(
-                      suffixTap: () {
-                        chatID.clear();
-                        setState(() {});
-                      },
-                      label: clsLan.insertTelegramChatID,
-                      controller: chatID,
-                      hintText: ""),
-                  SizedBox(height: Get.height * 0.01),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Flexible(
-                        child: Container(
-                          height: 50,
-                          width: Get.width,
-                          decoration: BoxDecoration(
-                            color: theme.orange,
-                            borderRadius: BorderRadius.circular(12),
-                            // boxShadow: [
-                            //   BoxShadow(
-                            //     color: Colors.grey,
-                            //     blurRadius: 1,
-                            //     //offset: Offset(4, 8), // Shadow position
-                            //   ),
-                            // ],
-                          ),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () async {
-                                final profile = UpdateProfile(
-                                  firstName.text.trim().toString(),
-                                  lastName.text.trim().toString(),
-                                  phoneBox.text.trim().toString(),
-                                  receiveMoneyCode.text.trim().toString(),
-                                  telegramToken.text.trim().toString(),
-                                  chatID.text.trim().toString(),
-                                );
-                                print(profile);
-                                print(profile);
+                          // ],
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () async {
+                              final profile = UpdateProfile(
+                                firstName.text.trim().toString(),
+                                lastName.text.trim().toString(),
+                                phoneBox.text.trim().toString(),
+                                receiveMoneyCode.text.trim().toString(),
+                                telegramToken.text.trim().toString(),
+                                chatID.text.trim().toString(),
+                              );
+                              print(profile);
+                              print(profile);
 
-                                if (firstName.text == mainData[fieldInfo.firstName] &&
-                                    lastName.text == mainData[fieldInfo.lastName] &&
-                                    phoneBox.text == mainData[fieldInfo.phoneNumber] &&
-                                    receiveMoneyCode.text == mainData[fieldInfo.ABACode] &&
-                                    telegramToken.text == mainData[fieldInfo.token] &&
-                                    chatID.text == mainData[fieldInfo.chatid]) {
-                                  Get.back();
-                                } else if (firstName.text.isEmpty ||
-                                    lastName.text.isEmpty ||
-                                    phoneBox.text.isEmpty ||
-                                    receiveMoneyCode.text.isEmpty ||
-                                    telegramToken.text.isEmpty ||
-                                    chatID.text.isEmpty) {
-                                  await reUse.reUseCircleDialog(
-                                      function: '',
-                                      context: context,
-                                      icon: Icons.back_hand_rounded,
-                                      title: clsLan.empty,
-                                      content: Center(
-                                        child: Text(
-                                          clsLan.emptyFill,
-                                          style: TextStyle(
-                                            color: theme.black,
-                                          ),
+                              if (firstName.text == mainData[fieldInfo.firstName] &&
+                                  lastName.text == mainData[fieldInfo.lastName] &&
+                                  phoneBox.text == mainData[fieldInfo.phoneNumber] &&
+                                  receiveMoneyCode.text == mainData[fieldInfo.ABACode] &&
+                                  telegramToken.text == mainData[fieldInfo.token] &&
+                                  chatID.text == mainData[fieldInfo.chatid]) {
+                                Get.back();
+                              } else if (firstName.text.isEmpty ||
+                                  lastName.text.isEmpty ||
+                                  phoneBox.text.isEmpty ||
+                                  receiveMoneyCode.text.isEmpty ||
+                                  telegramToken.text.isEmpty ||
+                                  chatID.text.isEmpty) {
+                                await reUse.reUseCircleDialog(
+                                    function: '',
+                                    context: context,
+                                    icon: Icons.back_hand_rounded,
+                                    title: clsLan.empty,
+                                    content: Center(
+                                      child: Text(
+                                        clsLan.emptyFill,
+                                        style: TextStyle(
+                                          color: theme.black,
                                         ),
-                                      ));
-                                } else {
-                                  await reUse.reUseOKCancelDialog(
-                                      data: profile,
-                                      icon: Icons.account_circle,
-                                      content: Text(clsLan.changeInfo),
-                                      context: context,
-                                      title: clsLan.change);
-                                }
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'UPDATE',
-                                    style: TextStyle(fontSize: 16, color: theme.white, fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
+                                      ),
+                                    ));
+                              } else {
+                                await reUse.reUseOKCancelDialog(
+                                    data: profile,
+                                    icon: Icons.account_circle,
+                                    content: Text(clsLan.changeInfo),
+                                    context: context,
+                                    title: clsLan.change);
+                              }
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'UPDATE',
+                                  style: TextStyle(fontSize: 16, color: theme.white, fontWeight: FontWeight.bold),
+                                )
+                              ],
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: Get.height * 0.5,
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: Get.height * 0.5,
+                ),
+              ],
             ),
           ),
         ),
