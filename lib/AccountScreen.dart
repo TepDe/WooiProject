@@ -114,10 +114,10 @@ class _AccountScreenState extends State<AccountScreen> {
     var viewHeight2 = MediaQuery.of(context).size.height * 0.03;
     var padding = MediaQuery.of(context).size.height * 0.01;
     var textWidth = MediaQuery.of(context).size.width * 0.2;
-    return Scaffold(
-      backgroundColor: theme.white,
-      body: SafeArea(
-        child: Stack(
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: theme.white,
+        body: Stack(
           children: [
             SingleChildScrollView(
               child: Column(
@@ -199,7 +199,6 @@ class _AccountScreenState extends State<AccountScreen> {
                         TextButton.icon(
                           onPressed: () {
                             Get.to(const EditProfileScreen(), arguments: userData);
-                            setState(() {});
                           },
                           icon: Icon(Icons.edit, color: theme.darkGrey),
                           label: reUse.reUseText(content: 'Edit', size: 16.0, color: theme.darkGrey),
