@@ -25,6 +25,9 @@ class _SetUpScreenState extends State<SetUpScreen> {
   final clsLan = ClsLanguage();
   var labelSize = 11.0;
   var valueSize = 14.0;
+  double textSize = 14;
+  int selectedItemIndex = -1;
+  String bankName = "";
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +52,16 @@ class _SetUpScreenState extends State<SetUpScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(top: Get.height * 0.15, left: Get.width * 0.05, right: Get.width * 0.05),
+                    padding: EdgeInsets.only(
+                        top: Get.height * 0.15, left: Get.width * 0.05, right: Get.width * 0.05),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        reUse.reUseText(content: clsLan.register, color: theme.black, size: 25.0, weight: FontWeight.bold),
+                        reUse.reUseText(
+                            content: clsLan.register,
+                            color: theme.black,
+                            size: 25.0,
+                            weight: FontWeight.bold),
                         reUse.reUseText(
                           content: clsLan.fillRequirement,
                           size: 12.0,
@@ -85,7 +93,7 @@ class _SetUpScreenState extends State<SetUpScreen> {
                           children: [
                             Flexible(
                               flex: 8,
-                              child: reUse.ruTextBox(
+                              child: reUse.reUseTextBox(
                                 controller: firstName,
                                 hind: clsLan.fname,
                                 obscureText: false,
@@ -98,7 +106,7 @@ class _SetUpScreenState extends State<SetUpScreen> {
                             ),
                             Flexible(
                               flex: 8,
-                              child: reUse.ruTextBox(
+                              child: reUse.reUseTextBox(
                                 controller: lastName,
                                 hind: clsLan.lname,
                               ),
@@ -108,29 +116,57 @@ class _SetUpScreenState extends State<SetUpScreen> {
                         SizedBox(
                           height: Get.height * 0.03,
                         ),
-                        reUse.ruTextBox(
+                        reUse.reUseTextBox(
                           controller: phoneNumber,
                           keyboardType: TextInputType.number,
                           hind: clsLan.phoneNumber,
                         ),
                         SizedBox(
-                          height: 100,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            padding: const EdgeInsets.all(8),
-                            children: <Widget>[
-                              Container(
-                                height: Get.width * 0.2,
-                                color: Colors.amber[600],
-                                child: const Center(child: Text('Entry A')),
-                              ),
-                            ],
-                          ),
+                          height: Get.height * 0.03,
                         ),
+                        reUse.reUseText(
+                            content: clsLan.payWay,
+                            size: textSize,
+                            weight: FontWeight.w500,
+                            color: theme.black),
+                        SizedBox(
+                            height: 100,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                padding: const EdgeInsets.all(8),
+                                itemCount: glb.payWay.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: SizedBox(
+                                      height: 100,
+                                      child: InkWell(
+                                        onTap: () async {
+                                          selectedItemIndex = index;
+                                          bankName = await glb.selectPayWay(glb.payWay[index]['name']);
+                                          setState(() {});
+                                        },
+                                        child: Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            Image(image: AssetImage(glb.payWay[index]["img"])),
+                                            Icon(
+                                              Icons.check_circle,
+                                              size: 50,
+                                              color: index == selectedItemIndex
+                                                  ? Colors.blue // Change the color of the selected item
+                                                  : Colors.transparent,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                })),
                         SizedBox(
                           height: Get.height * 0.03,
                         ),
-                        reUse.ruTextBox(
+                        reUse.reUseTextBox(
                           controller: abaNumber,
                           keyboardType: TextInputType.number,
                           hind: clsLan.receiveCode,
@@ -191,6 +227,36 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                           ),
                                         ),
                                       ));
+                                } else if (bankName == '') {
+                                  await reUse.reUseCircleDialog(
+                                      context: context,
+                                      icon: Icons.monetization_on,
+                                      title: 'Error',
+                                      content: Center(
+                                        child: Text(
+                                          'Phone choose bank name',
+                                          style: TextStyle(
+                                            color: theme.black,
+                                          ),
+                                        ),
+                                      ));
+                                } else if (lastName.text.isEmpty ||
+                                    firstName.text.isEmpty ||
+                                    phoneNumber.text.isEmpty ||
+                                    abaNumber.text.isEmpty) {
+                                  await reUse.reUseCircleDialog(
+                                      context: context,
+                                      icon: Icons.close_rounded,
+                                      title: clsLan.kvas,
+                                      function: '',
+                                      content: Center(
+                                        child: Text(
+                                          clsLan.emptyFill,
+                                          style: TextStyle(
+                                            color: theme.black,
+                                          ),
+                                        ),
+                                      ));
                                 } else {
                                   showDialog(
                                     barrierDismissible: false,
@@ -203,7 +269,8 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                           backgroundColor: Colors.transparent,
                                           actions: [
                                             Center(
-                                              child: SizedBox(height: 40, width: 40, child: CircularProgressIndicator()),
+                                              child: SizedBox(
+                                                  height: 40, width: 40, child: CircularProgressIndicator()),
                                             )
                                           ],
                                         ),
@@ -212,7 +279,10 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                   );
 
                                   glb.storeSetUpAccount(
-                                      phoneNumber: phoneNumber.text.trim(), firstname: firstName.text.trim(), lastname: lastName.text.trim());
+                                      bankName: bankName.trim(),
+                                      phoneNumber: phoneNumber.text.trim(),
+                                      firstname: firstName.text.trim(),
+                                      lastname: lastName.text.trim());
                                 }
 
                                 // await glb.setUpInfor(
