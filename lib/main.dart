@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
@@ -9,59 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/ViewScreen.dart';
 import 'dart:async';
-
-import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  print('Handling a background message: ${message.notification?.body}');
-  // Add your custom logic to handle the background message here
-}
-FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-void requestNotificationPermission() async {
-  NotificationSettings settings = await messaging.requestPermission(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
-  print('Notification permission granted: ${settings.authorizationStatus}');
-}
-void configureFirebaseMessaging() {
-  FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Received message: ${message.notification?.title}');
-    final reUse = ReUseWidget();
-    reUse.reUseCircleDialog(content: Text("${message.notification?.title}"));
-    // Handle the message when the app is in the foreground
-  });
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print('Opened app from notification: ${message.notification?.title}');
-    final reUse = ReUseWidget();
-    reUse.reUseCircleDialog(content: Text("${message.notification?.title}"));
-    // Handle the message when the app is opened from a notification
-  });}
-
-Future<void> _handleBackgroundMessage(RemoteMessage message) async {
-  print('Received background message: ${message.notification?.title}');
-  // Handle the message in the background
-}
-
-void _handleMessage(RemoteMessage message) {
-  print('Received message: ${message.notification?.title}');
-  // Handle the message when the app is in the foreground
-}
-
-void _handleMessageOpenedApp(RemoteMessage message) {
-  print('Opened app from notification: ${message.notification?.title}');
-  // Handle the message when the app is opened from a notification
-}
 void main() async {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  AndroidInitializationSettings androidInitializationSettings = const AndroidInitializationSettings('app_icon');
-  InitializationSettings initializationSettings = InitializationSettings(android: androidInitializationSettings);
-  flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  requestNotificationPermission();
-  configureFirebaseMessaging();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   // await Firebase.initializeApp(
@@ -72,7 +18,6 @@ void main() async {
   //         appId: '1:1093614007557:android:9efb550fcadd369394f36c',
   //         messagingSenderId: '1093614007557',
   //         projectId: 'wooi-c715e'));
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler );
   runApp(GetMaterialApp(debugShowCheckedModeBanner: false, home: MyApp()));
 }
 
