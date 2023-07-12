@@ -56,5 +56,7 @@ class ClsLanguage {
   String change = "ផ្លាស់ប្តូរ";
   String empty = "ទទេ";
   String emptyFill = "សូមបំពេញព័ត៌មានដែលខ្វះខាត";
+  String kvas = "ខ្វះព័ត៌មាន";
+  String payWay = "ជំរើសបង់ប្រាក់";
 
 }
