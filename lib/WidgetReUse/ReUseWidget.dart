@@ -907,7 +907,7 @@ class ReUseWidget {
     );
   }
 
-  ruTextBox({hind, icon, controller, obscureText, keyboardType}) {
+  reUseTextBox({hind, icon, controller, obscureText, keyboardType}) {
     return TextFormField(
       keyboardType: keyboardType,
       decoration: InputDecoration(
