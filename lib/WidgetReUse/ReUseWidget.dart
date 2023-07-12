@@ -2445,7 +2445,7 @@ class ReUseWidget {
   }
 
   reUseColumnTextField(
-      {hintText, controller, labelSize, label, VoidCallback? suffixTap}) {
+      {hintText, controller, labelSize, label, VoidCallback? suffixTap,keyboardType,inputFormatters}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -2466,6 +2466,8 @@ class ReUseWidget {
             //keyboardType: inputType,
             //inputFormatters: formater,
             onChanged: (value) {},
+            keyboardType: keyboardType,
+            inputFormatters: inputFormatters,
             decoration: InputDecoration(
               hintText: hintText ?? "",
               suffixIcon: IconButton(
