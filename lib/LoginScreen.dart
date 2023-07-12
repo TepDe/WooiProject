@@ -61,7 +61,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   ),
                   Column(
                     children: [
-                      reUse.ruTextBox(
+                      reUse.reUseTextBox(
                           icon: Icon(Icons.email),
                           controller: userEmail,
                           hind: 'Email',
@@ -69,7 +69,7 @@ class _LogInScreenState extends State<LogInScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      reUse.ruTextBox(
+                      reUse.reUseTextBox(
                           icon: Icon(Icons.password),
                           controller: userPassword,
                           hind: 'Password',
@@ -240,13 +240,13 @@ class _LogInScreenState extends State<LogInScreen> {
       } else {
         userEmail.clear();
         userPassword.clear();
+        reUse.waitingDialog(context);
         await glb.storeUser(
           uid: auth.currentUser!.uid,
           email: email.toString(),
           password: password.toString(),
         );
         setState(() {});
-        reUse.waitingDialog(context);
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'wrong-password') {
