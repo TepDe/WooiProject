@@ -139,7 +139,7 @@ class GlobalController {
   }
 
   checkUserInformation() async {
-    documentStream.doc(auth.currentUser!.uid).get().then((DocumentSnapshot documentSnapshot) async {
+    await documentStream.doc(auth.currentUser!.uid).get().then((DocumentSnapshot documentSnapshot) async {
       Map data = documentSnapshot.data() as Map;
       if (data['userID'] == null) {
         Random random = Random();
