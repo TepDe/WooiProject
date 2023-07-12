@@ -72,7 +72,11 @@ class GlobalController {
 
   Future<String> fetchUserData(whichField) async {
     String whichOfField = '';
-    await FirebaseFirestore.instance.collection('Users').doc(auth.currentUser!.uid.toString()).get().then((DocumentSnapshot documentSnapshot) async {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(auth.currentUser!.uid.toString())
+        .get()
+        .then((DocumentSnapshot documentSnapshot) async {
       whichOfField = await documentSnapshot[whichField];
     });
     return whichOfField;
@@ -88,22 +92,23 @@ class GlobalController {
 
   Future<void> storeUser({email, password, uid}) async {
     position = await GeolocatorPlatform.instance.getCurrentPosition();
-    latitude = position.latitude;
-    longitude = position.longitude;
     Random random = Random();
-    int randomNumber = random.nextInt(999999);
     try {
-      FirebaseFirestore.instance.collection('Users').doc(auth.currentUser!.uid).get().then((DocumentSnapshot documentSnapshot) async {
+      FirebaseFirestore.instance
+          .collection('Users')
+          .doc(auth.currentUser!.uid)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) async {
         if (documentSnapshot.exists) {
           return;
         } else {
-          documentStream.doc(auth.currentUser!.uid).set({
+          await documentStream.doc(auth.currentUser!.uid).set({
             'email': email.toString(),
             'password': password.toString(),
             'uid': auth.currentUser!.uid.toString(),
-            'userID': randomNumber.toString(),
-            'latitude': latitude.toString(),
-            'longitude': longitude.toString(),
+            'userID': random.nextInt(999999).toString(),
+            'latitude': position.latitude.toString(),
+            'longitude': position.longitude.toString(),
           });
           await checkUserInformation();
         }
@@ -182,7 +187,11 @@ class GlobalController {
   // }
 
   checkUserID(uid) async {
-    await FirebaseFirestore.instance.collection('Users').doc(uid).get().then((DocumentSnapshot documentSnapshot) async {});
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(uid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) async {});
     // FirebaseFirestore.instance
     //     .collection('Users')
     //     .doc(uid)
@@ -197,7 +206,8 @@ class GlobalController {
     print(getUserID);
   }
 
-  Future<SharedPreferences> onSaveLocalStorage({latitude, longitude, isGoOnline, phoneNumber, email, password, userID, userName, uid}) async {
+  Future<SharedPreferences> onSaveLocalStorage(
+      {latitude, longitude, isGoOnline, phoneNumber, email, password, userID, userName, uid}) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setDouble(str.latitude, latitude ?? 0.0);
     await prefs.setDouble(str.longitude, longitude ?? 0.0);
@@ -254,7 +264,19 @@ class GlobalController {
   final fieldInfo = FieldInfo();
 
   Future<void> createPackage(
-      {price, userName, userPhoneNumber, note, packageID, uid, phoneNumber, location, qty, tokenKey, abaCode, chatid, data}) async {
+      {price,
+      userName,
+      userPhoneNumber,
+      note,
+      packageID,
+      uid,
+      phoneNumber,
+      location,
+      qty,
+      tokenKey,
+      abaCode,
+      chatid,
+      data}) async {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
     position = await GeolocatorPlatform.instance.getCurrentPosition();
@@ -270,7 +292,8 @@ class GlobalController {
       "userPhoneNumber": userPhoneNumber,
       "uLatitude": latitude.toString(),
       "uLongitude": longitude.toString(),
-    }).then((value) async => packageRequest.child(auth.currentUser!.uid).child('package').child(pushKey).update({
+    }).then((value) async =>
+            packageRequest.child(auth.currentUser!.uid).child('package').child(pushKey).update({
               field.uid: auth.currentUser!.uid.toString(),
               field.location: location.toString(),
               field.pushKey: pushKey.toString(),
@@ -474,11 +497,12 @@ class GlobalController {
     await witchDataBase.child(data[field.driverUID]);
   }
 
-  storeSetUpAccount({phoneNumber, firstname, lastname}) async {
+  storeSetUpAccount({bankName, phoneNumber, firstname, lastname}) async {
     try {
       users
           .doc(auth.currentUser!.uid)
           .update({
+            "bankName": bankName,
             'phoneNumber': phoneNumber,
             'firstname': firstname,
             'lastname': lastname,
@@ -492,7 +516,19 @@ class GlobalController {
     }
   }
 
-  Future<void> editPackage({price, data, userName, userPhoneNumber, note, packageID, uid, phoneNumber, location, qty, tokenKey, chatid}) async {
+  Future<void> editPackage(
+      {price,
+      data,
+      userName,
+      userPhoneNumber,
+      note,
+      packageID,
+      uid,
+      phoneNumber,
+      location,
+      qty,
+      tokenKey,
+      chatid}) async {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
     position = await GeolocatorPlatform.instance.getCurrentPosition();
@@ -506,7 +542,8 @@ class GlobalController {
       "userPhoneNumber": userPhoneNumber,
       "uLatitude": latitude.toString(),
       "uLongitude": longitude.toString(),
-    }).then((value) async => packageRequest.child(auth.currentUser!.uid).child('package').child(data[field.pushKey]).update({
+    }).then((value) async =>
+            packageRequest.child(auth.currentUser!.uid).child('package').child(data[field.pushKey]).update({
               field.uid: auth.currentUser!.uid.toString(),
               field.location: location.toString(),
               field.pushKey: data[field.pushKey].toString(),
@@ -528,7 +565,11 @@ class GlobalController {
   }
 
   updateStatus({uid, key, status}) async {
-    await packageRequest.child(uid).child('package').child(key).update({'status': status, field.packageID: auth.currentUser!.uid.toString()});
+    await packageRequest
+        .child(uid)
+        .child('package')
+        .child(key)
+        .update({'status': status, field.packageID: auth.currentUser!.uid.toString()});
   }
 
   Future<void> backToReturn({data}) async {
@@ -642,7 +683,8 @@ class GlobalController {
     try {
       statusMessage.value = "Verifying... " + otp;
       // Create a PhoneAuthCredential with the code
-      PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: firebaseVerificationId, smsCode: otp);
+      PhoneAuthCredential credential =
+          PhoneAuthProvider.credential(verificationId: firebaseVerificationId, smsCode: otp);
       // Sign the user in (or link) with the credential
       await auth.signInWithCredential(credential);
     } catch (e) {
@@ -677,7 +719,7 @@ class GlobalController {
         fieldInfo.token: value.token,
         fieldInfo.chatid: value.chatid,
         fieldInfo.ABACode: value.ABACode,
-      }).then((value) async{
+      }).then((value) async {
         print("User Added");
         await reUse.reUseCircleDialog(
             context: context,
@@ -691,9 +733,9 @@ class GlobalController {
                 ),
               ),
             ));
-      }).catchError((error)async {
+      }).catchError((error) async {
         print("Failed to add user: $error");
-         await reUse.reUseCircleDialog(
+        await reUse.reUseCircleDialog(
             context: context,
             icon: Icons.account_circle_rounded,
             title: 'failed',
@@ -707,7 +749,6 @@ class GlobalController {
             ));
       });
     } catch (e) {
-
       print(e);
     }
   }
@@ -822,5 +863,27 @@ class GlobalController {
         },
       );
     });
+  }
+
+  List payWay = [
+    {
+      "name": "wing",
+      "img": "assets/images/wing.webp",
+    },
+    {
+      "name": "aba",
+      "img": "assets/images/aba.webp",
+    },
+    {
+      "name": "vattanac",
+      "img": "assets/images/vattanac.webp",
+    }
+  ];
+  List filteredList = [];
+
+  Future<String> selectPayWay(data) async {
+    filteredList =
+        payWay.where((item) => item['name'].toLowerCase().toString().trim().contains(data)).toList();
+    return filteredList[0]['name'];
   }
 }
