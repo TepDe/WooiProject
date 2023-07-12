@@ -87,7 +87,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         setState(() {});
                       },
                       icon: Icon(Icons.arrow_back_rounded, color: theme.black, size: 30),
-                      label: reUse.reUseText(content: "Back", size: 20.0, weight: FontWeight.w500),
+                      label: reUse.reUseText(
+                          content: "Back", size: 20.0, weight: FontWeight.w500),
                     ),
                   ],
                 ),
@@ -108,6 +109,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     controller: lastName,
                     hintText: ""),
                 reUse.reUseColumnTextField(
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
                     suffixTap: () {
                       phoneBox.clear();
                       setState(() {});
@@ -116,6 +122,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     controller: phoneBox,
                     hintText: ""),
                 reUse.reUseColumnTextField(
+                    keyboardType: const TextInputType.numberWithOptions(decimal: false),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
                     suffixTap: () {
                       receiveMoneyCode.clear();
                       setState(() {});
@@ -213,7 +224,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               children: [
                                 Text(
                                   'UPDATE',
-                                  style: TextStyle(fontSize: 16, color: theme.white, fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: theme.white,
+                                      fontWeight: FontWeight.bold),
                                 )
                               ],
                             ),
@@ -246,7 +260,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             backgroundColor: Colors.transparent,
             actions: [
               Center(
-                child: SizedBox(height: 40, width: 40, child: CircularProgressIndicator()),
+                child:
+                    SizedBox(height: 40, width: 40, child: CircularProgressIndicator()),
               )
             ],
           ),
@@ -300,5 +315,6 @@ class UpdateProfile {
     };
   }
 
-  UpdateProfile(this.firstName, this.lastName, this.phoneNumber, this.ABACode, this.token, this.chatid);
+  UpdateProfile(this.firstName, this.lastName, this.phoneNumber, this.ABACode, this.token,
+      this.chatid);
 }
