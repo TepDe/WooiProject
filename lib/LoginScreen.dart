@@ -190,33 +190,6 @@ class _LogInScreenState extends State<LogInScreen> {
                       ),
                     ),
                   ),
-
-                  // Row(
-                  //   crossAxisAlignment: CrossAxisAlignment.center,
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: const [
-                  //     Flexible(
-                  //       child: Divider(
-                  //         color: Colors.black,
-                  //       ),
-                  //     ),
-                  //     Padding(
-                  //       padding: EdgeInsets.all(8.0),
-                  //       child: Text("Already have Account?"),
-                  //     ),
-                  //     Flexible(
-                  //       child: Divider(
-                  //         color: Colors.black,
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  // const Align(
-                  //     alignment: Alignment.topCenter,
-                  //     child: Text(
-                  //       "Sign in",
-                  //       style: TextStyle(color: Colors.blue),
-                  //     )),
                 ],
               ),
             ),
