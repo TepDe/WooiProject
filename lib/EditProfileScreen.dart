@@ -62,6 +62,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     bankCode.text = mainData[fieldInfo.ABACode] ?? '';
   }
 
+  int selectedItemIndex = -1;
+  String bankName = "";
+  int bankIndex = -1;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -121,6 +125,54 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     label: clsLan.phoneNumber,
                     controller: phoneBox,
                     hintText: ""),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: reUse.reUseText(
+                      content: clsLan.payWay, size: textSize, weight: FontWeight.w500),
+                ),
+                SizedBox(
+                    height: 100,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.all(8),
+                        itemCount: glb.payWay.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: SizedBox(
+                              height: 100,
+                              child: InkWell(
+                                onTap: () async {
+                                  selectedItemIndex = index;
+                                  bankName =
+                                      await glb.selectPayWay(glb.payWay[index]['name']);
+                                  setState(() {});
+                                },
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Image(image: AssetImage(glb.payWay[index]["img"])),
+                                    CircleAvatar(
+                                      minRadius: 20,
+                                      backgroundColor: index == selectedItemIndex
+                                          ? Colors
+                                              .white // Change the color of the selected item
+                                          : Colors.transparent,
+                                      child: Icon(
+                                        Icons.check_circle,
+                                        size: 50,
+                                        color: index == selectedItemIndex
+                                            ? Colors
+                                                .blue // Change the color of the selected item
+                                            : Colors.transparent,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        })),
                 reUse.reUseColumnTextField(
                     keyboardType: const TextInputType.numberWithOptions(decimal: false),
                     inputFormatters: [
@@ -196,7 +248,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   phoneBox.text.isEmpty ||
                                   receiveMoneyCode.text.isEmpty ||
                                   telegramToken.text.isEmpty ||
-                                  chatID.text.isEmpty) {
+                                  chatID.text.isEmpty ||
+                                  bankName == "") {
                                 await reUse.reUseCircleDialog(
                                     function: '',
                                     context: context,
@@ -268,6 +321,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         );
       },
     );
+  }
+
+  void handleListItemTap(int index) {
+    // Perform actions using the index
+    print('Index: $index');
   }
 
   bool hasNullValues(obj) {
