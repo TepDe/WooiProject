@@ -58,5 +58,6 @@ class FieldInfo {
   String ABACode = "ABACode";
   String receiveMoneyCode = "receiveMoneyCode";
   String bankCode = "bankCode";
+  String bankName = "bankName";
 }
 
