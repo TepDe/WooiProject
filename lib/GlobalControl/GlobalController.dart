@@ -155,7 +155,11 @@ class GlobalController {
             .then((value) => print("User's Property Deleted"))
             .catchError((error) => print("Failed to delete user's property: $error"));
       } else {}
-      if (data['firstname'] == null || data['lastname'] == null || data['phoneNumber'] == null||data['bankCode'] == null) {
+      if (data['firstname'] == null ||
+          data['lastname'] == null ||
+          data['phoneNumber'] == null ||
+          data['bankCode'] == null ||
+          data['bankName'] == null) {
         Get.to(const SetUpScreen());
       } else {
         Get.to(const ViewScreen());
