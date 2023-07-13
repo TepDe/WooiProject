@@ -154,7 +154,7 @@ class _CompleteDetailState extends State<CompleteDetail> {
                       reUse.reUseRowText(
                           lableSize: labelSize,
                           titleColor: theme.grey,
-                          title: clsLan.abaCode,
+                          title: clsLan.bankCode,
                           size: valueSize,
                           color: theme.black,
                           content: forDisplay[field.ABACode],
