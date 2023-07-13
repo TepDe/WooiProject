@@ -37,10 +37,6 @@ class _ViewScreenState extends State<ViewScreen> {
     super.initState();
     glb.checkUserInformation();
   }
-
-  checkInfo(){
-
-  }
   var ctime;
   final clsLan = ClsLanguage();
 
@@ -85,45 +81,6 @@ class _ViewScreenState extends State<ViewScreen> {
                   ),
                   label: 'Home',
                 ),
-                // BottomNavigationBarItem(
-                //   icon: reUseIcon(icons: Icons.menu),
-                //   label: 'Activity',
-                // ),
-                // BottomNavigationBarItem(
-                //   icon: Stack(
-                //     children: <Widget>[
-                //       // Image.asset(
-                //       //   'assets/images/box.png',
-                //       //   scale: 16,
-                //       //   alignment: Alignment.topRight,
-                //       //   color: changeColor ?? themes.grey,
-                //       // ),
-                //       Icon(
-                //         Icons.notifications,
-                //         size: 40,
-                //       ),
-                //       Positioned(
-                //         right: 0,
-                //         child: Container(
-                //           padding: EdgeInsets.all(3),
-                //           decoration: BoxDecoration(
-                //             color: themes.red,
-                //             borderRadius: BorderRadius.circular(60),
-                //           ),
-                //           child: const Text(
-                //             '+9',
-                //             style: TextStyle(
-                //               color: Colors.white,
-                //               fontSize: 8,
-                //             ),
-                //             textAlign: TextAlign.center,
-                //           ),
-                //         ),
-                //       )
-                //     ],
-                //   ),
-                //   label: 'Notifications',
-                // ),
                 BottomNavigationBarItem(
                   icon: reUseIcon(icons: Icons.account_circle),
                   label: 'Account',
@@ -144,7 +101,6 @@ class _ViewScreenState extends State<ViewScreen> {
               currentIndex: selectedIndex,
               backgroundColor: themes.white,
               type: BottomNavigationBarType.fixed,
-              //
               onTap: (index) {
                 setState(() {
                   selectedIndex = index;
