@@ -76,7 +76,7 @@ class MainController extends GetxController {
   }
 
   var isSignIn = false.obs;
-  final glb = Get.put(GlobalController());
+  final glb = GlobalController();
 
   onAlreadySignIn() async {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
