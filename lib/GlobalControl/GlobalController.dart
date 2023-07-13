@@ -155,7 +155,7 @@ class GlobalController {
             .then((value) => print("User's Property Deleted"))
             .catchError((error) => print("Failed to delete user's property: $error"));
       } else {}
-      if (data['firstname'] == null || data['lastname'] == null || data['phoneNumber'] == null) {
+      if (data['firstname'] == null || data['lastname'] == null || data['phoneNumber'] == null||data['bankCode'] == null) {
         Get.to(const SetUpScreen());
       } else {
         Get.to(const ViewScreen());
@@ -497,11 +497,12 @@ class GlobalController {
     await witchDataBase.child(data[field.driverUID]);
   }
 
-  storeSetUpAccount({bankName, phoneNumber, firstname, lastname}) async {
+  storeSetUpAccount({bankName, phoneNumber, firstname, lastname,bankCode}) async {
     try {
       users
           .doc(auth.currentUser!.uid)
           .update({
+            fieldInfo.bankCode :bankCode,
             "bankName": bankName,
             'phoneNumber': phoneNumber,
             'firstname': firstname,
