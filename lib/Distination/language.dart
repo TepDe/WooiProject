@@ -33,7 +33,7 @@ class ClsLanguage {
   String lname = 'ឈ្មោះ';
   String phoneNumber = "លេខទូរស័ព្ទ";
   String receiveCode = "លេខកូតទទួលលុយ";
-  String continues = "បន្តរ";
+  String continues = "បន្ត";
   String register = "បង្កើតគណនី";
   String fillRequirement = "សូមបំពេញព័ត៌មានខាងក្រោមនេះដើម្បីបន្ត";
   String inputName = "* សូមបញ្ចូលព័ត៌មានរបស់អ្នកអោយដូចគ្នានឹងគណនីទទួលលុយរបស់អ្នក";
@@ -56,7 +56,8 @@ class ClsLanguage {
   String change = "ផ្លាស់ប្តូរ";
   String empty = "ទទេ";
   String emptyFill = "សូមបំពេញព័ត៌មានដែលខ្វះខាត";
-  String kvas = "ខ្វះព័ត៌មាន";
+  String remainEmpty = "ខ្វះព័ត៌មាន";
   String payWay = "ជំរើសបង់ប្រាក់";
+  String exit = "ចេញ";
 
 }
