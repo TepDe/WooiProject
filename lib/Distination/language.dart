@@ -39,7 +39,7 @@ class ClsLanguage {
   String inputName = "* សូមបញ្ចូលព័ត៌មានរបស់អ្នកអោយដូចគ្នានឹងគណនីទទួលលុយរបស់អ្នក";
   String noABA = "អ្នកមិនទាន់បញ្ចូលលេខកូដ ABA នៅឡើយទេ";
   String noName = "អ្នកមិនទាន់បញ្ចូលលេខកូដឈ្មោះនៅឡើយទេ";
-  String abaCode = "លេខកូត ABA";
+  String bankCode = "លេខកូតធនាគារ";
   String insertAbaDec = "បញ្ចូលលេខកូដ ABA របស់អ្នកនៅទីនេះ";
   String insert = "បញ្ចូល";
   String insertTelegramToken = "បញ្ចូលលេខកូដ Telegram Token របស់អ្នកនៅទីនេះ";
