@@ -153,9 +153,7 @@ class ReUseWidget {
           Text(
             name,
             style: TextStyle(
-                color: theme.deepOrange,
-                fontSize: 28,
-                fontWeight: FontWeight.bold),
+                color: theme.deepOrange, fontSize: 28, fontWeight: FontWeight.bold),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -165,9 +163,7 @@ class ReUseWidget {
                 child: Text(
                   "Your activity will record down here",
                   style: TextStyle(
-                      color: theme.grey,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold),
+                      color: theme.grey, fontSize: 12, fontWeight: FontWeight.bold),
                 ),
               ),
               Padding(
@@ -175,9 +171,7 @@ class ReUseWidget {
                 child: Text(
                   "15",
                   style: TextStyle(
-                      color: theme.grey,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold),
+                      color: theme.grey, fontSize: 12, fontWeight: FontWeight.bold),
                 ),
               ),
               reUseSquareButton(icon: Icons.filter_alt_rounded),
@@ -330,8 +324,7 @@ class ReUseWidget {
                         label: clsLan.complete,
                         qty: completeLength.toString(),
                         assetsIcon: 'assets/images/check.png',
-                        borderright:
-                            BorderSide(width: 1, color: theme.liteGrey),
+                        borderright: BorderSide(width: 1, color: theme.liteGrey),
                         bordertop: BorderSide(width: 1, color: theme.liteGrey),
                         assetsIconColor: theme.liteGreen),
                   )),
@@ -376,14 +369,10 @@ class ReUseWidget {
       //margin: EdgeInsets.all(9),
       decoration: BoxDecoration(
         border: Border(
-          bottom: borderbottom ??
-              const BorderSide(width: 1.5, color: Colors.transparent),
-          right: borderright ??
-              const BorderSide(width: 1.5, color: Colors.transparent),
-          left: borderleft ??
-              const BorderSide(width: 1.5, color: Colors.transparent),
-          top: bordertop ??
-              const BorderSide(width: 1.5, color: Colors.transparent),
+          bottom: borderbottom ?? const BorderSide(width: 1.5, color: Colors.transparent),
+          right: borderright ?? const BorderSide(width: 1.5, color: Colors.transparent),
+          left: borderleft ?? const BorderSide(width: 1.5, color: Colors.transparent),
+          top: bordertop ?? const BorderSide(width: 1.5, color: Colors.transparent),
         ),
         // color: theme.white,
         // borderRadius: BorderRadius.circular(10),
@@ -401,8 +390,8 @@ class ReUseWidget {
         children: [
           Text(
             '$label',
-            style: TextStyle(
-                fontSize: 12, color: theme.grey, fontWeight: FontWeight.bold),
+            style:
+                TextStyle(fontSize: 12, color: theme.grey, fontWeight: FontWeight.bold),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -442,8 +431,7 @@ class ReUseWidget {
     );
   }
 
-  unitThreeHomeScreen(
-      {icon, lable, price, funtion, context, latitude, longitude}) {
+  unitThreeHomeScreen({icon, lable, price, funtion, context, latitude, longitude}) {
     return Padding(
       padding: const EdgeInsets.only(top: 12.0, left: 18, right: 18),
       child: InkWell(
@@ -625,9 +613,7 @@ class ReUseWidget {
                   child: Text(
                     title ?? '',
                     style: TextStyle(
-                        fontSize: 18,
-                        color: titleColor,
-                        fontWeight: FontWeight.bold),
+                        fontSize: 18, color: titleColor, fontWeight: FontWeight.bold),
                   ),
                 ),
                 IconButton(
@@ -703,9 +689,7 @@ class ReUseWidget {
                       List results = packageList!
                           .where((user) => user['packageID']
                               .toLowerCase()
-                              .contains(searchcontroll!.text
-                                  .toString()
-                                  .toLowerCase()))
+                              .contains(searchcontroll!.text.toString().toLowerCase()))
                           .toList();
                       print(results);
                       print(results);
@@ -772,9 +756,7 @@ class ReUseWidget {
                   child: Text(
                     title ?? '',
                     style: TextStyle(
-                        fontSize: 18,
-                        color: titleColor,
-                        fontWeight: FontWeight.bold),
+                        fontSize: 18, color: titleColor, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
@@ -809,8 +791,7 @@ class ReUseWidget {
     );
   }
 
-  reUseColumnText(
-      {double? lableSize, content, size, weight, color, title, titleColor}) {
+  reUseColumnText({double? lableSize, content, size, weight, color, title, titleColor}) {
     return Flexible(
       child: SizedBox(
         width: Get.width,
@@ -840,8 +821,7 @@ class ReUseWidget {
     );
   }
 
-  reUseRowText(
-      {double? lableSize, content, size, weight, color, title, titleColor}) {
+  reUseRowText({double? lableSize, content, size, weight, color, title, titleColor}) {
     return Flexible(
       child: SizedBox(
         width: Get.width,
@@ -890,8 +870,7 @@ class ReUseWidget {
         onPressed: () {
           if (function == 'storeUserLogin') {
             print('${nameControl.text} ${phoneControl.text}');
-            gsc.storeUserLogin(
-                name: nameControl.text, phone: phoneControl.text);
+            gsc.storeUserLogin(name: nameControl.text, phone: phoneControl.text);
             // gsc.storeUserLogin(name: '',phone:'' );
           }
           if (function == 'requestDriver') {
@@ -911,6 +890,8 @@ class ReUseWidget {
     return TextFormField(
       keyboardType: keyboardType,
       decoration: InputDecoration(
+        fillColor: theme.liteGrey,
+        //<-- SEE HERE
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide.none,
@@ -997,8 +978,6 @@ class ReUseWidget {
     );
   }
 
-  final glb = GlobalController();
-
   reUseCustomizeButton(
       {isDispose,
       colorBC,
@@ -1013,6 +992,8 @@ class ReUseWidget {
       fontsize,
       value,
       weight}) {
+    final glb = GlobalController();
+
     return Container(
       height: 40,
       width: Get.width,
@@ -1056,7 +1037,7 @@ class ReUseWidget {
               FirebaseAuth.instance.signOut();
               Get.to(const LogInScreen());
             } else if (function == 'editPro') {
-              glb.editProfile(value: value,context: context);
+              glb.editProfile(value: value, context: context);
             } else if (function == '') {
               Get.back();
               FocusManager.instance.primaryFocus?.unfocus();
@@ -1091,8 +1072,7 @@ class ReUseWidget {
     );
   }
 
-  reUseOKCancelDialog(
-      {disposeAllow, data, context, icon, title, content, function}) {
+  reUseOKCancelDialog({disposeAllow, data, context, icon, title, content, function}) {
     return showDialog(
       barrierDismissible: disposeAllow ?? true,
       context: context,
@@ -1123,8 +1103,7 @@ class ReUseWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(
-                          top: Get.height * 0.08, left: 4, right: 4),
+                      padding: EdgeInsets.only(top: Get.height * 0.08, left: 4, right: 4),
                       child: Text(
                         title ?? "",
                         textAlign: TextAlign.center,
@@ -1149,14 +1128,13 @@ class ReUseWidget {
                       children: [
                         Flexible(
                           child: reUseCustomizeButton(
-                              value: data,
-                              function: "",
-                              textcolor: theme.orange,
-                              weight: FontWeight.bold,
-                              text: "Cancel",
-                              fontsize: 16.0,
-                              isBcColor: true,
-
+                            value: data,
+                            function: "",
+                            textcolor: theme.orange,
+                            weight: FontWeight.bold,
+                            text: "Cancel",
+                            fontsize: 16.0,
+                            isBcColor: true,
                           ),
                         ),
                         Flexible(
@@ -1580,9 +1558,7 @@ class ReUseWidget {
                             child: reUseText(
                                 size: 12.0,
                                 color: theme.liteGreen,
-                                content: pkc[index]['status']
-                                    .toString()
-                                    .toUpperCase(),
+                                content: pkc[index]['status'].toString().toUpperCase(),
                                 weight: FontWeight.w900),
                           ),
                         ],
@@ -1645,8 +1621,7 @@ class ReUseWidget {
                                     weight: FontWeight.bold,
                                     size: 16.0,
                                     color: theme.blue,
-                                    content:
-                                        pkc[index]['packageID'] ?? 'No ID'),
+                                    content: pkc[index]['packageID'] ?? 'No ID'),
                               ],
                             ),
                           ),
@@ -1769,8 +1744,7 @@ class ReUseWidget {
                                     weight: FontWeight.bold,
                                     size: 16.0,
                                     color: theme.blue,
-                                    content:
-                                        pkc[index]['packageID'] ?? "No ID"),
+                                    content: pkc[index]['packageID'] ?? "No ID"),
                                 SizedBox(
                                   height: 40,
                                   width: 40,
@@ -1778,8 +1752,7 @@ class ReUseWidget {
                                     onSelected: (item) => {},
                                     itemBuilder: (context) => [
                                       const PopupMenuItem<int>(
-                                          value: 0,
-                                          child: Text('Return to request')),
+                                          value: 0, child: Text('Return to request')),
                                       const PopupMenuItem<int>(
                                           value: 1, child: Text('Delete')),
                                     ],
@@ -1858,8 +1831,8 @@ class ReUseWidget {
                                 width: Get.width,
                                 margin: const EdgeInsets.all(8.0),
                                 padding: const EdgeInsets.all(8.0),
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: theme.grey)),
+                                decoration:
+                                    BoxDecoration(border: Border.all(color: theme.grey)),
                                 child: reUseTextNote(
                                     weight: FontWeight.w400,
                                     size: 14.0,
@@ -1987,8 +1960,7 @@ class ReUseWidget {
     );
   }
 
-  reUseCircleDialog(
-      {disposeAllow, data, context, icon, title, content, function}) {
+  reUseCircleDialog({disposeAllow, data, context, icon, title, content, function}) {
     return showDialog(
       barrierDismissible: disposeAllow ?? true,
       context: context,
@@ -2019,8 +1991,7 @@ class ReUseWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(
-                          top: Get.height * 0.08, left: 4, right: 4),
+                      padding: EdgeInsets.only(top: Get.height * 0.08, left: 4, right: 4),
                       child: Text(
                         title ?? "",
                         textAlign: TextAlign.center,
@@ -2041,8 +2012,7 @@ class ReUseWidget {
                     content,
                     const SizedBox(height: 20.0),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       child: reUseCustomizeButton(
                           value: data,
                           function: function,
@@ -2063,8 +2033,7 @@ class ReUseWidget {
     );
   }
 
-  reUseTextFormField(
-      {TextEditingController? textController, prefixIcon, hintText}) {
+  reUseTextFormField({TextEditingController? textController, prefixIcon, hintText}) {
     return Container(
       height: 60,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -2106,13 +2075,7 @@ class ReUseWidget {
   final token = TextEditingController();
 
   reUseSettingItem(
-      {data,
-      function,
-      title,
-      trailingIcon,
-      trailingIconColor,
-      context,
-      leading}) {
+      {data, function, title, trailingIcon, trailingIconColor, context, leading}) {
     return Container(
       height: 60,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -2178,8 +2141,7 @@ class ReUseWidget {
                               //   ),
                               // ),
                               reUseTextFormField(
-                                  hintText: 'your token',
-                                  textController: token),
+                                  hintText: 'your token', textController: token),
                               const SizedBox(height: 20.0),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -2228,8 +2190,8 @@ class ReUseWidget {
             backgroundColor: Colors.transparent,
             actions: [
               Center(
-                child: SizedBox(
-                    height: 40, width: 40, child: CircularProgressIndicator()),
+                child:
+                    SizedBox(height: 40, width: 40, child: CircularProgressIndicator()),
               )
             ],
           ),
@@ -2350,8 +2312,7 @@ class ReUseWidget {
                     // ),
                     Container(
                       height: 60,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 3),
+                      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
                         color: theme.white,
                         borderRadius: BorderRadius.circular(6),
@@ -2390,8 +2351,7 @@ class ReUseWidget {
                     ),
                     const SizedBox(height: 20.0),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       child: Flexible(
                         child: Container(
                           height: 40,
@@ -2445,7 +2405,13 @@ class ReUseWidget {
   }
 
   reUseColumnTextField(
-      {hintText, controller, labelSize, label, VoidCallback? suffixTap,keyboardType,inputFormatters}) {
+      {hintText,
+      controller,
+      labelSize,
+      label,
+      VoidCallback? suffixTap,
+      keyboardType,
+      inputFormatters}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -2486,5 +2452,50 @@ class ReUseWidget {
         ),
       ],
     );
+  }
+  int selectedItemIndex = -1;
+  String bankName = "";
+  final glb = GlobalController();
+
+  reUseChooseBank() {
+    return SizedBox(
+        height: 100,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.all(8),
+            itemCount: glb.payWay.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: SizedBox(
+                  height: 100,
+                  child: InkWell(
+                    onTap: () async {
+                      selectedItemIndex = index;
+                      bankName = await glb.selectPayWay(glb.payWay[index]['name']);
+                    },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Image(image: AssetImage(glb.payWay[index]["img"])),
+                        CircleAvatar(
+                          minRadius: 20,
+                          backgroundColor: index == selectedItemIndex
+                              ? Colors.white // Change the color of the selected item
+                              : Colors.transparent,
+                          child: Icon(
+                            Icons.check_circle,
+                            size: 50,
+                            color: index == selectedItemIndex
+                                ? Colors.blue // Change the color of the selected item
+                                : Colors.transparent,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }));
   }
 }
