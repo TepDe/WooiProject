@@ -60,6 +60,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     telegramToken.text = mainData[fieldInfo.token] ?? '';
     chatID.text = mainData[fieldInfo.chatid] ?? '';
     bankCode.text = mainData[fieldInfo.ABACode] ?? '';
+    bankName = mainData[fieldInfo.bankName] ?? '';
   }
 
   int selectedItemIndex = -1;
