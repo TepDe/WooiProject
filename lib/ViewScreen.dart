@@ -35,126 +35,12 @@ class _ViewScreenState extends State<ViewScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    FirebaseMessaging.instance
-        .getInitialMessage()
-        .then((RemoteMessage? message) {
-      if (message != null) {
-        // Handle the initial message when the app is launched from a notification
-        _handleMessage(message);
-      }
-    });
+    glb.checkUserInformation();
   }
 
-  Future<void> showNotification() async {
-    try{
-      AndroidNotificationDetails androidPlatformChannelSpecifics = const AndroidNotificationDetails(
-        'channel_id', 'channel_name',
-        importance: Importance.max,
-        priority: Priority.high,
-        ticker: 'ticker',
-        styleInformation: BigTextStyleInformation(''),
-      );
-
-      NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
-      await flutterLocalNotificationsPlugin.show(
-        0, 'Notification Title', 'Notification Body', platformChannelSpecifics,
-      );
-      setState(() {
-
-      });
-    }catch(e){
-      print(e);
-    }
+  checkInfo(){
 
   }
-
-  Future<void> requestNotificationPermissions() async {
-    final PermissionStatus status = await Permission.notification.request();
-    final PermissionStatus statusSms = await Permission.sms.request();
-    if (status.isGranted) {
-      // Notification permissions granted
-    } else if (status.isDenied) {
-      // Notification permissions denied
-    } else if (status.isPermanentlyDenied) {
-      // Notification permissions permanently denied, open app settings
-      await openAppSettings();
-    }
-    if (statusSms.isDenied) {
-
-      // We didn't ask for permission yet or the permission has been denied before but not permanently.
-
-      await Permission.sms.request();
-
-    }
-  }
-  final _localNotifications = FlutterLocalNotificationsPlugin();
-
-  Future<NotificationDetails> _notificationDetails() async {
-
-
-    AndroidNotificationDetails androidPlatformChannelSpecifics =
-    const AndroidNotificationDetails(
-      '3213213',
-      'channel name',
-      groupKey: 'com.example.flutter_push_notifications',
-      channelDescription: 'channel description',
-      importance: Importance.max,
-      priority: Priority.max,
-      playSound: true,
-      ticker: 'ticker',
-      largeIcon: DrawableResourceAndroidBitmap('justwater'),
-      color: Color(0xff2196f3),
-    );
-
-    NotificationDetails platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics);
-
-    return platformChannelSpecifics;
-  }
-
-  void _handleMessage(RemoteMessage message) {
-    print('Message received: ${message.notification?.body}');
-
-
-    final reUse = ReUseWidget();
-    reUse.reUseCircleDialog(content: Text("${message.notification?.title}"));
-    setState(() {
-
-    });
-    // Handle the message when the app is opened from a notification
-    // Add your custom logic to handle the message here
-  }
-
-  Future<void> _onSelectNotification(String? payload) async {
-    // Handle notification selection here
-  }
-
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-       FlutterLocalNotificationsPlugin();
-
-  Future<void> _showNotification() async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails('your_channel_id', 'your_channel_name',
-            importance: Importance.max, priority: Priority.high);
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'Database Updated',
-      'New data has been added to the database.',
-      platformChannelSpecifics,
-      payload: 'Default_Sound',
-    );
-  }
-
-  late DateTime currentBackPressTime;
-
-  bool onWillPop() {
-    return true;
-  }
-
-  int doubleClick = 0;
   var ctime;
   final clsLan = ClsLanguage();
 
