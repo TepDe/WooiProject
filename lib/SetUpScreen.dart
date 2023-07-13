@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
+import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/ViewScreen.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
@@ -40,10 +43,10 @@ class _SetUpScreenState extends State<SetUpScreen> {
   fetchUserData() async {
     fetch.doc(auth.currentUser!.uid.toString()).get().then((DocumentSnapshot documentSnapshot) async {
       userData = documentSnapshot.data() as Map<String, dynamic>;
-      lastName.text = userData['lastname']??"";
-      firstName.text = userData["firstname"]??"";
-      phoneNumber.text = userData['phoneNumber']??"";
-      bankCode.text = userData[fieldInfo.bankCode]??"";
+      lastName.text = userData['lastname'] ?? "";
+      firstName.text = userData["firstname"] ?? "";
+      phoneNumber.text = userData['phoneNumber'] ?? "";
+      bankCode.text = userData[fieldInfo.bankCode] ?? "";
       setState(() {});
     });
 
@@ -67,22 +70,26 @@ class _SetUpScreenState extends State<SetUpScreen> {
           if (lastName.text.isEmpty ||
               firstName.text.isEmpty ||
               phoneNumber.text.isEmpty ||
-              bankCode.text.isEmpty||bankName==""){
-            await reUse.reUseCircleDialog(
+              bankCode.text.isEmpty ||
+              bankName == "") {
+            await reUse.reUseYesNoDialog(
+                icon: Icons.question_mark_outlined,
+                content: Text(clsLan.emptyFill),
                 context: context,
-                icon: Icons.close_rounded,
-                title: clsLan.empty,
-                content: Center(
-                  child: Text(
-                    clsLan.emptyFill,
-                    style: TextStyle(
-                      color: theme.black,
-                    ),
-                  ),
-                ));
+                noText: clsLan.exit,
+                yesText: clsLan.continues,
+                noTap: () {
+                  exit(0);
+                },
+                yesTap: () {
+                  Navigator.pop(context);
+                },
+                title: clsLan.remainEmpty);
+          } else {
+            Get.to(const LogInScreen());
+            setState(() {});
           }
-
-            return Future.value(true);
+          return false;
         },
         child: SafeArea(
           child: Stack(
@@ -145,7 +152,7 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                 flex: 8,
                                 child: reUse.reUseTextBox(
                                   controller: firstName,
-                                hind: clsLan.fname,
+                                  hind: clsLan.fname,
                                   obscureText: false,
                                 ),
                               ),
@@ -158,7 +165,7 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                 flex: 8,
                                 child: reUse.reUseTextBox(
                                   controller: lastName,
-                                hind: clsLan.lname,
+                                  hind: clsLan.lname,
                                 ),
                               ),
                             ],
@@ -169,7 +176,7 @@ class _SetUpScreenState extends State<SetUpScreen> {
                           reUse.reUseTextBox(
                             controller: phoneNumber,
                             keyboardType: TextInputType.number,
-                          hind: clsLan.phoneNumber,
+                            hind: clsLan.phoneNumber,
                           ),
                           SizedBox(
                             height: Get.height * 0.03,
@@ -202,7 +209,7 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                               Image(image: AssetImage(glb.payWay[index]["img"])),
                                               CircleAvatar(
                                                 minRadius: 20,
-                                                backgroundColor:index == selectedItemIndex
+                                                backgroundColor: index == selectedItemIndex
                                                     ? Colors.white // Change the color of the selected item
                                                     : Colors.transparent,
                                                 child: Icon(
@@ -225,7 +232,7 @@ class _SetUpScreenState extends State<SetUpScreen> {
                           reUse.reUseTextBox(
                             controller: bankCode,
                             keyboardType: TextInputType.number,
-                          hind: clsLan.receiveCode,
+                            hind: clsLan.receiveCode,
                           ),
                           SizedBox(
                             height: Get.height * 0.03,
@@ -303,7 +310,7 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                     await reUse.reUseCircleDialog(
                                         context: context,
                                         icon: Icons.close_rounded,
-                                        title: clsLan.kvas,
+                                        title: clsLan.remainEmpty,
                                         function: '',
                                         content: Center(
                                           child: Text(
@@ -326,7 +333,9 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                             actions: [
                                               Center(
                                                 child: SizedBox(
-                                                    height: 40, width: 40, child: CircularProgressIndicator()),
+                                                    height: 40,
+                                                    width: 40,
+                                                    child: CircularProgressIndicator()),
                                               )
                                             ],
                                           ),
