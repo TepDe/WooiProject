@@ -2149,7 +2149,7 @@ class ReUseWidget {
 
   final token = TextEditingController();
 
-  reUseSettingItem({data, function, title, trailingIcon, trailingIconColor, context, leading}) {
+  reUseSettingItem({data, function, title, Widget? trailing, trailingIconColor, context, leading}) {
     return Container(
       height: 60,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -2240,9 +2240,9 @@ class ReUseWidget {
           },
           child: Center(
             child: ListTile(
-              title: title,
-              trailing: trailingIcon,
-              leading: leading,
+              title: title??Container(),
+              trailing: trailing??Container(),
+              leading: leading??Container(),
             ),
           ),
         ),
