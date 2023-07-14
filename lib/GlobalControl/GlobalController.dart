@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -16,6 +15,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/EditProfileScreen.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
@@ -711,28 +711,31 @@ class GlobalController {
   }
 
   bool isSuccessEditProfile = false;
-
+  final clsLan = ClsLanguage();
   editProfile({value, context}) async {
     final reUse = ReUseWidget();
     final theme = ThemesApp();
     try {
       CollectionReference users = FirebaseFirestore.instance.collection('Users');
       await users.doc(auth.currentUser!.uid).update({
-        fieldInfo.firstName: value.firstName,
-        fieldInfo.lastName: value.lastName,
-        fieldInfo.phoneNumber: value.phoneNumber,
-        fieldInfo.token: value.token,
-        fieldInfo.chatid: value.chatid,
-        fieldInfo.ABACode: value.ABACode,
+        'firstName': value.firstName,
+        'lastName': value.lastName,
+        'phoneNumber': value.phoneNumber,
+        'token': value.token,
+        'chatid': value.chatid,
+        'ABACode': value.ABACode,
+        'bankCode': value.bankCode,
+        'bankName': value.bankName,
       }).then((value) async {
         print("User Added");
+        Navigator.pop(context);
         await reUse.reUseCircleDialog(
             context: context,
-            icon: Icons.account_circle_rounded,
-            title: 'Success',
+            icon: Icons.check_circle_rounded,
+            title:  clsLan.stCom,
             content: Center(
               child: Text(
-                "Success",
+                clsLan.updatedAccount,
                 style: TextStyle(
                   color: theme.black,
                 ),
@@ -742,11 +745,11 @@ class GlobalController {
         print("Failed to add user: $error");
         await reUse.reUseCircleDialog(
             context: context,
-            icon: Icons.account_circle_rounded,
-            title: 'failed',
+            icon: Icons.close_rounded,
+            title: clsLan.fail,
             content: Center(
               child: Text(
-                error,
+                clsLan.tryAgain,
                 style: TextStyle(
                   color: theme.black,
                 ),
@@ -756,118 +759,6 @@ class GlobalController {
     } catch (e) {
       print(e);
     }
-  }
-
-  permissionMessage() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-    NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-    print('User granted permission: ${settings.authorizationStatus}');
-  }
-
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-  void configureFirebaseMessaging(BuildContext context) {
-    final theme = ThemesApp();
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      showDialog(
-        barrierDismissible: true,
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            actions: [
-              Stack(
-                clipBehavior: Clip.none,
-                alignment: Alignment.topCenter,
-                children: [
-                  Positioned(
-                    top: -60.0,
-                    child: CircleAvatar(
-                      radius: 60.0,
-                      backgroundColor: theme.white,
-                      child: Icon(
-                        Icons.confirmation_num_sharp,
-                        color: theme.orange,
-                        size: 100.0,
-                      ),
-                    ),
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: Get.height * 0.08, left: 4, right: 4),
-                        child: Text(
-                          title ?? "",
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20.0),
-                      // Text(
-                      //   content,
-                      //   textAlign: TextAlign.center,
-                      //   style: const TextStyle(
-                      //     fontSize: 16.0,
-                      //   ),
-                      // ),
-                      Text('dkbsbdbjdfgn'),
-                      const SizedBox(height: 20.0),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                        child: ElevatedButton(
-                          child: const Text('Close'),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Get.to(const ViewScreen());
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
-      );
-    });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Notification'),
-            content: Text(message.notification?.body ?? 'No message body'),
-            actions: [
-              ElevatedButton(
-                child: const Text('Close'),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Get.to(const ViewScreen());
-                },
-              ),
-            ],
-          );
-        },
-      );
-    });
   }
 
   List payWay = [
@@ -890,5 +781,10 @@ class GlobalController {
     filteredList =
         payWay.where((item) => item['name'].toLowerCase().toString().trim().contains(data)).toList();
     return filteredList[0]['name'];
+  }
+
+  getBank({bankName}){
+    int index = payWay.indexWhere((person) =>person['name'] == bankName);
+    return index;
   }
 }
