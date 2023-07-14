@@ -59,5 +59,8 @@ class ClsLanguage {
   String remainEmpty = "ខ្វះព័ត៌មាន";
   String payWay = "ជំរើសបង់ប្រាក់";
   String exit = "ចេញ";
-
+  String updatedAccount = "គណនីរបស់អ្នកត្រូវបានដំឡើងដោយជោគជ័យ";
+  String fail = "បរាជ័យ";
+  String tryAgain = "សូម​ព្យាយាម​ម្តង​ទៀត";
+  String bankName = "ឈ្មោះសេវាបង់ប្រាក់";
 }
