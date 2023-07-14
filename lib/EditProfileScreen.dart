@@ -29,7 +29,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final clsLan = ClsLanguage();
   final firstName = TextEditingController();
   final lastName = TextEditingController();
-  final receiveMoneyCode = TextEditingController();
   final phoneBox = TextEditingController();
   final bankCode = TextEditingController();
   final telegramToken = TextEditingController();
@@ -58,7 +57,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     firstName.text = mainData[fieldInfo.firstName] ?? '';
     lastName.text = mainData[fieldInfo.lastName] ?? '';
     phoneBox.text = mainData[fieldInfo.phoneNumber] ?? '';
-    receiveMoneyCode.text = mainData[fieldInfo.bankCode] ?? '';
     telegramToken.text = mainData[fieldInfo.token] ?? '';
     chatID.text = mainData[fieldInfo.chatid] ?? '';
     bankCode.text = mainData[fieldInfo.bankCode] ?? '';
@@ -191,11 +189,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         FilteringTextInputFormatter.digitsOnly,
                       ],
                       suffixTap: () {
-                        receiveMoneyCode.clear();
+                        bankCode.clear();
                         setState(() {});
                       },
                       label: clsLan.receiveMoneyNumber,
-                      controller: receiveMoneyCode,
+                      controller: bankCode,
                       hintText: ""),
                   reUse.reUseColumnTextField(
                       suffixTap: () {
@@ -240,7 +238,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     firstName: firstName.text.trim().toString(),
                                     lastName: lastName.text.trim().toString(),
                                     phoneNumber: phoneBox.text.trim().toString(),
-                                    ABACode: receiveMoneyCode.text.trim().toString(),
                                     token: telegramToken.text.trim().toString(),
                                     chatid: chatID.text.trim().toString(),
                                     bankName: bankName,
@@ -248,7 +245,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 if (firstName.text == mainData[fieldInfo.firstName] &&
                                     lastName.text == mainData[fieldInfo.lastName] &&
                                     phoneBox.text == mainData[fieldInfo.phoneNumber] &&
-                                    receiveMoneyCode.text == mainData[fieldInfo.ABACode] &&
                                     telegramToken.text == mainData[fieldInfo.token] &&
                                     chatID.text == mainData[fieldInfo.chatid] &&
                                     bankCode.text == mainData[fieldInfo.bankCode] &&
@@ -288,8 +284,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       noTap: () {
                                         Navigator.pop(context);
                                       },
-                                      yesTap: () {
-                                        glb.editProfile(value:profile ,context: context);
+                                      yesTap: () async {
+                                        await glb.editProfile(value:profile ,context: context);
                                       },
                                       title: clsLan.change);
                                 }
@@ -369,7 +365,6 @@ class UpdateProfile {
   String firstName = "firstName";
   String lastName = "lastName";
   String phoneNumber = "phoneNumber";
-  String ABACode = "ABACode";
   String token = "token";
   String chatid = "chatid";
   String bankName = "bankName";
@@ -383,7 +378,6 @@ class UpdateProfile {
       "receiveMoneyCode": data['receiveMoneyCode'],
       "token": data['token'],
       "chatid": data['chatid'],
-      "ABACode ": data['ABACode'],
       "bankName":data["bankName"],
       "bankCode":data["bankCode"],
     };
@@ -394,7 +388,6 @@ class UpdateProfile {
       "firstName": firstName,
       "lastName": lastName,
       "phoneNumber": phoneNumber,
-      "receiveMoneyCode": ABACode,
       "token": token,
       "chatid": chatid,
       "bankName": bankName,
@@ -408,7 +401,6 @@ class UpdateProfile {
       required this.firstName,
       required this.lastName,
       required this.phoneNumber,
-      required this.ABACode,
       required this.token,
       required this.chatid});
 }
