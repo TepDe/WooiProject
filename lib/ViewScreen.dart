@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -42,7 +41,6 @@ class _ViewScreenState extends State<ViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    glb.configureFirebaseMessaging(context);
     return Scaffold(
         body: SafeArea(
       child: WillPopScope(
