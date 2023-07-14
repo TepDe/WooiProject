@@ -8,8 +8,6 @@ import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/ViewScreen.dart';
 import 'dart:async';
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   // await Firebase.initializeApp(
   //     options: const FirebaseOptions(
   //         authDomain: 'wooi-c715e.web.app',
@@ -18,6 +16,8 @@ void main() async {
   //         appId: '1:1093614007557:android:9efb550fcadd369394f36c',
   //         messagingSenderId: '1093614007557',
   //         projectId: 'wooi-c715e'));
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(GetMaterialApp(debugShowCheckedModeBanner: false, home: MyApp()));
 }
 
