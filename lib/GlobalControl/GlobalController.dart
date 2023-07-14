@@ -787,4 +787,10 @@ class GlobalController {
     int index = payWay.indexWhere((person) =>person['name'] == bankName);
     return index;
   }
+
+  getBankImage({bankName}){
+    var object =
+        payWay.where((item) => item['name'].contains(bankName)).toList();
+    return object;
+  }
 }
