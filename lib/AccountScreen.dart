@@ -271,15 +271,23 @@ class _AccountScreenState extends State<AccountScreen> {
                       context: context,
                       leading: const Icon(Icons.phone)),
                   reUse.reUseSettingItem(
-                      trailing: imagePath != null
-                          ? Text(
-                              imagePath[0]['name'].toString().toUpperCase(),
-                              style: TextStyle(color: theme.grey),
-                            )
-                          : Container(),
-                      title: Text(clsLan.payService),
+                      trailing: Text(
+                        userData[fieldInfo.bankName].toString().toUpperCase() ?? 'loading...',
+                        style: TextStyle(color: theme.grey),
+                      ),
+                      title:  Text(clsLan.payService),
                       context: context,
                       leading: const Icon(Icons.monetization_on)),
+                  // reUse.reUseSettingItem(
+                  //     trailing: imagePath != null
+                  //         ? Text(
+                  //             imagePath[0]['name'].toString().toUpperCase(),
+                  //             style: TextStyle(color: theme.grey),
+                  //           )
+                  //         : Container(),
+                  //     title: Text(clsLan.payService),
+                  //     context: context,
+                  //     leading: const Icon(Icons.monetization_on)),
                   Container(
                     height: 60,
                     margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
