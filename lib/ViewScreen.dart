@@ -1,15 +1,11 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:wooiproject/AccountScreen.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/HomeScreen.dart';
-import 'package:wooiproject/NotificationScreen.dart';
-import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
 class ViewScreen extends StatefulWidget {
@@ -35,9 +31,36 @@ class _ViewScreenState extends State<ViewScreen> {
     // TODO: implement initState
     super.initState();
     glb.checkUserInformation();
+    showNotification();
   }
   var ctime;
   final clsLan = ClsLanguage();
+  void showNotification() async {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+    const AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('app_icon');
+
+    final InitializationSettings initializationSettings =
+    InitializationSettings(android: initializationSettingsAndroid);
+
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+        'channel_id', 'channel_name',
+        importance: Importance.high, priority: Priority.high);
+
+    const NotificationDetails platformChannelSpecifics =
+    NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+        0, 'Notification', 'This is a notification', platformChannelSpecifics);
+    setState(() {
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
