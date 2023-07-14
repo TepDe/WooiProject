@@ -251,6 +251,14 @@ class _AccountScreenState extends State<AccountScreen> {
                       title: const Text('Phone Number'),
                       context: context,
                       leading: const Icon(Icons.phone)),
+                  reUse.reUseSettingItem(
+                      trailingIcon: Text(
+                        userData[fieldInfo.bankName] ?? 'loading...',
+                        style: TextStyle(color: theme.grey),
+                      ),
+                      title:  Text(clsLan.bankName),
+                      context: context,
+                      leading: const Icon(Icons.monetization_on)),
                   Container(
                     height: 60,
                     margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -271,7 +279,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         trailing: SizedBox(
                             width: textWidth,
                             child: Text(
-                              userData[fieldInfo.ABACode] ?? "Not Include Yet",
+                              userData[fieldInfo.bankCode] ?? "Not Include Yet",
                               maxLines: 1,
                               style: TextStyle(color: theme.grey, overflow: TextOverflow.ellipsis),
                             )),
