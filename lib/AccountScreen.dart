@@ -94,7 +94,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   var fetch = FirebaseFirestore.instance.collection('Users');
   var userData = {};
-  var imagePath = [];
+  var imagePath;
 
   fetchUserData() async {
     fetch
@@ -105,7 +105,6 @@ class _AccountScreenState extends State<AccountScreen> {
       imagePath = await glb.getBankImage(bankName: userData[fieldInfo.bankName]);
       setState(() {});
     });
-    setState(() {});
   }
 
   final reUse = ReUseWidget();
@@ -272,7 +271,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       context: context,
                       leading: const Icon(Icons.phone)),
                   reUse.reUseSettingItem(
-                      trailingIcon: imagePath[0]['img'] != null
+                      trailingIcon: imagePath != null
                           ? Flexible(child: Image(image: AssetImage(imagePath[0]['img'])))
                           : Container(),
                       title: Text(clsLan.payService),
