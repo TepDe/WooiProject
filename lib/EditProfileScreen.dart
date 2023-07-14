@@ -10,6 +10,7 @@ import 'package:wooiproject/Distination/clsDistin.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
+import 'package:wooiproject/ViewScreen.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
@@ -47,6 +48,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final fieldData = FieldData();
   final fieldInfo = FieldInfo();
   FirebaseAuth auth = FirebaseAuth.instance;
+  int selectedBank = -1;
 
   @override
   void initState() {
@@ -56,245 +58,268 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     firstName.text = mainData[fieldInfo.firstName] ?? '';
     lastName.text = mainData[fieldInfo.lastName] ?? '';
     phoneBox.text = mainData[fieldInfo.phoneNumber] ?? '';
-    receiveMoneyCode.text = mainData[fieldInfo.ABACode] ?? '';
+    receiveMoneyCode.text = mainData[fieldInfo.bankCode] ?? '';
     telegramToken.text = mainData[fieldInfo.token] ?? '';
     chatID.text = mainData[fieldInfo.chatid] ?? '';
     bankCode.text = mainData[fieldInfo.ABACode] ?? '';
     bankName = mainData[fieldInfo.bankName] ?? '';
+    selectedBank = glb.getBank(bankName: bankName);
+    print(selectedBank);
+    print(selectedBank);
   }
 
-  int selectedItemIndex = -1;
   String bankName = "";
   int bankIndex = -1;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton.icon(
-                      onPressed: () {
-                        // Navigator.of(context).push(
-                        //   MaterialPageRoute(
-                        //     builder: (context) => const ViewScreen(),
-                        //   ),
-                        // );
-                        Get.back();
+      child: WillPopScope(
+        onWillPop: () async {
+          Get.to(ViewScreen());
+          setState(() {});
+          return true;
+        },
+        child: Scaffold(
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton.icon(
+                        onPressed: () {
+                          // Navigator.of(context).push(
+                          //   MaterialPageRoute(
+                          //     builder: (context) => const ViewScreen(),
+                          //   ),
+                          // );
+                          Get.to(ViewScreen());
+                          setState(() {});
+                        },
+                        icon: Icon(Icons.arrow_back_rounded, color: theme.black, size: 30),
+                        label: reUse.reUseText(
+                            content: "Back", size: 20.0, weight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                  reUse.reUseColumnTextField(
+                      suffixTap: () {
+                        firstName.clear();
                         setState(() {});
                       },
-                      icon: Icon(Icons.arrow_back_rounded, color: theme.black, size: 30),
-                      label: reUse.reUseText(
-                          content: "Back", size: 20.0, weight: FontWeight.w500),
-                    ),
-                  ],
-                ),
-                reUse.reUseColumnTextField(
-                    suffixTap: () {
-                      firstName.clear();
-                      setState(() {});
-                    },
-                    label: clsLan.fname,
-                    controller: firstName,
-                    hintText: ""),
-                reUse.reUseColumnTextField(
-                    suffixTap: () {
-                      lastName.clear();
-                      setState(() {});
-                    },
-                    label: clsLan.lname,
-                    controller: lastName,
-                    hintText: ""),
-                reUse.reUseColumnTextField(
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    suffixTap: () {
-                      phoneBox.clear();
-                      setState(() {});
-                    },
-                    label: clsLan.phoneNumber,
-                    controller: phoneBox,
-                    hintText: ""),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: reUse.reUseText(
-                      content: clsLan.payWay, size: textSize, weight: FontWeight.w500),
-                ),
-                SizedBox(
-                    height: 100,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.all(8),
-                        itemCount: glb.payWay.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: SizedBox(
-                              height: 100,
-                              child: InkWell(
-                                onTap: () async {
-                                  selectedItemIndex = index;
-                                  bankName =
-                                      await glb.selectPayWay(glb.payWay[index]['name']);
-                                  setState(() {});
-                                },
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    Image(image: AssetImage(glb.payWay[index]["img"])),
-                                    CircleAvatar(
-                                      minRadius: 20,
-                                      backgroundColor: index == selectedItemIndex
-                                          ? Colors
-                                              .white // Change the color of the selected item
-                                          : Colors.transparent,
-                                      child: Icon(
-                                        Icons.check_circle,
-                                        size: 50,
-                                        color: index == selectedItemIndex
+                      label: clsLan.fname,
+                      controller: firstName,
+                      hintText: ""),
+                  reUse.reUseColumnTextField(
+                      suffixTap: () {
+                        lastName.clear();
+                        setState(() {});
+                      },
+                      label: clsLan.lname,
+                      controller: lastName,
+                      hintText: ""),
+                  reUse.reUseColumnTextField(
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      suffixTap: () {
+                        phoneBox.clear();
+                        setState(() {});
+                      },
+                      label: clsLan.phoneNumber,
+                      controller: phoneBox,
+                      hintText: ""),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: reUse.reUseText(
+                        content: clsLan.payWay, size: textSize, weight: FontWeight.w500),
+                  ),
+                  SizedBox(
+                      height: 100,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.all(8),
+                          itemCount: glb.payWay.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: SizedBox(
+                                height: 100,
+                                child: InkWell(
+                                  onTap: () async {
+                                    selectedBank = index;
+                                    bankName =
+                                        await glb.selectPayWay(glb.payWay[index]['name']);
+                                    setState(() {});
+                                  },
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Image(image: AssetImage(glb.payWay[index]["img"])),
+                                      CircleAvatar(
+                                        minRadius: 20,
+                                        backgroundColor: index == selectedBank
                                             ? Colors
-                                                .blue // Change the color of the selected item
+                                                .white // Change the color of the selected item
                                             : Colors.transparent,
-                                      ),
-                                    )
-                                  ],
+                                        child: Icon(
+                                          Icons.check_circle,
+                                          size: 50,
+                                          color: index == selectedBank
+                                              ? Colors
+                                                  .blue // Change the color of the selected item
+                                              : Colors.transparent,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        })),
-                reUse.reUseColumnTextField(
-                    keyboardType: const TextInputType.numberWithOptions(decimal: false),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    suffixTap: () {
-                      receiveMoneyCode.clear();
-                      setState(() {});
-                    },
-                    label: clsLan.receiveMoneyNumber,
-                    controller: receiveMoneyCode,
-                    hintText: ""),
-                reUse.reUseColumnTextField(
-                    suffixTap: () {
-                      telegramToken.clear();
-                      setState(() {});
-                    },
-                    label: clsLan.insertTelegramToken,
-                    controller: telegramToken,
-                    hintText: ""),
-                reUse.reUseColumnTextField(
-                    suffixTap: () {
-                      chatID.clear();
-                      setState(() {});
-                    },
-                    label: clsLan.insertTelegramChatID,
-                    controller: chatID,
-                    hintText: ""),
-                SizedBox(height: Get.height * 0.01),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Flexible(
-                      child: Container(
-                        height: 50,
-                        width: Get.width,
-                        decoration: BoxDecoration(
-                          color: theme.orange,
-                          borderRadius: BorderRadius.circular(12),
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //     color: Colors.grey,
-                          //     blurRadius: 1,
-                          //     //offset: Offset(4, 8), // Shadow position
-                          //   ),
-                          // ],
-                        ),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () async {
-                              final profile = UpdateProfile(
-                                firstName.text.trim().toString(),
-                                lastName.text.trim().toString(),
-                                phoneBox.text.trim().toString(),
-                                receiveMoneyCode.text.trim().toString(),
-                                telegramToken.text.trim().toString(),
-                                chatID.text.trim().toString(),
-                              );
-                              print(profile);
-                              print(profile);
-
-                              if (firstName.text == mainData[fieldInfo.firstName] &&
-                                  lastName.text == mainData[fieldInfo.lastName] &&
-                                  phoneBox.text == mainData[fieldInfo.phoneNumber] &&
-                                  receiveMoneyCode.text == mainData[fieldInfo.ABACode] &&
-                                  telegramToken.text == mainData[fieldInfo.token] &&
-                                  chatID.text == mainData[fieldInfo.chatid]) {
-                                Get.back();
-                              } else if (firstName.text.isEmpty ||
-                                  lastName.text.isEmpty ||
-                                  phoneBox.text.isEmpty ||
-                                  receiveMoneyCode.text.isEmpty ||
-                                  telegramToken.text.isEmpty ||
-                                  chatID.text.isEmpty ||
-                                  bankName == "") {
-                                await reUse.reUseCircleDialog(
-                                    function: '',
-                                    context: context,
-                                    icon: Icons.back_hand_rounded,
-                                    title: clsLan.empty,
-                                    content: Center(
-                                      child: Text(
-                                        clsLan.emptyFill,
-                                        style: TextStyle(
-                                          color: theme.black,
+                            );
+                          })),
+                  reUse.reUseColumnTextField(
+                      keyboardType: const TextInputType.numberWithOptions(decimal: false),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      suffixTap: () {
+                        receiveMoneyCode.clear();
+                        setState(() {});
+                      },
+                      label: clsLan.receiveMoneyNumber,
+                      controller: receiveMoneyCode,
+                      hintText: ""),
+                  reUse.reUseColumnTextField(
+                      suffixTap: () {
+                        telegramToken.clear();
+                        setState(() {});
+                      },
+                      label: clsLan.insertTelegramToken,
+                      controller: telegramToken,
+                      hintText: ""),
+                  reUse.reUseColumnTextField(
+                      suffixTap: () {
+                        chatID.clear();
+                        setState(() {});
+                      },
+                      label: clsLan.insertTelegramChatID,
+                      controller: chatID,
+                      hintText: ""),
+                  SizedBox(height: Get.height * 0.01),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Flexible(
+                        child: Container(
+                          height: 50,
+                          width: Get.width,
+                          decoration: BoxDecoration(
+                            color: theme.orange,
+                            borderRadius: BorderRadius.circular(12),
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     color: Colors.grey,
+                            //     blurRadius: 1,
+                            //     //offset: Offset(4, 8), // Shadow position
+                            //   ),
+                            // ],
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () async {
+                                final profile = UpdateProfile(
+                                    firstName: firstName.text.trim().toString(),
+                                    lastName: lastName.text.trim().toString(),
+                                    phoneNumber: phoneBox.text.trim().toString(),
+                                    ABACode: receiveMoneyCode.text.trim().toString(),
+                                    token: telegramToken.text.trim().toString(),
+                                    chatid: chatID.text.trim().toString(),
+                                    bankName: bankName,
+                                    bankCode:  bankCode.text.trim().toString());
+                                if (firstName.text == mainData[fieldInfo.firstName] &&
+                                    lastName.text == mainData[fieldInfo.lastName] &&
+                                    phoneBox.text == mainData[fieldInfo.phoneNumber] &&
+                                    receiveMoneyCode.text == mainData[fieldInfo.ABACode] &&
+                                    telegramToken.text == mainData[fieldInfo.token] &&
+                                    chatID.text == mainData[fieldInfo.chatid] &&
+                                    bankCode.text == mainData[fieldInfo.bankCode] &&
+                                    bankName == mainData[fieldInfo.bankName]) {
+                                  Get.back();
+                                } else if (firstName.text.isEmpty ||
+                                    lastName.text.isEmpty ||
+                                    phoneBox.text.isEmpty ||
+                                    receiveMoneyCode.text.isEmpty ||
+                                    telegramToken.text.isEmpty ||
+                                    chatID.text.isEmpty ||
+                                    bankCode.text.isEmpty ||
+                                    bankName == "") {
+                                  await reUse.reUseCircleDialog(
+                                      function: '',
+                                      context: context,
+                                      icon: Icons.back_hand_rounded,
+                                      title: clsLan.empty,
+                                      content: Center(
+                                        child: Text(
+                                          clsLan.emptyFill,
+                                          style: TextStyle(
+                                            color: theme.black,
+                                          ),
                                         ),
-                                      ),
-                                    ));
-                              } else {
-                                await reUse.reUseOKCancelDialog(
-                                    data: profile,
-                                    icon: Icons.account_circle,
-                                    content: Text(clsLan.changeInfo),
-                                    context: context,
-                                    title: clsLan.change);
-                              }
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'UPDATE',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: theme.white,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
+                                      ));
+                                } else {
+                                  // await reUse.reUseOKCancelDialog(
+                                  //     data: profile,
+                                  //     icon: Icons.account_circle,
+                                  //     content: Text(clsLan.changeInfo),
+                                  //     context: context,
+                                  //     title: clsLan.change);
+                                  await reUse.reUseYesNoDialog(
+                                      icon: Icons.account_circle,
+                                      content: Text(clsLan.emptyFill),
+                                      context: context,
+                                      noText: clsLan.exit,
+                                      yesText: clsLan.continues,
+                                      noTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      yesTap: () {
+                                        glb.editProfile(value:profile ,context: context);
+                                      },
+                                      title: clsLan.change);
+                                }
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'UPDATE',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: theme.white,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: Get.height * 0.5,
-                ),
-              ],
+                    ],
+                  ),
+                  SizedBox(
+                    height: Get.height * 0.5,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -350,6 +375,8 @@ class UpdateProfile {
   String ABACode = "ABACode";
   String token = "token";
   String chatid = "chatid";
+  String bankName = "bankName";
+  String bankCode = "bankCode";
 
   toJson(data) {
     return {
@@ -360,6 +387,8 @@ class UpdateProfile {
       "token": data['token'],
       "chatid": data['chatid'],
       "ABACode ": data['ABACode'],
+      "bankName":data["bankName"],
+      "bankCode":data["bankCode"],
     };
   }
 
@@ -371,9 +400,18 @@ class UpdateProfile {
       "receiveMoneyCode": ABACode,
       "token": token,
       "chatid": chatid,
+      "bankName": bankName,
+      "bankCode": bankCode,
     };
   }
 
-  UpdateProfile(this.firstName, this.lastName, this.phoneNumber, this.ABACode, this.token,
-      this.chatid);
+  UpdateProfile(
+      {required this.bankCode,
+      required this.bankName,
+      required this.firstName,
+      required this.lastName,
+      required this.phoneNumber,
+      required this.ABACode,
+      required this.token,
+      required this.chatid});
 }
