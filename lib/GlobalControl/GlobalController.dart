@@ -711,18 +711,17 @@ class GlobalController {
 
   bool isSuccessEditProfile = false;
   final clsLan = ClsLanguage();
+
   editProfile({value, context}) async {
     final reUse = ReUseWidget();
     final theme = ThemesApp();
     try {
-      CollectionReference users = FirebaseFirestore.instance.collection('Users');
-      await users.doc(auth.currentUser!.uid).update({
+      await documentStream.doc(auth.currentUser!.uid).update({
         'firstName': value.firstName,
         'lastName': value.lastName,
         'phoneNumber': value.phoneNumber,
         'token': value.token,
         'chatid': value.chatid,
-        'ABACode': value.ABACode,
         'bankCode': value.bankCode,
         'bankName': value.bankName,
       }).then((value) async {
