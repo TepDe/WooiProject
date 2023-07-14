@@ -61,7 +61,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     receiveMoneyCode.text = mainData[fieldInfo.bankCode] ?? '';
     telegramToken.text = mainData[fieldInfo.token] ?? '';
     chatID.text = mainData[fieldInfo.chatid] ?? '';
-    bankCode.text = mainData[fieldInfo.ABACode] ?? '';
+    bankCode.text = mainData[fieldInfo.bankCode] ?? '';
     bankName = mainData[fieldInfo.bankName] ?? '';
     selectedBank = glb.getBank(bankName: bankName);
     print(selectedBank);
@@ -257,15 +257,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 } else if (firstName.text.isEmpty ||
                                     lastName.text.isEmpty ||
                                     phoneBox.text.isEmpty ||
-                                    receiveMoneyCode.text.isEmpty ||
-                                    telegramToken.text.isEmpty ||
-                                    chatID.text.isEmpty ||
                                     bankCode.text.isEmpty ||
                                     bankName == "") {
                                   await reUse.reUseCircleDialog(
                                       function: '',
                                       context: context,
-                                      icon: Icons.back_hand_rounded,
+                                      icon: Icons.close_rounded,
                                       title: clsLan.empty,
                                       content: Center(
                                         child: Text(
