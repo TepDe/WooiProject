@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,35 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
     //testObj();
     alertNoIntenet();
     // glb.getOtp();
-    showNotification();
-  }
-
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
-  Future<void> showNotification() async {
-    try {
-      AndroidNotificationDetails androidPlatformChannelSpecifics =
-          const AndroidNotificationDetails(
-        'channel_id',
-        'channel_name',
-        importance: Importance.max,
-        priority: Priority.high,
-        ticker: 'ticker',
-        styleInformation: BigTextStyleInformation(''),
-      );
-
-      NotificationDetails platformChannelSpecifics =
-          NotificationDetails(android: androidPlatformChannelSpecifics);
-      await flutterLocalNotificationsPlugin.show(
-        0,
-        'Notification Title',
-        'Notification Body',
-        platformChannelSpecifics,
-      );
-    } catch (e) {
-      print(e);
-    }
   }
 
   List distince = [];
@@ -292,7 +262,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    showNotification();
     return Scaffold(
       backgroundColor: theme.liteGrey,
       body: SingleChildScrollView(
