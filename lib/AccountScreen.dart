@@ -226,7 +226,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     ),
                   ),
                   reUse.reUseSettingItem(
-                      trailingIcon: Text(
+                      trailing: Text(
                         userData[fieldInfo.email] ?? 'loading...',
                         style: TextStyle(color: theme.grey),
                       ),
@@ -234,7 +234,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       context: context,
                       leading: const Icon(Icons.email)),
                   reUse.reUseSettingItem(
-                      trailingIcon: hindPassowrd == true
+                      trailing: hindPassowrd == true
                           ? IconButton(
                               onPressed: () {
                                 if (hindPassowrd == true) {
@@ -263,20 +263,20 @@ class _AccountScreenState extends State<AccountScreen> {
                       context: context,
                       leading: const Icon(Icons.password_rounded)),
                   reUse.reUseSettingItem(
-                      trailingIcon: Text(
+                      trailing: Text(
                         userData[fieldInfo.phoneNumber] ?? 'loading...',
                         style: TextStyle(color: theme.grey),
                       ),
                       title: const Text('Phone Number'),
                       context: context,
                       leading: const Icon(Icons.phone)),
-                  reUse.reUseSettingItem(
-                      trailingIcon: imagePath != null
-                          ? Flexible(child: Image(image: AssetImage(imagePath[0]['img'])))
-                          : Container(),
-                      title: Text(clsLan.payService),
-                      context: context,
-                      leading: const Icon(Icons.monetization_on)),
+                  // reUse.reUseSettingItem(
+                  //     trailing: imagePath != null
+                  //         ? SizedBox(width:20, height:20,child: Image.asset(imagePath[0]['img'],width:20, height:20,))
+                  //         : Container(),
+                  //     title: Text(clsLan.payService),
+                  //     context: context,
+                  //     leading: const Icon(Icons.monetization_on)),
                   Container(
                     height: 60,
                     margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
