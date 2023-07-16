@@ -286,6 +286,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       },
                                       yesTap: () async {
                                         await glb.editProfile(value:profile ,context: context);
+                                        setState(() {});
                                       },
                                       title: clsLan.change);
                                 }
