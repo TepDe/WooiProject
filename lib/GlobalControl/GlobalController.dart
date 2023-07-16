@@ -717,8 +717,8 @@ class GlobalController {
     final theme = ThemesApp();
     try {
       await documentStream.doc(auth.currentUser!.uid).update({
-        'firstName': value.firstName,
-        'lastName': value.lastName,
+        'firstname': value.firstName,
+        'lastname': value.lastName,
         'phoneNumber': value.phoneNumber,
         'token': value.token,
         'chatid': value.chatid,
