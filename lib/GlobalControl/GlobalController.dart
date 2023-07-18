@@ -269,6 +269,7 @@ class GlobalController {
   Future<void> createPackage(
       {price,
       userName,
+        bankName,
       userPhoneNumber,
       note,
       packageID,
@@ -304,6 +305,7 @@ class GlobalController {
               field.token: tokenKey.toString(),
               field.chatid: chatid.toString(),
               field.latitude: latitude.toString(),
+              field.bankName:bankName,
               field.longitude: longitude.toString(),
               field.date: formattedDate.toString(),
               field.qty: qty.toString(),
