@@ -48,6 +48,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
 
   String userName = '';
   String phoneNumber = '';
+  String bankName = '';
   String bankCode = '';
   final inFor = FieldInfo();
 
@@ -60,6 +61,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
       Map data = doc.data() as Map;
       userName = data['firstname'] + ' ' + data['lastname'].toString();
       phoneNumber = data['phoneNumber'].toString();
+      bankName = data['bankName'].toString();
       bankCode = data[inFor.bankCode].toString();
       setState(() {});
     });
@@ -463,6 +465,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                   alertDialog(context);
                                   await glb
                                       .createPackage(
+                                    bankName: bankName.trim(),
                                     abaCode: bankCode.toString(),
                                     userName: userName.trim().toString(),
                                     userPhoneNumber: phoneNumber.trim().toString(),
