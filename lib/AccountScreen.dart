@@ -174,6 +174,11 @@ class _AccountScreenState extends State<AccountScreen> {
                       weight: FontWeight.bold,
                       size: 12.0,
                       color: theme.grey),
+                  reUse.reUseText(
+                      content: glb.auth.currentUser!.uid,
+                      weight: FontWeight.bold,
+                      size: 12.0,
+                      color: theme.grey),
                   Row(
                     children: [
                       Flexible(
