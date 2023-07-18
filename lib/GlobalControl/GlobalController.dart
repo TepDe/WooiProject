@@ -315,7 +315,7 @@ class GlobalController {
               field.recLongitude: longitude.toString(),
               field.senderPhone: await fetchUserData(fieldInfo.phoneNumber),
               field.senderName: userName,
-              field.ABACode: abaCode,
+              field.bankCode: abaCode,
               field.paidStatus: "",
             }));
   }
