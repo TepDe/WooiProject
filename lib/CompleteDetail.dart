@@ -157,7 +157,7 @@ class _CompleteDetailState extends State<CompleteDetail> {
                           title: clsLan.bankCode,
                           size: valueSize,
                           color: theme.black,
-                          content: forDisplay[field.ABACode],
+                          content: forDisplay[field.bankCode],
                           weight: FontWeight.w500),
                       reUse.reUseRowText(
                           titleColor: theme.grey,
