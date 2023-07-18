@@ -20,7 +20,6 @@ class FieldData {
   String dPhone = "dPhoneNumber";
   String senderPhone = "senderPhone";
   String driverUID = "driverUID";
-  String ABACode = "ABACode";
   String assignBy = "assignBy";
   String senderFname = "senderFname";
   String senderLname = "senderLname";
@@ -28,6 +27,7 @@ class FieldData {
   String paidStatus = "paidStatus";
   String receiveCode = "receiveCode";
   String chatID = "chatID";
+  String bankCode = "bankCode";
 }
 
 
