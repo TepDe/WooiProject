@@ -13,4 +13,5 @@ class StorageKey {
   String pendingPackage = 'pendingPackage';
   String password = 'password';
   String cantEdit = 'cantEdit';
+  String profileImg = 'profileImg';
 }
