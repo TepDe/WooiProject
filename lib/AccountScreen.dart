@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/EditProfileScreen.dart';
@@ -55,6 +57,7 @@ class _AccountScreenState extends State<AccountScreen> {
     //fetchLocalStorage();
     fetchUserData();
     totalRevenue();
+   // fetchImage();
   }
 
   onGetLocalStorage() async {
@@ -63,11 +66,7 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   getDatsa(getUid) async {
-    FirebaseFirestore.instance
-        .collection('Users')
-        .doc(getUid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
+    FirebaseFirestore.instance.collection('Users').doc(getUid).get().then((DocumentSnapshot documentSnapshot) {
       getUserID = documentSnapshot['qty'];
       getToken = documentSnapshot['token'];
       getChatId = documentSnapshot['chatid'];
@@ -75,11 +74,7 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   Future<void> insertTelegramToken() async {
-    FirebaseFirestore.instance
-        .collection('Users')
-        .doc(auth.currentUser!.uid)
-        .get()
-        .then((value) {
+    FirebaseFirestore.instance.collection('Users').doc(auth.currentUser!.uid).get().then((value) {
       print(value);
       print(value);
       if (value.data()?.containsKey('telegramToken') == true) {
@@ -95,12 +90,40 @@ class _AccountScreenState extends State<AccountScreen> {
   var fetch = FirebaseFirestore.instance.collection('Users');
   var userData = {};
   var imagePath;
+  File? _image;
+  final strKey = StorageKey();
+  // fetchImage() async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String base64Image =await base64Encode(await prefs.getString(strKey.profileImg).toString());
+  //
+  //   _image = base64Image;
+  //   setState(() {});
+  // }
+
+  Future<void> pickImage() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    try {
+      var picture = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (picture != null) {
+        setState(() async {
+          _image = File(picture.path);
+          print(_image.toString());
+          await prefs.setString(strKey.profileImg, _image.toString());
+          print(_image);
+          print(_image);
+        });
+      } else {
+        // User canceled the image picking.
+      }
+    } catch (e) {
+      // Handle any errors that might occur during image picking.
+    }
+    setState(() {});
+  }
 
   fetchUserData() async {
-    fetch
-        .doc(auth.currentUser!.uid.toString())
-        .get()
-        .then((DocumentSnapshot documentSnapshot) async {
+    fetch.doc(auth.currentUser!.uid.toString()).get().then((DocumentSnapshot documentSnapshot) async {
       userData = await documentSnapshot.data() as Map<String, dynamic>;
       imagePath = await glb.getBankImage(bankName: userData[fieldInfo.bankName]);
       setState(() {});
@@ -122,7 +145,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var imageSize = MediaQuery.of(context).size.height * 0.1;
+    var imageSize = MediaQuery.of(context).size.height * 0.15;
     var viewHeight2 = MediaQuery.of(context).size.height * 0.03;
     var padding = MediaQuery.of(context).size.height * 0.01;
     var textWidth = MediaQuery.of(context).size.width * 0.2;
@@ -138,34 +161,38 @@ class _AccountScreenState extends State<AccountScreen> {
                   SizedBox(
                     height: viewHeight2,
                   ),
-                  reUse.reUseText(
-                      content: 'Profile', weight: FontWeight.w500, size: 18.0),
+                  reUse.reUseText(content: 'Profile', weight: FontWeight.w500, size: 18.0),
                   SizedBox(
                     height: viewHeight2,
                   ),
                   Container(
                     height: imageSize,
                     width: imageSize,
-                    padding: const EdgeInsets.all(3.0),
-                    // decoration: BoxDecoration(
-                    //     borderRadius: BorderRadius.circular(50),
-                    //     border: Border.all(color: theme.orange, width: 1.5)),
+                    //margin: const EdgeInsets.all(3.0),
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.minGrey,
+                          blurRadius: 6,
+                          spreadRadius: 1,
+                          offset: Offset(1, 1), // Shadow position
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(50),
+                      //border: Border.all(color: theme.orange, width: 1.5)
+                    ),
                     child: InkWell(
                       onTap: () {
-                        Get.to(const SetUpScreen());
+                        pickImage();
                       },
-                      child: const CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe1IKGF9z_2YNk4INs_zur1TjFIUtgpw_Ic2Jp2xxH5g&s"),
-                      ),
+                      child: _image != null ? CircleAvatar(backgroundImage: new FileImage(_image!)) : Container(),
                     ),
                   ),
                   SizedBox(
                     height: viewHeight2,
                   ),
                   reUse.reUseText(
-                      content:
-                          "${userData[fieldInfo.firstName] ?? " "} ${userData[fieldInfo.lastName] ?? " "}",
+                      content: "${userData[fieldInfo.firstName] ?? " "} ${userData[fieldInfo.lastName] ?? " "}",
                       weight: FontWeight.bold,
                       size: 20.0,
                       color: theme.black),
@@ -175,10 +202,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       size: 12.0,
                       color: theme.grey),
                   reUse.reUseText(
-                      content: glb.auth.currentUser!.uid,
-                      weight: FontWeight.bold,
-                      size: 12.0,
-                      color: theme.grey),
+                      content: glb.auth.currentUser!.uid, weight: FontWeight.bold, size: 12.0, color: theme.grey),
                   Row(
                     children: [
                       Flexible(
@@ -224,8 +248,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             Get.to(const EditProfileScreen(), arguments: userData);
                           },
                           icon: Icon(Icons.edit, color: theme.darkGrey),
-                          label: reUse.reUseText(
-                              content: 'Edit', size: 16.0, color: theme.darkGrey),
+                          label: reUse.reUseText(content: 'Edit', size: 16.0, color: theme.darkGrey),
                         )
                       ],
                     ),
@@ -272,7 +295,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         userData[fieldInfo.phoneNumber] ?? 'loading...',
                         style: TextStyle(color: theme.grey),
                       ),
-                      title:  Text(clsLan.phoneNumber),
+                      title: Text(clsLan.phoneNumber),
                       context: context,
                       leading: const Icon(Icons.phone)),
                   reUse.reUseSettingItem(
@@ -280,7 +303,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         userData[fieldInfo.bankName].toString().toUpperCase() ?? 'loading...',
                         style: TextStyle(color: theme.grey),
                       ),
-                      title:  Text(clsLan.payService),
+                      title: Text(clsLan.payService),
                       context: context,
                       leading: const Icon(Icons.monetization_on)),
                   // reUse.reUseSettingItem(
@@ -315,8 +338,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             child: Text(
                               userData[fieldInfo.bankCode] ?? "Not Include Yet",
                               maxLines: 1,
-                              style: TextStyle(
-                                  color: theme.grey, overflow: TextOverflow.ellipsis),
+                              style: TextStyle(color: theme.grey, overflow: TextOverflow.ellipsis),
                             )),
                         leading: const Text("123"),
                       ),
@@ -344,8 +366,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             child: Text(
                               userData[fieldInfo.token] ?? "Not Include Yet",
                               maxLines: 1,
-                              style: TextStyle(
-                                  color: theme.grey, overflow: TextOverflow.ellipsis),
+                              style: TextStyle(color: theme.grey, overflow: TextOverflow.ellipsis),
                             )),
                         leading: const Icon(Icons.telegram_rounded),
                       ),
@@ -373,8 +394,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             child: Text(
                               userData[fieldInfo.chatid] ?? "Not Include Yet",
                               maxLines: 1,
-                              style: TextStyle(
-                                  color: theme.grey, overflow: TextOverflow.ellipsis),
+                              style: TextStyle(color: theme.grey, overflow: TextOverflow.ellipsis),
                             )),
                         leading: const Icon(Icons.telegram_rounded),
                       ),
@@ -526,8 +546,7 @@ class _AccountScreenState extends State<AccountScreen> {
       },
       codeSent: (String verificationId, int? resendToken) async {
         String smsCode = 'xxxx';
-        PhoneAuthCredential credential = PhoneAuthProvider.credential(
-            verificationId: verificationId, smsCode: smsCode);
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
         await auth.signInWithCredential(credential);
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
@@ -562,8 +581,7 @@ class _AccountScreenState extends State<AccountScreen> {
   totalRevenue() {
     List mainData = [];
     try {
-      DatabaseReference refs =
-          FirebaseDatabase.instance.ref('Complete').child(auth.currentUser!.uid);
+      DatabaseReference refs = FirebaseDatabase.instance.ref('Complete').child(auth.currentUser!.uid);
       refs.onValue.listen((event) {
         revenuePrice.clear();
         paidPrice.clear();
