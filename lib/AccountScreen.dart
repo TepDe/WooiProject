@@ -57,12 +57,13 @@ class _AccountScreenState extends State<AccountScreen> {
     //fetchLocalStorage();
     fetchUserData();
     totalRevenue();
-   // fetchImage();
+    fetchImage();
   }
 
-  onGetLocalStorage() async {
+  fetchImage() async {
     final prefs = await SharedPreferences.getInstance();
-    cantEdit = (prefs.getBool(str.cantEdit))!;
+    _image = File(prefs.getString(str.profileImg).toString());
+    setState(() {});
   }
 
   getDatsa(getUid) async {
@@ -92,26 +93,15 @@ class _AccountScreenState extends State<AccountScreen> {
   var imagePath;
   File? _image;
   final strKey = StorageKey();
-  // fetchImage() async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String base64Image =await base64Encode(await prefs.getString(strKey.profileImg).toString());
-  //
-  //   _image = base64Image;
-  //   setState(() {});
-  // }
 
   Future<void> pickImage() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
     try {
       var picture = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (picture != null) {
         setState(() async {
           _image = File(picture.path);
-          print(_image.toString());
-          await prefs.setString(strKey.profileImg, _image.toString());
-          print(_image);
-          print(_image);
+          await prefs.setString(strKey.profileImg, picture.path);
         });
       } else {
         // User canceled the image picking.
@@ -165,29 +155,36 @@ class _AccountScreenState extends State<AccountScreen> {
                   SizedBox(
                     height: viewHeight2,
                   ),
-                  Container(
-                    height: imageSize,
-                    width: imageSize,
-                    //margin: const EdgeInsets.all(3.0),
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: theme.minGrey,
-                          blurRadius: 6,
-                          spreadRadius: 1,
-                          offset: Offset(1, 1), // Shadow position
-                        ),
-                      ],
-                      borderRadius: BorderRadius.circular(50),
-                      //border: Border.all(color: theme.orange, width: 1.5)
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        pickImage();
-                      },
-                      child: _image != null ? CircleAvatar(backgroundImage: new FileImage(_image!)) : Container(),
-                    ),
-                  ),
+                  if (_image != null)
+                    Container(
+                      height: imageSize,
+                      width: imageSize,
+                      //margin: const EdgeInsets.all(3.0),
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: theme.midGrey,
+                            blurRadius: 3,
+                            spreadRadius: 0.5,
+                            offset: Offset(0, 0), // Shadow position
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(50),
+                        //border: Border.all(color: theme.orange, width: 1.5)
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          pickImage();
+                        },
+                        child: CircleAvatar( backgroundImage: new FileImage(_image!)),
+                      ),
+                    )
+                  else
+                    InkWell(
+                        onTap: () {
+                          pickImage();
+                        },
+                        child: Icon(Icons.account_circle_rounded)),
                   SizedBox(
                     height: viewHeight2,
                   ),
