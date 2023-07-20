@@ -818,7 +818,7 @@ class ReUseWidget {
                     fontWeight: weight ?? FontWeight.normal),
               ),
               Text(
-                content,
+                content??"",
                 softWrap: true,
                 maxLines: 2,
                 style: TextStyle(
