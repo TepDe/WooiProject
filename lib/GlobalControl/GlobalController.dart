@@ -530,10 +530,11 @@ class GlobalController {
       note,
       packageID,
       uid,
+        bankCode,
       phoneNumber,
       location,
       qty,
-      tokenKey,
+      tokenKey,bankName,
       chatid}) async {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
@@ -564,6 +565,8 @@ class GlobalController {
               field.note: note.toString(),
               field.status: 'request',
               field.price: price.toString(),
+              field.bankCode:bankCode,
+              field.bankName:bankName,
               field.recLatitude: latitude.toString(),
               field.recLongitude: longitude.toString(),
               field.senderPhone: await fetchUserData(fieldInfo.phoneNumber).toString(),
