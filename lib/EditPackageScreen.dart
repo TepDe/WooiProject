@@ -38,6 +38,8 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
   List forDisplay = [];
   String userName = '';
   String phoneNumber = '';
+  String bankCode = '';
+  String bankName = '';
   String getToken = '';
   String chatid = '';
   var argumentData = Get.arguments;
@@ -79,6 +81,8 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
       Map data = doc.data() as Map;
       userName = data['firstname'] + ' ' + data['lastname'].toString();
       phoneNumber = data['phoneNumber'].toString();
+      bankCode = data['bankCode'].toString();
+      bankName = data['bankName'].toString();
       setState(() {});
     });
   }
@@ -458,6 +462,8 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                                     alertDialog(context);
                                     await glb
                                         .editPackage(
+                                        bankName:bankName.trim().toString(),
+                                      bankCode: bankCode.trim().toString(),
                                             data: argumentData,
                                             userName:
                                                 userName.trim().toString(),
