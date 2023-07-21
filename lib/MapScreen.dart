@@ -131,9 +131,7 @@ class _MapScreenState extends State<MapScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            _isLoading == true
-                ? Container()
-                : GoogleMap(
+            _currentPosition!= null ?GoogleMap(
                     indoorViewEnabled: true,
                     compassEnabled: true,
                     buildingsEnabled: true,
@@ -145,7 +143,7 @@ class _MapScreenState extends State<MapScreen> {
                       target: _currentPosition!,
                       zoom: 16,
                     ),
-                  ),
+                  ):Container(),
             wr.topButtonLeft(
                 function: 'home', icon: Icons.arrow_back_ios_rounded),
             wr.topButtonRight(
