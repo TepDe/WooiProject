@@ -145,30 +145,31 @@ class _LogInScreenState extends State<LogInScreen> {
                           ),
                         ),
                         onPressed: () async {
-                          if (userEmail.text.isEmpty) {
-                            onDialogOK(
-                                context: context,
-                                title: 'Not Found',
-                                content: 'Email is missing');
-                          } else if (userPassword.text.isEmpty) {
-                            onDialogOK(
-                                context: context,
-                                title: 'Not Found',
-                                content: 'Password is missing');
-                          } else if (userPassword.text.isEmpty &&
-                              userEmail.text.isEmpty) {
-                            onDialogOK(
-                                context: context,
-                                title: 'Not Found',
-                                content: 'Email and Password is missing');
-                          } else {
-                            onUserSignIn(
-                                email: userEmail.text.trim(),
-                                // email: 'u3@gmail.com',
-                                password: userPassword.text.trim(),
-                                // password: '111111',
-                                context: context);
-                          }
+                          // if (userEmail.text.isEmpty) {
+                          //   onDialogOK(
+                          //       context: context,
+                          //       title: 'Not Found',
+                          //       content: 'Email is missing');
+                          // } else if (userPassword.text.isEmpty) {
+                          //   onDialogOK(
+                          //       context: context,
+                          //       title: 'Not Found',
+                          //       content: 'Password is missing');
+                          // } else if (userPassword.text.isEmpty &&
+                          //     userEmail.text.isEmpty) {
+                          //   onDialogOK(
+                          //       context: context,
+                          //       title: 'Not Found',
+                          //       content: 'Email and Password is missing');
+                          // } else {
+                          //   // onUserSignIn(
+                          //   //     email: userEmail.text.trim(),
+                          //   //     // email: 'u3@gmail.com',
+                          //   //     password: userPassword.text.trim(),
+                          //   //     // password: '111111',
+                          //   //     context: context);
+                          // }
+                          _signInWithPhoneNumber(context: context,phoneNumber: phoneNumberUser);
 
                           // password: '111111');
 
@@ -197,6 +198,79 @@ class _LogInScreenState extends State<LogInScreen> {
         ),
       ),
     );
+  }
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  String _verificationId = "";
+  String phoneNumberUser = '+85511111111';
+  Future<void> _signInWithPhoneNumber({BuildContext? context, String? phoneNumber}) async {
+    try {
+      await _auth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await _auth.signInWithCredential(credential);
+          print("Verification Completed Automatically.");
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          print("Verification Failed: ${e.message}");
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          _verificationId = verificationId;
+          print("OTP Code Sent: $verificationId");
+          _showOTPDialog(context!);
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          _verificationId = verificationId;
+          print("Auto Retrieval Timeout: $verificationId");
+        },
+      );
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+  void _showOTPDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Enter OTP"),
+          content: TextField(
+            keyboardType: TextInputType.number,
+            onChanged: (value) {
+              // OTP input handling if needed
+            },
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                String otp = ""; // Get the entered OTP from the TextField
+                _verifyOTP(context, otp);
+              },
+              child: Text("Verify"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _verifyOTP(BuildContext context, String otp) async {
+    try {
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: _verificationId,
+        smsCode: otp,
+      );
+
+      await _auth.signInWithCredential(credential);
+      print("OTP Verification Success!");
+    } catch (e) {
+      print("Error: $e");
+    }
   }
 
   FirebaseAuth auth = FirebaseAuth.instance;
