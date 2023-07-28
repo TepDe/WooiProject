@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/ViewScreen.dart';
 import 'dart:async';
+
 void main() async {
   // await Firebase.initializeApp(
   //     options: const FirebaseOptions(
@@ -17,7 +18,15 @@ void main() async {
   //         messagingSenderId: '1093614007557',
   //         projectId: 'wooi-c715e'));
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: 'AIzaSyDooSUGSf63Ghq02_iIhtnmwMDs4HlWS6c',
+      appId: '1:406099696497:ios:acd9c8e17b5e620e3574d0',
+      messagingSenderId: '406099696497',
+      projectId: 'wooi-c715e',
+      databaseURL: 'https://flutterfire-e2e-tests-default-rtdb.europe-west1.firebasedatabase.app', // optional for Realtime Database
+    ),
+  );
   runApp(GetMaterialApp(debugShowCheckedModeBanner: false, home: MyApp()));
 }
 
@@ -49,9 +58,7 @@ class MainController extends GetxController {
   }
 
   Future<Position> requestUserPermissionLocation() async {
-    await Geolocator.requestPermission()
-        .then((value) {})
-        .onError((error, stackTrace) async {
+    await Geolocator.requestPermission().then((value) {}).onError((error, stackTrace) async {
       await Geolocator.requestPermission();
       print("ERROR" + error.toString());
     });
@@ -62,9 +69,7 @@ class MainController extends GetxController {
   Position? currentPosition;
 
   request() async {
-    await Geolocator.requestPermission()
-        .then((value) {})
-        .onError((error, stackTrace) {
+    await Geolocator.requestPermission().then((value) {}).onError((error, stackTrace) {
       print('$error' + "" + '$stackTrace');
       printError();
     });
