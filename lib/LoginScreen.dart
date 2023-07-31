@@ -145,31 +145,30 @@ class _LogInScreenState extends State<LogInScreen> {
                           ),
                         ),
                         onPressed: () async {
-                          // if (userEmail.text.isEmpty) {
-                          //   onDialogOK(
-                          //       context: context,
-                          //       title: 'Not Found',
-                          //       content: 'Email is missing');
-                          // } else if (userPassword.text.isEmpty) {
-                          //   onDialogOK(
-                          //       context: context,
-                          //       title: 'Not Found',
-                          //       content: 'Password is missing');
-                          // } else if (userPassword.text.isEmpty &&
-                          //     userEmail.text.isEmpty) {
-                          //   onDialogOK(
-                          //       context: context,
-                          //       title: 'Not Found',
-                          //       content: 'Email and Password is missing');
-                          // } else {
-                          //   // onUserSignIn(
-                          //   //     email: userEmail.text.trim(),
-                          //   //     // email: 'u3@gmail.com',
-                          //   //     password: userPassword.text.trim(),
-                          //   //     // password: '111111',
-                          //   //     context: context);
-                          // }
-                          _signInWithPhoneNumber(context: context,phoneNumber: phoneNumberUser);
+                          if (userEmail.text.isEmpty) {
+                            onDialogOK(
+                                context: context,
+                                title: 'Not Found',
+                                content: 'Email is missing');
+                          } else if (userPassword.text.isEmpty) {
+                            onDialogOK(
+                                context: context,
+                                title: 'Not Found',
+                                content: 'Password is missing');
+                          } else if (userPassword.text.isEmpty &&
+                              userEmail.text.isEmpty) {
+                            onDialogOK(
+                                context: context,
+                                title: 'Not Found',
+                                content: 'Email and Password is missing');
+                          } else {
+                            onUserSignIn(
+                                email: userEmail.text.trim(),
+                                // email: 'u3@gmail.com',
+                                password: userPassword.text.trim(),
+                                // password: '111111',
+                                context: context);
+                          }
 
                           // password: '111111');
 
