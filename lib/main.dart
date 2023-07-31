@@ -18,15 +18,7 @@ void main() async {
   //         messagingSenderId: '1093614007557',
   //         projectId: 'wooi-c715e'));
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: const FirebaseOptions(
-      apiKey: 'AIzaSyDooSUGSf63Ghq02_iIhtnmwMDs4HlWS6c',
-      appId: '1:406099696497:ios:acd9c8e17b5e620e3574d0',
-      messagingSenderId: '406099696497',
-      projectId: 'wooi-c715e',
-      databaseURL: 'https://flutterfire-e2e-tests-default-rtdb.europe-west1.firebasedatabase.app', // optional for Realtime Database
-    ),
-  );
+  await Firebase.initializeApp();
   runApp(GetMaterialApp(debugShowCheckedModeBanner: false, home: MyApp()));
 }
 
