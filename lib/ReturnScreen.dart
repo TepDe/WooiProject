@@ -210,7 +210,7 @@ class _ReturnScreenState extends State<ReturnScreen> {
                 ],
               ),
             ),
-            Expanded(
+           forDisplay.isNotEmpty? Flexible(
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -446,7 +446,7 @@ class _ReturnScreenState extends State<ReturnScreen> {
                   ],
                 ),
               ),
-            )
+            ):Flexible(child: Center(child: Text(clsLan.notHave)))
           ],
         ),
       ),
