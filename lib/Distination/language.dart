@@ -63,4 +63,5 @@ class ClsLanguage {
   String fail = "បរាជ័យ";
   String tryAgain = "សូម​ព្យាយាម​ម្តង​ទៀត";
   String payService = "សេវាបង់ប្រាក់";
+  String notHave = "មិនមាន";
 }
