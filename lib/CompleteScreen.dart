@@ -9,6 +9,7 @@ import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
+import 'package:intl/intl.dart';
 
 class CompleteScreen extends StatefulWidget {
   const CompleteScreen({Key? key}) : super(key: key);
@@ -46,6 +47,11 @@ class _CompleteScreenState extends State<CompleteScreen> {
 
   @override
   Widget build(BuildContext context) {
+    forDisplay.sort((a, b) {
+      DateTime dateA = DateFormat("dd-MM-yyyy  hh:mm a").parse(a['completeDate'] ?? "01-01-2001  09:23 AM");
+      DateTime dateB = DateFormat("dd-MM-yyyy  hh:mm a").parse(b['completeDate'] ?? "01-01-2001  09:23 AM");
+      return dateB.compareTo(dateA);
+    });
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -353,50 +359,10 @@ class _CompleteScreenState extends State<CompleteScreen> {
                                                       ['price'] +
                                                   " \$",
                                               weight: FontWeight.w500),
-                                          // reUse.reUseText(
-                                          //     weight: FontWeight.bold,
-                                          //     size: 12.0,
-                                          //     color: theme.grey,
-                                          //     content: 'Location'),
-                                          // reUse.reUseText(
-                                          //     size: 12.0,
-                                          //     weight: FontWeight.bold,
-                                          //     color: theme.grey,
-                                          //     content: 'Phone number'),
-                                          // reUse.reUseText(
-                                          //     size: 12.0,
-                                          //     weight: FontWeight.bold,
-                                          //     color: theme.grey,
-                                          //     content: 'Qty'),
+
                                         ],
                                       ),
                                     ),
-                                    // Padding(
-                                    //   padding: const EdgeInsets.all(3.0),
-                                    //   child: Row(
-                                    //     mainAxisAlignment:
-                                    //         MainAxisAlignment.spaceBetween,
-                                    //     children: [
-                                    //       reUse.reUseText(
-                                    //           size: 14.0,
-                                    //           color: theme.black,
-                                    //           content: forDisplay[index]['location'],
-                                    //           weight: FontWeight.w500),
-                                    //       reUse.reUseText(
-                                    //           size: 14.0,
-                                    //           color: theme.black,
-                                    //           weight: FontWeight.w500,
-                                    //           content: forDisplay[index]
-                                    //               ['phoneNumber']),
-                                    //       reUse.reUseText(
-                                    //           size: 14.0,
-                                    //           color: theme.black,
-                                    //           content: '1',
-                                    //           weight: FontWeight.w500),
-                                    //     ],
-                                    //   ),
-                                    // ),
-
                                     Padding(
                                       padding: const EdgeInsets.all(6.0),
                                       child: Divider(
@@ -404,30 +370,20 @@ class _CompleteScreenState extends State<CompleteScreen> {
                                         color: theme.grey,
                                       ),
                                     ),
+
                                     Row(
+                                      mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        reUse.reUseText(
+                                        reUse.reUseRowText(
+                                            lableSize: 12.0,
+                                            titleColor: theme.grey,
+                                            title: clsLan.bankCode,
                                             size: 12.0,
-                                            weight: FontWeight.w400,
-                                            color: theme.grey,
-                                            content: clsLan.status),
-                                        // Container(
-                                        //   decoration: BoxDecoration(
-                                        //     color: theme.litestGreen,
-                                        //     borderRadius: BorderRadius.circular(6),
-                                        //   ),
-                                        //   padding: const EdgeInsets.symmetric(
-                                        //       horizontal: 10, vertical: 4),
-                                        //   child: reUse.reUseText(
-                                        //       size: 10.0,
-                                        //       color: theme.liteGreen,
-                                        //       content: forDisplay[index]['status']
-                                        //           .toString()
-                                        //           .toUpperCase(),
-                                        //       weight: FontWeight.w900),
-                                        // ),
+                                            color: theme.black,
+                                            content: "${forDisplay[index][field.completeDate]}   ",
+                                            weight: FontWeight.w500),
                                         Container(
                                           decoration: BoxDecoration(
                                             color: theme.litestGreen,
