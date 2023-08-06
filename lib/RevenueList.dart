@@ -7,6 +7,7 @@ import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
+import 'package:intl/intl.dart';
 
 class RevenueList extends StatefulWidget {
   const RevenueList({Key? key}) : super(key: key);
@@ -44,6 +45,11 @@ class _RevenueListState extends State<RevenueList> {
 
   @override
   Widget build(BuildContext context) {
+    forDisplay.sort((a, b) {
+      DateTime dateA = DateFormat("dd-MM-yyyy  hh:mm a").parse(a['completeDate'] ?? "01-01-2001  09:23 AM");
+      DateTime dateB = DateFormat("dd-MM-yyyy  hh:mm a").parse(b['completeDate'] ?? "01-01-2001  09:23 AM");
+      return dateB.compareTo(dateA);
+    });
     return SafeArea(
         child: Scaffold(
       body: Column(
@@ -370,40 +376,36 @@ class _RevenueListState extends State<RevenueList> {
                                       ],
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(3.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        reUse.reUseText(
-                                            size: 12.0,
-                                            weight: FontWeight.w400,
-                                            color: theme.grey,
-                                            content: clsLan.status),
-
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            color: theme.litestGreen,
-                                            borderRadius:
-                                            BorderRadius.circular(6),
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10, vertical: 4),
-                                          child: reUse.reUseText(
-                                              size: 12.0,
-                                              color: theme.liteGreen,
-                                              content: forDisplay[index]
-                                              [field.paidStatus] ==
-                                                  "paid"
-                                                  ? clsLan.readyPaid
-                                                  : clsLan.notPaidYet,
-                                              weight: FontWeight.w600),
-                                        ),
-
-                                      ],
-                                    ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      reUse.reUseRowText(
+                                          lableSize: 12.0,
+                                          titleColor: theme.grey,
+                                          title: clsLan.bankCode,
+                                          size: 12.0,
+                                          color: theme.black,
+                                          content: "${forDisplay[index][field.completeDate]}   ",
+                                          weight: FontWeight.w500),
+                                      // Container(
+                                      //   decoration: BoxDecoration(
+                                      //     color: theme.litestGreen,
+                                      //     borderRadius:
+                                      //     BorderRadius.circular(6),
+                                      //   ),
+                                      //   padding: const EdgeInsets.symmetric(
+                                      //       horizontal: 10, vertical: 4),
+                                      //   child: reUse.reUseText(
+                                      //       size: 10.0,
+                                      //       color: theme.liteGreen,
+                                      //       content: clsLan.stCom,
+                                      //       weight: FontWeight.w900),
+                                      // ),
+                                    ],
                                   ),
+
                                 ],
                               ),
                             ),
