@@ -29,6 +29,7 @@ class FieldData {
   String chatID = "chatID";
   String bankCode = "bankCode";
   String bankName = "bankName";
+  String completeDate = "completeDate";
 }
 
 
