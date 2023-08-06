@@ -8,6 +8,7 @@ import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/EditPackageScreen.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
+import 'package:intl/intl.dart';
 
 import 'WidgetReUse/ReUseWidget.dart';
 import 'WidgetReUse/Themes.dart';
@@ -66,8 +67,8 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
           .ref('PackageRequest')
           .child(auth.currentUser!.uid);
       refs.onValue.listen((event) {
-        setState(() {});
         totalList.clear();
+        forDisplay.clear();
         DataSnapshot driver = event.snapshot;
         Map values = driver.value as Map;
         values.forEach((key, values) async {
@@ -75,9 +76,10 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
           data.forEach((key, value) async {
             setState(() {
               totalList.add(value);
-              forDisplay = totalList;
+
             });
           });
+          forDisplay=totalList;
         });
       });
     } catch (e) {
@@ -100,6 +102,11 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    forDisplay.sort((a, b) {
+      DateTime dateA = DateFormat(" dd-MM-yyyy hh:mm a").parse(a['date'] ?? " 02-08-2023 09:23 AM");
+      DateTime dateB = DateFormat(" dd-MM-yyyy hh:mm a").parse(b['date'] ?? " 02-08-2023 09:23 AM");
+      return dateB.compareTo(dateA);
+    });
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -335,7 +342,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                               weight: FontWeight.w400,
                                               size: 14.0,
                                               color: theme.darkGrey,
-                                              content: clsLan.packageID),
+                                              content: "${index+1}./  "+clsLan.packageID),
                                           Row(
                                             children: [
                                               reUse.reUseText(
