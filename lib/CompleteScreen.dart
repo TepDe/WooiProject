@@ -271,6 +271,7 @@ class _CompleteScreenState extends State<CompleteScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
+                                  mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
@@ -282,7 +283,7 @@ class _CompleteScreenState extends State<CompleteScreen> {
                                             weight: FontWeight.w400,
                                             size: 12.0,
                                             color: theme.grey,
-                                            content: clsLan.packageID),
+                                            content: "${index+1}./  "+clsLan.packageID),
                                         Row(
                                           children: [
                                             reUse.reUseText(
@@ -291,29 +292,6 @@ class _CompleteScreenState extends State<CompleteScreen> {
                                                 color: theme.blue,
                                                 content: forDisplay[index]
                                                     ['packageID']),
-                                            // SizedBox(
-                                            //   height: 40,
-                                            //   width: 40,
-                                            //   child: PopupMenuButton<int>(
-                                            //     onSelected: (item) async {
-                                            //       if (item == 0) {
-                                            //       } else {}
-                                            //     },
-                                            //     itemBuilder: (context) => [
-                                            //       PopupMenuItem<int>(
-                                            //           value: 1,
-                                            //           child: Row(
-                                            //             mainAxisAlignment:
-                                            //                 MainAxisAlignment.spaceAround,
-                                            //             children: [
-                                            //               Icon(Icons
-                                            //                   .delete_forever_rounded),
-                                            //               Text('Delete'),
-                                            //             ],
-                                            //           )),
-                                            //     ],
-                                            //   ),
-                                            // ),
                                           ],
                                         ),
                                       ],
@@ -370,36 +348,14 @@ class _CompleteScreenState extends State<CompleteScreen> {
                                         color: theme.grey,
                                       ),
                                     ),
-
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        reUse.reUseRowText(
-                                            lableSize: 12.0,
-                                            titleColor: theme.grey,
-                                            title: clsLan.bankCode,
-                                            size: 12.0,
-                                            color: theme.black,
-                                            content: "${forDisplay[index][field.completeDate]}   ",
-                                            weight: FontWeight.w500),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            color: theme.litestGreen,
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10, vertical: 4),
-                                          child: reUse.reUseText(
-                                              size: 10.0,
-                                              color: theme.liteGreen,
-                                              content: clsLan.stCom,
-                                              weight: FontWeight.w900),
-                                        ),
-                                      ],
-                                    ),
+                                    reUse.reUseRowText(
+                                        lableSize: 12.0,
+                                        titleColor: theme.grey,
+                                        title: clsLan.date,
+                                        size: 12.0,
+                                        color: theme.black,
+                                        content: "${forDisplay[index][field.completeDate]}   ",
+                                        weight: FontWeight.w500),
                                   ],
                                 ),
                               ),
