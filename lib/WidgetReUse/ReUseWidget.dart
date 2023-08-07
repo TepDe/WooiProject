@@ -272,7 +272,7 @@ class ReUseWidget {
                     //     builder: (context) => const TotalPackageScreen(),
                     //   ),
                     // );
-                    Get.to(const TotalPackageScreen(), arguments: [
+                    Get.to(()=> const TotalPackageScreen(), arguments: [
                       {'data': totalPackageData},
                       {'key': totalPackageDataKey}
                     ]);
@@ -290,7 +290,7 @@ class ReUseWidget {
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    Get.to(const PendingScreen(), arguments: pendingData);
+                    Get.to(()=> const PendingScreen(), arguments: pendingData);
                   },
                   child: unitTwoText(
                       label: clsLan.pending,
@@ -919,7 +919,7 @@ class ReUseWidget {
           try {
             final result = await InternetAddress.lookup('example.com');
             if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-              Get.to(const CreatePackageScreen());
+              Get.to(()=> const CreatePackageScreen());
             }
           } on SocketException catch (_) {
             final reUse = ReUseWidget();
@@ -937,7 +937,7 @@ class ReUseWidget {
                   ),
                 ));
           }
-          //Get.to(const CreatePackageScreen());
+          //Get.to(()=> CreatePackageScreen());
         },
         icon: Image.asset(
           'assets/images/box.png',
@@ -1012,7 +1012,7 @@ class ReUseWidget {
               exit(0);
             } else if (function == 'logOut') {
               FirebaseAuth.instance.signOut();
-              Get.to(const LogInScreen());
+              Get.to(()=> const LogInScreen());
             } else if (function == 'editPro') {
               glb.editProfile(value: value, context: context);
             } else if (function == '') {
@@ -2307,9 +2307,9 @@ class ReUseWidget {
           borderRadius: BorderRadius.circular(10),
           onTap: () {
             if (witchClick == "revenue") {
-              Get.to(const RevenueList(), arguments: data);
+              Get.to(()=> const RevenueList(), arguments: data);
             } else {
-              Get.to(const PaidScreen(), arguments: data);
+              Get.to(()=> const PaidScreen(), arguments: data);
             }
           },
           child: Padding(
