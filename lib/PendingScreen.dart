@@ -32,6 +32,8 @@ class _PendingScreenState extends State<PendingScreen> {
     //pendingListLength();
   }
 
+  var labelSize = 14.0;
+  var valueSize = 14.0;
   FirebaseAuth auth = FirebaseAuth.instance;
   List pendingList = [];
   List forDisplay = [];
@@ -90,7 +92,10 @@ class _PendingScreenState extends State<PendingScreen> {
                           ),
                           label: Text(
                             clsLan.stPend,
-                            style: TextStyle(fontSize: 18, color: theme.orange, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: theme.orange,
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
                         // Padding(
@@ -179,13 +184,17 @@ class _PendingScreenState extends State<PendingScreen> {
                               List results = pendingList
                                   .where((user) => user['packageID']
                                       .toLowerCase()
-                                      .contains(searchController.text.toString().toLowerCase()))
+                                      .contains(searchController.text
+                                          .toString()
+                                          .toLowerCase()))
                                   .toList();
                               if (results == null || results.isEmpty) {
                                 results = pendingList
                                     .where((user) => user['phoneNumber']
                                         .toLowerCase()
-                                        .contains(searchController.text.toString().toLowerCase()))
+                                        .contains(searchController.text
+                                            .toString()
+                                            .toLowerCase()))
                                     .toList();
                               }
                               forDisplay = results;
@@ -219,7 +228,9 @@ class _PendingScreenState extends State<PendingScreen> {
                 children: [
                   Padding(
                     padding: EdgeInsets.all(padding),
-                    child: reUse.reUseText(content: '${clsLan.totalPackage} : ${forDisplay.length}'),
+                    child: reUse.reUseText(
+                        content:
+                            '${clsLan.totalPackage} : ${forDisplay.length}'),
                   ),
 
                   const Flexible(child: Divider()),
@@ -255,7 +266,8 @@ class _PendingScreenState extends State<PendingScreen> {
                                   return Container(
                                     width: Get.width,
                                     margin: const EdgeInsets.all(6),
-                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
                                     decoration: BoxDecoration(
                                       color: theme.liteGrey,
                                       borderRadius: BorderRadius.circular(6),
@@ -263,55 +275,55 @@ class _PendingScreenState extends State<PendingScreen> {
                                         BoxShadow(
                                           color: theme.grey,
                                           blurRadius: 4,
-                                          offset: const Offset(0, 1), // Shadow position
+                                          offset: const Offset(
+                                              0, 1), // Shadow position
                                         ),
                                       ],
                                     ),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(top: 6, bottom: 6),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              reUse.reUseText(
-                                                  weight: FontWeight.w400,
-                                                  size: 14.0,
-                                                  color: theme.grey,
-                                                  content: clsLan.packageID),
-                                              reUse.reUseText(
-                                                  weight: FontWeight.bold,
-                                                  size: 16.0,
-                                                  color: theme.blue,
-                                                  content: forDisplay[index]['packageID'] ?? 'No ID'),
-                                            ],
-                                          ),
-                                        ),
+                                        reUse.reUseRowText(
+                                            lableSize: labelSize,
+                                            titleColor: theme.grey,
+                                            title:"${index+1}./  "+ clsLan.packageID,
+                                            size: 16.0,
+                                            color: theme.blue,
+                                            content: forDisplay[index]
+                                                ['packageID'],
+                                            weight: FontWeight.w500),
                                         Divider(
                                           color: theme.grey,
                                         ),
                                         Padding(
                                           padding: EdgeInsets.all(padding),
                                           child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               reUse.reUseColumnText(
                                                   titleColor: theme.grey,
-                                                  title: clsLan.receiverLocation,
+                                                  title:
+                                                      clsLan.receiverLocation,
                                                   lableSize: 11,
                                                   size: 14.0,
                                                   color: theme.black,
-                                                  content: forDisplay[index]['location'],
+                                                  content: forDisplay[index]
+                                                      ['location'],
                                                   weight: FontWeight.w500),
                                               reUse.reUseColumnText(
                                                   lableSize: 11,
                                                   titleColor: theme.grey,
-                                                  title: clsLan.receiverPhoneNumber,
+                                                  title: clsLan
+                                                      .receiverPhoneNumber,
                                                   size: 14.0,
                                                   color: theme.black,
-                                                  content: forDisplay[index]['phoneNumber'],
+                                                  content: forDisplay[index]
+                                                      ['phoneNumber'],
                                                   weight: FontWeight.w500),
                                               reUse.reUseColumnText(
                                                   lableSize: 11,
@@ -324,79 +336,55 @@ class _PendingScreenState extends State<PendingScreen> {
                                             ],
                                           ),
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(top: 6),
-                                          child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              reUse.reUseColumnText(
-                                                  lableSize: 12,
-                                                  titleColor: theme.grey,
-                                                  title: clsLan.assignBy + " :",
-                                                  size: 0.0,
-                                                  color: theme.black,
-                                                  content: '',
-                                                  weight: FontWeight.w500),
-                                              // reUse.reUseColumnText(
-                                              //     title: 'Driver Name',
-                                              //     size: 14.0,
-                                              //     color: theme.black,
-                                              //     content: forDisplay[index]
-                                              //             [field.dLastName] +
-                                              //         ' ' +
-                                              //         forDisplay[index]
-                                              //             [field.dFirstName],
-                                              //     weight: FontWeight.w500),
-                                              reUse.reUseColumnText(
-                                                  lableSize: 12,
-                                                  titleColor: theme.grey,
-                                                  title: clsLan.driverPhone,
-                                                  size: 14.0,
-                                                  color: theme.black,
-                                                  content: forDisplay[index][field.dPhone],
-                                                  weight: FontWeight.w500),
-                                              reUse.reUseColumnText(
-                                                  lableSize: 12,
-                                                  titleColor: theme.grey,
-                                                  title: clsLan.driverName,
-                                                  size: 14.0,
-                                                  color: theme.black,
-                                                  content: forDisplay[index][field.dLastName] +
-                                                      ' ' +
-                                                      forDisplay[index][field.dFirstName],
-                                                  weight: FontWeight.w500),
-                                            ],
-                                          ),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            reUse.reUseColumnText(
+                                                lableSize: 12,
+                                                titleColor: theme.grey,
+                                                title: clsLan.assignBy + " :",
+                                                size: 0.0,
+                                                color: theme.black,
+                                                content: '',
+                                                weight: FontWeight.w500),
+                                            reUse.reUseColumnText(
+                                                lableSize: 12,
+                                                titleColor: theme.grey,
+                                                title: clsLan.driverPhone,
+                                                size: 14.0,
+                                                color: theme.black,
+                                                content: forDisplay[index]
+                                                    [field.dPhone],
+                                                weight: FontWeight.w500),
+                                            reUse.reUseColumnText(
+                                                lableSize: 12,
+                                                titleColor: theme.grey,
+                                                title: clsLan.driverName,
+                                                size: 14.0,
+                                                color: theme.black,
+                                                content: forDisplay[index]
+                                                        [field.dLastName] +
+                                                    ' ' +
+                                                    forDisplay[index]
+                                                        [field.dFirstName],
+                                                weight: FontWeight.w500),
+                                          ],
                                         ),
                                         Divider(
                                           color: theme.grey,
                                         ),
-                                        Padding(
-                                          padding: EdgeInsets.all(padding),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              reUse.reUseText(
-                                                  size: 14.0,
-                                                  weight: FontWeight.w400,
-                                                  color: theme.grey,
-                                                  content: clsLan.status),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color: theme.litestOrange,
-                                                  borderRadius: BorderRadius.circular(6),
-                                                ),
-                                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                                child: reUse.reUseText(
-                                                    weight: FontWeight.w500,
-                                                    size: 12.0,
-                                                    color: theme.orange,
-                                                    content: clsLan.stPend),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
+                                        reUse.reUseRowText(
+                                            lableSize: labelSize,
+                                            titleColor: theme.grey,
+                                            title: clsLan.date,
+                                            size: valueSize,
+                                            color: theme.black,
+                                            content: forDisplay[index]
+                                                    [field.assignDate],
+                                            weight: FontWeight.w500),
                                       ],
                                     ),
                                   );
