@@ -242,7 +242,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             color: theme.black),
                         TextButton.icon(
                           onPressed: () {
-                            Get.to(const EditProfileScreen(), arguments: userData);
+                            Get.to(()=>const EditProfileScreen(), arguments: userData);
                           },
                           icon: Icon(Icons.edit, color: theme.darkGrey),
                           label: reUse.reUseText(content: 'Edit', size: 16.0, color: theme.darkGrey),
@@ -559,7 +559,7 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
         onPressed: () async {
           FirebaseAuth.instance.signOut();
-          Get.to(const LogInScreen());
+          Get.to(()=>const LogInScreen());
           setState(() {});
         },
         child: Text(
