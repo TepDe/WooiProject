@@ -248,6 +248,7 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(10),
                                   child: Column(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Row(
                                         mainAxisAlignment:
@@ -257,7 +258,7 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                               weight: FontWeight.w400,
                                               size: 16.0,
                                               color: theme.grey,
-                                              content: '${clsLan.packageID} :'),
+                                              content: '${index+1}./  ${clsLan.packageID}'),
                                           Row(
                                             children: [
                                               reUse.reUseText(
@@ -300,13 +301,6 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceAround,
                                         children: [
-                                          // reUse.reSetUseText(
-                                          //     titleColor: theme.grey,
-                                          //     title: 'Destination',
-                                          //     size: 14.0,
-                                          //     color: theme.black,
-                                          //     content: forDisplay[index]['location'],
-                                          //     weight: FontWeight.w500),
                                           reUse.reUseColumnText(
                                               titleColor: theme.grey,
                                               title: clsLan.receiverLocation,
@@ -341,99 +335,14 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                       Divider(
                                         color: theme.grey,
                                       ),
-                                      // Row(
-                                      //   crossAxisAlignment: CrossAxisAlignment.start,
-                                      //   children: [
-                                      //     reUse.reUseText(
-                                      //         weight: FontWeight.w500,
-                                      //         size: labelSize,
-                                      //         color: theme.grey,
-                                      //         content: '${clsLan.note} : '),
-                                      //   ],
-                                      // ),
-                                      // Row(
-                                      //   crossAxisAlignment: CrossAxisAlignment.start,
-                                      //   children: [
-                                      //     Flexible(
-                                      //       child: Container(
-                                      //         width: Get.width,
-                                      //         margin: const EdgeInsets.all(8.0),
-                                      //         padding: const EdgeInsets.all(8.0),
-                                      //         decoration: BoxDecoration(
-                                      //             border:
-                                      //                 Border.all(color: theme.grey)),
-                                      //         child: reUse.reUseTextNote(
-                                      //             weight: FontWeight.w400,
-                                      //             size: 14.0,
-                                      //             color: theme.black,
-                                      //             content: forDisplay[index]['note'] ??
-                                      //                 "No reason"),
-                                      //       ),
-                                      //     ),
-                                      //   ],
-                                      // ),
-                                      // Row(
-                                      //   children: [
-                                      //     reUse.reUseText(
-                                      //         weight: FontWeight.w400,
-                                      //         size: labelSize,
-                                      //         color: theme.grey,
-                                      //         content: '${clsLan.createDate} : '),
-                                      //     reUse.reUseText(
-                                      //         weight: FontWeight.bold,
-                                      //         size: valueSize,
-                                      //         color: theme.black,
-                                      //         content: forDisplay[index]['date']),
-                                      //   ],
-                                      // ),
-                                      // Row(
-                                      //   crossAxisAlignment: CrossAxisAlignment.start,
-                                      //   children: [
-                                      //     reUse.reUseText(
-                                      //         weight: FontWeight.w400,
-                                      //         size: labelSize,
-                                      //         color: theme.grey,
-                                      //         content: '${clsLan.returnReason} : '),
-                                      //   ],
-                                      // ),
-                                      // Row(
-                                      //   crossAxisAlignment: CrossAxisAlignment.start,
-                                      //   children: [
-                                      //     Flexible(
-                                      //       child: Container(
-                                      //         width: Get.width,
-                                      //         margin: const EdgeInsets.all(8.0),
-                                      //         padding: const EdgeInsets.all(8.0),
-                                      //         decoration: BoxDecoration(
-                                      //             border:
-                                      //                 Border.all(color: theme.grey)),
-                                      //         child: reUse.reUseTextNote(
-                                      //             weight: FontWeight.w400,
-                                      //             size: 14.0,
-                                      //             color: theme.black,
-                                      //             content: forDisplay[index]
-                                      //                     ['returnNote'] ??
-                                      //                 "No reason"),
-                                      //       ),
-                                      //     ),
-                                      //   ],
-                                      // ),
-                                      Row(
-                                        children: [
-                                          reUse.reUseText(
-                                              weight: FontWeight.w400,
-                                              size: labelSize,
-                                              color: theme.grey,
-                                              content:
-                                                  '${clsLan.returnTime} : '),
-                                          reUse.reUseText(
-                                              weight: FontWeight.bold,
-                                              size: valueSize,
-                                              color: theme.black,
-                                              content: forDisplay[index]
-                                                  ['date']),
-                                        ],
-                                      ),
+                                      reUse.reUseRowText(
+                                          lableSize: 12.0,
+                                          titleColor: theme.grey,
+                                          title: clsLan.date,
+                                          size: 12.0,
+                                          color: theme.black,
+                                          content: "${forDisplay[index]['returnDate']}   ",
+                                          weight: FontWeight.w500),
                                     ],
                                   ),
                                 ),
