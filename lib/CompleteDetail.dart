@@ -43,7 +43,7 @@ class _CompleteDetailState extends State<CompleteDetail> {
     return  SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: theme.litestGreen, //<-- SEE HERE
+          backgroundColor: theme.liteGreen, //<-- SEE HERE
           automaticallyImplyLeading: false,
           elevation: 0,
           title: TextButton.icon(
@@ -52,13 +52,13 @@ class _CompleteDetailState extends State<CompleteDetail> {
             },
             icon: Icon(
               Icons.arrow_back_ios_new_outlined,
-              color: theme.green,
+              color: theme.white,
             ),
             label: Text(
               clsLan.returns,
               style: TextStyle(
                   fontSize: 18,
-                  color: theme.green,
+                  color: theme.white,
                   //color: titleColor,
                   fontWeight: FontWeight.bold),
             ),
