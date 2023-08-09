@@ -13,6 +13,7 @@ import 'package:wooiproject/CompleteScreen.dart';
 import 'package:wooiproject/CreatePackageScreen.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
+import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/HomeScreen.dart';
 import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/MapScreen.dart';
@@ -120,21 +121,16 @@ class ReUseWidget {
     );
   }
 
-  unitOneHomeScreen({getTime, function, String? userID, context}) {
+  unitOneHomeScreen({function, String? userID, context}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(
           children: [
-            Text(
-              getTime,
-              style: TextStyle(color: theme.black, fontWeight: FontWeight.bold),
-            ),
             reUseText(size: 20.0, color: theme.black, weight: FontWeight.bold, content: userID ?? 'loading'),
           ],
         ),
-        const Icon(Icons.account_circle, size: 60, color: Colors.transparent)
       ],
     );
   }
@@ -272,7 +268,7 @@ class ReUseWidget {
                     //     builder: (context) => const TotalPackageScreen(),
                     //   ),
                     // );
-                    Get.to(()=> const TotalPackageScreen(), arguments: [
+                    Get.to(() => const TotalPackageScreen(), arguments: [
                       {'data': totalPackageData},
                       {'key': totalPackageDataKey}
                     ]);
@@ -290,7 +286,7 @@ class ReUseWidget {
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    Get.to(()=> const PendingScreen(), arguments: pendingData);
+                    Get.to(() => const PendingScreen(), arguments: pendingData);
                   },
                   child: unitTwoText(
                       label: clsLan.pending,
@@ -539,13 +535,7 @@ class ReUseWidget {
   final dialogPhoneNum = TextEditingController();
 
   reUseHeader(
-      {TextEditingController? searchcontroll,
-      headercolor,
-      title,
-      List? packageList,
-      label,
-      titleColor,
-      context}) {
+      {TextEditingController? searchcontroll, headercolor, title, List? packageList, label, titleColor, context}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: const BoxDecoration(
@@ -668,9 +658,8 @@ class ReUseWidget {
                     splashRadius: 20,
                     onPressed: () {
                       List results = packageList!
-                          .where((user) => user['packageID']
-                              .toLowerCase()
-                              .contains(searchcontroll!.text.toString().toLowerCase()))
+                          .where((user) =>
+                              user['packageID'].toLowerCase().contains(searchcontroll!.text.toString().toLowerCase()))
                           .toList();
                       print(results);
                       print(results);
@@ -764,8 +753,7 @@ class ReUseWidget {
     return Text(
       content ?? "",
       maxLines: 5,
-      style: TextStyle(
-          fontSize: size ?? 12, color: color ?? theme.black, fontWeight: weight ?? FontWeight.normal),
+      style: TextStyle(fontSize: size ?? 12, color: color ?? theme.black, fontWeight: weight ?? FontWeight.normal),
     );
   }
 
@@ -789,9 +777,7 @@ class ReUseWidget {
               softWrap: true,
               maxLines: 2,
               style: TextStyle(
-                  fontSize: size ?? 12.0,
-                  color: color ?? theme.black,
-                  fontWeight: weight ?? FontWeight.normal),
+                  fontSize: size ?? 12.0, color: color ?? theme.black, fontWeight: weight ?? FontWeight.normal),
             ),
           ],
         ),
@@ -818,13 +804,11 @@ class ReUseWidget {
                     fontWeight: weight ?? FontWeight.normal),
               ),
               Text(
-                content??"",
+                content ?? "",
                 softWrap: true,
                 maxLines: 2,
                 style: TextStyle(
-                    fontSize: size ?? 12.0,
-                    color: color ?? theme.black,
-                    fontWeight: weight ?? FontWeight.normal),
+                    fontSize: size ?? 12.0, color: color ?? theme.black, fontWeight: weight ?? FontWeight.normal),
               ),
             ],
           ),
@@ -919,7 +903,7 @@ class ReUseWidget {
           try {
             final result = await InternetAddress.lookup('example.com');
             if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-              Get.to(()=> const CreatePackageScreen());
+              Get.to(() => const CreatePackageScreen());
             }
           } on SocketException catch (_) {
             final reUse = ReUseWidget();
@@ -1012,7 +996,7 @@ class ReUseWidget {
               exit(0);
             } else if (function == 'logOut') {
               FirebaseAuth.instance.signOut();
-              Get.to(()=> const LogInScreen());
+              Get.to(() => const LogInScreen());
             } else if (function == 'editPro') {
               glb.editProfile(value: value, context: context);
             } else if (function == '') {
@@ -1038,9 +1022,7 @@ class ReUseWidget {
               Text(
                 text ?? '',
                 style: TextStyle(
-                    fontSize: fontsize ?? 14,
-                    color: textcolor ?? theme.black,
-                    fontWeight: weight ?? FontWeight.normal),
+                    fontSize: fontsize ?? 14, color: textcolor ?? theme.black, fontWeight: weight ?? FontWeight.normal),
               )
             ],
           ),
@@ -1138,7 +1120,20 @@ class ReUseWidget {
   }
 
   reUseYesNoDialog(
-      {disposeAllow, data, context, icon,yesText ,noText,noTap,yesTap, iconcolor, btnNoColorBC, title, content, showIcon, function}) {
+      {disposeAllow,
+      data,
+      context,
+      icon,
+      yesText,
+      noText,
+      noTap,
+      yesTap,
+      iconcolor,
+      btnNoColorBC,
+      title,
+      content,
+      showIcon,
+      function}) {
     return showDialog(
       barrierDismissible: true,
       context: context,
@@ -1217,9 +1212,8 @@ class ReUseWidget {
                                           )
                                         : Container(),
                                     Text(
-                                      noText??'',
-                                      style: TextStyle(
-                                          fontSize: 16, color: theme.black, fontWeight: FontWeight.bold),
+                                      noText ?? '',
+                                      style: TextStyle(fontSize: 16, color: theme.black, fontWeight: FontWeight.bold),
                                     )
                                   ],
                                 ),
@@ -1259,9 +1253,8 @@ class ReUseWidget {
                                           )
                                         : Container(),
                                     Text(
-                                      yesText??'',
-                                      style: TextStyle(
-                                          fontSize: 16, color: theme.white, fontWeight: FontWeight.bold),
+                                      yesText ?? '',
+                                      style: TextStyle(fontSize: 16, color: theme.white, fontWeight: FontWeight.bold),
                                     )
                                   ],
                                 ),
@@ -1281,8 +1274,7 @@ class ReUseWidget {
     );
   }
 
-  reuseTextField(
-      {mixLength, prefixIcon, prefixIconColor, label, controller, textIcon, inputType, require, formater}) {
+  reuseTextField({mixLength, prefixIcon, prefixIconColor, label, controller, textIcon, inputType, require, formater}) {
     return TextFormField(
       controller: controller ?? dialogPhoneNum,
       // keyboardType: inputType,
@@ -1326,8 +1318,7 @@ class ReUseWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: reUseText(
-                content: label ?? "", size: textSize ?? 14.0, weight: FontWeight.w500, color: theme.black),
+            child: reUseText(content: label ?? "", size: textSize ?? 14.0, weight: FontWeight.w500, color: theme.black),
           ),
           TextFormField(
             controller: controller ?? dialogPhoneNum,
@@ -1436,10 +1427,7 @@ class ReUseWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               reUseText(
-                                  weight: FontWeight.w400,
-                                  size: 12.0,
-                                  color: theme.grey,
-                                  content: 'SHIPPING ID :'),
+                                  weight: FontWeight.w400, size: 12.0, color: theme.grey, content: 'SHIPPING ID :'),
                               Row(
                                 children: [
                                   reUseText(
@@ -1493,26 +1481,15 @@ class ReUseWidget {
                           ),
                           Row(
                             children: [
+                              reUseText(weight: FontWeight.bold, size: 12.0, color: theme.darkGrey, content: 'Price '),
                               reUseText(
-                                  weight: FontWeight.bold,
-                                  size: 12.0,
-                                  color: theme.darkGrey,
-                                  content: 'Price '),
-                              reUseText(
-                                  weight: FontWeight.bold,
-                                  size: 18.0,
-                                  color: theme.blue,
-                                  content: pkc[index]['price']),
+                                  weight: FontWeight.bold, size: 18.0, color: theme.blue, content: pkc[index]['price']),
                             ],
                           ),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              reUseText(
-                                  weight: FontWeight.bold,
-                                  size: 12.0,
-                                  color: theme.darkGrey,
-                                  content: 'Note :'),
+                              reUseText(weight: FontWeight.bold, size: 12.0, color: theme.darkGrey, content: 'Note :'),
                               Flexible(
                                 child: Container(
                                   width: Get.width,
@@ -1531,8 +1508,7 @@ class ReUseWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              reUseText(
-                                  weight: FontWeight.w400, size: 12.0, color: theme.grey, content: 'Date : '),
+                              reUseText(weight: FontWeight.w400, size: 12.0, color: theme.grey, content: 'Date : '),
                               reUseText(
                                   weight: FontWeight.w400,
                                   size: 12.0,
@@ -1582,13 +1558,9 @@ class ReUseWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        reUseText(weight: FontWeight.w400, size: 12.0, color: theme.grey, content: 'SHIPPING ID :'),
                         reUseText(
-                            weight: FontWeight.w400, size: 12.0, color: theme.grey, content: 'SHIPPING ID :'),
-                        reUseText(
-                            weight: FontWeight.bold,
-                            size: 16.0,
-                            color: theme.blue,
-                            content: pkc[index]['packageID']),
+                            weight: FontWeight.bold, size: 16.0, color: theme.blue, content: pkc[index]['packageID']),
                       ],
                     ),
                     Padding(
@@ -1596,13 +1568,8 @@ class ReUseWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          reUseText(
-                              weight: FontWeight.bold, size: 12.0, color: theme.grey, content: 'Location'),
-                          reUseText(
-                              size: 12.0,
-                              weight: FontWeight.bold,
-                              color: theme.grey,
-                              content: 'Phone number'),
+                          reUseText(weight: FontWeight.bold, size: 12.0, color: theme.grey, content: 'Location'),
+                          reUseText(size: 12.0, weight: FontWeight.bold, color: theme.grey, content: 'Phone number'),
                           reUseText(size: 12.0, weight: FontWeight.bold, color: theme.grey, content: 'Qty'),
                         ],
                       ),
@@ -1613,10 +1580,7 @@ class ReUseWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           reUseText(
-                              size: 14.0,
-                              color: theme.black,
-                              content: pkc[index]['location'],
-                              weight: FontWeight.w500),
+                              size: 14.0, color: theme.black, content: pkc[index]['location'], weight: FontWeight.w500),
                           reUseText(
                               size: 14.0,
                               color: theme.black,
@@ -1638,8 +1602,7 @@ class ReUseWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          reUseText(
-                              size: 12.0, weight: FontWeight.bold, color: theme.grey, content: 'Status'),
+                          reUseText(size: 12.0, weight: FontWeight.bold, color: theme.grey, content: 'Status'),
                           Container(
                             width: 100,
                             child: reUseText(
@@ -1700,10 +1663,7 @@ class ReUseWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 reUseText(
-                                    weight: FontWeight.w400,
-                                    size: 12.0,
-                                    color: theme.grey,
-                                    content: 'SHIPPING ID :'),
+                                    weight: FontWeight.w400, size: 12.0, color: theme.grey, content: 'SHIPPING ID :'),
                                 reUseText(
                                     weight: FontWeight.bold,
                                     size: 16.0,
@@ -1717,18 +1677,10 @@ class ReUseWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                reUseText(weight: FontWeight.bold, size: 12.0, color: theme.grey, content: 'Location'),
                                 reUseText(
-                                    weight: FontWeight.bold,
-                                    size: 12.0,
-                                    color: theme.grey,
-                                    content: 'Location'),
-                                reUseText(
-                                    size: 12.0,
-                                    weight: FontWeight.bold,
-                                    color: theme.grey,
-                                    content: 'Phone number'),
-                                reUseText(
-                                    size: 12.0, weight: FontWeight.bold, color: theme.grey, content: 'Qty'),
+                                    size: 12.0, weight: FontWeight.bold, color: theme.grey, content: 'Phone number'),
+                                reUseText(size: 12.0, weight: FontWeight.bold, color: theme.grey, content: 'Qty'),
                               ],
                             ),
                           ),
@@ -1747,8 +1699,7 @@ class ReUseWidget {
                                     color: theme.black,
                                     weight: FontWeight.w500,
                                     content: pkc[index]['phoneNumber']),
-                                reUseText(
-                                    size: 14.0, color: theme.black, content: '1', weight: FontWeight.w500),
+                                reUseText(size: 14.0, color: theme.black, content: '1', weight: FontWeight.w500),
                               ],
                             ),
                           ),
@@ -1757,16 +1708,9 @@ class ReUseWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                reUseText(size: 12.0, weight: FontWeight.bold, color: theme.grey, content: 'Status'),
                                 reUseText(
-                                    size: 12.0,
-                                    weight: FontWeight.bold,
-                                    color: theme.grey,
-                                    content: 'Status'),
-                                reUseText(
-                                    size: 12.0,
-                                    color: theme.liteGreen,
-                                    content: 'PENDING',
-                                    weight: FontWeight.w900),
+                                    size: 12.0, color: theme.liteGreen, content: 'PENDING', weight: FontWeight.w900),
                               ],
                             ),
                           ),
@@ -1814,11 +1758,7 @@ class ReUseWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            reUseText(
-                                weight: FontWeight.w400,
-                                size: 12.0,
-                                color: theme.grey,
-                                content: 'SHIPPING ID :'),
+                            reUseText(weight: FontWeight.w400, size: 12.0, color: theme.grey, content: 'SHIPPING ID :'),
                             Row(
                               children: [
                                 reUseText(
@@ -1885,10 +1825,7 @@ class ReUseWidget {
                           child: Row(
                             children: [
                               reUseText(
-                                  weight: FontWeight.bold,
-                                  size: 12.0,
-                                  color: theme.darkGrey,
-                                  content: 'Price : '),
+                                  weight: FontWeight.bold, size: 12.0, color: theme.darkGrey, content: 'Price : '),
                               reUseText(
                                   weight: FontWeight.bold,
                                   size: 12.0,
@@ -1900,11 +1837,7 @@ class ReUseWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            reUseText(
-                                weight: FontWeight.bold,
-                                size: 12.0,
-                                color: theme.darkGrey,
-                                content: 'Note :'),
+                            reUseText(weight: FontWeight.bold, size: 12.0, color: theme.darkGrey, content: 'Note :'),
                             Flexible(
                               child: Container(
                                 width: Get.width,
@@ -1924,10 +1857,7 @@ class ReUseWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             reUseText(
-                                weight: FontWeight.w400,
-                                size: 12.0,
-                                color: theme.grey,
-                                content: 'Return Time : '),
+                                weight: FontWeight.w400, size: 12.0, color: theme.grey, content: 'Return Time : '),
                             reUseText(
                                 weight: FontWeight.w400,
                                 size: 12.0,
@@ -2019,8 +1949,8 @@ class ReUseWidget {
       margin: const EdgeInsets.all(6),
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: value == 'complete' ? theme.liteGreen : theme.liteRed,
-        borderRadius: BorderRadius.circular(10),
+        color: value == 'complete' ? theme.litestGreen : theme.litestRed,
+        borderRadius: BorderRadius.circular(6),
         // boxShadow: [
         //   BoxShadow(
         //
@@ -2031,7 +1961,10 @@ class ReUseWidget {
         // ],
       ),
       child: reUseText(
-          content: value == 'complete' ? 'Complete' : 'Return', color: theme.white, weight: FontWeight.w500),
+          content: value == 'complete' ? 'Complete' : 'Return',
+          color: value == 'complete' ? theme.green : theme.red,
+          size: 10.0,
+          weight: FontWeight.w500),
     );
   }
 
@@ -2240,9 +2173,9 @@ class ReUseWidget {
           },
           child: Center(
             child: ListTile(
-              title: title??Container(),
-              trailing: trailing??Container(),
-              leading: leading??Container(),
+              title: title ?? Container(),
+              trailing: trailing ?? Container(),
+              leading: leading ?? Container(),
             ),
           ),
         ),
@@ -2307,9 +2240,9 @@ class ReUseWidget {
           borderRadius: BorderRadius.circular(10),
           onTap: () {
             if (witchClick == "revenue") {
-              Get.to(()=> const RevenueList(), arguments: data);
+              Get.to(() => const RevenueList(), arguments: data);
             } else {
-              Get.to(()=> const PaidScreen(), arguments: data);
+              Get.to(() => const PaidScreen(), arguments: data);
             }
           },
           child: Padding(
@@ -2368,11 +2301,7 @@ class ReUseWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    reUseText(
-                        content: clsLan.insertAbaDec,
-                        color: theme.black,
-                        weight: FontWeight.w400,
-                        size: 14.0),
+                    reUseText(content: clsLan.insertAbaDec, color: theme.black, weight: FontWeight.w400, size: 14.0),
                     const SizedBox(height: 20.0),
                     // Text(
                     //   content,
@@ -2455,8 +2384,7 @@ class ReUseWidget {
                               },
                               child: Text(
                                 clsLan.insert,
-                                style:
-                                    TextStyle(fontSize: 14, color: theme.orange, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 14, color: theme.orange, fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
@@ -2481,8 +2409,7 @@ class ReUseWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: reUseText(
-              content: label ?? "", size: labelSize ?? 14.0, weight: FontWeight.w500, color: theme.black),
+          child: reUseText(content: label ?? "", size: labelSize ?? 14.0, weight: FontWeight.w500, color: theme.black),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -2559,4 +2486,64 @@ class ReUseWidget {
               );
             }));
   }
+
+  reUseTodayComponent({value, completeDate, returnDate, status, onTap}) {
+    double size = 30;
+    final field = FieldData();
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 3.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(6.0),
+        boxShadow: [
+          BoxShadow(
+            color: theme.midGrey,
+            blurRadius: 1,
+            //offset: Offset(4, 8), // Shadow position
+          ),
+        ],
+      ),
+      child: ListTile(
+        onTap: onTap,
+        leading: status == "complete"
+            ? SizedBox(
+                height: double.infinity,
+                child: Image.asset(
+                  'assets/images/check.png',
+                  height: size,
+                  width: size,
+                  color: theme.liteGreen,
+                ),
+              )
+            : SizedBox(
+                height: double.infinity,
+                child: Image.asset(
+                  'assets/images/return-box.png',
+                  height: size,
+                  width: size,
+                  color: theme.liteRed,
+                ),
+              ),
+        subtitle: Text(
+          "${clsLan.date} : ${completeDate ?? returnDate}",
+          style: TextStyle(fontSize: 12.0, color: theme.black,fontWeight: FontWeight.w500,),
+        ),
+        title: Text(
+          "${clsLan.packageID} : ${value[field.packageID]}",
+          style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w500, color: theme.black),
+        ),
+        trailing: reUseStatusBox(value: status),
+      ),
+    );
+  }
+// reUseStatusBox(){
+//   return Container(
+//     decoration: BoxDecoration(
+//       color: theme.litestGreen,
+//       borderRadius: BorderRadius.circular(6),
+//     ),
+//     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+//     child: reUseText(size: 10.0, color: theme.liteGreen, content: clsLan.stCom, weight: FontWeight.w900),
+//   )
+// }
 }
