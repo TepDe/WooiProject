@@ -31,6 +31,7 @@ class FieldData {
   String bankName = "bankName";
   String completeDate = "completeDate";
   String assignDate = "assignDate";
+  String returnDate = "returnDate";
 }
 
 
