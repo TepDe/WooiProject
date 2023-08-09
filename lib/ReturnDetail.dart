@@ -51,18 +51,18 @@ class _ReturnDetailState extends State<ReturnDetail> {
             },
             icon: Icon(
               Icons.arrow_back_ios_new_outlined,
-              color: theme.black,
+              color: theme.white,
             ),
             label: Text(
               clsLan.returns,
               style: TextStyle(
                   fontSize: 18,
-                  color: theme.black,
+                  color: theme.white,
                   //color: titleColor,
                   fontWeight: FontWeight.bold),
             ),
           ),
-          backgroundColor: Colors.transparent,
+          backgroundColor: theme.red,
         ),
         body: Container(
           width: Get.width,
