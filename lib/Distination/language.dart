@@ -65,4 +65,5 @@ class ClsLanguage {
   String payService = "សេវាបង់ប្រាក់";
   String notHave = "មិនមាន";
   String date = "កាលបរិច្ឆេទ";
+  String today = "ថ្ងៃនេះ";
 }
