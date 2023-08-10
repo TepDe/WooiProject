@@ -50,11 +50,11 @@ class _ReturnDetailState extends State<ReturnDetail> {
               Get.back();
             },
             icon: Icon(
-              Icons.arrow_back_ios_new_outlined,
+              Icons.arrow_back_outlined,
               color: theme.white,
             ),
             label: Text(
-              clsLan.returns,
+              "${forDisplay[field.packageID]}",
               style: TextStyle(
                   fontSize: 18,
                   color: theme.white,
@@ -79,164 +79,202 @@ class _ReturnDetailState extends State<ReturnDetail> {
             //   ),
             // ],
           ),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(6),
-              child: Column(
-                children: [
-                  reUse.reUseRowText(
-                      titleColor: theme.grey,
-                      title: clsLan.packageID,
-                      size: valueSize,
-                      lableSize: labelSize,
-                      color: theme.blue,
-                      content: forDisplay['packageID'],
-                      weight: FontWeight.w500),
-                  reUse.reUseRowText(
-                      titleColor: theme.grey,
-                      title: clsLan.receiverLocation,
-                      size: valueSize,
-                      lableSize: labelSize,
-                      color: theme.black,
-                      content: forDisplay['location'],
-                      weight: FontWeight.w500),
-                  reUse.reUseRowText(
-                      lableSize: labelSize,
-                      titleColor: theme.grey,
-                      title: clsLan.receiverPhoneNumber,
-                      size: valueSize,
-                      color: theme.black,
-                      content: forDisplay['phoneNumber'],
-                      weight: FontWeight.w500),
-                  reUse.reUseRowText(
-                      titleColor: theme.grey,
-                      title: clsLan.qty,
-                      size: valueSize,
-                      lableSize: labelSize,
-                      color: theme.black,
-                      content: forDisplay['price'],
-                      weight: FontWeight.w500),
-                  Padding(
-                    padding: const EdgeInsets.all(0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        reUse.reUseText(
-                            size: labelSize,
-                            weight: FontWeight.w500,
-                            color: theme.grey,
-                            content: clsLan.price),
-                        Container(
-                          margin: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: theme.blue,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 4),
-                          child: Center(
-                              child: reUse.reUseText(
-                                  weight: FontWeight.bold,
-                                  size: 16.0,
-                                  color: theme.white,
-                                  content: forDisplay['price'] + " \$")),
-                        )
-                      ],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                reUse.reUseRowText(
+                    titleColor: theme.grey,
+                    title: clsLan.packageID,
+                    size: valueSize,
+                    lableSize: labelSize,
+                    color: theme.black,
+                    content: forDisplay[field.packageID],
+                    weight: FontWeight.w500),
+                reUse.reUseRowText(
+                    titleColor: theme.grey,
+                    title: clsLan.createDate,
+                    size: valueSize,
+                    lableSize: labelSize,
+                    color: theme.black,
+                    content: forDisplay[field.date],
+                    weight: FontWeight.w500),
+                reUse.reUseRowText(
+                    titleColor: theme.grey,
+                    title: clsLan.receiverLocation,
+                    size: valueSize,
+                    lableSize: labelSize,
+                    color: theme.black,
+                    content: forDisplay['location'],
+                    weight: FontWeight.w500),
+                reUse.reUseRowText(
+                    titleColor: theme.grey,
+                    title: clsLan.qty,
+                    size: valueSize,
+                    lableSize: labelSize,
+                    color: theme.black,
+                    content: forDisplay[field.qty],
+                    weight: FontWeight.w500),
+                reUse.reUseRowText(
+                    titleColor: theme.grey,
+                    title: clsLan.assignDate,
+                    size: valueSize,
+                    lableSize: labelSize,
+                    color: theme.black,
+                    content: forDisplay[field.assignDate],
+                    weight: FontWeight.w500),
+                reUse.reUseRowText(
+                    lableSize: labelSize,
+                    titleColor: theme.grey,
+                    title: clsLan.receiverPhoneNumber,
+                    size: valueSize,
+                    color: theme.black,
+                    content: forDisplay['phoneNumber'],
+                    weight: FontWeight.w500),
+                reUse.reUseRowText(
+                    lableSize: labelSize,
+                    titleColor: theme.grey,
+                    title: clsLan.bankCode,
+                    size: valueSize,
+                    color: theme.black,
+                    content: forDisplay[field.bankCode],
+                    weight: FontWeight.w500),
+                reUse.reUseText(
+                    weight: FontWeight.w500, size: labelSize, color: theme.grey, content: '${clsLan.note} : '),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      child: Container(
+                        width: Get.width,
+                        margin: const EdgeInsets.symmetric(vertical: 8.0),
+                         // decoration: BoxDecoration(
+                        //     border: Border.all(color: theme.grey)),
+                        child: reUse.reUseTextNote(
+                            weight: FontWeight.w400, size: 14.0, color: theme.black, content: forDisplay['note'] ?? ""),
+                      ),
                     ),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      reUse.reUseText(
-                          weight: FontWeight.w500,
-                          size: labelSize,
-                          color: theme.grey,
-                          content: '${clsLan.note} : '),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Flexible(
-                        child: Container(
-                          width: Get.width,
-                          margin: const EdgeInsets.all(8.0),
-                          padding: const EdgeInsets.all(8.0),
-                          // decoration: BoxDecoration(
-                          //     border: Border.all(color: theme.grey)),
-                          child: reUse.reUseTextNote(
-                              weight: FontWeight.w400,
-                              size: 14.0,
-                              color: theme.black,
-                              content: forDisplay['note'] ?? "No reason"),
-                        ),
+                  ],
+                ),
+                reUse.reUseText(
+                    weight: FontWeight.w500, size: labelSize, color: theme.grey, content: '${clsLan.returnReason} : '),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      child: Container(
+                        width: Get.width,
+                        margin: const EdgeInsets.symmetric(vertical: 8.0),
+                         // decoration: BoxDecoration(
+                        //     border: Border.all(color: theme.grey)),
+                        child: reUse.reUseTextNote(
+                            weight: FontWeight.w400, size: 14.0, color: theme.black, content: forDisplay['returnNote'] ?? ""),
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  width: Get.width,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: theme.minGrey,
+                        blurRadius: 1,
+                        //offset: Offset(4, 8), // Shadow position
                       ),
                     ],
                   ),
-                  reUse.reUseRowText(
-                      titleColor: theme.grey,
-                      title: clsLan.createDate,
-                      size: valueSize,
-                      lableSize: labelSize,
-                      color: theme.black,
-                      content: forDisplay['date'],
-                      weight: FontWeight.w500),
-                  reUse.reUseRowText(
-                      titleColor: theme.grey,
-                      title: clsLan.driverName,
-                      size: valueSize,
-                      lableSize: labelSize,
-                      color: theme.black,
-                      content: forDisplay[field.assignBy],
-                      weight: FontWeight.w500),
-                  reUse.reUseRowText(
-                      titleColor: theme.grey,
-                      title: clsLan.driverPhone,
-                      size: valueSize,
-                      lableSize: labelSize,
-                      color: theme.black,
-                      content: forDisplay[field.dPhone],
-                      weight: FontWeight.w500),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      reUse.reUseText(
-                          weight: FontWeight.w400,
-                          size: labelSize,
-                          color: theme.grey,
-                          content: '${clsLan.returnReason} : '),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Flexible(
-                        child: Container(
-                          width: Get.width,
-                          margin: const EdgeInsets.all(8.0),
-                          padding: const EdgeInsets.all(8.0),
-                          // decoration: BoxDecoration(
-                          //     border: Border.all(color: theme.grey)),
-                          child: reUse.reUseTextNote(
-                              weight: FontWeight.w400,
-                              size: 14.0,
-                              color: theme.black,
-                              content: forDisplay['returnNote']),
-                        ),
+                      reUse.reUseRowText(
+                          titleColor: theme.grey,
+                          title: clsLan.driverName,
+                          size: valueSize,
+                          lableSize: labelSize,
+                          color: theme.black,
+                          content: forDisplay[field.assignBy],
+                          weight: FontWeight.w500),
+                      reUse.reUseRowText(
+                          titleColor: theme.grey,
+                          title: clsLan.driverPhone,
+                          size: valueSize,
+                          lableSize: labelSize,
+                          color: theme.black,
+                          content: forDisplay[field.dPhone],
+                          weight: FontWeight.w500),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          reUse.reUseText(
+                              size: labelSize, weight: FontWeight.w500, color: theme.grey, content: clsLan.price),
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 8),
+                            decoration: BoxDecoration(
+                              color: theme.blue,
+                              borderRadius: BorderRadius.circular(3),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            child: Center(
+                                child: reUse.reUseText(
+                                    weight: FontWeight.bold,
+                                    size: 16.0,
+                                    color: theme.white,
+                                    content: forDisplay['price'] + " \$")),
+                          )
+                        ],
                       ),
+                      reUse.reUseRowText(
+                          titleColor: theme.grey,
+                          title: clsLan.returnTime,
+                          size: valueSize,
+                          lableSize: labelSize,
+                          color: theme.black,
+                          content: forDisplay[field.returnDate],
+                          weight: FontWeight.w500),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     Row(
+                      //       children: [
+                      //         reUse.reUseText(
+                      //             weight: FontWeight.w400,
+                      //             size: labelSize,
+                      //             color: theme.grey,
+                      //             content: '${clsLan.complete} : '),
+                      //         reUse.reUseText(
+                      //             weight: FontWeight.bold,
+                      //             size: valueSize,
+                      //             color: theme.black,
+                      //             content: forDisplay[field.returnDate]),
+                      //       ],
+                      //     ),
+                      //     // Container(
+                      //     //   decoration: BoxDecoration(
+                      //     //     color: theme.litestGreen,
+                      //     //     borderRadius: BorderRadius.circular(6),
+                      //     //   ),
+                      //     //   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      //     //   child: reUse.reUseText(
+                      //     //       weight: FontWeight.bold, size: 12.0, color: theme.liteGreen, content: clsLan.stCom),
+                      //     // )
+                      //   ],
+                      // ),
+                      // reUse.reUseRowText(
+                      //     titleColor: theme.grey,
+                      //     title: clsLan.qty,
+                      //     size: valueSize,
+                      //     lableSize: labelSize,
+                      //     color: theme.black,
+                      //     content: forDisplay['price'],
+                      //     weight: FontWeight.w500),
                     ],
                   ),
-                  reUse.reUseRowText(
-                      titleColor: theme.grey,
-                      title: clsLan.returnTime,
-                      size: valueSize,
-                      lableSize: labelSize,
-                      color: theme.black,
-                      content: forDisplay['date'],
-                      weight: FontWeight.w500),
-                ],
-              ),
+                )
+              ],
             ),
           ),
         ),
