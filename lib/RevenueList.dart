@@ -376,35 +376,14 @@ class _RevenueListState extends State<RevenueList> {
                                       ],
                                     ),
                                   ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      reUse.reUseRowText(
-                                          lableSize: 12.0,
-                                          titleColor: theme.grey,
-                                          title: clsLan.bankCode,
-                                          size: 12.0,
-                                          color: theme.black,
-                                          content: "${forDisplay[index][field.completeDate]}   ",
-                                          weight: FontWeight.w500),
-                                      // Container(
-                                      //   decoration: BoxDecoration(
-                                      //     color: theme.litestGreen,
-                                      //     borderRadius:
-                                      //     BorderRadius.circular(6),
-                                      //   ),
-                                      //   padding: const EdgeInsets.symmetric(
-                                      //       horizontal: 10, vertical: 4),
-                                      //   child: reUse.reUseText(
-                                      //       size: 10.0,
-                                      //       color: theme.liteGreen,
-                                      //       content: clsLan.stCom,
-                                      //       weight: FontWeight.w900),
-                                      // ),
-                                    ],
-                                  ),
+                                  reUse.reUseRowText(
+                                      lableSize: 12.0,
+                                      titleColor: theme.grey,
+                                      title: clsLan.bankCode,
+                                      size: 12.0,
+                                      color: theme.black,
+                                      content: "${forDisplay[index][field.completeDate]}   ",
+                                      weight: FontWeight.w500),
 
                                 ],
                               ),
