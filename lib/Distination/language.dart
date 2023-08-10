@@ -66,4 +66,5 @@ class ClsLanguage {
   String notHave = "មិនមាន";
   String date = "កាលបរិច្ឆេទ";
   String today = "ថ្ងៃនេះ";
+  String assignDate = "ពេលមកទទួលទំនិញ";
 }
