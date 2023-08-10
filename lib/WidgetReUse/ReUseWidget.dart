@@ -304,13 +304,12 @@ class ReUseWidget {
                   flex: 1,
                   child: InkWell(
                     onTap: () {
-                      Get.to(
-                        const CompleteScreen(),
+                      Get.to(()=>CompleteScreen(),
                         arguments: completeData,
                       );
                     },
                     child: unitTwoText(
-                        label: clsLan.complete,
+                        label: clsLan.stCom,
                         qty: completeLength.toString(),
                         assetsIcon: 'assets/images/check.png',
                         borderright: BorderSide(width: 1, color: theme.liteGrey),
@@ -321,8 +320,7 @@ class ReUseWidget {
                   flex: 1,
                   child: InkWell(
                     onTap: () {
-                      Get.to(
-                        const ReturnScreen(),
+                      Get.to(()=> ReturnScreen(),
                         arguments: returnData,
                       );
                     },
@@ -1960,7 +1958,7 @@ class ReUseWidget {
         // ],
       ),
       child: reUseText(
-          content: value == 'complete' ? 'Complete' : 'Return',
+          content: value == 'complete' ? '${clsLan.stCom}' : '${clsLan.stReturn}',
           color: value == 'complete' ? theme.green : theme.red,
           size: 10.0,
           weight: FontWeight.w500),
