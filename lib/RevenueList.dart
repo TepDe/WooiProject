@@ -376,6 +376,10 @@ class _RevenueListState extends State<RevenueList> {
                                       ],
                                     ),
                                   ),
+                                  Divider(
+                                    height: 1,
+                                    color: theme.grey,
+                                  ),
                                   reUse.reUseRowText(
                                       lableSize: 12.0,
                                       titleColor: theme.grey,
