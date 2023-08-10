@@ -786,32 +786,31 @@ class ReUseWidget {
   }
 
   reUseRowText({double? lableSize, content, size, weight, color, title, titleColor}) {
-    return Flexible(
-      child: SizedBox(
-        width: Get.width,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                title,
-                softWrap: true,
-                maxLines: 2,
-                style: TextStyle(
-                    fontSize: lableSize ?? 10.0,
-                    color: titleColor ?? theme.black,
-                    fontWeight: weight ?? FontWeight.normal),
-              ),
-              Text(
-                content ?? "",
-                softWrap: true,
-                maxLines: 2,
-                style: TextStyle(
-                    fontSize: size ?? 12.0, color: color ?? theme.black, fontWeight: weight ?? FontWeight.normal),
-              ),
-            ],
-          ),
+    return SizedBox(
+      width: Get.width,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              softWrap: true,
+              maxLines: 2,
+              style: TextStyle(
+                  fontSize: lableSize ?? 10.0,
+                  color: titleColor ?? theme.black,
+                  fontWeight: weight ?? FontWeight.normal),
+            ),
+            Text(
+              content ?? "",
+              softWrap: true,
+              maxLines: 2,
+              style: TextStyle(
+                  fontSize: size ?? 12.0, color: color ?? theme.black, fontWeight: weight ?? FontWeight.normal),
+            ),
+          ],
         ),
       ),
     );
