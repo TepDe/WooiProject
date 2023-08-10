@@ -360,6 +360,13 @@ class _PaidScreenState extends State<PaidScreen> {
                                   //     color: theme.grey,
                                   //   ),
                                   // ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0,top: 8.0),
+                                    child: Divider(
+                                      height: 1,
+                                      color: theme.grey,
+                                    ),
+                                  ),
                                   Row(
                                     mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
