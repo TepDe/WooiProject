@@ -284,12 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(50),
                       //border: Border.all(color: theme.orange, width: 1.5)
                     ),
-                    child: InkWell(
-                      onTap: () {
-                        //pickImage();
-                      },
-                      child: CircleAvatar(backgroundImage: new FileImage(_image!)),
-                    ),
+                    child: CircleAvatar(backgroundImage: new FileImage(_image!)),
                   )
                 else
                   InkWell(
