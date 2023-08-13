@@ -198,10 +198,13 @@ class _LogInScreenState extends State<LogInScreen> {
       ),
     );
   }
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String _verificationId = "";
   String phoneNumberUser = '+85511111111';
-  Future<void> _signInWithPhoneNumber({BuildContext? context, String? phoneNumber}) async {
+
+  Future<void> _signInWithPhoneNumber(
+      {BuildContext? context, String? phoneNumber}) async {
     try {
       await _auth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
@@ -226,6 +229,7 @@ class _LogInScreenState extends State<LogInScreen> {
       print("Error: $e");
     }
   }
+
   void _showOTPDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -314,11 +318,21 @@ class _LogInScreenState extends State<LogInScreen> {
         userEmail.clear();
         userPassword.clear();
         reUse.waitingDialog(context);
-        await glb.storeUser(
-          uid: auth.currentUser!.uid,
-          email: email.toString(),
-          password: password.toString(),
-        );
+        if (await glb.checkAccountType() == false) {
+          Get.back();
+          await onDialogOK(
+              context: context,
+              title: 'Not Found',
+              content: 'This User is not found please check and again!');
+          await FirebaseAuth.instance.signOut();
+        } else {
+          await glb.storeUser(
+            uid: auth.currentUser!.uid,
+            email: email.toString(),
+            password: password.toString(),
+          );
+        }
+
         setState(() {});
       }
     } on FirebaseAuthException catch (e) {
