@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -795,5 +796,33 @@ class GlobalController {
     var object =
         payWay.where((item) => item['name'].contains(bankName)).toList();
     return object;
+  }
+  Future<bool> checkAccountType() async {
+    bool isTrue =false;
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(auth.currentUser!.uid.toString())
+        .get()
+        .then((DocumentSnapshot documentSnapshot) async {
+          Map data = documentSnapshot.data() as Map;
+          if(data[field.accountType]==null){
+            await FirebaseFirestore.instance
+                .collection('Users')
+                .doc(auth.currentUser!.uid.toString())
+                .update({
+              "accountType" : "Users"
+            });
+            isTrue = true;
+          }else{
+            if(data[field.accountType]=="Drivers"){
+              isTrue = false;
+              await FirebaseAuth.instance.signOut();
+            }else if(data[field.accountType]=="Users"){
+              isTrue = true;
+
+            }
+          }
+    });
+    return isTrue;
   }
 }
