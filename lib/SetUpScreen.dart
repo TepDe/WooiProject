@@ -41,7 +41,10 @@ class _SetUpScreenState extends State<SetUpScreen> {
   final fieldInfo = FieldInfo();
 
   fetchUserData() async {
-    fetch.doc(auth.currentUser!.uid.toString()).get().then((DocumentSnapshot documentSnapshot) async {
+    fetch
+        .doc(auth.currentUser!.uid.toString())
+        .get()
+        .then((DocumentSnapshot documentSnapshot) async {
       userData = documentSnapshot.data() as Map<String, dynamic>;
       lastName.text = userData['lastname'] ?? "";
       firstName.text = userData["firstname"] ?? "";
@@ -52,12 +55,14 @@ class _SetUpScreenState extends State<SetUpScreen> {
 
     setState(() {});
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     fetchUserData();
   }
+
   var ctime;
 
   @override
@@ -110,7 +115,9 @@ class _SetUpScreenState extends State<SetUpScreen> {
                   children: [
                     Padding(
                       padding: EdgeInsets.only(
-                          top: Get.height * 0.15, left: Get.width * 0.05, right: Get.width * 0.05),
+                          top: Get.height * 0.15,
+                          left: Get.width * 0.05,
+                          right: Get.width * 0.05),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -192,31 +199,40 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                   scrollDirection: Axis.horizontal,
                                   padding: const EdgeInsets.all(8),
                                   itemCount: glb.payWay.length,
-                                  itemBuilder: (BuildContext context, int index) {
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
                                     return Padding(
-                                      padding: const EdgeInsets.only(right: 8.0),
+                                      padding:
+                                          const EdgeInsets.only(right: 8.0),
                                       child: SizedBox(
                                         height: 100,
                                         child: InkWell(
                                           onTap: () async {
                                             selectedItemIndex = index;
-                                            bankName = await glb.selectPayWay(glb.payWay[index]['name']);
+                                            bankName = await glb.selectPayWay(
+                                                glb.payWay[index]['name']);
                                             setState(() {});
                                           },
                                           child: Stack(
                                             alignment: Alignment.center,
                                             children: [
-                                              Image(image: AssetImage(glb.payWay[index]["img"])),
+                                              Image(
+                                                  image: AssetImage(glb
+                                                      .payWay[index]["img"])),
                                               CircleAvatar(
                                                 minRadius: 20,
-                                                backgroundColor: index == selectedItemIndex
-                                                    ? Colors.white // Change the color of the selected item
+                                                backgroundColor: index ==
+                                                        selectedItemIndex
+                                                    ? Colors
+                                                        .white // Change the color of the selected item
                                                     : Colors.transparent,
                                                 child: Icon(
                                                   Icons.check_circle,
                                                   size: 50,
-                                                  color: index == selectedItemIndex
-                                                      ? Colors.blue // Change the color of the selected item
+                                                  color: index ==
+                                                          selectedItemIndex
+                                                      ? Colors
+                                                          .blue // Change the color of the selected item
                                                       : Colors.transparent,
                                                 ),
                                               )
@@ -237,12 +253,24 @@ class _SetUpScreenState extends State<SetUpScreen> {
                           SizedBox(
                             height: Get.height * 0.03,
                           ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: SizedBox(
-                              width: Get.width * 0.3,
-                              height: Get.height * 0.05,
-                              child: ElevatedButton(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              TextButton(
+                                  // style: ElevatedButton.styleFrom(
+                                  //   elevation: 1,
+                                  //   backgroundColor: Colors.transparent,
+                                  //   shape: RoundedRectangleBorder(
+                                  //     borderRadius: BorderRadius.circular(6),
+                                  //   ),
+                                  // ),
+                                  onPressed: () async {
+                                    await FirebaseAuth.instance.signOut().then(
+                                        (value) =>
+                                            Get.to(() => const LogInScreen()));
+                                  },
+                                  child: reUse.reUseText(content: "Log Out")),
+                              ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   elevation: 1,
                                   backgroundColor: theme.orange,
@@ -264,7 +292,8 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                             ),
                                           ),
                                         ));
-                                  } else if (lastName.text.trim().toString() == '') {
+                                  } else if (lastName.text.trim().toString() ==
+                                      '') {
                                     await reUse.reUseCircleDialog(
                                         context: context,
                                         icon: Icons.account_circle_rounded,
@@ -277,7 +306,10 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                             ),
                                           ),
                                         ));
-                                  } else if (phoneNumber.text.trim().toString() == '') {
+                                  } else if (phoneNumber.text
+                                          .trim()
+                                          .toString() ==
+                                      '') {
                                     await reUse.reUseCircleDialog(
                                         context: context,
                                         icon: Icons.phone_rounded,
@@ -335,7 +367,8 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                                 child: SizedBox(
                                                     height: 40,
                                                     width: 40,
-                                                    child: CircularProgressIndicator()),
+                                                    child:
+                                                        CircularProgressIndicator()),
                                               )
                                             ],
                                           ),
@@ -360,17 +393,20 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                   setState(() {});
                                 },
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     Text(
                                       clsLan.continues,
-                                      style: TextStyle(color: theme.white, fontWeight: FontWeight.w700),
+                                      style: TextStyle(
+                                          color: theme.white,
+                                          fontWeight: FontWeight.w700),
                                     ),
                                     const Icon(Icons.navigate_next_rounded),
                                   ],
                                 ),
                               ),
-                            ),
+                            ],
                           )
                         ],
                       ),
