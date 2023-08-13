@@ -32,6 +32,7 @@ class FieldData {
   String completeDate = "completeDate";
   String assignDate = "assignDate";
   String returnDate = "returnDate";
+  String accountType = "accountType";
 }
 
 
