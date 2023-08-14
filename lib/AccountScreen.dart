@@ -153,7 +153,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   SizedBox(
                     height: viewHeight2,
                   ),
-                  reUse.reUseText(content: 'Profile', weight: FontWeight.w500, size: 18.0),
+                  reUse.reUseText(content: 'គណនី', weight: FontWeight.bold, size: 18.0),
                   SizedBox(
                     height: viewHeight2,
                   ),
