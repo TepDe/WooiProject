@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -73,11 +74,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
   }
 
   fetchUserInformation() async {
-    FirebaseFirestore.instance
-        .collection('Users')
-        .doc(auth.currentUser!.uid)
-        .get()
-        .then((doc) async {
+    FirebaseFirestore.instance.collection('Users').doc(auth.currentUser!.uid).get().then((doc) async {
       Map data = doc.data() as Map;
       userName = data['firstname'] + ' ' + data['lastname'].toString();
       phoneNumber = data['phoneNumber'].toString();
@@ -117,13 +114,22 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                       ),
                     ),
                     TextButton.icon(
-                      onPressed: () {
+                      onPressed: () async {
                         // Navigator.of(context).push(
                         //   MaterialPageRoute(
                         //     builder: (context) => const ViewScreen(),
                         //   ),
                         // );
-                        Navigator.pop(context);
+                        DatabaseReference packageRequest = FirebaseDatabase.instance.ref("PackageRequest");
+                        await packageRequest
+                            .child(auth.currentUser!.uid)
+                            .child('package')
+                            .child(argumentData[fieldData.pushKey])
+                            .remove()
+                            .then((value) => {Get.back()})
+                            .catchError((onError) => {});
+                        setState(() {});
+
                       },
                       icon: Icon(Icons.delete_forever, color: theme.red),
                       label: Text(
@@ -145,11 +151,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                         size: 16.0,
                         color: theme.grey,
                       ),
-                      reUse.reUseText(
-                          content: packageID,
-                          size: 26.0,
-                          color: theme.black,
-                          weight: FontWeight.bold),
+                      reUse.reUseText(content: packageID, size: 26.0, color: theme.black, weight: FontWeight.bold),
                     ],
                   ),
                 ),
@@ -163,10 +165,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10),
                   child: reUse.reUseText(
-                      content: 'លេខទូរស័ព្ទអ្នកទទួល :',
-                      size: textSize,
-                      weight: FontWeight.w500,
-                      color: theme.black),
+                      content: 'លេខទូរស័ព្ទអ្នកទទួល :', size: textSize, weight: FontWeight.w500, color: theme.black),
                 ),
                 // Padding(
                 //   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -184,8 +183,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                   child: TextFormField(
                     controller: phoneBox,
                     // keyboardType: inputType,
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
                       FilteringTextInputFormatter.digitsOnly,
@@ -210,8 +208,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10),
                   child: reUse.reUseText(
-                      content:
-                          'ទីតាំងអ្នកទទួល : ( សូមបញ្ចូលទីតាំងអ្នកទទួលជាអក្សរខ្មែរ )',
+                      content: 'ទីតាំងអ្នកទទួល : ( សូមបញ្ចូលទីតាំងអ្នកទទួលជាអក្សរខ្មែរ )',
                       size: textSize,
                       weight: FontWeight.w500,
                       color: theme.black),
@@ -225,13 +222,11 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                     //inputFormatters: formater,
                     onChanged: (value) {
                       List results = clsDis.destination
-                          .where((user) => user.toLowerCase().contains(
-                              locationBox.text.toString().toLowerCase()))
+                          .where((user) => user.toLowerCase().contains(locationBox.text.toString().toLowerCase()))
                           .toList();
                       if (results == null) {
                         results = eng_distin
-                            .where((user) => user.toLowerCase().contains(
-                                locationBox.text.toString().toLowerCase()))
+                            .where((user) => user.toLowerCase().contains(locationBox.text.toString().toLowerCase()))
                             .toList();
                       }
                       print(results);
@@ -272,10 +267,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                             return SizedBox(
                               child: TextButton(
                                 onPressed: () {
-                                  locationBox.text = forDisplay[index]
-                                      .toString()
-                                      .trim()
-                                      .toLowerCase();
+                                  locationBox.text = forDisplay[index].toString().trim().toLowerCase();
                                 },
                                 child: Text(forDisplay[index]),
                               ),
@@ -289,8 +281,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10, top: 10),
                   child: reUse.reUseText(
-                      content:
-                          clsLan.price + " : ( សូមបញ្ចូលតំលៃគិតជាដុល្លារ )",
+                      content: clsLan.price + " : ( សូមបញ្ចូលតំលៃគិតជាដុល្លារ )",
                       size: textSize,
                       weight: FontWeight.w500,
                       color: theme.black),
@@ -304,11 +295,9 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                           mixLength: 4,
                           controller: priceBox,
                           formater: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp('[0-9.,]+')),
+                            FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
                           ],
-                          inputType: const TextInputType.numberWithOptions(
-                              decimal: true),
+                          inputType: const TextInputType.numberWithOptions(decimal: true),
                           label: ' ',
                           textIcon: Icons.location_on),
                     ),
@@ -321,10 +310,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10, top: 10),
                   child: reUse.reUseText(
-                      content: clsLan.qty + " :",
-                      size: textSize,
-                      weight: FontWeight.w500,
-                      color: theme.black),
+                      content: clsLan.qty + " :", size: textSize, weight: FontWeight.w500, color: theme.black),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -335,11 +321,9 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                           mixLength: 3,
                           controller: qtyBox,
                           formater: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp('[0-9.,]+')),
+                            FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
                           ],
-                          inputType: const TextInputType.numberWithOptions(
-                              decimal: true),
+                          inputType: const TextInputType.numberWithOptions(decimal: true),
                           label: ' ',
                           textIcon: Icons.location_on),
                     ),
@@ -355,8 +339,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                 const SizedBox(
                   height: 18,
                 ),
-                reUse.reUseText(
-                    content: 'ចំណាំ :', size: textSize, color: theme.black),
+                reUse.reUseText(content: 'ចំណាំ :', size: textSize, color: theme.black),
                 Container(
                   alignment: Alignment.center,
                   child: TextField(
@@ -365,14 +348,11 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                     maxLines: 3,
                     decoration: InputDecoration(
                         border: const OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 0.0),
+                          borderSide: BorderSide(color: Colors.grey, width: 0.0),
                         ),
 
                         // hintText: "Enter Remarks",
-                        focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 1, color: theme.hiLiteBlue))),
+                        focusedBorder: OutlineInputBorder(borderSide: BorderSide(width: 1, color: theme.hiLiteBlue))),
                   ),
                 ),
                 const SizedBox(
@@ -413,8 +393,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                                         ),
                                       ),
                                     ));
-                              } else if (locationBox.text.trim().toString() ==
-                                  '') {
+                              } else if (locationBox.text.trim().toString() == '') {
                                 await reUse.reUseCircleDialog(
                                     context: context,
                                     icon: Icons.location_on_rounded,
@@ -427,8 +406,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                                         ),
                                       ),
                                     ));
-                              } else if (priceBox.text.trim().toString() ==
-                                  '') {
+                              } else if (priceBox.text.trim().toString() == '') {
                                 await reUse.reUseCircleDialog(
                                     context: context,
                                     icon: Icons.monetization_on,
@@ -446,42 +424,30 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                                   Get.back();
                                   setState(() {});
                                 } else {
-                                  if (phoneBox.text ==
-                                          argumentData[fieldData.phoneNumber] &&
-                                      locationBox.text ==
-                                          argumentData[fieldData.location] &&
-                                      priceBox.text ==
-                                          argumentData[fieldData.price] &&
-                                      qtyBox.text ==
-                                          argumentData[fieldData.qty] &&
-                                      noteBox.text ==
-                                          argumentData[fieldData.note]) {
+                                  if (phoneBox.text == argumentData[fieldData.phoneNumber] &&
+                                      locationBox.text == argumentData[fieldData.location] &&
+                                      priceBox.text == argumentData[fieldData.price] &&
+                                      qtyBox.text == argumentData[fieldData.qty] &&
+                                      noteBox.text == argumentData[fieldData.note]) {
                                     Get.back();
                                     setState(() {});
                                   } else {
                                     alertDialog(context);
                                     await glb
                                         .editPackage(
-                                        bankName:bankName.trim().toString(),
-                                      bankCode: bankCode.trim().toString(),
+                                            bankName: bankName.trim().toString(),
+                                            bankCode: bankCode.trim().toString(),
                                             data: argumentData,
-                                            userName:
-                                                userName.trim().toString(),
-                                            userPhoneNumber:
-                                                phoneNumber.trim().toString(),
-                                            tokenKey:
-                                                getToken.trim().toString(),
+                                            userName: userName.trim().toString(),
+                                            userPhoneNumber: phoneNumber.trim().toString(),
+                                            tokenKey: getToken.trim().toString(),
                                             chatid: chatid.trim().toString(),
-                                            price:
-                                                priceBox.text.trim().toString(),
+                                            price: priceBox.text.trim().toString(),
                                             note: noteBox.text.toString(),
                                             packageID: packageID.toString(),
                                             qty: qtyBox.text.trim().toString(),
-                                            phoneNumber:
-                                                phoneBox.text.trim().toString(),
-                                            location: locationBox.text
-                                                .trim()
-                                                .toString())
+                                            phoneNumber: phoneBox.text.trim().toString(),
+                                            location: locationBox.text.trim().toString())
                                         .then((value) {
                                       // phoneBox.clear();
                                       // priceBox.clear();
@@ -522,10 +488,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
 
                                 Text(
                                   'UPDATE',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: theme.white,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontSize: 16, color: theme.white, fontWeight: FontWeight.bold),
                                 )
                               ],
                             ),
@@ -571,8 +534,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
             backgroundColor: Colors.transparent,
             actions: [
               Center(
-                child: SizedBox(
-                    height: 40, width: 40, child: CircularProgressIndicator()),
+                child: SizedBox(height: 40, width: 40, child: CircularProgressIndicator()),
               )
             ],
           ),
