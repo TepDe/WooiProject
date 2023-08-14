@@ -948,6 +948,7 @@ class ReUseWidget {
       showIcon,
       iconcolor,
       fontsize,
+        onTap,
       value,
       weight}) {
     final glb = GlobalController();
@@ -969,7 +970,7 @@ class ReUseWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {
+          onTap: onTap??() {
             if (function == 'minus') {
               Fluttertoast.showToast(
                 msg: 'Maximum input is 9',
@@ -1965,7 +1966,7 @@ class ReUseWidget {
     );
   }
 
-  reUseCircleDialog({disposeAllow, data, context, icon, title, content, function}) {
+  reUseCircleDialog({disposeAllow, data, context, icon, title, content, function,onTap}) {
     return showDialog(
       barrierDismissible: disposeAllow ?? true,
       context: context,
@@ -2014,11 +2015,12 @@ class ReUseWidget {
                     //     fontSize: 16.0,
                     //   ),
                     // ),
-                    content,
+                    content??Container(),
                     const SizedBox(height: 20.0),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       child: reUseCustomizeButton(
+                        onTap:onTap ,
                           value: data,
                           function: function,
                           textcolor: theme.orange,
@@ -2079,7 +2081,7 @@ class ReUseWidget {
 
   final token = TextEditingController();
 
-  reUseSettingItem({data, function, title, Widget? trailing, trailingIconColor, context, leading}) {
+  reUseSettingItem({data,onTap, function, title, Widget? trailing, trailingIconColor, context, leading}) {
     return Container(
       height: 60,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -2097,7 +2099,7 @@ class ReUseWidget {
       child: Material(
         color: theme.white,
         child: InkWell(
-          onTap: () {
+          onTap:onTap?? () {
             if (function == 'token') {
               showDialog(
                 context: context,
