@@ -100,11 +100,11 @@ class _ViewScreenState extends State<ViewScreen> {
                     //alignment: Alignment.topRight,
                     color: changeColor ?? themes.deepOrange,
                   ),
-                  label: 'Home',
+                  label: 'ទំព័រដើម',
                 ),
                 BottomNavigationBarItem(
                   icon: reUseIcon(icons: Icons.account_circle),
-                  label: 'Account',
+                  label: 'គណនី',
                 ),
               ],
               iconSize: 60,
