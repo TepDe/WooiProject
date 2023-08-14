@@ -18,7 +18,7 @@ import 'package:wooiproject/HomeScreen.dart';
 import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/MapScreen.dart';
 import 'package:wooiproject/PaidScreen.dart';
-import 'package:wooiproject/PendingScreen.dart';
+import 'package:wooiproject/PendingComponent/PendingScreen.dart';
 import 'package:wooiproject/ProfileScreen.dart';
 import 'package:wooiproject/RenderListDetail.dart';
 import 'package:wooiproject/ReturnScreen.dart';
