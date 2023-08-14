@@ -50,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     return true;
   }
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -66,6 +67,10 @@ class _HomeScreenState extends State<HomeScreen> {
     // glb.getOtp();
     fetchImage();
     glb.checkAccountType();
+      isLoading = true;
+      setState(() {
+
+      });
   }
 
   alertNoInternet() async {
@@ -253,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
     var imageSize = MediaQuery.of(context).size.height * 0.08;
     return Scaffold(
       backgroundColor: theme.liteGrey,
-      body: Column(
+      body: isLoading == true ? Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           // Padding(
@@ -353,7 +358,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               : Container(),
         ],
-      ),
+      ) : Center(child: CircularProgressIndicator())
     );
   }
 
