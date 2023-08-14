@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -92,6 +93,7 @@ class _AccountScreenState extends State<AccountScreen> {
   var userData = {};
   var imagePath;
   File? _image;
+  final passwordBox = TextEditingController();
   final strKey = StorageKey();
 
   Future<void> pickImage() async {
@@ -176,7 +178,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         onTap: () {
                           pickImage();
                         },
-                        child: CircleAvatar( backgroundImage: new FileImage(_image!)),
+                        child: CircleAvatar(backgroundImage: new FileImage(_image!)),
                       ),
                     )
                   else
@@ -242,7 +244,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             color: theme.black),
                         TextButton.icon(
                           onPressed: () {
-                            Get.to(()=>const EditProfileScreen(), arguments: userData);
+                            Get.to(() => const EditProfileScreen(), arguments: userData);
                           },
                           icon: Icon(Icons.edit, color: theme.darkGrey),
                           label: reUse.reUseText(content: 'Edit', size: 16.0, color: theme.darkGrey),
@@ -259,6 +261,117 @@ class _AccountScreenState extends State<AccountScreen> {
                       context: context,
                       leading: const Icon(Icons.email)),
                   reUse.reUseSettingItem(
+                      onTap: () {
+                        reUse.reUseYesNoDialog(
+                          context: context,
+                          noText: "ទេ",
+                          yesText: "ព្រម",
+                          title: 'ផ្លាស់ប្តូរពាក្យសម្ងាត់',
+                          yesTap: () async {
+                            if (passwordBox.text.toString().isEmpty) {
+                              Get.back();
+                            } else {
+                              await FirebaseAuth.instance.currentUser!
+                                  .updatePassword(passwordBox.text.toString())
+                                  .then((value) async {
+                                await FirebaseFirestore.instance
+                                    .collection('Users')
+                                    .doc(auth.currentUser!.uid)
+                                    .update({'password': passwordBox.text}).then((value) async {
+                                  Navigator.pop(context);
+                                  await reUse.reUseCircleDialog(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      context: context,
+                                      icon: Icons.check_circle_rounded,
+                                      title: 'ជោគជ័យ',
+                                      content: Center(
+                                        child: Text(
+                                          'ការកែសម្រួលរបស់អ្នកគឺជោគជ័យ',
+                                          style: TextStyle(
+                                            color: theme.black,
+                                          ),
+                                        ),
+                                      ));
+                                }).catchError((catchError) async {
+                                  Navigator.pop(context);
+                                  await reUse.reUseCircleDialog(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      context: context,
+                                      icon: Icons.check_circle_rounded,
+                                      title: 'បរាជ័យ',
+                                      content: Center(
+                                        child: Text(
+                                          'បរាជ័យ សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ',
+                                          style: TextStyle(
+                                            color: theme.black,
+                                          ),
+                                        ),
+                                      ));
+                                });
+                              }).catchError((catchError) async {
+                                Navigator.pop(context);
+                                await reUse.reUseCircleDialog(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    context: context,
+                                    icon: Icons.check_circle_rounded,
+                                    title: 'បរាជ័យ',
+                                    content: Center(
+                                      child: Text(
+                                        'បរាជ័យ សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ',
+                                        style: TextStyle(
+                                          color: theme.black,
+                                        ),
+                                      ),
+                                    ));
+                              });
+                            }
+                          },
+                          noTap: () async {
+                            Navigator.pop(context);
+                          },
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 20),
+                                child: reUse.reUseText(
+                                    content: "បញ្ចូលពាក្យសម្ងាត់របស់អ្នកខាងក្រោម",
+                                    size: 12.0,
+                                    color: theme.black,
+                                    weight: FontWeight.w500),
+                              ),
+                              TextFormField(
+                                controller: passwordBox,
+                                // keyboardType: inputType,
+                                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                // inputFormatters: [
+                                //   FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
+                                //   FilteringTextInputFormatter.digitsOnly,
+                                // ],
+                                // maxLength: 10,
+                                onChanged: (value) async {},
+                                decoration: InputDecoration(
+                                  //icon: Icon(textIcon ?? null),
+                                  // fillColor: theme.liteGrey,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  //border: InputBorder.none,
+
+                                  hintStyle: const TextStyle(fontSize: 12),
+                                ),
+                              ),
+                            ],
+                          ),
+                          icon: Icons.password,
+                        );
+                      },
                       trailing: hindPassowrd == true
                           ? IconButton(
                               onPressed: () {
@@ -559,7 +672,7 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
         onPressed: () async {
           FirebaseAuth.instance.signOut();
-          Get.to(()=>const LogInScreen());
+          Get.to(() => const LogInScreen());
           setState(() {});
         },
         child: Text(
