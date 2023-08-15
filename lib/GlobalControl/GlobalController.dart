@@ -805,24 +805,38 @@ class GlobalController {
         .get()
         .then((DocumentSnapshot documentSnapshot) async {
           Map data = documentSnapshot.data() as Map;
-          if(data[field.accountType]==null){
+          if(data[field.accountType]==null||data["signInToken"]==null){
             await FirebaseFirestore.instance
                 .collection('Users')
                 .doc(auth.currentUser!.uid.toString())
                 .update({
-              "accountType" : "Users"
+              "accountType" : "Users",
+              "signInToken" : "true",
             });
             isTrue = true;
           }else{
             if(data[field.accountType]=="Drivers"){
               isTrue = false;
               await FirebaseAuth.instance.signOut();
-            }else if(data[field.accountType]=="Users"){
+            }else if(data[field.accountType]=="Users" && data["isBanned"]=="false"&& data["signInToken"]=="false"){
               isTrue = true;
-
             }
           }
     });
     return isTrue;
+  }
+  Future<bool> updateOneField({required String field ,required firebaseFireStore, data, required String value, required context}) async {
+    final reUse = ReUseWidget();
+    bool isReady = false;
+    await FirebaseFirestore.instance.collection(firebaseFireStore).doc(data).update({
+      field: value,
+    }).then((value) async {
+      isReady = true;
+    }).catchError((error) async {
+      isReady = false;
+      reUse.reUseCircleDialog(
+          onTap: () {}, context: context, title: 'បរាជ័យ', content: reUse.reUseText(content: "បរាជ័យ សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ"));
+    });
+    return isReady;
   }
 }
