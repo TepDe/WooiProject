@@ -68,7 +68,8 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   getDatsa(getUid) async {
-    FirebaseFirestore.instance.collection('Users').doc(getUid).get().then((DocumentSnapshot documentSnapshot) {
+    FirebaseFirestore.instance.collection('Users').doc(getUid).get().then((
+        DocumentSnapshot documentSnapshot) {
       getUserID = documentSnapshot['qty'];
       getToken = documentSnapshot['token'];
       getChatId = documentSnapshot['chatid'];
@@ -76,7 +77,10 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   Future<void> insertTelegramToken() async {
-    FirebaseFirestore.instance.collection('Users').doc(auth.currentUser!.uid).get().then((value) {
+    FirebaseFirestore.instance.collection('Users')
+        .doc(auth.currentUser!.uid)
+        .get()
+        .then((value) {
       print(value);
       print(value);
       if (value.data()?.containsKey('telegramToken') == true) {
@@ -115,9 +119,11 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   fetchUserData() async {
-    fetch.doc(auth.currentUser!.uid.toString()).get().then((DocumentSnapshot documentSnapshot) async {
+    fetch.doc(auth.currentUser!.uid.toString()).get().then((
+        DocumentSnapshot documentSnapshot) async {
       userData = await documentSnapshot.data() as Map<String, dynamic>;
-      imagePath = await glb.getBankImage(bankName: userData[fieldInfo.bankName]);
+      imagePath =
+      await glb.getBankImage(bankName: userData[fieldInfo.bankName]);
       setState(() {});
     });
   }
@@ -137,10 +143,22 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var imageSize = MediaQuery.of(context).size.height * 0.15;
-    var viewHeight2 = MediaQuery.of(context).size.height * 0.03;
-    var padding = MediaQuery.of(context).size.height * 0.01;
-    var textWidth = MediaQuery.of(context).size.width * 0.2;
+    var imageSize = MediaQuery
+        .of(context)
+        .size
+        .height * 0.15;
+    var viewHeight2 = MediaQuery
+        .of(context)
+        .size
+        .height * 0.03;
+    var padding = MediaQuery
+        .of(context)
+        .size
+        .height * 0.01;
+    var textWidth = MediaQuery
+        .of(context)
+        .size
+        .width * 0.2;
     return SafeArea(
       child: Scaffold(
         backgroundColor: theme.white,
@@ -153,7 +171,8 @@ class _AccountScreenState extends State<AccountScreen> {
                   SizedBox(
                     height: viewHeight2,
                   ),
-                  reUse.reUseText(content: 'គណនី', weight: FontWeight.bold, size: 18.0),
+                  reUse.reUseText(
+                      content: 'គណនី', weight: FontWeight.bold, size: 18.0),
                   SizedBox(
                     height: viewHeight2,
                   ),
@@ -168,7 +187,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             color: theme.midGrey,
                             blurRadius: 3,
                             spreadRadius: 0.5,
-                            offset: Offset(0, 0), // Shadow position
+                            offset: const Offset(0, 0), // Shadow position
                           ),
                         ],
                         borderRadius: BorderRadius.circular(50),
@@ -178,7 +197,8 @@ class _AccountScreenState extends State<AccountScreen> {
                         onTap: () {
                           pickImage();
                         },
-                        child: CircleAvatar(backgroundImage: new FileImage(_image!)),
+                        child: CircleAvatar(
+                            backgroundImage: new FileImage(_image!)),
                       ),
                     )
                   else
@@ -186,12 +206,13 @@ class _AccountScreenState extends State<AccountScreen> {
                         onTap: () {
                           pickImage();
                         },
-                        child: Icon(Icons.account_circle_rounded)),
+                        child: const Icon(Icons.account_circle_rounded)),
                   SizedBox(
                     height: viewHeight2,
                   ),
                   reUse.reUseText(
-                      content: "${userData[fieldInfo.firstName] ?? " "} ${userData[fieldInfo.lastName] ?? " "}",
+                      content: "${userData[fieldInfo.firstName] ??
+                          " "} ${userData[fieldInfo.lastName] ?? " "}",
                       weight: FontWeight.bold,
                       size: 20.0,
                       color: theme.black),
@@ -201,7 +222,10 @@ class _AccountScreenState extends State<AccountScreen> {
                       size: 12.0,
                       color: theme.grey),
                   reUse.reUseText(
-                      content: glb.auth.currentUser!.uid, weight: FontWeight.bold, size: 12.0, color: theme.grey),
+                      content: glb.auth.currentUser!.uid,
+                      weight: FontWeight.bold,
+                      size: 12.0,
+                      color: theme.grey),
                   Row(
                     children: [
                       Flexible(
@@ -244,10 +268,13 @@ class _AccountScreenState extends State<AccountScreen> {
                             color: theme.black),
                         TextButton.icon(
                           onPressed: () {
-                            Get.to(() => const EditProfileScreen(), arguments: userData);
+                            Get.to(() => const EditProfileScreen(),
+                                arguments: userData);
                           },
                           icon: Icon(Icons.edit, color: theme.darkGrey),
-                          label: reUse.reUseText(content: 'Edit', size: 16.0, color: theme.darkGrey),
+                          label: reUse.reUseText(
+                              content: 'Edit', size: 16.0, color: theme
+                              .darkGrey),
                         )
                       ],
                     ),
@@ -268,7 +295,9 @@ class _AccountScreenState extends State<AccountScreen> {
                           yesText: "ព្រម",
                           title: 'ផ្លាស់ប្តូរពាក្យសម្ងាត់',
                           yesTap: () async {
-                            if (passwordBox.text.toString().isEmpty) {
+                            if (passwordBox.text
+                                .toString()
+                                .isEmpty) {
                               Get.back();
                             } else {
                               await FirebaseAuth.instance.currentUser!
@@ -277,7 +306,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                 await FirebaseFirestore.instance
                                     .collection('Users')
                                     .doc(auth.currentUser!.uid)
-                                    .update({'password': passwordBox.text}).then((value) async {
+                                    .update({'password': passwordBox.text})
+                                    .then((value) async {
                                   Navigator.pop(context);
                                   await reUse.reUseCircleDialog(
                                       onTap: () {
@@ -339,7 +369,8 @@ class _AccountScreenState extends State<AccountScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Padding(
-                                padding: EdgeInsets.symmetric(vertical: 20),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 20),
                                 child: reUse.reUseText(
                                     content: "បញ្ចូលពាក្យសម្ងាត់របស់អ្នកខាងក្រោម",
                                     size: 12.0,
@@ -349,7 +380,8 @@ class _AccountScreenState extends State<AccountScreen> {
                               TextFormField(
                                 controller: passwordBox,
                                 // keyboardType: inputType,
-                                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                keyboardType: const TextInputType
+                                    .numberWithOptions(decimal: true),
                                 // inputFormatters: [
                                 //   FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
                                 //   FilteringTextInputFormatter.digitsOnly,
@@ -374,29 +406,29 @@ class _AccountScreenState extends State<AccountScreen> {
                       },
                       trailing: hindPassowrd == true
                           ? IconButton(
-                              onPressed: () {
-                                if (hindPassowrd == true) {
-                                  hindPassowrd = false;
-                                } else {
-                                  hindPassowrd = true;
-                                }
-                                setState(() {});
-                              },
-                              icon: const Icon(Icons.visibility_off))
+                          onPressed: () {
+                            if (hindPassowrd == true) {
+                              hindPassowrd = false;
+                            } else {
+                              hindPassowrd = true;
+                            }
+                            setState(() {});
+                          },
+                          icon: const Icon(Icons.visibility_off))
                           : InkWell(
-                              onTap: () {
-                                if (hindPassowrd == false) {
-                                  hindPassowrd = true;
-                                } else {
-                                  hindPassowrd = false;
-                                }
-                                setState(() {});
-                              },
-                              child: Text(
-                                (userData[fieldInfo.password] ?? 'loading...'),
-                                style: TextStyle(color: theme.grey),
-                              ),
-                            ),
+                        onTap: () {
+                          if (hindPassowrd == false) {
+                            hindPassowrd = true;
+                          } else {
+                            hindPassowrd = false;
+                          }
+                          setState(() {});
+                        },
+                        child: Text(
+                          (userData[fieldInfo.password] ?? 'loading...'),
+                          style: TextStyle(color: theme.grey),
+                        ),
+                      ),
                       title: const Text('Password'),
                       context: context,
                       leading: const Icon(Icons.password_rounded)),
@@ -410,7 +442,8 @@ class _AccountScreenState extends State<AccountScreen> {
                       leading: const Icon(Icons.phone)),
                   reUse.reUseSettingItem(
                       trailing: Text(
-                        userData[fieldInfo.bankName].toString().toUpperCase() ?? 'loading...',
+                        userData[fieldInfo.bankName].toString().toUpperCase() ??
+                            'loading...',
                         style: TextStyle(color: theme.grey),
                       ),
                       title: Text(clsLan.payService),
@@ -428,7 +461,8 @@ class _AccountScreenState extends State<AccountScreen> {
                   //     leading: const Icon(Icons.monetization_on)),
                   Container(
                     height: 60,
-                    margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
                       color: theme.white,
                       borderRadius: BorderRadius.circular(6),
@@ -448,7 +482,8 @@ class _AccountScreenState extends State<AccountScreen> {
                             child: Text(
                               userData[fieldInfo.bankCode] ?? "Not Include Yet",
                               maxLines: 1,
-                              style: TextStyle(color: theme.grey, overflow: TextOverflow.ellipsis),
+                              style: TextStyle(color: theme.grey,
+                                  overflow: TextOverflow.ellipsis),
                             )),
                         leading: const Text("123"),
                       ),
@@ -456,7 +491,8 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                   Container(
                     height: 60,
-                    margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
                       color: theme.white,
                       borderRadius: BorderRadius.circular(6),
@@ -476,7 +512,8 @@ class _AccountScreenState extends State<AccountScreen> {
                             child: Text(
                               userData[fieldInfo.token] ?? "Not Include Yet",
                               maxLines: 1,
-                              style: TextStyle(color: theme.grey, overflow: TextOverflow.ellipsis),
+                              style: TextStyle(color: theme.grey,
+                                  overflow: TextOverflow.ellipsis),
                             )),
                         leading: const Icon(Icons.telegram_rounded),
                       ),
@@ -484,7 +521,8 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                   Container(
                     height: 60,
-                    margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
                       color: theme.white,
                       borderRadius: BorderRadius.circular(6),
@@ -504,7 +542,8 @@ class _AccountScreenState extends State<AccountScreen> {
                             child: Text(
                               userData[fieldInfo.chatid] ?? "Not Include Yet",
                               maxLines: 1,
-                              style: TextStyle(color: theme.grey, overflow: TextOverflow.ellipsis),
+                              style: TextStyle(color: theme.grey,
+                                  overflow: TextOverflow.ellipsis),
                             )),
                         leading: const Icon(Icons.telegram_rounded),
                       ),
@@ -520,6 +559,12 @@ class _AccountScreenState extends State<AccountScreen> {
                             function: 'logOut',
                             icon: Icons.logout_rounded,
                             title: 'Log out',
+                            onTap: () async {
+                              await glb.updateOneField(field: field.accountType,context: context,value: "false",firebaseFireStore: "Users",data: auth.currentUser!.uid);
+                              await auth.signOut().then((value) =>
+                                  Get.to(() => const LogInScreen())
+                              );
+                            },
                             content: Center(
                               child: Text(
                                 'Are sure you want to log out?',
@@ -623,7 +668,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     content,
                     const SizedBox(height: 20.0),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
                       child: reUseButton(text: "OK"),
                     ),
                   ],
@@ -656,7 +702,8 @@ class _AccountScreenState extends State<AccountScreen> {
       },
       codeSent: (String verificationId, int? resendToken) async {
         String smsCode = 'xxxx';
-        PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(
+            verificationId: verificationId, smsCode: smsCode);
         await auth.signInWithCredential(credential);
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
@@ -677,7 +724,8 @@ class _AccountScreenState extends State<AccountScreen> {
         },
         child: Text(
           text,
-          style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 14),
+          style: TextStyle(
+              color: textColor, fontWeight: FontWeight.bold, fontSize: 14),
         ),
       ),
     );
@@ -691,7 +739,8 @@ class _AccountScreenState extends State<AccountScreen> {
   totalRevenue() {
     List mainData = [];
     try {
-      DatabaseReference refs = FirebaseDatabase.instance.ref('Complete').child(auth.currentUser!.uid);
+      DatabaseReference refs = FirebaseDatabase.instance.ref('Complete').child(
+          auth.currentUser!.uid);
       refs.onValue.listen((event) {
         revenuePrice.clear();
         paidPrice.clear();
