@@ -970,7 +970,7 @@ class ReUseWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: onTap??() {
+          onTap: onTap??()async {
             if (function == 'minus') {
               Fluttertoast.showToast(
                 msg: 'Maximum input is 9',
