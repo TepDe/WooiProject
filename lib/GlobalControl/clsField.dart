@@ -33,6 +33,8 @@ class FieldData {
   String assignDate = "assignDate";
   String returnDate = "returnDate";
   String accountType = "accountType";
+  String isBanned = "isBanned";
+  String signInToken = "signInToken";
 }
 
 
