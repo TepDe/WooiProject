@@ -322,8 +322,8 @@ class _LogInScreenState extends State<LogInScreen> {
           Get.back();
           await onDialogOK(
               context: context,
-              title: 'Not Found',
-              content: 'This User is not found please check and again!');
+              title: 'បរាជ័យ',
+              content: 'សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ!');
           await FirebaseAuth.instance.signOut();
         } else {
           await glb.storeUser(
