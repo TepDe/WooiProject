@@ -270,7 +270,7 @@ class GlobalController {
   Future<void> createPackage(
       {price,
       userName,
-        bankName,
+      bankName,
       userPhoneNumber,
       note,
       packageID,
@@ -297,8 +297,7 @@ class GlobalController {
       "userPhoneNumber": userPhoneNumber,
       "uLatitude": latitude.toString(),
       "uLongitude": longitude.toString(),
-    }).then((value) async =>
-            packageRequest.child(auth.currentUser!.uid).child('package').child(pushKey).update({
+    }).then((value) async => packageRequest.child(auth.currentUser!.uid).child('package').child(pushKey).update({
               field.uid: auth.currentUser!.uid.toString(),
               field.location: location.toString(),
               field.pushKey: pushKey.toString(),
@@ -306,7 +305,7 @@ class GlobalController {
               field.token: tokenKey.toString(),
               field.chatid: chatid.toString(),
               field.latitude: latitude.toString(),
-              field.bankName:bankName,
+              field.bankName: bankName,
               field.longitude: longitude.toString(),
               field.date: formattedDate.toString(),
               field.qty: qty.toString(),
@@ -503,12 +502,12 @@ class GlobalController {
     await witchDataBase.child(data[field.driverUID]);
   }
 
-  storeSetUpAccount({bankName, phoneNumber, firstname, lastname,bankCode}) async {
+  storeSetUpAccount({bankName, phoneNumber, firstname, lastname, bankCode}) async {
     try {
       users
           .doc(auth.currentUser!.uid)
           .update({
-            fieldInfo.bankCode :bankCode,
+            fieldInfo.bankCode: bankCode,
             "bankName": bankName,
             'phoneNumber': phoneNumber,
             'firstname': firstname,
@@ -531,11 +530,12 @@ class GlobalController {
       note,
       packageID,
       uid,
-        bankCode,
+      bankCode,
       phoneNumber,
       location,
       qty,
-      tokenKey,bankName,
+      tokenKey,
+      bankName,
       chatid}) async {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
@@ -566,8 +566,8 @@ class GlobalController {
               field.note: note.toString(),
               field.status: 'request',
               field.price: price.toString(),
-              field.bankCode:bankCode,
-              field.bankName:bankName,
+              field.bankCode: bankCode,
+              field.bankName: bankName,
               field.recLatitude: latitude.toString(),
               field.recLongitude: longitude.toString(),
               field.senderPhone: await fetchUserData(fieldInfo.phoneNumber).toString(),
@@ -736,7 +736,7 @@ class GlobalController {
         await reUse.reUseCircleDialog(
             context: context,
             icon: Icons.check_circle_rounded,
-            title:  clsLan.stCom,
+            title: clsLan.stCom,
             content: Center(
               child: Text(
                 clsLan.updatedAccount,
@@ -782,50 +782,58 @@ class GlobalController {
   List filteredList = [];
 
   Future<String> selectPayWay(data) async {
-    filteredList =
-        payWay.where((item) => item['name'].toLowerCase().toString().trim().contains(data)).toList();
+    filteredList = payWay.where((item) => item['name'].toLowerCase().toString().trim().contains(data)).toList();
     return filteredList[0]['name'];
   }
 
-  getBank({bankName}){
-    int index = payWay.indexWhere((person) =>person['name'] == bankName);
+  getBank({bankName}) {
+    int index = payWay.indexWhere((person) => person['name'] == bankName);
     return index;
   }
 
-  getBankImage({bankName}){
-    var object =
-        payWay.where((item) => item['name'].contains(bankName)).toList();
+  getBankImage({bankName}) {
+    var object = payWay.where((item) => item['name'].contains(bankName)).toList();
     return object;
   }
+
   Future<bool> checkAccountType() async {
-    bool isTrue =false;
+    bool isTrue = false;
     await FirebaseFirestore.instance
         .collection('Users')
         .doc(auth.currentUser!.uid.toString())
         .get()
         .then((DocumentSnapshot documentSnapshot) async {
-          Map data = documentSnapshot.data() as Map;
-          if(data[field.accountType]==null||data["signInToken"]==null){
-            await FirebaseFirestore.instance
-                .collection('Users')
-                .doc(auth.currentUser!.uid.toString())
-                .update({
-              "accountType" : "Users",
-              "signInToken" : "true",
-            });
-            isTrue = true;
-          }else{
-            if(data[field.accountType]=="Drivers"){
-              isTrue = false;
-              await FirebaseAuth.instance.signOut();
-            }else if(data[field.accountType]=="Users" && data["isBanned"]=="false"&& data["signInToken"]=="false"){
-              isTrue = true;
-            }
-          }
+      Map data = documentSnapshot.data() as Map;
+      // if(data[field.accountType]==null||data["signInToken"]==null){
+      //   await FirebaseFirestore.instance
+      //       .collection('Users')
+      //       .doc(auth.currentUser!.uid.toString())
+      //       .update({
+      //     "accountType" : "Users",
+      //     "signInToken" : "true",
+      //   });
+      //   isTrue = true;
+      // }else{
+      //   if(data[field.accountType]=="Drivers"){
+      //     isTrue = false;
+      //     await FirebaseAuth.instance.signOut();
+      //   }else if(data[field.accountType]=="Users" && data["isBanned"]=="false"&& data["signInToken"]=="false"){
+      //     isTrue = true;
+      //   }
+      // }
+
+      if (data["accountType"] == "Users" && data["isBanned"] == "false" && data["signInToken"] == "false") {
+        isTrue = true;
+      } else {
+        isTrue = false;
+        await FirebaseAuth.instance.signOut();
+      }
     });
     return isTrue;
   }
-  Future<bool> updateOneField({required String field ,required firebaseFireStore, data, required String value, required context}) async {
+
+  Future<bool> updateOneField(
+      {required String field, required firebaseFireStore, data, required String value, required context}) async {
     final reUse = ReUseWidget();
     bool isReady = false;
     await FirebaseFirestore.instance.collection(firebaseFireStore).doc(data).update({
@@ -835,7 +843,10 @@ class GlobalController {
     }).catchError((error) async {
       isReady = false;
       reUse.reUseCircleDialog(
-          onTap: () {}, context: context, title: 'បរាជ័យ', content: reUse.reUseText(content: "បរាជ័យ សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ"));
+          onTap: () {},
+          context: context,
+          title: 'បរាជ័យ',
+          content: reUse.reUseText(content: "បរាជ័យ សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ"));
     });
     return isReady;
   }
