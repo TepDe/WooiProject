@@ -796,44 +796,29 @@ class GlobalController {
     return object;
   }
 
-  Future<bool> checkAccountType() async {
-    bool isTrue = false;
+  Future<String> checkAccountType() async {
+    String result = "true";
     await FirebaseFirestore.instance
         .collection('Users')
         .doc(auth.currentUser!.uid.toString())
         .get()
         .then((DocumentSnapshot documentSnapshot) async {
-      Map data = documentSnapshot.data() as Map;
-      // if(data[field.accountType]==null||data["signInToken"]==null){
-      //   await FirebaseFirestore.instance
-      //       .collection('Users')
-      //       .doc(auth.currentUser!.uid.toString())
-      //       .update({
-      //     "accountType" : "Users",
-      //     "signInToken" : "true",
-      //   });
-      //   isTrue = true;
-      // }else{
-      //   if(data[field.accountType]=="Drivers"){
-      //     isTrue = false;
-      //     await FirebaseAuth.instance.signOut();
-      //   }else if(data[field.accountType]=="Users" && data["isBanned"]=="false"&& data["signInToken"]=="false"){
-      //     isTrue = true;
-      //   }
-      // }
-
-      if (data["accountType"] == "Users" && data["isBanned"] == "false" && data["signInToken"] == "false") {
-        isTrue = true;
-      } else {
-        isTrue = false;
-        await FirebaseAuth.instance.signOut();
+      Map data = await documentSnapshot.data() as Map;
+      if (data["accountType"] != "Users") {
+        result = "type";
+      }
+      if (data["isBanned"] != "false") {
+        result = "banned";
+      }
+      if (data["signInToken"] != "false") {
+        result = "token";
       }
     });
-    return isTrue;
+    return result;
   }
 
   Future<bool> updateOneField(
-      {required String field, required firebaseFireStore, data, required String value, required context}) async {
+      {required String field, required firebaseFireStore, data, required String value,  context,required bool allowDialog }) async {
     final reUse = ReUseWidget();
     bool isReady = false;
     await FirebaseFirestore.instance.collection(firebaseFireStore).doc(data).update({
@@ -842,11 +827,15 @@ class GlobalController {
       isReady = true;
     }).catchError((error) async {
       isReady = false;
-      reUse.reUseCircleDialog(
-          onTap: () {},
-          context: context,
-          title: 'បរាជ័យ',
-          content: reUse.reUseText(content: "បរាជ័យ សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ"));
+      if(allowDialog == true ) {
+        reUse.reUseCircleDialog(
+            onTap: () {},
+            context: context,
+            title: 'បរាជ័យ',
+            content: reUse.reUseText(content: "បរាជ័យ សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ"));
+      }else{
+
+      }
     });
     return isReady;
   }
