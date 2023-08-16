@@ -65,7 +65,13 @@ class _HomeScreenState extends State<HomeScreen> {
     alertNoInternet();
     // glb.getOtp();
     fetchImage();
-    glb.checkAccountType();
+    if (glb.checkAccountType() == true ){
+      exit(0);
+    }else{
+
+    }
+
+
   }
 
   alertNoInternet() async {
