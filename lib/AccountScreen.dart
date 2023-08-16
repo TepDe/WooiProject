@@ -222,7 +222,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       size: 12.0,
                       color: theme.grey),
                   reUse.reUseText(
-                      content: glb.auth.currentUser!.uid,
+                      content: "${glb.auth.currentUser!.uid}",
                       weight: FontWeight.bold,
                       size: 12.0,
                       color: theme.grey),
@@ -231,7 +231,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       Flexible(
                         child: reUse.reUseBoxText(
                             backgroundColor: theme.white,
-                            assetImage: "assets/images/RevenueBtn.png",
+                            // assetImage: "assets/images/RevenueBtn.png",
                             data: revenuePrice,
                             value: "\$ ${revenue.toStringAsFixed(2)}",
                             textColor: theme.black,
@@ -245,7 +245,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         child: reUse.reUseBoxText(
                             witchClick: "paid",
                             backgroundColor: theme.white,
-                            assetImage: "assets/images/TotalPaidBtn.png",
+                            // assetImage: "assets/images/TotalPaidBtn.png",
                             value: "\$ ${paid.toStringAsFixed(2)}",
                             title: clsLan.paid,
                             valueTextSize: 20.0,
@@ -281,7 +281,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                   reUse.reUseSettingItem(
                       trailing: Text(
-                        userData[fieldInfo.email] ?? 'loading...',
+                        "${userData[fieldInfo.email]}",
                         style: TextStyle(color: theme.grey),
                       ),
                       title: const Text('Email'),
@@ -425,7 +425,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           setState(() {});
                         },
                         child: Text(
-                          (userData[fieldInfo.password] ?? 'loading...'),
+                          ("${userData[fieldInfo.password]}"),
                           style: TextStyle(color: theme.grey),
                         ),
                       ),
@@ -434,7 +434,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       leading: const Icon(Icons.password_rounded)),
                   reUse.reUseSettingItem(
                       trailing: Text(
-                        userData[fieldInfo.phoneNumber] ?? 'loading...',
+                        "${userData[fieldInfo.phoneNumber]}",
                         style: TextStyle(color: theme.grey),
                       ),
                       title: Text(clsLan.phoneNumber),
@@ -442,8 +442,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       leading: const Icon(Icons.phone)),
                   reUse.reUseSettingItem(
                       trailing: Text(
-                        userData[fieldInfo.bankName].toString().toUpperCase() ??
-                            'loading...',
+                        "${userData[fieldInfo.bankName].toString().toUpperCase()}",
                         style: TextStyle(color: theme.grey),
                       ),
                       title: Text(clsLan.payService),
@@ -476,11 +475,11 @@ class _AccountScreenState extends State<AccountScreen> {
                     ),
                     child: Center(
                       child: ListTile(
-                        title: Text(clsLan.receiveMoneyNumber),
+                        title: Text("${clsLan.receiveMoneyNumber}"),
                         trailing: SizedBox(
                             width: textWidth,
                             child: Text(
-                              userData[fieldInfo.bankCode] ?? "Not Include Yet",
+                              "${userData[fieldInfo.bankCode]}",
                               maxLines: 1,
                               style: TextStyle(color: theme.grey,
                                   overflow: TextOverflow.ellipsis),
@@ -510,7 +509,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         trailing: SizedBox(
                             width: textWidth,
                             child: Text(
-                              userData[fieldInfo.token] ?? "Not Include Yet",
+                              "${userData[fieldInfo.token]}",
                               maxLines: 1,
                               style: TextStyle(color: theme.grey,
                                   overflow: TextOverflow.ellipsis),
@@ -540,7 +539,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         trailing: SizedBox(
                             width: textWidth,
                             child: Text(
-                              userData[fieldInfo.chatid] ?? "Not Include Yet",
+                              "${userData[fieldInfo.chatid]}",
                               maxLines: 1,
                               style: TextStyle(color: theme.grey,
                                   overflow: TextOverflow.ellipsis),
@@ -560,7 +559,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             icon: Icons.logout_rounded,
                             title: 'Log out',
                             onTap: () async {
-                              await glb.updateOneField(field: field.accountType,context: context,value: "false",firebaseFireStore: "Users",data: auth.currentUser!.uid);
+                              await glb.updateOneField(field: 'signInToken',context: context,value: "false",firebaseFireStore: "Users",data: auth.currentUser!.uid,allowDialog: true);
                               await auth.signOut().then((value) =>
                                   Get.to(() => const LogInScreen())
                               );
