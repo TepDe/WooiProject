@@ -47,11 +47,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   SizedBox(
                     height: Get.height * 0.1,
                   ),
-                  reUse.reUseText(
-                      content: 'Sign in',
-                      color: theme.black,
-                      size: 25.0,
-                      weight: FontWeight.bold),
+                  reUse.reUseText(content: 'Sign in', color: theme.black, size: 25.0, weight: FontWeight.bold),
                   reUse.reUseText(
                     content: 'Please sign in to Continue (User)',
                     size: 12.0,
@@ -62,18 +58,12 @@ class _LogInScreenState extends State<LogInScreen> {
                   Column(
                     children: [
                       reUse.reUseTextBox(
-                          icon: Icon(Icons.email),
-                          controller: userEmail,
-                          hind: 'Email',
-                          obscureText: false),
+                          icon: Icon(Icons.email), controller: userEmail, hind: 'Email', obscureText: false),
                       const SizedBox(
                         height: 20,
                       ),
                       reUse.reUseTextBox(
-                          icon: Icon(Icons.password),
-                          controller: userPassword,
-                          hind: 'Password',
-                          obscureText: true),
+                          icon: Icon(Icons.password), controller: userPassword, hind: 'Password', obscureText: true),
                     ],
                   ),
                   SizedBox(
@@ -146,43 +136,26 @@ class _LogInScreenState extends State<LogInScreen> {
                         ),
                         onPressed: () async {
                           if (userEmail.text.isEmpty) {
-                            onDialogOK(
-                                context: context,
-                                title: 'Not Found',
-                                content: 'Email is missing');
+                            onDialogOK(context: context, title: 'Not Found', content: 'Email is missing');
                           } else if (userPassword.text.isEmpty) {
-                            onDialogOK(
-                                context: context,
-                                title: 'Not Found',
-                                content: 'Password is missing');
-                          } else if (userPassword.text.isEmpty &&
-                              userEmail.text.isEmpty) {
-                            onDialogOK(
-                                context: context,
-                                title: 'Not Found',
-                                content: 'Email and Password is missing');
+                            onDialogOK(context: context, title: 'Not Found', content: 'Password is missing');
+                          } else if (userPassword.text.isEmpty && userEmail.text.isEmpty) {
+                            onDialogOK(context: context, title: 'Not Found', content: 'Email and Password is missing');
                           } else {
-                            onUserSignIn(
+                            await onUserSignIn(
                                 email: userEmail.text.trim(),
-                                // email: 'u3@gmail.com',
+                                // email: 'u@gmail.com',
                                 password: userPassword.text.trim(),
-                                // password: '111111',
+                                // password: 'qqqqqq',
                                 context: context);
                           }
-
-                          // password: '111111');
-
-                          // lc._phoneVerify(context);
-                          // phoneAuth();
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Text(
                               'Continue',
-                              style: TextStyle(
-                                  color: theme.white,
-                                  fontWeight: FontWeight.w700),
+                              style: TextStyle(color: theme.white, fontWeight: FontWeight.w700),
                             ),
                             Icon(Icons.navigate_next_rounded),
                           ],
@@ -203,8 +176,7 @@ class _LogInScreenState extends State<LogInScreen> {
   String _verificationId = "";
   String phoneNumberUser = '+85511111111';
 
-  Future<void> _signInWithPhoneNumber(
-      {BuildContext? context, String? phoneNumber}) async {
+  Future<void> _signInWithPhoneNumber({BuildContext? context, String? phoneNumber}) async {
     try {
       await _auth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
@@ -297,8 +269,7 @@ class _LogInScreenState extends State<LogInScreen> {
       },
       codeSent: (String verificationId, int? resendToken) async {
         String smsCode = '124578';
-        PhoneAuthCredential credential = PhoneAuthProvider.credential(
-            verificationId: verificationId, smsCode: smsCode);
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
         await auth.signInWithCredential(credential);
       },
       codeAutoRetrievalTimeout: (String verificationId) async {
@@ -311,46 +282,71 @@ class _LogInScreenState extends State<LogInScreen> {
 
   onUserSignIn({email, password, context}) async {
     try {
-      UserCredential userCredential = await auth.signInWithEmailAndPassword(
-          email: email, password: password);
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(email: email, password: password);
       if (userCredential.isNull) {
       } else {
         userEmail.clear();
         userPassword.clear();
         reUse.waitingDialog(context);
-        if (await glb.checkAccountType() == false) {
+        var result = await glb.checkAccountType();
+        if (result == "type") {
           Get.back();
-          await onDialogOK(
-              context: context,
-              title: 'បរាជ័យ',
-              content: 'សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ!');
+          await onDialogOK(context: context, title: 'មិនមាន type', content: 'គណនីនេះមិនមានទេ សូមពិនិត្យមើលម្តងទៀត!');
           await FirebaseAuth.instance.signOut();
-        } else {
-          await glb.storeUser(
+        } else if (result == "token") {
+          Get.back();
+          await onDialogOK(context: context, title: 'ផ្សេងទៀត token', content: 'គណនីនេះកំពុងប្រើនៅលើឧបករណ៍ផ្សេងទៀត');
+          await FirebaseAuth.instance.signOut();
+        } else if (result == "banned") {
+          Get.back();
+          await onDialogOK(context: context, title: 'ផ្អាក banned', content: 'បច្ចុប្បន្នគណនីនេះត្រូវបានផ្អាក');
+          await FirebaseAuth.instance.signOut();
+        } else if (result == "true") {
+          await glb.updateOneField(
+              field: 'signInToken',
+              firebaseFireStore: 'Users',
+              value: "true",
+              data: auth.currentUser!.uid,
+              allowDialog: false);
+          await glb
+              .storeUser(
             uid: auth.currentUser!.uid,
             email: email.toString(),
             password: password.toString(),
           );
         }
+        // else {
+        //   await glb.storeUser(
+        //     uid: auth.currentUser!.uid,
+        //     email: email.toString(),
+        //     password: password.toString(),
+        //   );
+        // }
+
+        // if (await glb.checkAccountType() == false) {
+        //   Get.back();
+        //   await onDialogOK(
+        //       context: context,
+        //       title: 'បរាជ័យ',
+        //       content: 'សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ!');
+        //   await FirebaseAuth.instance.signOut();
+        // } else {
+        //   await glb.storeUser(
+        //     uid: auth.currentUser!.uid,
+        //     email: email.toString(),
+        //     password: password.toString(),
+        //   );
+        // }
 
         setState(() {});
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'wrong-password') {
-        onDialogOK(
-            context: context,
-            title: 'Wrong Password',
-            content: 'Please check your password and again!');
+        onDialogOK(context: context, title: 'Wrong Password', content: 'Please check your password and again!');
       } else if (e.code == 'invalid-email') {
-        onDialogOK(
-            context: context,
-            title: 'Wrong Email',
-            content: 'Please check your Email and again!');
+        onDialogOK(context: context, title: 'Wrong Email', content: 'Please check your Email and again!');
       } else if (e.code == 'user-not-found') {
-        onDialogOK(
-            context: context,
-            title: 'Not Found',
-            content: 'This User is not found please check and again!');
+        onDialogOK(context: context, title: 'Not Found', content: 'This User is not found please check and again!');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -360,7 +356,7 @@ class _LogInScreenState extends State<LogInScreen> {
     setState(() {});
   }
 
-  onDialogOK({context, title, content}) {
+  onDialogOK({context, title, content}) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -369,7 +365,7 @@ class _LogInScreenState extends State<LogInScreen> {
           content: Text('$content'),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.pop(context);
               },
               child: const Text('OK'),
@@ -399,8 +395,7 @@ class LoginController extends GetxController {
 
   onUserSignIn({email, password, context}) async {
     try {
-      UserCredential userCredential = await auth.signInWithEmailAndPassword(
-          email: email, password: password);
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(email: email, password: password);
       if (userCredential.isNull) {
       } else {
         glb.UID = (userCredential.user?.uid).toString();
@@ -417,15 +412,9 @@ class LoginController extends GetxController {
       } else if (e.code == 'email-already-in-use') {
         // onDialog(context: context);
       } else if (e.code == 'wrong-password') {
-        onDialogOK(
-            context: context,
-            title: 'Wrong Password',
-            content: 'Please check your password and again!');
+        onDialogOK(context: context, title: 'Wrong Password', content: 'Please check your password and again!');
       } else if (e.code == 'wrong-email') {
-        onDialogOK(
-            context: context,
-            title: 'Wrong Email',
-            content: 'Please check your password and again!');
+        onDialogOK(context: context, title: 'Wrong Email', content: 'Please check your password and again!');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -466,11 +455,7 @@ class LoginController extends GetxController {
           // content: Text('wait'),
           actions: const [
             SizedBox(
-                height: 60,
-                width: 60,
-                child: Align(
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator()))
+                height: 60, width: 60, child: Align(alignment: Alignment.center, child: CircularProgressIndicator()))
           ],
         );
       },
@@ -480,8 +465,7 @@ class LoginController extends GetxController {
   final _codeController = TextEditingController();
   var smsCode;
   var _credential;
-  var credential = PhoneAuthProvider.credential(
-      verificationId: 'dasd', smsCode: 'dasjdasdasd');
+  var credential = PhoneAuthProvider.credential(verificationId: 'dasd', smsCode: 'dasjdasdasd');
 
   Future registerUser(BuildContext context) async {
     FirebaseAuth _auth = FirebaseAuth.instance;
@@ -490,8 +474,7 @@ class LoginController extends GetxController {
         timeout: Duration(seconds: 25),
         verificationCompleted: (AuthCredential authCredential) {
           _auth.signInWithCredential(credential).then((UserCredential result) {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => HomeScreen()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
           }).catchError((e) {
             print(e);
           });
@@ -521,11 +504,8 @@ class LoginController extends GetxController {
 
                           smsCode = _codeController.text.trim();
 
-                          _credential = PhoneAuthProvider.credential(
-                              verificationId: verificationId, smsCode: smsCode);
-                          auth
-                              .signInWithCredential(_credential)
-                              .then((UserCredential result) {
+                          _credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
+                          auth.signInWithCredential(_credential).then((UserCredential result) {
                             Get.to(HomeScreen());
                           }).catchError((e) {
                             print(e);
