@@ -291,15 +291,15 @@ class _LogInScreenState extends State<LogInScreen> {
         var result = await glb.checkAccountType();
         if (result == "type") {
           Get.back();
-          await onDialogOK(context: context, title: 'មិនមាន type', content: 'គណនីនេះមិនមានទេ សូមពិនិត្យមើលម្តងទៀត!');
+          await onDialogOK(context: context, title: 'មិនមាន', content: 'គណនីនេះមិនមានទេ សូមពិនិត្យមើលម្តងទៀត!');
           await FirebaseAuth.instance.signOut();
         } else if (result == "token") {
           Get.back();
-          await onDialogOK(context: context, title: 'ផ្សេងទៀត token', content: 'គណនីនេះកំពុងប្រើនៅលើឧបករណ៍ផ្សេងទៀត');
+          await onDialogOK(context: context, title: 'ផ្សេងទៀត', content: 'គណនីនេះកំពុងប្រើនៅលើឧបករណ៍ផ្សេងទៀត');
           await FirebaseAuth.instance.signOut();
         } else if (result == "banned") {
           Get.back();
-          await onDialogOK(context: context, title: 'ផ្អាក banned', content: 'បច្ចុប្បន្នគណនីនេះត្រូវបានផ្អាក');
+          await onDialogOK(context: context, title: 'ផ្អាក', content: 'បច្ចុប្បន្នគណនីនេះត្រូវបានផ្អាក');
           await FirebaseAuth.instance.signOut();
         } else if (result == "true") {
           await glb.updateOneField(
