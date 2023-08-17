@@ -559,10 +559,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             icon: Icons.logout_rounded,
                             title: 'Log out',
                             onTap: () async {
-                              await glb.updateOneField(field: 'signInToken',context: context,value: "false",firebaseFireStore: "Users",data: auth.currentUser!.uid,allowDialog: true);
-                              await auth.signOut().then((value) =>
-                                  Get.to(() => const LogInScreen())
-                              );
+                              await glb.isLogOut();
                             },
                             content: Center(
                               child: Text(
