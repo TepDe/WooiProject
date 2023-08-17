@@ -805,13 +805,16 @@ class GlobalController {
         .then((DocumentSnapshot documentSnapshot) async {
       Map data = await documentSnapshot.data() as Map;
       if (data["accountType"] != "Users") {
-        result = "type";
+        return result = "type";
       }
       if (data["isBanned"] != "false") {
-        result = "banned";
+        return result = "banned";
       }
       if (data["signInToken"] != "false") {
-        result = "token";
+        return result = "token";
+      }else{
+        result = "true";
+
       }
     });
     return result;
@@ -829,7 +832,7 @@ class GlobalController {
       isReady = false;
       if(allowDialog == true ) {
         reUse.reUseCircleDialog(
-            onTap: () {},
+            onTap: () => Get.back(),
             context: context,
             title: 'បរាជ័យ',
             content: reUse.reUseText(content: "បរាជ័យ សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ"));
@@ -838,5 +841,14 @@ class GlobalController {
       }
     });
     return isReady;
+  }
+  isLogOut()async{
+    await updateOneField(
+        field: 'signInToken', value: "false",
+        firebaseFireStore: "Users",
+        data: auth.currentUser!.uid,
+        allowDialog: true);
+    await auth.signOut().then((value) => Get.to(() => const LogInScreen()));
+
   }
 }
