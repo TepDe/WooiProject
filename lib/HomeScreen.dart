@@ -15,6 +15,7 @@ import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
+import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/ReturnDetail.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
@@ -65,13 +66,44 @@ class _HomeScreenState extends State<HomeScreen> {
     alertNoInternet();
     // glb.getOtp();
     fetchImage();
-    if (glb.checkAccountType() == true ){
-      exit(0);
-    }else{
+    checkingAccount();
+  }
 
+  checkingAccount() async {
+    final result = await glb.checkAccountType();
+    if (result == "type") {
+      await reUse.reUseCircleDialog(
+          disposeAllow: false,
+          onTap: ()=> glb.isLogOut(),
+          context: context,
+          icon: Icons.wifi,
+          title: 'មិនមាន',
+          content: Center(
+            child: Text(
+              'គណនីនេះមិនមានទេ សូមពិនិត្យមើលម្តងទៀត!',
+              style: TextStyle(
+                color: theme.black,
+              ),
+            ),
+          ));
+      setState(() {});
+    } else if (result == "banned") {
+      await reUse.reUseCircleDialog(
+          disposeAllow: false,
+          onTap: ()=> glb.isLogOut(),
+          context: context,
+          icon: Icons.cancel_outlined,
+          title: 'ផ្អាក',
+          content: Center(
+            child: Text(
+              'បច្ចុប្បន្នគណនីនេះត្រូវបានផ្អាក',
+              style: TextStyle(
+                color: theme.black,
+              ),
+            ),
+          ));
+      setState(() {});
     }
-
-
   }
 
   alertNoInternet() async {
@@ -258,109 +290,108 @@ class _HomeScreenState extends State<HomeScreen> {
     forSort = mergeList(comp: compSort, ret: retSort);
     var imageSize = MediaQuery.of(context).size.height * 0.08;
     return Scaffold(
-      backgroundColor: theme.liteGrey,
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Padding(
-          //   padding: EdgeInsets.only(top: 10, right: paddings, left: paddings),
-          //   child: reUse.unitOneHomeScreen(userID: '$greeting\nID $getUserID', context: context),
-          // ),
-          Padding(
-            padding: EdgeInsets.only(top: 10, right: paddings, left: paddings),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        backgroundColor: theme.liteGrey,
+        body: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Padding(
+            //   padding: EdgeInsets.only(top: 10, right: paddings, left: paddings),
+            //   child: reUse.unitOneHomeScreen(userID: '$greeting\nID $getUserID', context: context),
+            // ),
+            Padding(
+              padding: EdgeInsets.only(top: 10, right: paddings, left: paddings),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  reUse.reUseText(
+                      size: 20.0, color: theme.black, weight: FontWeight.bold, content: '$greeting\nID $getUserID'),
+                  if (_image != null)
+                    Container(
+                      height: imageSize,
+                      width: imageSize,
+                      //margin: const EdgeInsets.all(3.0),
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: theme.midGrey,
+                            blurRadius: 3,
+                            spreadRadius: 0.5,
+                            offset: Offset(0, 0), // Shadow position
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(50),
+                        //border: Border.all(color: theme.orange, width: 1.5)
+                      ),
+                      child: CircleAvatar(backgroundImage: new FileImage(_image!)),
+                    )
+                  else
+                    InkWell(
+                        onTap: () {
+                          //pickImage();
+                        },
+                        child: Icon(Icons.account_circle_rounded)),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(paddings),
+              child: reUse.unitTwoHomeScreen(
+                  context: context,
+                  totalPackageDataKey: totalPackageIndex,
+                  totalPackageData: driverList,
+                  returnData: returnData,
+                  completeData: completeData,
+                  returnLength: returnData.length,
+                  completeLength: completeData.length,
+                  pendingData: pendingList,
+                  totalLength: driverList.length,
+                  pendingLength: pendingList.length),
+            ),
+
+            //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
+            // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
+            //reUse.renderListView(),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: paddings),
+              child: reUse.reUseCreatePackage(context: context, padding: paddings, height: Get.height * 0.02),
+            ),
+            Row(
               children: [
-                reUse.reUseText(
-                    size: 20.0, color: theme.black, weight: FontWeight.bold, content: '$greeting\nID $getUserID'),
-                if (_image != null)
-                  Container(
-                    height: imageSize,
-                    width: imageSize,
-                    //margin: const EdgeInsets.all(3.0),
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: theme.midGrey,
-                          blurRadius: 3,
-                          spreadRadius: 0.5,
-                          offset: Offset(0, 0), // Shadow position
-                        ),
-                      ],
-                      borderRadius: BorderRadius.circular(50),
-                      //border: Border.all(color: theme.orange, width: 1.5)
-                    ),
-                    child: CircleAvatar(backgroundImage: new FileImage(_image!)),
-                  )
-                else
-                  InkWell(
-                      onTap: () {
-                        //pickImage();
-                      },
-                      child: Icon(Icons.account_circle_rounded)),
+                reUse.reUseText(content: "   ${clsLan.today} : ${forSort.length}", color: theme.grey),
+                Divider(
+                  height: 1,
+                  color: theme.grey,
+                ),
               ],
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(paddings),
-            child: reUse.unitTwoHomeScreen(
-                context: context,
-                totalPackageDataKey: totalPackageIndex,
-                totalPackageData: driverList,
-                returnData: returnData,
-                completeData: completeData,
-                returnLength: returnData.length,
-                completeLength: completeData.length,
-                pendingData: pendingList,
-                totalLength: driverList.length,
-                pendingLength: pendingList.length),
-          ),
-
-          //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
-          // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
-          //reUse.renderListView(),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: paddings),
-            child: reUse.reUseCreatePackage(context: context, padding: paddings, height: Get.height * 0.02),
-          ),
-          Row(
-            children: [
-              reUse.reUseText(content: "   ${clsLan.today} : ${forSort.length}", color: theme.grey),
-              Divider(
-                height: 1,
-                color: theme.grey,
-              ),
-            ],
-          ),
-          forSort.isNotEmpty
-              ? Flexible(
-                  child: SingleChildScrollView(
-                    child: ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.all(8),
-                        itemCount: forSort.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return reUse.reUseTodayComponent(
-                              onTap: () {
-                                if (forSort[index][field.status] == 'complete') {
-                                  Get.to(() => CompleteDetail(), arguments: forSort[index]);
-                                }else if (forSort[index][field.status] == 'return') {
-                                  Get.to(() => ReturnDetail(), arguments: forSort[index]);
-                                }
-                              },
-                              value: forSort[index],
-                              completeDate: forSort[index][field.completeDate],
-                              returnDate: forSort[index][field.returnDate],
-                              status: forSort[index][field.status]);
-                        }),
-                  ),
-                )
-              : Container(),
-        ],
-      )
-    );
+            forSort.isNotEmpty
+                ? Flexible(
+                    child: SingleChildScrollView(
+                      child: ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.all(8),
+                          itemCount: forSort.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return reUse.reUseTodayComponent(
+                                onTap: () {
+                                  if (forSort[index][field.status] == 'complete') {
+                                    Get.to(() => CompleteDetail(), arguments: forSort[index]);
+                                  } else if (forSort[index][field.status] == 'return') {
+                                    Get.to(() => ReturnDetail(), arguments: forSort[index]);
+                                  }
+                                },
+                                value: forSort[index],
+                                completeDate: forSort[index][field.completeDate],
+                                returnDate: forSort[index][field.returnDate],
+                                status: forSort[index][field.status]);
+                          }),
+                    ),
+                  )
+                : Container(),
+          ],
+        ));
   }
 
   List filterAndSortDatesForToday() {
