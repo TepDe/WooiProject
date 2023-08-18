@@ -842,7 +842,7 @@ class ReUseWidget {
     );
   }
 
-  reUseTextBox({hind, icon, controller, obscureText, keyboardType}) {
+  reUseTextBox({hind, icon, controller, obscureText, keyboardType,suffixIcon,suffixIconOnTap}) {
     return TextFormField(
       keyboardType: keyboardType,
       decoration: InputDecoration(
@@ -856,6 +856,7 @@ class ReUseWidget {
         hintText: hind,
         filled: true,
         labelText: hind,
+        suffixIcon: InkWell(onTap: suffixIconOnTap,child: Icon(suffixIcon),)
       ),
       obscureText: obscureText ?? false,
       controller: controller,
