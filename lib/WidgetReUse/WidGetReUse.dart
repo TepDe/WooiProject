@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wooiproject/HomeScreen.dart';
 import 'package:wooiproject/MapScreen.dart';
-import 'package:wooiproject/ProfileScreen.dart';
 import 'package:wooiproject/WidgetReUse/SuperController.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
@@ -118,7 +117,6 @@ class WidgetReUse extends GetxController {
           InkWell(
             onTap: () {
               if (function == 'profile') {
-                Get.to(ProfileScreen());
               }
             },
             child: Icon(
