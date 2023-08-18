@@ -19,8 +19,6 @@ import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/MapScreen.dart';
 import 'package:wooiproject/PaidScreen.dart';
 import 'package:wooiproject/PendingComponent/PendingScreen.dart';
-import 'package:wooiproject/ProfileScreen.dart';
-import 'package:wooiproject/RenderListDetail.dart';
 import 'package:wooiproject/ReturnScreen.dart';
 import 'package:wooiproject/RevenueList.dart';
 import 'package:wooiproject/TotalPackageScreen.dart';
@@ -2212,6 +2210,7 @@ class ReUseWidget {
       valueTextSize,
       labelTextSize,
       textColor,
+        onTap,
       valueColor,
       backgroundColor}) {
     return Container(
@@ -2237,7 +2236,7 @@ class ReUseWidget {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
-          onTap: () {
+          onTap: onTap??() {
             if (witchClick == "revenue") {
               Get.to(() => const RevenueList(), arguments: data);
             } else {
