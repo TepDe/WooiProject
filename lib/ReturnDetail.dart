@@ -40,31 +40,31 @@ class _ReturnDetailState extends State<ReturnDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          title: TextButton.icon(
-            onPressed: () {
-              Get.back();
-            },
-            icon: Icon(
-              Icons.arrow_back_outlined,
-              color: theme.white,
-            ),
-            label: Text(
-              "${forDisplay[field.packageID]}",
-              style: TextStyle(
-                  fontSize: 18,
-                  color: theme.white,
-                  //color: titleColor,
-                  fontWeight: FontWeight.bold),
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        title: TextButton.icon(
+          onPressed: () {
+            Get.back();
+          },
+          icon: Icon(
+            Icons.arrow_back_outlined,
+            color: theme.white,
           ),
-          backgroundColor: theme.red,
+          label: Text(
+            "${forDisplay[field.packageID]}",
+            style: TextStyle(
+                fontSize: 18,
+                color: theme.white,
+                //color: titleColor,
+                fontWeight: FontWeight.bold),
+          ),
         ),
-        body: Container(
+        backgroundColor: theme.red,
+      ),
+      body: SafeArea(
+        child: Container(
           width: Get.width,
           margin: const EdgeInsets.all(6),
           padding: const EdgeInsets.all(10),
