@@ -25,6 +25,8 @@ class _LogInScreenState extends State<LogInScreen> {
   final theme = ThemesApp();
   final reUse = ReUseWidget();
 
+  bool obscureText = true;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -47,9 +49,9 @@ class _LogInScreenState extends State<LogInScreen> {
                   SizedBox(
                     height: Get.height * 0.1,
                   ),
-                  reUse.reUseText(content: 'Sign in', color: theme.black, size: 25.0, weight: FontWeight.bold),
+                  reUse.reUseText(content: 'ចូលគណនី', color: theme.black, size: 25.0, weight: FontWeight.bold),
                   reUse.reUseText(
-                    content: 'Please sign in to Continue (User)',
+                    content: 'សូមបំពេញព័ត៌មានដើម្បីបន្ត',
                     size: 12.0,
                   ),
                   SizedBox(
@@ -63,7 +65,19 @@ class _LogInScreenState extends State<LogInScreen> {
                         height: 20,
                       ),
                       reUse.reUseTextBox(
-                          icon: Icon(Icons.password), controller: userPassword, hind: 'Password', obscureText: true),
+                          suffixIconOnTap: () {
+                            if(obscureText == false){
+                              obscureText = true;
+                            }else{
+                              obscureText = false;
+                            }
+                            setState(() {});
+                          },
+                          suffixIcon: Icons.remove_red_eye,
+                          icon: Icon(Icons.password),
+                          controller: userPassword,
+                          hind: 'Password',
+                          obscureText: obscureText),
                     ],
                   ),
                   SizedBox(
@@ -124,7 +138,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: SizedBox(
-                      width: Get.width * 0.33,
+                      width: Get.width * 0.45,
                       height: Get.height * 0.05,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -136,11 +150,11 @@ class _LogInScreenState extends State<LogInScreen> {
                         ),
                         onPressed: () async {
                           if (userEmail.text.isEmpty) {
-                            onDialogOK(context: context, title: 'Not Found', content: 'Email is missing');
+                            onDialogOK(context: context, title: 'ខ្វះព័ត៌មាន', content: 'ខ្វះអ៊ីមែល');
                           } else if (userPassword.text.isEmpty) {
-                            onDialogOK(context: context, title: 'Not Found', content: 'Password is missing');
+                            onDialogOK(context: context, title: 'ខ្វះព័ត៌មាន', content: 'ខ្វះពាក្យសម្ងាត់');
                           } else if (userPassword.text.isEmpty && userEmail.text.isEmpty) {
-                            onDialogOK(context: context, title: 'Not Found', content: 'Email and Password is missing');
+                            onDialogOK(context: context, title: 'ខ្វះព័ត៌មាន', content: 'ខ្វះអ៊ីមែល និង ពាក្យសម្ងាត់');
                           } else {
                             await onUserSignIn(
                                 email: userEmail.text.trim(),
@@ -151,10 +165,10 @@ class _LogInScreenState extends State<LogInScreen> {
                           }
                         },
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
+                          mainAxisAlignment: MainAxisAlignment.center,
+                           children: [
                             Text(
-                              'Continue',
+                              'បន្ត',
                               style: TextStyle(color: theme.white, fontWeight: FontWeight.w700),
                             ),
                             Icon(Icons.navigate_next_rounded),
@@ -308,8 +322,7 @@ class _LogInScreenState extends State<LogInScreen> {
               value: "true",
               data: auth.currentUser!.uid,
               allowDialog: false);
-          await glb
-              .storeUser(
+          await glb.storeUser(
             uid: auth.currentUser!.uid,
             email: email.toString(),
             password: password.toString(),
