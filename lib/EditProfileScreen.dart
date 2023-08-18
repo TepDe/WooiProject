@@ -71,15 +71,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: WillPopScope(
-        onWillPop: () async {
-          Get.to(ViewScreen());
-          setState(() {});
-          return true;
-        },
-        child: Scaffold(
-          body: Padding(
+    return WillPopScope(
+      onWillPop: () async {
+        Get.to(ViewScreen());
+        setState(() {});
+        return true;
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: SingleChildScrollView(
               child: Column(
