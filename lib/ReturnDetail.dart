@@ -148,7 +148,7 @@ class _ReturnDetailState extends State<ReturnDetail> {
                       child: Container(
                         width: Get.width,
                         margin: const EdgeInsets.symmetric(vertical: 8.0),
-                         // decoration: BoxDecoration(
+                        // decoration: BoxDecoration(
                         //     border: Border.all(color: theme.grey)),
                         child: reUse.reUseTextNote(
                             weight: FontWeight.w400, size: 14.0, color: theme.black, content: forDisplay['note'] ?? ""),
@@ -165,10 +165,13 @@ class _ReturnDetailState extends State<ReturnDetail> {
                       child: Container(
                         width: Get.width,
                         margin: const EdgeInsets.symmetric(vertical: 8.0),
-                         // decoration: BoxDecoration(
+                        // decoration: BoxDecoration(
                         //     border: Border.all(color: theme.grey)),
                         child: reUse.reUseTextNote(
-                            weight: FontWeight.w400, size: 14.0, color: theme.black, content: forDisplay['returnNote'] ?? ""),
+                            weight: FontWeight.w400,
+                            size: 14.0,
+                            color: theme.black,
+                            content: forDisplay['returnNote'] ?? ""),
                       ),
                     ),
                   ],
