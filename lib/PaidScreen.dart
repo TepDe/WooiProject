@@ -35,8 +35,8 @@ class _PaidScreenState extends State<PaidScreen> {
       completeList = [];
       forDisplay = [];
     } else {
-      completeList = argumentData;
-      forDisplay = argumentData;
+      completeList = argumentData['data'];
+      forDisplay = argumentData['data'];
       setState(() {});
     }
   }
@@ -88,13 +88,26 @@ class _PaidScreenState extends State<PaidScreen> {
                               Icons.arrow_back_ios_new_outlined,
                               color: theme.deepPumpkin,
                             ),
-                            label: Text(
-                              clsLan.paid,
-                              style: TextStyle(
-                                  color: theme.deepPumpkin,
-                                  fontSize: 18,
-                                  // color: titleColor,
-                                  fontWeight: FontWeight.bold),
+                            label: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  clsLan.paid,
+                                  style: TextStyle(
+                                      color: theme.deepPumpkin,
+                                      fontSize: 18,
+                                      // color: titleColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "${argumentData['price']} \$",
+                                  style: TextStyle(
+                                      color: theme.deepPumpkin,
+                                      fontSize: 14,
+                                      // color: titleColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
                             ),
                           ),
                           // Padding(
