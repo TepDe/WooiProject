@@ -70,33 +70,33 @@ class _SetUpScreenState extends State<SetUpScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: theme.white,
-      body: WillPopScope(
-        onWillPop: () async {
-          if (lastName.text.isEmpty ||
-              firstName.text.isEmpty ||
-              phoneNumber.text.isEmpty ||
-              bankCode.text.isEmpty ||
-              bankName == "") {
-            await reUse.reUseYesNoDialog(
-                icon: Icons.question_mark_outlined,
-                content: Text(clsLan.emptyFill),
-                context: context,
-                noText: clsLan.exit,
-                yesText: clsLan.continues,
-                noTap: () {
-                  exit(0);
-                },
-                yesTap: () {
-                  Navigator.pop(context);
-                },
-                title: clsLan.remainEmpty);
-          } else {
-            Get.to(const LogInScreen());
-            setState(() {});
-          }
-          return false;
-        },
-        child: SafeArea(
+      body: SafeArea(
+        child: WillPopScope(
+          onWillPop: () async {
+            if (lastName.text.isEmpty ||
+                firstName.text.isEmpty ||
+                phoneNumber.text.isEmpty ||
+                bankCode.text.isEmpty ||
+                bankName == "") {
+              await reUse.reUseYesNoDialog(
+                  icon: Icons.question_mark_outlined,
+                  content: Text(clsLan.emptyFill),
+                  context: context,
+                  noText: clsLan.exit,
+                  yesText: clsLan.continues,
+                  noTap: () {
+                    exit(0);
+                  },
+                  yesTap: () {
+                    Navigator.pop(context);
+                  },
+                  title: clsLan.remainEmpty);
+            } else {
+              Get.to(const LogInScreen());
+              setState(() {});
+            }
+            return false;
+          },
           child: Stack(
             children: [
               Container(
