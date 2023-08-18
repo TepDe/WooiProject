@@ -119,10 +119,14 @@ class _ReturnScreenState extends State<ReturnScreen> {
                               ),
                               suffixIcon: IconButton(
                                 splashColor: Colors.transparent,
-                                onPressed: () => {
-                                  search.clear(),
+                                onPressed: ()  {
+                                  forDisplay = returnList;
+                                  search.clear();
                                   //packageList!.clear(),
-                                  FocusManager.instance.primaryFocus?.unfocus(),
+                                  FocusManager.instance.primaryFocus?.unfocus();
+                                  setState(() {
+
+                                  });
                                 },
                                 icon: const Icon(Icons.close),
                               ),
@@ -163,7 +167,7 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                       .contains(
                                           search.text.toString().toLowerCase()))
                                   .toList();
-                              if (results == null || results.isEmpty) {
+                              if (results.isEmpty) {
                                 results = returnList
                                     .where((user) => user['phoneNumber']
                                         .toLowerCase()
