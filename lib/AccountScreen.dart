@@ -16,6 +16,8 @@ import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/LoginScreen.dart';
+import 'package:wooiproject/PaidScreen.dart';
+import 'package:wooiproject/RevenueList.dart';
 import 'package:wooiproject/SetUpScreen.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
@@ -237,6 +239,9 @@ class _AccountScreenState extends State<AccountScreen> {
                             textColor: theme.black,
                             witchClick: "revenue",
                             valueTextSize: 20.0,
+                            onTap: (){
+                              Get.to(() => const RevenueList(), arguments: {"data":revenuePrice,"price":revenue.toStringAsFixed(2)});
+                            },
                             labelTextSize: 14.0,
                             valueColor: theme.grey,
                             title: clsLan.revenue),
@@ -247,6 +252,9 @@ class _AccountScreenState extends State<AccountScreen> {
                             backgroundColor: theme.white,
                             // assetImage: "assets/images/TotalPaidBtn.png",
                             value: "\$ ${paid.toStringAsFixed(2)}",
+                            onTap: (){
+                              Get.to(() => const PaidScreen(), arguments: {"data":paidPrice,"price":paid.toStringAsFixed(2)});
+                            },
                             title: clsLan.paid,
                             valueTextSize: 20.0,
                             labelTextSize: 14.0,
