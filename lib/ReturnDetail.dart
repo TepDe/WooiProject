@@ -44,54 +44,40 @@ class _ReturnDetailState extends State<ReturnDetail> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: 0,
-        title: TextButton.icon(
-          onPressed: () {
-            Get.back();
-          },
-          icon: Icon(
-            Icons.arrow_back_outlined,
-            color: theme.black,
-          ),
-          label: Text(
-            "វិក្កយបត្រ",
-            style: TextStyle(
-                fontSize: 18,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TextButton.icon(
+              onPressed: () {
+                Get.back();
+              },
+              icon: Icon(
+                Icons.arrow_back_outlined,
                 color: theme.black,
-                //color: titleColor,
-                fontWeight: FontWeight.bold),
-          ),
+              ),
+              label: Text(
+                "វិក្កយបត្រ",
+                style: TextStyle(
+                    fontSize: 18,
+                    color: theme.black,
+                    //color: titleColor,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            reUse.reUseStatusBox(value: clsLan.stReturn, color: theme.litestRed,textColor: theme.red),
+
+          ],
         ),
         backgroundColor: Colors.white,
       ),
       body: SafeArea(
-        child: Container(
-          width: Get.width,
-          margin: const EdgeInsets.all(6),
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: theme.liteGrey,
-            borderRadius: BorderRadius.circular(6),
-            // boxShadow: [
-            //   BoxShadow(
-            //     color: theme.minGrey,
-            //     blurRadius: 4,
-            //     offset: const Offset(0, 0), // Shadow position
-            //   ),
-            // ],
-          ),
-          child: SingleChildScrollView(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                reUse.reUseRowText(
-                    titleColor: theme.black,
-                    title: "ទំនិញ :",
-                    size: valueSize,
-                    lableSize: labelSize,
-                    color: theme.black,
-                    content: "",
-                    weight: FontWeight.w500),
                 reUse.reUseRowText(
                     titleColor: theme.grey,
                     title: clsLan.packageID,
