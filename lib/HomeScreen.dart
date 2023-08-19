@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooiproject/CompleteDetail.dart';
 import 'package:wooiproject/Distination/language.dart';
@@ -66,44 +67,6 @@ class _HomeScreenState extends State<HomeScreen> {
     alertNoInternet();
     // glb.getOtp();
     fetchImage();
-    checkingAccount();
-  }
-
-  checkingAccount() async {
-    final result = await glb.checkAccountType();
-    if (result == "type") {
-      await reUse.reUseCircleDialog(
-          disposeAllow: false,
-          onTap: ()=> glb.isLogOut(),
-          context: context,
-          icon: Icons.wifi,
-          title: 'មិនមាន',
-          content: Center(
-            child: Text(
-              'គណនីនេះមិនមានទេ សូមពិនិត្យមើលម្តងទៀត!',
-              style: TextStyle(
-                color: theme.black,
-              ),
-            ),
-          ));
-      setState(() {});
-    } else if (result == "banned") {
-      await reUse.reUseCircleDialog(
-          disposeAllow: false,
-          onTap: ()=> glb.isLogOut(),
-          context: context,
-          icon: Icons.cancel_outlined,
-          title: 'ផ្អាក',
-          content: Center(
-            child: Text(
-              'បច្ចុប្បន្នគណនីនេះត្រូវបានផ្អាក',
-              style: TextStyle(
-                color: theme.black,
-              ),
-            ),
-          ));
-      setState(() {});
-    }
   }
 
   alertNoInternet() async {
@@ -113,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
         print('connected');
       }
     } on SocketException catch (_) {
-      reUse.reUseCircleDialog(
+      return reUse.reUseCircleDialog(
           function: 'nointernet',
           disposeAllow: false,
           context: context,
@@ -127,15 +90,47 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ));
-      setState(() {});
     }
   }
 
   checkID() async {
     final prefs = await SharedPreferences.getInstance();
     try {
-      FirebaseFirestore.instance.collection('Users').doc(auth.currentUser!.uid).get().then((doc) async {
-        Map data = doc.data() as Map;
+      await FirebaseFirestore.instance.collection('Users').doc(auth.currentUser!.uid).get().then((doc) async {
+        Map data = await doc.data() as Map;
+        if (data["accountType"] != "Users") {
+          await reUse.reUseCircleDialog(
+              disposeAllow: false,
+              onTap: () => glb.isLogOut(),
+              context: context,
+              icon: Icons.wifi,
+              title: 'មិនមាន',
+              content: Center(
+                child: Text(
+                  'គណនីនេះមិនមានទេ សូមពិនិត្យមើលម្តងទៀត!',
+                  style: TextStyle(
+                    color: theme.black,
+                  ),
+                ),
+              ));
+          setState(() {});
+        } else if (data["isBanned"] != "false") {
+          await reUse.reUseCircleDialog(
+              disposeAllow: false,
+              onTap: () => glb.isLogOut(),
+              context: context,
+              icon: Icons.cancel_outlined,
+              title: 'ផ្អាក',
+              content: Center(
+                child: Text(
+                  'បច្ចុប្បន្នគណនីនេះត្រូវបានផ្អាក',
+                  style: TextStyle(
+                    color: theme.black,
+                  ),
+                ),
+              ));
+          setState(() {});
+        }
         if (data.containsKey('userID')) {
           final name = data['userID'];
           getUserID = name.toString();
@@ -298,6 +293,15 @@ class _HomeScreenState extends State<HomeScreen> {
               // Padding(
               //   padding: EdgeInsets.only(top: 10, right: paddings, left: paddings),
               //   child: reUse.unitOneHomeScreen(userID: '$greeting\nID $getUserID', context: context),
+              // ),
+              // SizedBox(
+              //   height: 100,
+              //   width: 100,
+              //   child: QrImageView(
+              //     data: '1234567890',
+              //     version: QrVersions.auto,
+              //     size: 200.0,
+              //   ),
               // ),
               Padding(
                 padding: EdgeInsets.only(top: 10, right: paddings, left: paddings),
