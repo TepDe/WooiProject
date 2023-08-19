@@ -1941,12 +1941,12 @@ class ReUseWidget {
     );
   }
 
-  reUseStatusBox({color, value}) {
+  reUseStatusBox({color, value, textColor, textSize}) {
     return Container(
       margin: const EdgeInsets.all(6),
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: value == 'complete' ? theme.litestGreen : theme.litestRed,
+        color:color,
         borderRadius: BorderRadius.circular(6),
         // boxShadow: [
         //   BoxShadow(
@@ -1958,9 +1958,9 @@ class ReUseWidget {
         // ],
       ),
       child: reUseText(
-          content: value == 'complete' ? '${clsLan.stCom}' : '${clsLan.stReturn}',
-          color: value == 'complete' ? theme.green : theme.red,
-          size: 10.0,
+          content:value,
+          color: textColor,
+          size: textSize??14.0,
           weight: FontWeight.w500),
     );
   }
