@@ -40,33 +40,39 @@ class _CompleteDetailState extends State<CompleteDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: theme.liteGreen,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          title: TextButton.icon(
-            onPressed: () {
-              Get.back();
-            },
-            icon: Icon(
-              Icons.arrow_back_rounded,
-              color: theme.white,
+    return  Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TextButton.icon(
+              onPressed: () {
+                Get.back();
+              },
+              icon: Icon(
+                Icons.arrow_back_outlined,
+                color: theme.black,
+              ),
+              label: Text(
+                "វិក្កយបត្រ",
+                style: TextStyle(
+                    fontSize: 18,
+                    color: theme.black,
+                    //color: titleColor,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
-            label: Text(
-              "${forDisplay[field.packageID]}",
-              style: TextStyle(
-                  fontSize: 18,
-                  color: theme.white,
-                  //color: titleColor,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
+            reUse.reUseStatusBox(value: clsLan.stCom, color: theme.litestGreen,textColor: theme.green),
+          ],
         ),
-        body: SingleChildScrollView(
+        backgroundColor: Colors.white,
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            padding: const EdgeInsets.all(8.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,25 +131,47 @@ class _CompleteDetailState extends State<CompleteDetail> {
                     title: clsLan.bankCode,
                     size: valueSize,
                     color: theme.black,
-                    content: forDisplay[field.bankCode],
+                    content: "${forDisplay["bankName"].toString().toUpperCase()}",
                     weight: FontWeight.w500),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: SizedBox(height: 100, child: Image(image: AssetImage(getBank()))),
+                ),
                 reUse.reUseText(
                     weight: FontWeight.w500, size: labelSize, color: theme.grey, content: '${clsLan.note} : '),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Flexible(
-                      child: Container(
-                        width: Get.width,
-                        margin: const EdgeInsets.all(8.0),
-                        padding: const EdgeInsets.all(8.0),
-                        // decoration: BoxDecoration(
-                        //     border: Border.all(color: theme.grey)),
-                        child: reUse.reUseTextNote(
-                            weight: FontWeight.w400, size: 14.0, color: theme.black, content: forDisplay['note'] ?? ""),
-                      ),
-                    ),
-                  ],
+                Container(
+                  width: Get.width,
+                  height: forDisplay['note'] == '' ? 100 : null,
+                  margin: const EdgeInsets.symmetric(vertical: 15.0),
+                  padding: const EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.white,
+                    border: Border.all(color: theme.midGrey, width: 1.5),
+                  ),
+                  child: reUse.reUseTextNote(
+                      weight: FontWeight.w400,
+                      size: 14.0,
+                      color: theme.black,
+                      content: forDisplay['note'] ?? "(មិនមានបញ្ចូល)"),
+                ),
+                reUse.reUseText(
+                    weight: FontWeight.w500, size: labelSize, color: theme.grey, content: '${clsLan.returnReason} : '),
+                Container(
+                  width: Get.width,
+                  height: forDisplay['note'] == '' ? 100 : null,
+                  margin: const EdgeInsets.symmetric(vertical: 15.0),
+                  padding: const EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.white,
+                    border: Border.all(color: theme.midGrey, width: 1.5),
+                  ),
+                  child: reUse.reUseTextNote(
+                      weight: FontWeight.w400,
+                      size: 14.0,
+                      color: theme.black,
+                      content: forDisplay['returnNote'] ?? ""),
                 ),
                 Container(
                   width: Get.width,
@@ -176,7 +204,7 @@ class _CompleteDetailState extends State<CompleteDetail> {
                           size: valueSize,
                           lableSize: labelSize,
                           color: theme.black,
-                          content: forDisplay[field.dPhone] ?? "No Phone",
+                          content: forDisplay[field.dPhone],
                           weight: FontWeight.w500),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -201,11 +229,19 @@ class _CompleteDetailState extends State<CompleteDetail> {
                       ),
                       reUse.reUseRowText(
                           titleColor: theme.grey,
-                          title: clsLan.complete,
+                          title: clsLan.deliveryFee,
                           size: valueSize,
                           lableSize: labelSize,
                           color: theme.black,
-                          content: forDisplay[field.completeDate] ?? "No Phone",
+                          content: forDisplay["feePrice"],
+                          weight: FontWeight.w500),
+                      reUse.reUseRowText(
+                          titleColor: theme.grey,
+                          title: clsLan.completeDate,
+                          size: valueSize,
+                          lableSize: labelSize,
+                          color: theme.black,
+                          content: forDisplay[field.completeDate],
                           weight: FontWeight.w500),
                       // Row(
                       //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -221,7 +257,7 @@ class _CompleteDetailState extends State<CompleteDetail> {
                       //             weight: FontWeight.bold,
                       //             size: valueSize,
                       //             color: theme.black,
-                      //             content: forDisplay['completeDate']),
+                      //             content: forDisplay[field.returnDate]),
                       //       ],
                       //     ),
                       //     // Container(
@@ -252,5 +288,9 @@ class _CompleteDetailState extends State<CompleteDetail> {
         ),
       ),
     );
+  }
+  String getBank() {
+    var result = glb.payWay.where((person) => person['name'] == forDisplay['bankName']);
+    return result.first['img'].toString();
   }
 }
