@@ -60,7 +60,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   Column(
                     children: [
                       reUse.reUseTextBox(
-                          icon: Icon(Icons.email), controller: userEmail, hind: 'Email', obscureText: false),
+                          icon: Icon(Icons.email), controller: userEmail, hind: 'អ៊ីមែល', obscureText: false),
                       const SizedBox(
                         height: 20,
                       ),
@@ -76,7 +76,7 @@ class _LogInScreenState extends State<LogInScreen> {
                           suffixIcon: Icons.remove_red_eye,
                           icon: Icon(Icons.password),
                           controller: userPassword,
-                          hind: 'Password',
+                          hind: 'ពាក្យសម្ងាត់',
                           obscureText: obscureText),
                     ],
                   ),
