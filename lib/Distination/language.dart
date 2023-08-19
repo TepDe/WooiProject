@@ -21,7 +21,7 @@ class ClsLanguage {
   String returnReason = 'មូលហេតុត្រឡប់';
   String returnTime = 'ពេលវេលាត្រឡប់';
   String status = 'ស្ថានភាព';
-  String driverPhone = 'លេខទូរសព្ទអ្នកដឹក';
+  String driverPhone = 'លេខទូរស័ព្ទអ្នកដឹក';
   String driverName = 'ឈ្មោះអ្នកដឹក';
   String assignBy = 'ដឹកដោយ';
   String requestAgain = 'ហៅម្តងទៀត';
@@ -67,4 +67,7 @@ class ClsLanguage {
   String date = "កាលបរិច្ឆេទ";
   String today = "ថ្ងៃនេះ";
   String assignDate = "ពេលមកទទួលទំនិញ";
+  String completeDate = 'ពេលបញ្ចប់';
+  String deliveryFee = 'តំលៃដឹកជញ្ជូន';
+
 }
