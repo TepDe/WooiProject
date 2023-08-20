@@ -45,27 +45,16 @@ class _HomeScreenState extends State<HomeScreen> {
   String getUserID = '';
   final str = StorageKey();
 
-  exitApp() {
-    doubleClick += 1;
-    if (doubleClick == 2) {
-      exit(0);
-    }
-    return true;
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    checkID();
+    onGetUserData();
     totalListLength();
     pendingListLength();
     completeListLength();
     returnListLength();
-    currentTime();
-    //testObj();
     alertNoInternet();
-    // glb.getOtp();
     fetchImage();
   }
 
@@ -95,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late Map data;
 
-  checkID() async {
+  onGetUserData() async {
     final prefs = await SharedPreferences.getInstance();
     try {
       await FirebaseFirestore.instance
@@ -137,16 +126,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ));
           setState(() {});
         }
-        if (data.containsKey('userID')) {
-          final name = data['userID'];
-          getUserID = name.toString();
-          await prefs.setString(str.userID, getUserID.toString());
-          setState(() {});
-          print('User name: $name');
-        } else {
-          isNullUserID();
-          print('Name field does not exist in document');
-        }
+        getUserID = data['userID'];
+        await prefs.setString(str.userID, getUserID.toString());
+        setState(() {
+
+        });
       });
     } catch (e) {}
   }
@@ -269,10 +253,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return Result;
   }
 
-  String greeting = "";
   DateTime today = DateTime.now();
 
-  currentTime() {
+  String currentTime() {
+    String greeting = '';
     int hours = today.hour;
     if (hours >= 1 && hours <= 12) {
       greeting = "អរុណ សួស្តី";
@@ -285,7 +269,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       greeting = "រាត្រី សួស្តី";
     }
-    setState(() {});
+    return greeting;
   }
 
   bool circleIndicator = false;
@@ -321,12 +305,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     children: [
                       SizedBox(
-                        height: Get.height * 0.4,
-                        width: Get.width * 0.4,
+                        height: Get.height * 0.3,
+                        width: Get.width * 0.3,
                         child: QrImageView(
                           data: "${data['phoneNumber']},${data['email']},${data['firstname']},${data['lastname']},${data['userID']}",
                           version: QrVersions.auto,
-                          size: 200.0,
+                          size: Get.height * 0.4,
                         ),
                       ),
                       reUse.reUseText(),
@@ -365,7 +349,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         size: 20.0,
                         color: theme.black,
                         weight: FontWeight.bold,
-                        content: '$greeting\nID $getUserID'),
+                        content: '${currentTime()}\nID $getUserID'),
                     Container(
                       height: imageSize,
                       width: imageSize,
@@ -479,21 +463,21 @@ class _HomeScreenState extends State<HomeScreen> {
   List compSort = [];
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  isNullUserID() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    CollectionReference users = FirebaseFirestore.instance.collection('Users');
-    int? userID;
-    var rng = Random();
-    userID = rng.nextInt(999999);
-    await users
-        .doc(auth.currentUser!.uid)
-        .update({'userID': userID}).then((value) async {
-      await prefs.setString(str.userID, userID.toString());
-
-      print("User Updated");
-    }).catchError((error) => print("Failed to update user: $error"));
-    await checkID();
-    setState(() {});
-  }
+  // isNullUserID() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //
+  //   CollectionReference users = FirebaseFirestore.instance.collection('Users');
+  //   int? userID;
+  //   var rng = Random();
+  //   userID = rng.nextInt(999999);
+  //   await users
+  //       .doc(auth.currentUser!.uid)
+  //       .update({'userID': userID}).then((value) async {
+  //     await prefs.setString(str.userID, userID.toString());
+  //
+  //     print("User Updated");
+  //   }).catchError((error) => print("Failed to update user: $error"));
+  //   await checkID();
+  //   setState(() {});
+  // }
 }
