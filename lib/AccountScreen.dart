@@ -65,13 +65,15 @@ class _AccountScreenState extends State<AccountScreen> {
 
   fetchImage() async {
     final prefs = await SharedPreferences.getInstance();
-    _image = File(prefs.getString(str.profileImg).toString());
-    setState(() {});
+    getImageFileFromPath(prefs.getString(str.profileImg).toString());
   }
 
   getDatsa(getUid) async {
-    FirebaseFirestore.instance.collection('Users').doc(getUid).get().then((
-        DocumentSnapshot documentSnapshot) {
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc(getUid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
       getUserID = documentSnapshot['qty'];
       getToken = documentSnapshot['token'];
       getChatId = documentSnapshot['chatid'];
@@ -79,7 +81,8 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   Future<void> insertTelegramToken() async {
-    FirebaseFirestore.instance.collection('Users')
+    FirebaseFirestore.instance
+        .collection('Users')
         .doc(auth.currentUser!.uid)
         .get()
         .then((value) {
@@ -121,13 +124,15 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   fetchUserData() async {
-   await fetch.doc(auth.currentUser!.uid.toString()).get().then((
-        DocumentSnapshot documentSnapshot) async {
+    await fetch
+        .doc(auth.currentUser!.uid.toString())
+        .get()
+        .then((DocumentSnapshot documentSnapshot) async {
       userData = await documentSnapshot.data() as Map<String, dynamic>;
       if (userData["accountType"] != "Users") {
         return await reUse.reUseCircleDialog(
             disposeAllow: false,
-            onTap: ()=> glb.isLogOut(),
+            onTap: () => glb.isLogOut(),
             context: context,
             icon: Icons.wifi,
             title: 'មិនមាន',
@@ -142,7 +147,7 @@ class _AccountScreenState extends State<AccountScreen> {
       } else if (userData["isBanned"] != "false") {
         return await reUse.reUseCircleDialog(
             disposeAllow: false,
-            onTap: ()=> glb.isLogOut(),
+            onTap: () => glb.isLogOut(),
             context: context,
             icon: Icons.cancel_outlined,
             title: 'ផ្អាក',
@@ -156,7 +161,7 @@ class _AccountScreenState extends State<AccountScreen> {
             ));
       }
       imagePath =
-      await glb.getBankImage(bankName: userData[fieldInfo.bankName]);
+          await glb.getBankImage(bankName: userData[fieldInfo.bankName]);
       setState(() {});
     });
   }
@@ -174,24 +179,19 @@ class _AccountScreenState extends State<AccountScreen> {
 
   bool hindPassowrd = true;
 
+  Future<File> getImageFileFromPath(String imagePath) async {
+    final prefs = await SharedPreferences.getInstance();
+    print(prefs.getString(str.profileImg).toString());
+    print(prefs.getString(str.profileImg).toString());
+    return File(prefs.getString(str.profileImg).toString());
+  }
+
   @override
   Widget build(BuildContext context) {
-    var imageSize = MediaQuery
-        .of(context)
-        .size
-        .height * 0.15;
-    var viewHeight2 = MediaQuery
-        .of(context)
-        .size
-        .height * 0.03;
-    var padding = MediaQuery
-        .of(context)
-        .size
-        .height * 0.01;
-    var textWidth = MediaQuery
-        .of(context)
-        .size
-        .width * 0.2;
+    var imageSize = MediaQuery.of(context).size.height * 0.15;
+    var viewHeight2 = MediaQuery.of(context).size.height * 0.03;
+    var padding = MediaQuery.of(context).size.height * 0.01;
+    var textWidth = MediaQuery.of(context).size.width * 0.2;
     return SafeArea(
       child: Scaffold(
         backgroundColor: theme.white,
@@ -209,43 +209,69 @@ class _AccountScreenState extends State<AccountScreen> {
                   SizedBox(
                     height: viewHeight2,
                   ),
-                  if (_image != null)
-                    Container(
-                      height: imageSize,
-                      width: imageSize,
-                      //margin: const EdgeInsets.all(3.0),
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: theme.midGrey,
-                            blurRadius: 3,
-                            spreadRadius: 0.5,
-                            offset: const Offset(0, 0), // Shadow position
-                          ),
-                        ],
-                        borderRadius: BorderRadius.circular(50),
-                        //border: Border.all(color: theme.orange, width: 1.5)
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          pickImage();
-                        },
-                        child: CircleAvatar(
-                            backgroundImage: new FileImage(_image!)),
-                      ),
-                    )
-                  else
-                    InkWell(
-                        onTap: () {
-                          pickImage();
-                        },
-                        child: const Icon(Icons.account_circle_rounded)),
+                  FutureBuilder<String?>(
+                    future: SharedPreferences.getInstance()
+                        .then((prefs) => prefs.getString(str.profileImg)),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        // Display a loading indicator while waiting for data
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        // Handle error case
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else if (snapshot.hasData && snapshot.data != null) {
+                        String imagePath = snapshot.data!;
+                        return FutureBuilder<File>(
+                          future: getImageFileFromPath(imagePath),
+                          builder: (context, fileSnapshot) {
+                            if (fileSnapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              // Display a loading indicator while waiting for image file
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            } else if (fileSnapshot.hasError) {
+                              // Handle error case
+                              return Center(
+                                  child: Text('Error: ${fileSnapshot.error}'));
+                            } else if (fileSnapshot.hasData &&
+                                fileSnapshot.data != null) {
+                              File imageFile = fileSnapshot.data!;
+                              return SizedBox(
+                                height: imageSize,
+                                width: imageSize,
+                                child: InkWell(
+                                  onTap: () => pickImage(),
+                                  child: CircleAvatar(
+                                      backgroundImage: FileImage(imageFile)),
+                                ),
+                              );
+                            } else {
+                              // Image not found
+                              return const Center(
+                                  child: Text('Image not found'));
+                            }
+                          },
+                        );
+                      } else {
+                        // No image stored
+                        return InkWell(
+                            onTap: () {
+                              pickImage();
+                            },
+                            child: Icon(
+                              Icons.account_circle_rounded,
+                              size: imageSize,
+                              color: theme.grey,
+                            ));
+                      }
+                    },
+                  ),
                   SizedBox(
                     height: viewHeight2,
                   ),
                   reUse.reUseText(
-                      content: "${userData[fieldInfo.firstName] ??
-                          " "} ${userData[fieldInfo.lastName] ?? " "}",
+                      content:
+                          "${userData[fieldInfo.firstName] ?? " "} ${userData[fieldInfo.lastName] ?? " "}",
                       weight: FontWeight.bold,
                       size: 20.0,
                       color: theme.black),
@@ -270,8 +296,11 @@ class _AccountScreenState extends State<AccountScreen> {
                             textColor: theme.black,
                             witchClick: "revenue",
                             valueTextSize: 20.0,
-                            onTap: (){
-                              Get.to(() => const RevenueList(), arguments: {"data":revenuePrice,"price":revenue.toStringAsFixed(2)});
+                            onTap: () {
+                              Get.to(() => const RevenueList(), arguments: {
+                                "data": revenuePrice,
+                                "price": revenue.toStringAsFixed(2)
+                              });
                             },
                             labelTextSize: 14.0,
                             valueColor: theme.grey,
@@ -283,8 +312,11 @@ class _AccountScreenState extends State<AccountScreen> {
                             backgroundColor: theme.white,
                             // assetImage: "assets/images/TotalPaidBtn.png",
                             value: "\$ ${paid.toStringAsFixed(2)}",
-                            onTap: (){
-                              Get.to(() => const PaidScreen(), arguments: {"data":paidPrice,"price":paid.toStringAsFixed(2)});
+                            onTap: () {
+                              Get.to(() => const PaidScreen(), arguments: {
+                                "data": paidPrice,
+                                "price": paid.toStringAsFixed(2)
+                              });
                             },
                             title: clsLan.paid,
                             valueTextSize: 20.0,
@@ -312,8 +344,9 @@ class _AccountScreenState extends State<AccountScreen> {
                           },
                           icon: Icon(Icons.edit, color: theme.darkGrey),
                           label: reUse.reUseText(
-                              content: 'Edit', size: 16.0, color: theme
-                              .darkGrey),
+                              content: 'Edit',
+                              size: 16.0,
+                              color: theme.darkGrey),
                         )
                       ],
                     ),
@@ -334,9 +367,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           yesText: "ព្រម",
                           title: 'ផ្លាស់ប្តូរពាក្យសម្ងាត់',
                           yesTap: () async {
-                            if (passwordBox.text
-                                .toString()
-                                .isEmpty) {
+                            if (passwordBox.text.toString().isEmpty) {
                               Get.back();
                             } else {
                               await FirebaseAuth.instance.currentUser!
@@ -345,8 +376,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                 await FirebaseFirestore.instance
                                     .collection('Users')
                                     .doc(auth.currentUser!.uid)
-                                    .update({'password': passwordBox.text})
-                                    .then((value) async {
+                                    .update({
+                                  'password': passwordBox.text
+                                }).then((value) async {
                                   Navigator.pop(context);
                                   await reUse.reUseCircleDialog(
                                       onTap: () {
@@ -408,10 +440,11 @@ class _AccountScreenState extends State<AccountScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
                                 child: reUse.reUseText(
-                                    content: "បញ្ចូលពាក្យសម្ងាត់របស់អ្នកខាងក្រោម",
+                                    content:
+                                        "បញ្ចូលពាក្យសម្ងាត់របស់អ្នកខាងក្រោម",
                                     size: 12.0,
                                     color: theme.black,
                                     weight: FontWeight.w500),
@@ -419,8 +452,9 @@ class _AccountScreenState extends State<AccountScreen> {
                               TextFormField(
                                 controller: passwordBox,
                                 // keyboardType: inputType,
-                                keyboardType: const TextInputType
-                                    .numberWithOptions(decimal: true),
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
+                                        decimal: true),
                                 // inputFormatters: [
                                 //   FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
                                 //   FilteringTextInputFormatter.digitsOnly,
@@ -445,29 +479,29 @@ class _AccountScreenState extends State<AccountScreen> {
                       },
                       trailing: hindPassowrd == true
                           ? IconButton(
-                          onPressed: () {
-                            if (hindPassowrd == true) {
-                              hindPassowrd = false;
-                            } else {
-                              hindPassowrd = true;
-                            }
-                            setState(() {});
-                          },
-                          icon: const Icon(Icons.visibility_off))
+                              onPressed: () {
+                                if (hindPassowrd == true) {
+                                  hindPassowrd = false;
+                                } else {
+                                  hindPassowrd = true;
+                                }
+                                setState(() {});
+                              },
+                              icon: const Icon(Icons.visibility_off))
                           : InkWell(
-                        onTap: () {
-                          if (hindPassowrd == false) {
-                            hindPassowrd = true;
-                          } else {
-                            hindPassowrd = false;
-                          }
-                          setState(() {});
-                        },
-                        child: Text(
-                          ("${userData[fieldInfo.password]}"),
-                          style: TextStyle(color: theme.grey),
-                        ),
-                      ),
+                              onTap: () {
+                                if (hindPassowrd == false) {
+                                  hindPassowrd = true;
+                                } else {
+                                  hindPassowrd = false;
+                                }
+                                setState(() {});
+                              },
+                              child: Text(
+                                ("${userData[fieldInfo.password]}"),
+                                style: TextStyle(color: theme.grey),
+                              ),
+                            ),
                       title: const Text('Password'),
                       context: context,
                       leading: const Icon(Icons.password_rounded)),
@@ -499,8 +533,8 @@ class _AccountScreenState extends State<AccountScreen> {
                   //     leading: const Icon(Icons.monetization_on)),
                   Container(
                     height: 60,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 3),
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
                       color: theme.white,
                       borderRadius: BorderRadius.circular(6),
@@ -520,7 +554,8 @@ class _AccountScreenState extends State<AccountScreen> {
                             child: Text(
                               "${userData[fieldInfo.bankCode]}",
                               maxLines: 1,
-                              style: TextStyle(color: theme.grey,
+                              style: TextStyle(
+                                  color: theme.grey,
                                   overflow: TextOverflow.ellipsis),
                             )),
                         leading: const Text("123"),
@@ -529,8 +564,8 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                   Container(
                     height: 60,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 3),
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
                       color: theme.white,
                       borderRadius: BorderRadius.circular(6),
@@ -550,7 +585,8 @@ class _AccountScreenState extends State<AccountScreen> {
                             child: Text(
                               "${userData[fieldInfo.token]}",
                               maxLines: 1,
-                              style: TextStyle(color: theme.grey,
+                              style: TextStyle(
+                                  color: theme.grey,
                                   overflow: TextOverflow.ellipsis),
                             )),
                         leading: const Icon(Icons.telegram_rounded),
@@ -559,8 +595,8 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                   Container(
                     height: 60,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 3),
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
                       color: theme.white,
                       borderRadius: BorderRadius.circular(6),
@@ -580,7 +616,8 @@ class _AccountScreenState extends State<AccountScreen> {
                             child: Text(
                               "${userData[fieldInfo.chatid]}",
                               maxLines: 1,
-                              style: TextStyle(color: theme.grey,
+                              style: TextStyle(
+                                  color: theme.grey,
                                   overflow: TextOverflow.ellipsis),
                             )),
                         leading: const Icon(Icons.telegram_rounded),
@@ -774,8 +811,9 @@ class _AccountScreenState extends State<AccountScreen> {
   totalRevenue() {
     List mainData = [];
     try {
-      DatabaseReference refs = FirebaseDatabase.instance.ref('Complete').child(
-          auth.currentUser!.uid);
+      DatabaseReference refs = FirebaseDatabase.instance
+          .ref('Complete')
+          .child(auth.currentUser!.uid);
       refs.onValue.listen((event) {
         revenuePrice.clear();
         paidPrice.clear();
