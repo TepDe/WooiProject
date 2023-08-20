@@ -732,10 +732,10 @@ class ReUseWidget {
     );
   }
 
-  reUseText({content, size, weight, color}) {
+  reUseText({content, size, weight, color,maxLines}) {
     return Text(
       content ?? '',
-      maxLines: 2,
+      maxLines: maxLines??2,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
           fontSize: size ?? 12,
