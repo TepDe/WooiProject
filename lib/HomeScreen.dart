@@ -49,13 +49,16 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    onGetUserData();
-    totalListLength();
-    pendingListLength();
-    completeListLength();
-    returnListLength();
-    alertNoInternet();
+    if(totalPackageIndex.isEmpty){
+      totalListLength();
+      completeListLength();
+      pendingListLength();
+      returnListLength();
+    }
     fetchImage();
+    onGetUserData();
+    alertNoInternet();
+
   }
 
   alertNoInternet() async {
@@ -273,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   bool circleIndicator = false;
-  late File _image;
+  var _image = null;
 
   // late File _image = 'assets/images/no_photo.png';
 
@@ -282,8 +285,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   fetchImage() async {
     final prefs = await SharedPreferences.getInstance();
-    _image = File(prefs.getString(str.profileImg).toString());
-    setState(() {});
+    getImageFileFromPath(prefs.getString(str.profileImg).toString());
+
+  }
+  Future<File> getImageFileFromPath(String imagePath) async {
+    return File(imagePath);
   }
 
   // List todayDateStrings=[];
@@ -350,24 +356,56 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: theme.black,
                         weight: FontWeight.bold,
                         content: '${currentTime()}\nID $getUserID'),
-                    Container(
-                      height: imageSize,
-                      width: imageSize,
-                      //margin: const EdgeInsets.all(3.0),
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: theme.midGrey,
-                            blurRadius: 3,
-                            spreadRadius: 0.5,
-                            offset: const Offset(0, 0), // Shadow position
-                          ),
-                        ],
-                        borderRadius: BorderRadius.circular(50),
-                        //border: Border.all(color: theme.orange, width: 1.5)
-                      ),
-                      child: CircleAvatar(backgroundImage: FileImage(_image)),
-                    )
+                    FutureBuilder<String?>(
+                      future: SharedPreferences.getInstance()
+                          .then((prefs) => prefs.getString(str.profileImg)),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          // Display a loading indicator while waiting for data
+                          return const Center(child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          // Handle error case
+                          return Center(child: Text('Error: ${snapshot.error}'));
+                        } else if (snapshot.hasData && snapshot.data != null) {
+                          String imagePath = snapshot.data!;
+                          return FutureBuilder<File>(
+                            future: getImageFileFromPath(imagePath),
+                            builder: (context, fileSnapshot) {
+                              if (fileSnapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                // Display a loading indicator while waiting for image file
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              } else if (fileSnapshot.hasError) {
+                                // Handle error case
+                                return Center(
+                                    child: Text('Error: ${fileSnapshot.error}'));
+                              } else if (fileSnapshot.hasData &&
+                                  fileSnapshot.data != null) {
+                                File imageFile = fileSnapshot.data!;
+                                return SizedBox(
+                                  height: imageSize,
+                                  width: imageSize,
+                                  child: CircleAvatar(
+                                      backgroundImage: FileImage(imageFile)),
+                                );
+                              } else {
+                                // Image not found
+                                return const Center(
+                                    child: Text('Image not found'));
+                              }
+                            },
+                          );
+                        } else {
+                          // No image stored
+                          return Icon(
+                            Icons.account_circle_rounded,
+                            size: imageSize,
+                            color: theme.grey,
+                          );
+                        }
+                      },
+                    ),
                   ],
                 ),
               ),
