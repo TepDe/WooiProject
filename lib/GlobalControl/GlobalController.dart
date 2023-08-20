@@ -797,26 +797,39 @@ class GlobalController {
   }
 
   Future<String> checkAccountType() async {
-    String result = "true";
-    await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(auth.currentUser!.uid.toString())
-        .get()
-        .then((DocumentSnapshot documentSnapshot) async {
-      Map data = await documentSnapshot.data() as Map;
-      if (data["accountType"] != "Users") {
-        return result = "type";
-      }
-      if (data["isBanned"] != "false") {
-        return result = "banned";
-      }
-      if (data["signInToken"] != "false") {
-        return result = "token";
-      }else{
-        result = "true";
+    String result = "";
+    try{
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(auth.currentUser!.uid.toString())
+          .get()
+          .then((DocumentSnapshot documentSnapshot) async {
+            if(documentSnapshot.exists){
+              Map data = documentSnapshot.data() as Map;
+              if (data["accountType"] != "Users") {
+                return result = "type";
+              }
+              if (data["isBanned"] != "false") {
+                return result = "banned";
+              }
+              // if (data["signInToken"] != "false") {
+              //   return result = "token";
+              // }
+              else{
+                return result = "true";
 
-      }
-    });
+              }
+            }else{
+              return result = "";
+            }
+
+      });
+    } on FirebaseFirestore catch (e){
+      print(e);
+      Get.back();
+      result = e.toString() ;
+    }
+
     return result;
   }
 
