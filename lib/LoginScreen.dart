@@ -328,30 +328,6 @@ class _LogInScreenState extends State<LogInScreen> {
             password: password.toString(),
           );
         }
-        // else {
-        //   await glb.storeUser(
-        //     uid: auth.currentUser!.uid,
-        //     email: email.toString(),
-        //     password: password.toString(),
-        //   );
-        // }
-
-        // if (await glb.checkAccountType() == false) {
-        //   Get.back();
-        //   await onDialogOK(
-        //       context: context,
-        //       title: 'បរាជ័យ',
-        //       content: 'សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ!');
-        //   await FirebaseAuth.instance.signOut();
-        // } else {
-        //   await glb.storeUser(
-        //     uid: auth.currentUser!.uid,
-        //     email: email.toString(),
-        //     password: password.toString(),
-        //   );
-        // }
-
-        setState(() {});
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'wrong-password') {
@@ -366,7 +342,6 @@ class _LogInScreenState extends State<LogInScreen> {
         print(e);
       }
     }
-    setState(() {});
   }
 
   onDialogOK({context, title, content}) async {
