@@ -299,29 +299,33 @@ class _LogInScreenState extends State<LogInScreen> {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(email: email, password: password);
       if (userCredential.isNull) {
       } else {
-        userEmail.clear();
-        userPassword.clear();
         reUse.waitingDialog(context);
         var result = await glb.checkAccountType();
         if (result == "type") {
           Get.back();
+          auth.signOut();
           await onDialogOK(context: context, title: 'មិនមាន', content: 'គណនីនេះមិនមានទេ សូមពិនិត្យមើលម្តងទៀត!');
-          await FirebaseAuth.instance.signOut();
-        } else if (result == "token") {
-          Get.back();
-          await onDialogOK(context: context, title: 'ផ្សេងទៀត', content: 'គណនីនេះកំពុងប្រើនៅលើឧបករណ៍ផ្សេងទៀត');
-          await FirebaseAuth.instance.signOut();
-        } else if (result == "banned") {
-          Get.back();
+        }
+        // else if (result == "token") {
+        //   Get.back();auth.signOut();
+        //   await onDialogOK(context: context, title: 'ផ្សេងទៀត', content: 'គណនីនេះកំពុងប្រើនៅលើឧបករណ៍ផ្សេងទៀត');
+        //
+        // }
+        else if (result == "banned") {
+          Get.back();auth.signOut();
           await onDialogOK(context: context, title: 'ផ្អាក', content: 'បច្ចុប្បន្នគណនីនេះត្រូវបានផ្អាក');
-          await FirebaseAuth.instance.signOut();
+
+        } else if (result == "") {
+          Get.back();auth.signOut();
+          await onDialogOK(context: context, title: 'មិនមាន', content: 'គណនីនេះមិនមានទេ សូមពិនិត្យមើលម្តងទៀត!');
+
         } else if (result == "true") {
-          await glb.updateOneField(
-              field: 'signInToken',
-              firebaseFireStore: 'Users',
-              value: "true",
-              data: auth.currentUser!.uid,
-              allowDialog: false);
+          // await glb.updateOneField(
+          //     field: 'signInToken',
+          //     firebaseFireStore: 'Users',
+          //     value: "true",
+          //     data: auth.currentUser!.uid,
+          //     allowDialog: false);
           await glb.storeUser(
             uid: auth.currentUser!.uid,
             email: email.toString(),
