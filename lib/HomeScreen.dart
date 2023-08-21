@@ -297,35 +297,40 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     forSort = mergeList(comp: compSort, ret: retSort);
     var imageSize = MediaQuery.of(context).size.height * 0.08;
+    var qrSize = MediaQuery.of(context).size.height * 0.25;
+    var flotBtn = MediaQuery.of(context).size.height * 0.08;
+    var flotIcon = MediaQuery.of(context).size.height * 0.045;
     return Scaffold(
         backgroundColor: theme.liteGrey,
-        floatingActionButton: FloatingActionButton(
-          elevation: 3,
-          backgroundColor: theme.deepOrange,
-          onPressed: () async {
-            reUse.reUseCircleDialog(
-                context: context,
-                onTap: () => Navigator.pop(context),
-                title: 'Qr កូត',
-                content: Center(
-                  child: Column(
+        floatingActionButton: SizedBox(
+          width: flotBtn,
+          height: flotBtn,
+          child: FloatingActionButton(
+            elevation: 3,
+            backgroundColor: theme.deepOrange,
+            onPressed: () async {
+              reUse.reUseCircleDialog(
+                  context: context,
+                  onTap: () => Navigator.pop(context),
+                  title: 'Qr កូត',
+                  content: Column(
                     children: [
                       SizedBox(
-                        height: Get.height * 0.3,
-                        width: Get.width * 0.3,
+                        height: qrSize,
+                        width: qrSize,
                         child: QrImageView(
-                          data: "${data['phoneNumber']},${data['email']},${data['firstname']},${data['lastname']},${data['userID']}",
+                          data: "${data['phoneNumber']},${data['email']},${data['firstname']},${data['lastname']},${auth.currentUser!.uid}",
                           version: QrVersions.auto,
-                          size: Get.height * 0.4,
+                          size: qrSize,
                         ),
                       ),
-                      reUse.reUseText(),
+                      reUse.reUseText(content: "សូមបង្ហាញកូដនេះដល់អ្នកដឹកជញ្ជូនរបស់យើងនៅពេលគាត់មកទទួលទំនិញ",maxLines: 3,size: 14.0),
                     ],
                   ),
-                ),
-                icon: Icons.qr_code_scanner);
-          },
-          child: const Icon(Icons.qr_code_2_rounded),
+                  icon: Icons.qr_code_scanner_rounded);
+            },
+            child:  Icon(Icons.qr_code_scanner_rounded,size: flotIcon),
+          ),
         ),
         body: SafeArea(
           child: Column(
@@ -518,4 +523,14 @@ class _HomeScreenState extends State<HomeScreen> {
   //   await checkID();
   //   setState(() {});
   // }
+}
+
+
+class QrData {
+  String phoneNumber = '';
+  String email = '';
+  String firstname = '';
+  String lastname = '';
+  String userID = '';
+  // QrData({required this.phoneNumber, required this.email, required this.firstname, required this.lastname, required this.userID});
 }
