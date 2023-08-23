@@ -56,23 +56,6 @@ class _CompleteScreenState extends State<CompleteScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // reUse.reUseHeader(
-            //     title: 'Complete',
-            //     headercolor: theme.liteGreen,
-            //     titleColor: theme.black
-            // ),
-            // // reUse.reCompletePackageListview(pkc: completeList),
-            // completeList.isEmpty
-            //     ? Flexible(
-            //     flex: 3,
-            //     child: Column(
-            //       mainAxisAlignment: MainAxisAlignment.center,
-            //       children: [
-            //         Image.asset('assets/images/check.png', color: theme.grey,scale: 12),
-            //         reUse.reUseText(content: 'Pending not available', color: theme.grey)
-            //       ],
-            //     ))
-            //     : reUse.reCompletePackageListview(pkc: completeList),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               decoration: const BoxDecoration(
@@ -188,18 +171,14 @@ class _CompleteScreenState extends State<CompleteScreen> {
                             splashRadius: 20,
                             onPressed: () {
                               List results = completeList
-                                  .where((user) => user['packageID']
-                                      .toLowerCase()
-                                      .contains(
-                                          search.text.toString().toLowerCase()))
+                                  .where((user) =>
+                                      user['packageID'].toLowerCase().contains(search.text.toString().toLowerCase()))
                                   .toList();
                               if (results == null || results.isEmpty) {
                                 results = completeList
                                     .where((user) => user['phoneNumber']
                                         .toLowerCase()
-                                        .contains(search.text
-                                            .toString()
-                                            .toLowerCase()))
+                                        .contains(search.text.toString().toLowerCase()))
                                     .toList();
                               }
                               forDisplay = results;
@@ -220,8 +199,7 @@ class _CompleteScreenState extends State<CompleteScreen> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  reUse.reUseText(
-                      content: '${clsLan.totalPackage} : ${forDisplay.length}'),
+                  reUse.reUseText(content: '${clsLan.totalPackage} : ${forDisplay.length}'),
                   const Flexible(child: Divider()),
                   // Container(
                   //   decoration: BoxDecoration(
@@ -239,129 +217,132 @@ class _CompleteScreenState extends State<CompleteScreen> {
                 ],
               ),
             ),
-             ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: forDisplay.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        width: Get.width,
-                        margin: const EdgeInsets.all(6),
-                        // padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: theme.liteGrey,
-                          borderRadius: BorderRadius.circular(6),
-                          boxShadow: [
-                            BoxShadow(
-                              color: theme.minGrey,
-                              blurRadius: 4,
-                              offset: const Offset(0, 0), // Shadow position
-                            ),
-                          ],
-                        ),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(6),
-                            onTap: () {
-                              Get.to(const CompleteDetail(),
-                                  arguments: forDisplay[index]);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      reUse.reUseText(
-                                          weight: FontWeight.w400,
-                                          size: 12.0,
-                                          color: theme.grey,
-                                          content: "${index+1}./  "+clsLan.packageID),
-                                      Row(
-                                        children: [
-                                          reUse.reUseText(
-                                              weight: FontWeight.bold,
-                                              size: 16.0,
-                                              color: theme.blue,
-                                              content: forDisplay[index]
-                                                  ['packageID']),
+            forDisplay.isNotEmpty
+                ? Flexible(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  padding: const EdgeInsets.all(8),
+                                  itemCount: forDisplay.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return Container(
+                                      width: Get.width,
+                                      margin: const EdgeInsets.all(6),
+                                      // padding: const EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                        color: theme.liteGrey,
+                                        borderRadius: BorderRadius.circular(6),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: theme.minGrey,
+                                            blurRadius: 4,
+                                            offset: const Offset(0, 0), // Shadow position
+                                          ),
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(6.0),
-                                    child: Divider(
-                                      height: 1,
-                                      color: theme.grey,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(3.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        reUse.reUseColumnText(
-                                            titleColor: theme.grey,
-                                            title: clsLan.receiverLocation,
-                                            lableSize: 11,
-                                            size: 14.0,
-                                            color: theme.black,
-                                            content: forDisplay[index]
-                                                ['location'],
-                                            weight: FontWeight.w500),
-                                        reUse.reUseColumnText(
-                                            titleColor: theme.grey,
-                                            title: clsLan.receiverPhoneNumber,
-                                            lableSize: 11,
-                                            size: 14.0,
-                                            color: theme.black,
-                                            content: forDisplay[index]
-                                                ['phoneNumber'],
-                                            weight: FontWeight.w500),
-                                        reUse.reUseColumnText(
-                                            titleColor: theme.grey,
-                                            title: clsLan.price,
-                                            lableSize: 11,
-                                            size: 14.0,
-                                            color: theme.black,
-                                            content: forDisplay[index]
-                                                    ['price'] +
-                                                " \$",
-                                            weight: FontWeight.w500),
-
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(6.0),
-                                    child: Divider(
-                                      height: 1,
-                                      color: theme.grey,
-                                    ),
-                                  ),
-                                  reUse.reUseRowText(
-                                      lableSize: 12.0,
-                                      titleColor: theme.grey,
-                                      title: clsLan.date,
-                                      size: 12.0,
-                                      color: theme.black,
-                                      content: "${forDisplay[index][field.completeDate]}   ",
-                                      weight: FontWeight.w500),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    })
-
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          borderRadius: BorderRadius.circular(6),
+                                          onTap: () {
+                                            Get.to(const CompleteDetail(), arguments: forDisplay[index]);
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    reUse.reUseText(
+                                                        weight: FontWeight.w400,
+                                                        size: 12.0,
+                                                        color: theme.grey,
+                                                        content: "${index + 1}./  " + clsLan.packageID),
+                                                    Row(
+                                                      children: [
+                                                        reUse.reUseText(
+                                                            weight: FontWeight.bold,
+                                                            size: 16.0,
+                                                            color: theme.blue,
+                                                            content: forDisplay[index]['packageID']),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(6.0),
+                                                  child: Divider(
+                                                    height: 1,
+                                                    color: theme.grey,
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(3.0),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      reUse.reUseColumnText(
+                                                          titleColor: theme.grey,
+                                                          title: clsLan.receiverLocation,
+                                                          lableSize: 11,
+                                                          size: 14.0,
+                                                          color: theme.black,
+                                                          content: forDisplay[index]['location'],
+                                                          weight: FontWeight.w500),
+                                                      reUse.reUseColumnText(
+                                                          titleColor: theme.grey,
+                                                          title: clsLan.receiverPhoneNumber,
+                                                          lableSize: 11,
+                                                          size: 14.0,
+                                                          color: theme.black,
+                                                          content: forDisplay[index]['phoneNumber'],
+                                                          weight: FontWeight.w500),
+                                                      reUse.reUseColumnText(
+                                                          titleColor: theme.grey,
+                                                          title: clsLan.price,
+                                                          lableSize: 11,
+                                                          size: 14.0,
+                                                          color: theme.black,
+                                                          content: forDisplay[index]['price'] + " \$",
+                                                          weight: FontWeight.w500),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(6.0),
+                                                  child: Divider(
+                                                    height: 1,
+                                                    color: theme.grey,
+                                                  ),
+                                                ),
+                                                reUse.reUseRowText(
+                                                    lableSize: 12.0,
+                                                    titleColor: theme.grey,
+                                                    title: clsLan.date,
+                                                    size: 12.0,
+                                                    color: theme.black,
+                                                    content: "${forDisplay[index][field.completeDate]}   ",
+                                                    weight: FontWeight.w500),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  })),
+                        ],
+                      ),
+                    ),
+                  )
+                : Flexible(child: Center(child: Text(clsLan.notHave)))
           ],
         ),
       ),
@@ -372,13 +353,8 @@ class _CompleteScreenState extends State<CompleteScreen> {
   final field = FieldData();
 
   removeItem({keyIndex, listIndex}) async {
-    DatabaseReference packageRequest =
-        FirebaseDatabase.instance.ref("PackageRequest");
-    await packageRequest
-        .child(auth.currentUser!.uid)
-        .child('package')
-        .child(keyIndex)
-        .remove();
+    DatabaseReference packageRequest = FirebaseDatabase.instance.ref("PackageRequest");
+    await packageRequest.child(auth.currentUser!.uid).child('package').child(keyIndex).remove();
     completeList.removeWhere((item) => item == listIndex);
     // keyList.removeWhere((item) => item == keyIndex);
     // forDisplay = totalList;
