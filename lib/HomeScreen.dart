@@ -49,12 +49,11 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(totalPackageIndex.isEmpty){
       totalListLength();
       completeListLength();
       pendingListLength();
       returnListLength();
-    }
+
     fetchImage();
     onGetUserData();
     alertNoInternet();
@@ -153,9 +152,9 @@ class _HomeScreenState extends State<HomeScreen> {
           data.forEach((key, value) async {
             totalPackageIndex.add(key);
             driverList.add(value);
+            setState(() {});
           });
         });
-        setState(() {});
       });
     } catch (e) {
       print('totalListLength $e');
@@ -177,9 +176,9 @@ class _HomeScreenState extends State<HomeScreen> {
               await value[auth.currentUser!.uid] as Map<dynamic, dynamic>;
           data.forEach((key, value) {
             pendingList.add(value);
+            setState(() {});
           });
         });
-        setState(() {});
       });
     } catch (e) {
       print('pendingListLength $e');
@@ -191,18 +190,19 @@ class _HomeScreenState extends State<HomeScreen> {
       DatabaseReference refs = FirebaseDatabase.instance
           .ref('Complete')
           .child(auth.currentUser!.uid);
-      await refs.onValue.listen((event) async {
+       refs.onValue.listen((event) async {
         completeData.clear();
         forSort.clear();
         compSort.clear();
         DataSnapshot driver = await event.snapshot;
         Map<dynamic, dynamic> values =
-            await driver.value as Map<dynamic, dynamic>;
+             driver.value as Map<dynamic, dynamic>;
         values.forEach((key, value) async {
           completeData.add(value);
           compSort.add(value);
+          setState(() {});
+
         });
-        setState(() {});
       });
       mergeList(ret: completeData);
     } catch (e) {
@@ -225,8 +225,8 @@ class _HomeScreenState extends State<HomeScreen> {
         values.forEach((key, value) async {
           returnData.add(value);
           retSort.add(value);
+          setState(() {});
         });
-        setState(() {});
       });
     } catch (e) {
       print('returnListLength $e');
@@ -244,6 +244,9 @@ class _HomeScreenState extends State<HomeScreen> {
           frmDate.month == today.month &&
           frmDate.year == today.year) {
         Result.add(element);
+        setState(() {
+
+        });
       }
     });
     Result.sort((a, b) {
