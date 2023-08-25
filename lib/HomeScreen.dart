@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'package:intl/intl.dart'; // for date formatting and parsing
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,12 +14,10 @@ import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
-import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/ReturnDetail.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 
-import 'GlobalControl/createModule.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -254,6 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
           .parse(a[field.completeDate] ?? a[field.returnDate]);
       DateTime dateB = DateFormat("dd-MM-yyyy  hh:mm a")
           .parse(b[field.completeDate] ?? b[field.returnDate]);
+      setState(() {});
       return dateB.compareTo(dateA);
     });
     return Result;
