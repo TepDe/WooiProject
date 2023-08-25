@@ -302,7 +302,8 @@ class ReUseWidget {
                   flex: 1,
                   child: InkWell(
                     onTap: () {
-                      Get.to(()=>CompleteScreen(),
+                      Get.to(
+                        () => CompleteScreen(),
                         arguments: completeData,
                       );
                     },
@@ -318,7 +319,8 @@ class ReUseWidget {
                   flex: 1,
                   child: InkWell(
                     onTap: () {
-                      Get.to(()=> ReturnScreen(),
+                      Get.to(
+                        () => ReturnScreen(),
                         arguments: returnData,
                       );
                     },
@@ -732,10 +734,10 @@ class ReUseWidget {
     );
   }
 
-  reUseText({content, size, weight, color,maxLines}) {
+  reUseText({content, size, weight, color, maxLines}) {
     return Text(
       content ?? '',
-      maxLines: maxLines??2,
+      maxLines: maxLines ?? 2,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
           fontSize: size ?? 12,
@@ -842,22 +844,24 @@ class ReUseWidget {
     );
   }
 
-  reUseTextBox({hind, icon, controller, obscureText, keyboardType,suffixIcon,suffixIconOnTap}) {
+  reUseTextBox({hind, icon, controller, obscureText, keyboardType, suffixIcon, suffixIconOnTap}) {
     return TextFormField(
       keyboardType: keyboardType,
       decoration: InputDecoration(
-        fillColor: theme.liteGrey,
-        //<-- SEE HERE
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide.none,
-        ),
-        disabledBorder: InputBorder.none,
-        hintText: hind,
-        filled: true,
-        labelText: hind,
-        suffixIcon: InkWell(onTap: suffixIconOnTap,child: Icon(suffixIcon),)
-      ),
+          fillColor: theme.liteGrey,
+          //<-- SEE HERE
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: BorderSide.none,
+          ),
+          disabledBorder: InputBorder.none,
+          hintText: hind,
+          filled: true,
+          labelText: hind,
+          suffixIcon: InkWell(
+            onTap: suffixIconOnTap,
+            child: Icon(suffixIcon),
+          )),
       obscureText: obscureText ?? false,
       controller: controller,
       // decoration: InputDecoration(
@@ -947,7 +951,7 @@ class ReUseWidget {
       showIcon,
       iconcolor,
       fontsize,
-        onTap,
+      onTap,
       value,
       weight}) {
     final glb = GlobalController();
@@ -969,41 +973,42 @@ class ReUseWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: onTap??()async {
-            if (function == 'minus') {
-              Fluttertoast.showToast(
-                msg: 'Maximum input is 9',
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.BOTTOM,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-                fontSize: 16.0,
-              );
-            } else if (function == 'add') {
-              int qty = int.parse(value) + 1;
-              print(qty);
-            } else if (function == 'pincode') {
-              glb.insertTelegramToken();
-            } else if (function == 'token') {
-              print(value);
-              print(value);
-              glb.insertTelegramToken(token: value);
-            } else if (function == 'nointernet') {
-              exit(0);
-            } else if (function == 'logOut') {
-              FirebaseAuth.instance.signOut();
-              Get.to(() => const LogInScreen());
-            } else if (function == 'editPro') {
-              glb.editProfile(value: value, context: context);
-            } else if (function == '') {
-              Get.back();
-              FocusManager.instance.primaryFocus?.unfocus();
-            } else {
-              Get.back();
-              FocusManager.instance.primaryFocus?.unfocus();
-            }
-          },
+          onTap: onTap ??
+              () async {
+                if (function == 'minus') {
+                  Fluttertoast.showToast(
+                    msg: 'Maximum input is 9',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
+                } else if (function == 'add') {
+                  int qty = int.parse(value) + 1;
+                  print(qty);
+                } else if (function == 'pincode') {
+                  glb.insertTelegramToken();
+                } else if (function == 'token') {
+                  print(value);
+                  print(value);
+                  glb.insertTelegramToken(token: value);
+                } else if (function == 'nointernet') {
+                  exit(0);
+                } else if (function == 'logOut') {
+                  FirebaseAuth.instance.signOut();
+                  Get.to(() => const LogInScreen());
+                } else if (function == 'editPro') {
+                  glb.editProfile(value: value, context: context);
+                } else if (function == '') {
+                  Get.back();
+                  FocusManager.instance.primaryFocus?.unfocus();
+                } else {
+                  Get.back();
+                  FocusManager.instance.primaryFocus?.unfocus();
+                }
+              },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -1946,7 +1951,7 @@ class ReUseWidget {
       margin: const EdgeInsets.all(6),
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color:color,
+        color: color,
         borderRadius: BorderRadius.circular(6),
         // boxShadow: [
         //   BoxShadow(
@@ -1957,15 +1962,11 @@ class ReUseWidget {
         //   ),
         // ],
       ),
-      child: reUseText(
-          content:value,
-          color: textColor,
-          size: textSize??14.0,
-          weight: FontWeight.w500),
+      child: reUseText(content: value, color: textColor, size: textSize ?? 14.0, weight: FontWeight.w500),
     );
   }
 
-  reUseCircleDialog({disposeAllow, data, context, icon, title, content, function,onTap}) {
+  reUseCircleDialog({disposeAllow, data, context, icon, title, content, function, onTap}) {
     return showDialog(
       barrierDismissible: disposeAllow ?? true,
       context: context,
@@ -2014,12 +2015,12 @@ class ReUseWidget {
                     //     fontSize: 16.0,
                     //   ),
                     // ),
-                    content??Container(),
+                    content ?? Container(),
                     const SizedBox(height: 20.0),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       child: reUseCustomizeButton(
-                        onTap:onTap ,
+                          onTap: onTap,
                           value: data,
                           function: function,
                           textcolor: theme.orange,
@@ -2080,7 +2081,7 @@ class ReUseWidget {
 
   final token = TextEditingController();
 
-  reUseSettingItem({data,onTap, function, title, Widget? trailing, trailingIconColor, context, leading}) {
+  reUseSettingItem({data, onTap, function, title, Widget? trailing, trailingIconColor, context, leading}) {
     return Container(
       height: 60,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -2098,77 +2099,78 @@ class ReUseWidget {
       child: Material(
         color: theme.white,
         child: InkWell(
-          onTap:onTap?? () {
-            if (function == 'token') {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return Dialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      alignment: Alignment.topCenter,
-                      children: [
-                        Positioned(
-                          top: -60.0,
-                          child: CircleAvatar(
-                            radius: 60.0,
-                            backgroundColor: theme.white,
-                            child: Icon(
-                              Icons.telegram_rounded,
-                              color: theme.orange,
-                              size: 100.0,
-                            ),
-                          ),
+          onTap: onTap ??
+              () {
+                if (function == 'token') {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 80.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const Text(
-                                'title',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          alignment: Alignment.topCenter,
+                          children: [
+                            Positioned(
+                              top: -60.0,
+                              child: CircleAvatar(
+                                radius: 60.0,
+                                backgroundColor: theme.white,
+                                child: Icon(
+                                  Icons.telegram_rounded,
+                                  color: theme.orange,
+                                  size: 100.0,
                                 ),
                               ),
-                              const SizedBox(height: 20.0),
-                              // Text(
-                              //   content,
-                              //   textAlign: TextAlign.center,
-                              //   style: const TextStyle(
-                              //     fontSize: 16.0,
-                              //   ),
-                              // ),
-                              reUseTextFormField(hintText: 'your token', textController: token),
-                              const SizedBox(height: 20.0),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                child: reUseCustomizeButton(
-                                    value: token.text,
-                                    function: function,
-                                    textcolor: theme.orange,
-                                    weight: FontWeight.bold,
-                                    text: "OK",
-                                    fontsize: 16.0,
-                                    isBcColor: true,
-                                    colorBC: theme.litestOrange),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 80.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  const Text(
+                                    'title',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20.0),
+                                  // Text(
+                                  //   content,
+                                  //   textAlign: TextAlign.center,
+                                  //   style: const TextStyle(
+                                  //     fontSize: 16.0,
+                                  //   ),
+                                  // ),
+                                  reUseTextFormField(hintText: 'your token', textController: token),
+                                  const SizedBox(height: 20.0),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                    child: reUseCustomizeButton(
+                                        value: token.text,
+                                        function: function,
+                                        textcolor: theme.orange,
+                                        weight: FontWeight.bold,
+                                        text: "OK",
+                                        fontsize: 16.0,
+                                        isBcColor: true,
+                                        colorBC: theme.litestOrange),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   );
-                },
-              );
-            }
-          },
+                }
+              },
           child: Center(
             child: ListTile(
               title: title ?? Container(),
@@ -2211,7 +2213,7 @@ class ReUseWidget {
       valueTextSize,
       labelTextSize,
       textColor,
-        onTap,
+      onTap,
       valueColor,
       backgroundColor}) {
     return Container(
@@ -2237,13 +2239,14 @@ class ReUseWidget {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
-          onTap: onTap??() {
-            if (witchClick == "revenue") {
-              Get.to(() => const RevenueList(), arguments: data);
-            } else {
-              Get.to(() => const PaidScreen(), arguments: data);
-            }
-          },
+          onTap: onTap ??
+              () {
+                if (witchClick == "revenue") {
+                  Get.to(() => const RevenueList(), arguments: data);
+                } else {
+                  Get.to(() => const PaidScreen(), arguments: data);
+                }
+              },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -2525,13 +2528,20 @@ class ReUseWidget {
               ),
         subtitle: Text(
           "${clsLan.date} : ${completeDate ?? returnDate}",
-          style: TextStyle(fontSize: 12.0, color: theme.black,fontWeight: FontWeight.w500,),
+          style: TextStyle(
+            fontSize: 12.0,
+            color: theme.black,
+            fontWeight: FontWeight.w500,
+          ),
         ),
         title: Text(
           "${clsLan.packageID} : ${value[field.packageID]}",
           style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w500, color: theme.black),
         ),
-        trailing: reUseStatusBox(value: status),
+        trailing: reUseStatusBox(
+            value: status=='return'?clsLan.stReturn:clsLan.stCom,
+            color: status == 'return' ? theme.litestRed : theme.litestGreen,
+            textColor: status == 'return' ? theme.red : theme.green),
       ),
     );
   }
