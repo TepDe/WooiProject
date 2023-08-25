@@ -507,7 +507,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       leading: const Icon(Icons.password_rounded)),
                   reUse.reUseSettingItem(
                       trailing: Text(
-                        "${userData[fieldInfo.phoneNumber]}",
+                        "${userData[fieldInfo.phoneNumber]??"មិនមាន"}",
                         style: TextStyle(color: theme.grey),
                       ),
                       title: Text(clsLan.phoneNumber),
@@ -552,7 +552,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         trailing: SizedBox(
                             width: textWidth,
                             child: Text(
-                              "${userData[fieldInfo.bankCode]}",
+                              "${userData[fieldInfo.bankCode]??"មិនមាន"}",
                               maxLines: 1,
                               style: TextStyle(
                                   color: theme.grey,
@@ -583,7 +583,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         trailing: SizedBox(
                             width: textWidth,
                             child: Text(
-                              "${userData[fieldInfo.token]}",
+                              "${userData[fieldInfo.token]??"មិនមាន"}",
                               maxLines: 1,
                               style: TextStyle(
                                   color: theme.grey,
@@ -614,7 +614,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         trailing: SizedBox(
                             width: textWidth,
                             child: Text(
-                              "${userData[fieldInfo.chatid]}",
+                              "${userData[fieldInfo.chatid]??"មិនមាន"}",
                               maxLines: 1,
                               style: TextStyle(
                                   color: theme.grey,
