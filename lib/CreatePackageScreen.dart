@@ -248,6 +248,8 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   decoration: InputDecoration(
                     suffixIcon: IconButton(
                       onPressed: () {
+                        forDisplay=clsDis.destination;
+
                         locationBox.clear();
                         locationBox.text = '';
                         setState(() {});
@@ -265,6 +267,14 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                     hintStyle: const TextStyle(fontSize: 12),
                   ),
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric( horizontal: 15),
+                child: reUse.reUseText(
+                    content: 'ទីតាំង : ${forDisplay.length}',
+                    size: textSize,
+                    weight: FontWeight.w500,
+                    color: theme.grey),
               ),
               SizedBox(
                 //color: theme.red,
@@ -488,7 +498,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                     phoneBox.clear();
                                     priceBox.clear();
                                     locationBox.clear();
-                                    qtyBox.clear();
+                                    qtyBox.text='1';
                                     noteBox.clear();
                                   });
                                   Get.back();
