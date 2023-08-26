@@ -864,4 +864,19 @@ class GlobalController {
     await auth.signOut().then((value) => Get.to(() => const LogInScreen()));
 
   }
+  onGetGeneralInfo() async {
+    var object;
+    await FirebaseFirestore.instance
+        .collection("General")
+        .doc("GeneralInfo")
+        .get()
+        .then((DocumentSnapshot documentSnapshot) async {
+      object = await documentSnapshot.data();
+      print("===> ${ object}");
+      print("===> ${ object}");
+
+    });
+    return object;
+   }
+
 }
