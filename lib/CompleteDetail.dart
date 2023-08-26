@@ -29,12 +29,19 @@ class _CompleteDetailState extends State<CompleteDetail> {
   var valueSize = 14.0;
 
   var argumentData = Get.arguments;
+  var object={};
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     forDisplay = argumentData;
+    onGetGeneralInfo();
+    setState(() {});
+  }
+
+  onGetGeneralInfo()async {
+    object = await glb.onGetGeneralInfo();
     setState(() {});
   }
 
@@ -208,11 +215,12 @@ class _CompleteDetailState extends State<CompleteDetail> {
                           weight: FontWeight.w500),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           reUse.reUseText(
                               size: labelSize, weight: FontWeight.w500, color: theme.grey, content: clsLan.price),
                           Container(
-                            margin: EdgeInsets.symmetric(vertical: 8),
+                            margin: EdgeInsets.symmetric(vertical: 3),
                             decoration: BoxDecoration(
                               color: theme.blue,
                               borderRadius: BorderRadius.circular(3),
@@ -227,14 +235,14 @@ class _CompleteDetailState extends State<CompleteDetail> {
                           )
                         ],
                       ),
-                      reUse.reUseRowText(
-                          titleColor: theme.grey,
-                          title: clsLan.deliveryFee,
-                          size: valueSize,
-                          lableSize: labelSize,
-                          color: theme.black,
-                          content: forDisplay["feePrice"],
-                          weight: FontWeight.w500),
+                      // reUse.reUseRowText(
+                      //     titleColor: theme.grey,
+                      //     title: clsLan.deliveryFee,
+                      //     size: valueSize,
+                      //     lableSize: labelSize,
+                      //     color: theme.black,
+                      //     content: "${object['feePrice']??""} ៛",
+                      //     weight: FontWeight.w500),
                       reUse.reUseRowText(
                           titleColor: theme.grey,
                           title: clsLan.completeDate,
