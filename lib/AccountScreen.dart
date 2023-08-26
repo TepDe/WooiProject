@@ -635,6 +635,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             icon: Icons.logout_rounded,
                             title: 'Log out',
                             onTap: () async {
+                              reUse.waitingDialog(context);
                               await glb.isLogOut();
                             },
                             content: Center(
