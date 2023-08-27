@@ -215,148 +215,152 @@ class _ReturnScreenState extends State<ReturnScreen> {
               ),
             ),
            forDisplay.isNotEmpty? Flexible(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: const EdgeInsets.all(8),
-                        itemCount: forDisplay.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Container(
-                            width: Get.width,
-                            margin: const EdgeInsets.all(6),
-                            //padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: theme.liteGrey,
-                              borderRadius: BorderRadius.circular(6),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: theme.minGrey,
-                                  blurRadius: 4,
-                                  offset: const Offset(0, 0), // Shadow position
-                                ),
-                              ],
-                            ),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: InkWell(
+              child: Scrollbar(
+                thickness: 6,
+                radius: const Radius.circular(6.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: const EdgeInsets.all(8),
+                          itemCount: forDisplay.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              width: Get.width,
+                              margin: const EdgeInsets.all(6),
+                              //padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: theme.liteGrey,
                                 borderRadius: BorderRadius.circular(6),
-                                onTap: () {
-                                  Get.to(const ReturnDetail(),
-                                      arguments: forDisplay[index]);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          reUse.reUseText(
-                                              weight: FontWeight.w400,
-                                              size: 16.0,
-                                              color: theme.grey,
-                                              content: '${index+1}./  ${clsLan.packageID}'),
-                                          Row(
-                                            children: [
-                                              reUse.reUseText(
-                                                  weight: FontWeight.bold,
-                                                  size: 16.0,
-                                                  color: theme.blue,
-                                                  content: forDisplay[index]
-                                                          ['packageID'] ??
-                                                      "No ID"),
-                                              SizedBox(
-                                                height: 40,
-                                                width: 40,
-                                                child: PopupMenuButton<int>(
-                                                  onSelected: (item) {
-                                                    optionSelect(
-                                                        opt: item,
-                                                        data:
-                                                            forDisplay[index]);
-                                                    setState(() {});
-                                                  },
-                                                  itemBuilder: (context) => [
-                                                    const PopupMenuItem<int>(
-                                                        value: 0,
-                                                        child: Text(
-                                                            'Back to Request')),
-                                                    const PopupMenuItem<int>(
-                                                        value: 1,
-                                                        child: Text('Delete')),
-                                                  ],
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: theme.minGrey,
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 0), // Shadow position
+                                  ),
+                                ],
+                              ),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(6),
+                                  onTap: () {
+                                    Get.to(const ReturnDetail(),
+                                        arguments: forDisplay[index]);
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            reUse.reUseText(
+                                                weight: FontWeight.w400,
+                                                size: 16.0,
+                                                color: theme.grey,
+                                                content: '${index+1}./  ${clsLan.packageID}'),
+                                            Row(
+                                              children: [
+                                                reUse.reUseText(
+                                                    weight: FontWeight.bold,
+                                                    size: 16.0,
+                                                    color: theme.blue,
+                                                    content: forDisplay[index]
+                                                            ['packageID'] ??
+                                                        "No ID"),
+                                                SizedBox(
+                                                  height: 40,
+                                                  width: 40,
+                                                  child: PopupMenuButton<int>(
+                                                    onSelected: (item) {
+                                                      optionSelect(
+                                                          opt: item,
+                                                          data:
+                                                              forDisplay[index]);
+                                                      setState(() {});
+                                                    },
+                                                    itemBuilder: (context) => [
+                                                      const PopupMenuItem<int>(
+                                                          value: 0,
+                                                          child: Text(
+                                                              'Back to Request')),
+                                                      const PopupMenuItem<int>(
+                                                          value: 1,
+                                                          child: Text('Delete')),
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      Divider(
-                                        color: theme.grey,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          reUse.reUseColumnText(
-                                              titleColor: theme.grey,
-                                              title: clsLan.receiverLocation,
-                                              size: valueSize,
-                                              lableSize: labelSize,
-                                              color: theme.black,
-                                              content: forDisplay[index]
-                                                  ['location'],
-                                              weight: FontWeight.w500),
-                                          reUse.reUseColumnText(
-                                              lableSize: labelSize,
-                                              titleColor: theme.grey,
-                                              title: clsLan.receiverPhoneNumber,
-                                              size: valueSize,
-                                              color: theme.black,
-                                              content: forDisplay[index]
-                                                  ['phoneNumber'],
-                                              weight: FontWeight.w500),
-                                          reUse.reUseColumnText(
-                                              titleColor: theme.grey,
-                                              title: clsLan.qty,
-                                              size: valueSize,
-                                              lableSize: labelSize,
-                                              color: theme.black,
-                                              content: forDisplay[index]
-                                                      ['price'] +
-                                                  " \$",
-                                              weight: FontWeight.w500),
-                                        ],
-                                      ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(
+                                          color: theme.grey,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            reUse.reUseColumnText(
+                                                titleColor: theme.grey,
+                                                title: clsLan.receiverLocation,
+                                                size: valueSize,
+                                                lableSize: labelSize,
+                                                color: theme.black,
+                                                content: forDisplay[index]
+                                                    ['location'],
+                                                weight: FontWeight.w500),
+                                            reUse.reUseColumnText(
+                                                lableSize: labelSize,
+                                                titleColor: theme.grey,
+                                                title: clsLan.receiverPhoneNumber,
+                                                size: valueSize,
+                                                color: theme.black,
+                                                content: forDisplay[index]
+                                                    ['phoneNumber'],
+                                                weight: FontWeight.w500),
+                                            reUse.reUseColumnText(
+                                                titleColor: theme.grey,
+                                                title: clsLan.qty,
+                                                size: valueSize,
+                                                lableSize: labelSize,
+                                                color: theme.black,
+                                                content: forDisplay[index]
+                                                        ['price'] +
+                                                    " \$",
+                                                weight: FontWeight.w500),
+                                          ],
+                                        ),
 
-                                      Divider(
-                                        color: theme.grey,
-                                      ),
-                                      reUse.reUseRowText(
-                                          lableSize: 12.0,
-                                          titleColor: theme.grey,
-                                          title: clsLan.date,
-                                          size: 12.0,
-                                          color: theme.black,
-                                          content: "${forDisplay[index]['returnDate']}   ",
-                                          weight: FontWeight.w500),
-                                    ],
+                                        Divider(
+                                          color: theme.grey,
+                                        ),
+                                        reUse.reUseRowText(
+                                            lableSize: 12.0,
+                                            titleColor: theme.grey,
+                                            title: clsLan.date,
+                                            size: 12.0,
+                                            color: theme.black,
+                                            content: "${forDisplay[index]['returnDate']}   ",
+                                            weight: FontWeight.w500),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ):Flexible(child: Center(child: Text(clsLan.notHave)))
