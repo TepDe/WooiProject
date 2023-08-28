@@ -253,7 +253,7 @@ class _CompleteScreenState extends State<CompleteScreen> {
                                           child: InkWell(
                                             borderRadius: BorderRadius.circular(6),
                                             onTap: () {
-                                              Get.to(const CompleteDetail(), arguments: forDisplay[index]);
+                                              Get.to(()=> CompleteDetail(), arguments: forDisplay[index]);
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.all(8.0),
