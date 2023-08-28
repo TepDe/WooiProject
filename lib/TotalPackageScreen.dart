@@ -403,7 +403,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                       onSelected: (item) async {
                                                         if (item == 0) {
                                                           Get.to(
-                                                              const EditPackageScreen(),
+                                                              ()=> EditPackageScreen(),
                                                               arguments:
                                                                   forDisplay[
                                                                       index]);
