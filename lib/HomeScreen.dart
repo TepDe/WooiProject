@@ -195,7 +195,6 @@ class _HomeScreenState extends State<HomeScreen> {
       await refs.onValue.listen((event) async {
         returnData.clear();
         forSort.clear();
-        retSort.clear();
         DataSnapshot driver = await event.snapshot;
         Map<dynamic, dynamic> values = await driver.value as Map<dynamic, dynamic>;
         values.forEach((key, value) async {
@@ -211,6 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List mergeList({List? comp, List? ret}) {
+    forSort.clear();
     List merge = comp! + ret!;
     List Result = [];
     merge.forEach((element) async {
