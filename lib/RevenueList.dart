@@ -268,7 +268,7 @@ class _RevenueListState extends State<RevenueList> {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(6),
                           onTap: () {
-                            Get.to(()=> CompleteDetail(), arguments: forDisplay[index]);
+                            Get.to(()=> CompleteDetail(), arguments: {"data":forDisplay[index],"from":"revenue"});
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
