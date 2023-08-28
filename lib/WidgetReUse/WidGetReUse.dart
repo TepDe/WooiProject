@@ -28,7 +28,7 @@ class WidgetReUse extends GetxController {
                 color: Colors.black,
                 onPressed: () {
                   if (function == 'home') {
-                    Get.to(HomeScreen());
+                    Get.to(()=>HomeScreen());
                   }
                 },
                 icon: Icon(icon)),
@@ -175,7 +175,7 @@ class WidgetReUse extends GetxController {
         borderRadius: BorderRadius.circular(20),
         splashColor: Colors.transparent,
         onTap: () {
-          Get.to(MapScreen());
+          Get.to(()=>MapScreen());
         },
         child: Container(
           decoration: BoxDecoration(
