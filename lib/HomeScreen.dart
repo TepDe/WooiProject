@@ -426,9 +426,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               return reUse.reUseTodayComponent(
                                   onTap: () {
                                     if (forSort[index][field.status] == 'complete') {
-                                      Get.to(() => const CompleteDetail(), arguments: forSort[index]);
+                                      Get.to(() => const CompleteDetail(), arguments: {"data":forSort[index]});
                                     } else if (forSort[index][field.status] == 'return') {
-                                      Get.to(() => const ReturnDetail(), arguments: forSort[index]);
+                                      Get.to(() => const ReturnDetail(), arguments: {"data":forSort[index]});
                                     }
                                   },
                                   value: forSort[index],
