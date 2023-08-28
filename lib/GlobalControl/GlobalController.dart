@@ -160,9 +160,9 @@ class GlobalController {
           data['phoneNumber'] == null ||
           data['bankCode'] == null ||
           data['bankName'] == null) {
-        Get.to(const SetUpScreen());
+        Get.to(()=> SetUpScreen());
       } else {
-        Get.to(const ViewScreen());
+        Get.to(()=> ViewScreen());
       }
     });
   }
@@ -515,7 +515,7 @@ class GlobalController {
           })
           .then((value) => print("User's Property Deleted"))
           .catchError((error) => print("Failed to delete user's property: $error"));
-      Get.to(const ViewScreen());
+      Get.to(()=> ViewScreen());
     } catch (e) {
       final reUse = ReUseWidget();
       reUse.reUseCircleDialog(function: 'error', content: const Text("error"));
