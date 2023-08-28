@@ -274,7 +274,7 @@ class _LogInScreenState extends State<LogInScreen> {
       phoneNumber: '+85578344511',
       verificationCompleted: (PhoneAuthCredential credential) async {
         await auth.signInWithCredential(credential);
-        Get.to(ViewScreen());
+        Get.to(()=>ViewScreen());
       },
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {
@@ -498,7 +498,7 @@ class LoginController extends GetxController {
 
                           _credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
                           auth.signInWithCredential(_credential).then((UserCredential result) {
-                            Get.to(HomeScreen());
+                            Get.to(()=>HomeScreen());
                           }).catchError((e) {
                             print(e);
                           });
