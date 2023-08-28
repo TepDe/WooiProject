@@ -73,7 +73,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Get.to(const ViewScreen());
+        Get.to(()=> ViewScreen());
         setState(() {});
         return true;
       },
@@ -94,7 +94,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         //     builder: (context) => const ViewScreen(),
                         //   ),
                         // );
-                        Get.to(const ViewScreen());
+                        Get.to(()=> ViewScreen());
                         setState(() {});
                       },
                       icon: Icon(Icons.arrow_back_rounded,
