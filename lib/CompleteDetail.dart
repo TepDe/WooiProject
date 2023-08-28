@@ -29,25 +29,31 @@ class _CompleteDetailState extends State<CompleteDetail> {
   var valueSize = 14.0;
 
   var argumentData = Get.arguments;
-  var object={};
+  var object = {};
+  String from = "";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    forDisplay = argumentData;
+    forDisplay = argumentData['data'];
     onGetGeneralInfo();
+    if (argumentData['from'] != null) {
+      from = argumentData['from'];
+    } else {
+      return;
+    }
     setState(() {});
   }
 
-  onGetGeneralInfo()async {
+  onGetGeneralInfo() async {
     object = await glb.onGetGeneralInfo();
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: 0,
@@ -71,7 +77,12 @@ class _CompleteDetailState extends State<CompleteDetail> {
                     fontWeight: FontWeight.bold),
               ),
             ),
-            reUse.reUseStatusBox(value: clsLan.stCom, color: theme.litestGreen,textColor: theme.green),
+            from != ""
+                ? const SizedBox()
+                : reUse.reUseStatusBox(
+                    value: clsLan.stCom,
+                    color: theme.litestGreen,
+                    textColor: theme.green),
           ],
         ),
         backgroundColor: Colors.white,
@@ -138,14 +149,19 @@ class _CompleteDetailState extends State<CompleteDetail> {
                     title: clsLan.bankCode,
                     size: valueSize,
                     color: theme.black,
-                    content: "${forDisplay["bankName"].toString().toUpperCase()}",
+                    content:
+                        "${forDisplay["bankName"].toString().toUpperCase()}",
                     weight: FontWeight.w500),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: SizedBox(height: 100, child: Image(image: AssetImage(getBank()))),
+                  child: SizedBox(
+                      height: 100, child: Image(image: AssetImage(getBank()))),
                 ),
                 reUse.reUseText(
-                    weight: FontWeight.w500, size: labelSize, color: theme.grey, content: '${clsLan.note} : '),
+                    weight: FontWeight.w500,
+                    size: labelSize,
+                    color: theme.grey,
+                    content: '${clsLan.note} : '),
                 Container(
                   width: Get.width,
                   height: forDisplay['note'] == '' ? 100 : null,
@@ -163,7 +179,10 @@ class _CompleteDetailState extends State<CompleteDetail> {
                       content: forDisplay['note'] ?? "(មិនមានបញ្ចូល)"),
                 ),
                 reUse.reUseText(
-                    weight: FontWeight.w500, size: labelSize, color: theme.grey, content: '${clsLan.returnReason} : '),
+                    weight: FontWeight.w500,
+                    size: labelSize,
+                    color: theme.grey,
+                    content: '${clsLan.returnReason} : '),
                 Container(
                   width: Get.width,
                   height: forDisplay['note'] == '' ? 100 : null,
@@ -218,14 +237,18 @@ class _CompleteDetailState extends State<CompleteDetail> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           reUse.reUseText(
-                              size: labelSize, weight: FontWeight.w500, color: theme.grey, content: clsLan.price),
+                              size: labelSize,
+                              weight: FontWeight.w500,
+                              color: theme.grey,
+                              content: clsLan.price),
                           Container(
-                            margin: EdgeInsets.symmetric(vertical: 3),
+                            margin: const EdgeInsets.symmetric(vertical: 3),
                             decoration: BoxDecoration(
                               color: theme.blue,
                               borderRadius: BorderRadius.circular(3),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 4),
                             child: Center(
                                 child: reUse.reUseText(
                                     weight: FontWeight.bold,
@@ -297,8 +320,10 @@ class _CompleteDetailState extends State<CompleteDetail> {
       ),
     );
   }
+
   String getBank() {
-    var result = glb.payWay.where((person) => person['name'] == forDisplay['bankName']);
+    var result =
+        glb.payWay.where((person) => person['name'] == forDisplay['bankName']);
     return result.first['img'].toString();
   }
 }
