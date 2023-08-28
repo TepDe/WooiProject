@@ -46,7 +46,7 @@ class ReUseWidget {
                 color: Colors.black,
                 onPressed: () {
                   if (function == 'home') {
-                    Get.to(const ViewScreen());
+                    Get.to(()=> ViewScreen());
                   }
                 },
                 icon: Icon(icon)),
