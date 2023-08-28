@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:wooiproject/CompleteDetail.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
@@ -40,6 +41,7 @@ class _PaidScreenState extends State<PaidScreen> {
       setState(() {});
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -194,16 +196,17 @@ class _PaidScreenState extends State<PaidScreen> {
                             onPressed: () {
                               List results = completeList
                                   .where((user) => user['packageID']
-                                  .toLowerCase()
-                                  .contains(
-                                  search.text.toString().toLowerCase()))
+                                      .toLowerCase()
+                                      .contains(
+                                          search.text.toString().toLowerCase()))
                                   .toList();
-                              if (results == null || results.isEmpty) {
+                              if (results.isEmpty) {
                                 results = completeList
                                     .where((user) => user['phoneNumber']
-                                    .toLowerCase()
-                                    .contains(
-                                    search.text.toString().toLowerCase()))
+                                        .toLowerCase()
+                                        .contains(search.text
+                                            .toString()
+                                            .toLowerCase()))
                                     .toList();
                               }
                               forDisplay = results;
@@ -243,194 +246,220 @@ class _PaidScreenState extends State<PaidScreen> {
                 ],
               ),
             ),
-            Flexible(
-              child: forDisplay != []
-                  ? ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: forDisplay.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      width: Get.width,
-                      margin: const EdgeInsets.all(6),
-                      // padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: theme.liteGrey,
-                        borderRadius: BorderRadius.circular(6),
-                        boxShadow: [
-                          BoxShadow(
-                            color: theme.minGrey,
-                            blurRadius: 4,
-                            offset: const Offset(0, 0), // Shadow position
-                          ),
-                        ],
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(6),
-                          onTap: () {
-                            //Get.to(const CompleteDetail(),arguments:  forDisplay[index]);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    reUse.reUseText(
-                                        weight: FontWeight.w400,
-                                        size: 12.0,
-                                        color: theme.grey,
-                                        content: clsLan.packageID),
-                                    Row(
-                                      children: [
-                                        reUse.reUseText(
-                                            weight: FontWeight.bold,
-                                            size: 16.0,
-                                            color: theme.blue,
-                                            content: forDisplay[index]
-                                            ['packageID']),
-                                        // SizedBox(
-                                        //   height: 40,
-                                        //   width: 40,
-                                        //   child: PopupMenuButton<int>(
-                                        //     onSelected: (item) async {
-                                        //       if (item == 0) {
-                                        //       } else {}
-                                        //     },
-                                        //     itemBuilder: (context) => [
-                                        //       PopupMenuItem<int>(
-                                        //           value: 1,
-                                        //           child: Row(
-                                        //             mainAxisAlignment:
-                                        //                 MainAxisAlignment.spaceAround,
-                                        //             children: [
-                                        //               Icon(Icons
-                                        //                   .delete_forever_rounded),
-                                        //               Text('Delete'),
-                                        //             ],
-                                        //           )),
-                                        //     ],
-                                        //   ),
-                                        // ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(6.0),
-                                  child: Divider(
-                                    height: 1,
-                                    color: theme.grey,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      reUse.reUseColumnText(
-                                          titleColor: theme.grey,
-                                          title: clsLan.receiverLocation,
-                                          lableSize: 11,
-                                          size: 14.0,
-                                          color: theme.black,
-                                          content: forDisplay[index]
-                                          ['location'],
-                                          weight: FontWeight.w500),
-                                      reUse.reUseColumnText(
-                                          titleColor: theme.grey,
-                                          title: clsLan.receiverPhoneNumber,
-                                          lableSize: 11,
-                                          size: 14.0,
-                                          color: theme.black,
-                                          content: forDisplay[index]
-                                          ['phoneNumber'],
-                                          weight: FontWeight.w500),
-                                      reUse.reUseColumnText(
-                                          titleColor: theme.grey,
-                                          title: clsLan.price,
-                                          lableSize: 11,
-                                          size: 14.0,
-                                          color: theme.black,
-                                          content: forDisplay[index]
-                                          ['price'] +
-                                              " \$",
-                                          weight: FontWeight.w500),
-
-                                    ],
-                                  ),
-                                ),
-                                // Padding(
-                                //   padding: const EdgeInsets.all(6.0),
-                                //   child: Divider(
-                                //     height: 1,
-                                //     color: theme.grey,
-                                //   ),
-                                // ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 8.0,top: 8.0),
-                                  child: Divider(
-                                    height: 1,
-                                    color: theme.grey,
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    reUse.reUseText(
-                                        size: 12.0,
-                                        weight: FontWeight.w400,
-                                        color: theme.grey,
-                                        content: clsLan.status),
-
-                                    Container(
+            forDisplay != []
+                ? Flexible(
+                    child: Scrollbar(
+                      thickness: 6,
+                      radius: const Radius.circular(6.0),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Flexible(
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  padding: const EdgeInsets.all(8),
+                                  itemCount: forDisplay.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Container(
+                                      width: Get.width,
+                                      margin: const EdgeInsets.all(6),
+                                      // padding: const EdgeInsets.all(6),
                                       decoration: BoxDecoration(
-                                        color: theme.litestOrange,
-                                        borderRadius:
-                                        BorderRadius.circular(6),
+                                        color: theme.liteGrey,
+                                        borderRadius: BorderRadius.circular(6),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: theme.minGrey,
+                                            blurRadius: 4,
+                                            offset: const Offset(
+                                                0, 0), // Shadow position
+                                          ),
+                                        ],
                                       ),
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 4),
-                                      child: reUse.reUseText(
-                                          size: 12.0,
-                                          color: theme.deepPumpkin,
-                                          content: clsLan.readyPaid,
-                                          weight: FontWeight.w600),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(6),
+                                          onTap: () {
+                                            Get.to(() => const CompleteDetail(),
+                                                arguments: {
+                                                  "data": forDisplay[index],
+                                                  "from": "paid"
+                                                });
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    reUse.reUseText(
+                                                        weight: FontWeight.w400,
+                                                        size: 12.0,
+                                                        color: theme.grey,
+                                                        content:
+                                                            clsLan.packageID),
+                                                    Row(
+                                                      children: [
+                                                        reUse.reUseText(
+                                                            weight:
+                                                                FontWeight.bold,
+                                                            size: 16.0,
+                                                            color: theme.blue,
+                                                            content: forDisplay[
+                                                                    index]
+                                                                ['packageID']),
+                                                        // SizedBox(
+                                                        //   height: 40,
+                                                        //   width: 40,
+                                                        //   child: PopupMenuButton<int>(
+                                                        //     onSelected: (item) async {
+                                                        //       if (item == 0) {
+                                                        //       } else {}
+                                                        //     },
+                                                        //     itemBuilder: (context) => [
+                                                        //       PopupMenuItem<int>(
+                                                        //           value: 1,
+                                                        //           child: Row(
+                                                        //             mainAxisAlignment:
+                                                        //                 MainAxisAlignment.spaceAround,
+                                                        //             children: [
+                                                        //               Icon(Icons
+                                                        //                   .delete_forever_rounded),
+                                                        //               Text('Delete'),
+                                                        //             ],
+                                                        //           )),
+                                                        //     ],
+                                                        //   ),
+                                                        // ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(6.0),
+                                                  child: Divider(
+                                                    height: 1,
+                                                    color: theme.grey,
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(3.0),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      reUse.reUseColumnText(
+                                                          titleColor:
+                                                              theme.grey,
+                                                          title: clsLan
+                                                              .receiverLocation,
+                                                          lableSize: 11,
+                                                          size: 14.0,
+                                                          color: theme.black,
+                                                          content:
+                                                              forDisplay[index]
+                                                                  ['location'],
+                                                          weight:
+                                                              FontWeight.w500),
+                                                      reUse.reUseColumnText(
+                                                          titleColor:
+                                                              theme.grey,
+                                                          title: clsLan
+                                                              .receiverPhoneNumber,
+                                                          lableSize: 11,
+                                                          size: 14.0,
+                                                          color: theme.black,
+                                                          content: forDisplay[
+                                                                  index]
+                                                              ['phoneNumber'],
+                                                          weight:
+                                                              FontWeight.w500),
+                                                      reUse.reUseColumnText(
+                                                          titleColor:
+                                                              theme.grey,
+                                                          title: clsLan.price,
+                                                          lableSize: 11,
+                                                          size: 14.0,
+                                                          color: theme.black,
+                                                          content: forDisplay[
+                                                                      index]
+                                                                  ['price'] +
+                                                              " \$",
+                                                          weight:
+                                                              FontWeight.w500),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(6.0),
+                                                  child: Divider(
+                                                    height: 1,
+                                                    color: theme.grey,
+                                                  ),
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    reUse.reUseText(
+                                                        size: 12.0,
+                                                        weight: FontWeight.w400,
+                                                        color: theme.grey,
+                                                        content: clsLan.status),
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            theme.litestOrange,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(6),
+                                                      ),
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 10,
+                                                          vertical: 4),
+                                                      child: reUse.reUseText(
+                                                          size: 12.0,
+                                                          color:
+                                                              theme.deepPumpkin,
+                                                          content:
+                                                              clsLan.readyPaid,
+                                                          weight:
+                                                              FontWeight.w600),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }),
                             ),
-                          ),
+                          ],
                         ),
                       ),
-                    );
-                  })
-                  : SizedBox(
-                width: Get.width * 1,
-                height: Get.height * 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(
-                      'assets/images/check.png',
-                      height: 300,
-                      width: 300,
-                      color: theme.black,
                     ),
-                    reUse.reUseText(content: "No Data"),
-                  ],
-                ),
-              ),
-            )
+                  )
+                : Flexible(
+                    child: Center(child: reUse.reUseText(content: "មិនមាន")))
           ],
         ),
       ),
