@@ -809,26 +809,29 @@ class _AccountScreenState extends State<AccountScreen> {
   double revenue = 0.0;
   double paid = 0.0;
 
-  totalRevenue() {
+  totalRevenue() async {
     List mainData = [];
     try {
-      DatabaseReference refs = FirebaseDatabase.instance
+      DatabaseReference refs = await FirebaseDatabase.instance
           .ref('Complete')
           .child(auth.currentUser!.uid);
-      refs.onValue.listen((event) {
+      refs.onValue.listen((event) async {
         revenuePrice.clear();
         paidPrice.clear();
-        revenue = 0;
-        paid = 0;
-        DataSnapshot driver = event.snapshot;
+        revenue = 0.0;
+        paid = 0.0;
+        DataSnapshot driver = await event.snapshot;
         Map values = driver.value as Map;
-        values.forEach((key, value) {
+        values.forEach((key, value) async {
           mainData.add(value);
           if (value[field.paidStatus] == 'paid') {
             paidPrice.add(value);
           } else {
             revenuePrice.add(value);
           }
+          setState(() {
+
+          });
         });
         calculation(mainData);
       });
@@ -844,7 +847,7 @@ class _AccountScreenState extends State<AccountScreen> {
       } else {
         revenue += double.parse(data[a][field.price]);
       }
+      setState(() {});
     }
-    setState(() {});
   }
 }
