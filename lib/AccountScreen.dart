@@ -281,7 +281,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       size: 12.0,
                       color: theme.grey),
                   reUse.reUseText(
-                      content: "${glb.auth.currentUser!.uid}",
+                      content: glb.auth.currentUser!.uid,
                       weight: FontWeight.bold,
                       size: 12.0,
                       color: theme.grey),
@@ -452,14 +452,14 @@ class _AccountScreenState extends State<AccountScreen> {
                               TextFormField(
                                 controller: passwordBox,
                                 // keyboardType: inputType,
-                                keyboardType:
-                                    const TextInputType.numberWithOptions(
-                                        decimal: true),
+                                // keyboardType:
+                                //     const TextInputType.numberWithOptions(
+                                //         decimal: true),
                                 // inputFormatters: [
                                 //   FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
                                 //   FilteringTextInputFormatter.digitsOnly,
                                 // ],
-                                // maxLength: 10,
+                                maxLength: 20,
                                 onChanged: (value) async {},
                                 decoration: InputDecoration(
                                   //icon: Icon(textIcon ?? null),
@@ -515,7 +515,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       leading: const Icon(Icons.phone)),
                   reUse.reUseSettingItem(
                       trailing: Text(
-                        "${userData[fieldInfo.bankName].toString().toUpperCase()}",
+                        userData[fieldInfo.bankName].toString().toUpperCase(),
                         style: TextStyle(color: theme.grey),
                       ),
                       title: Text(clsLan.payService),
@@ -548,7 +548,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     ),
                     child: Center(
                       child: ListTile(
-                        title: Text("${clsLan.receiveMoneyNumber}"),
+                        title: Text(clsLan.receiveMoneyNumber),
                         trailing: SizedBox(
                             width: textWidth,
                             child: Text(
