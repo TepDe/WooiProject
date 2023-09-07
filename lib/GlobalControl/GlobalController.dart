@@ -907,8 +907,8 @@ class GlobalController {
         createDate,
         data,
         price}) async {
-    token = "5853718868:AAEjEeec_8G22TJOpRvItc5tQKo5Iq4b2HQ";
-    chatid = '1030012373';
+    token = "";
+    chatid = '';
     final String _sendMessageUrl = 'https://api.telegram.org/bot$token/sendMessage';
 
     final response = await http.post(
