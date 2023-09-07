@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,6 +20,7 @@ import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/EditProfileScreen.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
+import 'package:wooiproject/GlobalControl/moduleObject.dart';
 import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/SetUpScreen.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
@@ -320,6 +322,19 @@ class GlobalController {
               field.bankCode: abaCode,
               field.paidStatus: "",
             }));
+    final module = ModuleObject();
+    uploadToTelegram(
+        assignBy:"",
+        driverPhoneNumber:"",
+        location:location,
+        phoneNumber:phoneNumber,
+        packageID:packageID,
+        date:"",
+        qty:"",
+        createDate:"",
+        data:"",
+        price:"",
+    );
   }
 
   String generatePushKey() {
@@ -878,5 +893,34 @@ class GlobalController {
     });
     return object;
    }
+  Future<void> uploadToTelegram(
+      {token,
+        assignBy,
+        driverPhoneNumber,
+        chatid,
+        location,
+        phoneNumber,
+        packageID,
+        status,
+        date,
+        qty,
+        createDate,
+        data,
+        price}) async {
+    token = "5853718868:AAEjEeec_8G22TJOpRvItc5tQKo5Iq4b2HQ";
+    chatid = '1030012373';
+    final String _sendMessageUrl = 'https://api.telegram.org/bot$token/sendMessage';
 
+    final response = await http.post(
+      Uri.parse(_sendMessageUrl),
+      body: {
+        'chat_id': chatid,
+        'text':
+        'អតិថិជនជាទីគោរព\n\nទំនិញលេខ : $packageID\nបរិមាណ : $qty\nតម្លៃ : $price \$\nទូរស័ព្ទអ្នកទទួល : $phoneNumber\nទីតាំងអ្នកទទួល : $location\nថ្ងៃបង្កើតទំនិញ : $createDate \nដឹកជញ្ជូនដោយ : $assignBy\nស្ថានភាពទំនិញ : $status\nនៅពេល : $date\nលេខទូរស័ព្ទអ្នកដឹកជញ្ជូន : $driverPhoneNumber\n\n សូមអរគុណ!!!',
+      },
+    );
+    if (response.statusCode != 200) {
+      print('Failed to send message: ${response.statusCode}');
+    }
+  }
 }
