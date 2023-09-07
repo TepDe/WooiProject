@@ -267,26 +267,27 @@ class _PendingScreenState extends State<PendingScreen> {
                                   padding: const EdgeInsets.all(8),
                                   itemCount: forDisplay.length,
                                   itemBuilder: (BuildContext context, int index) {
-                                    return Container(
-                                      width: Get.width,
-                                      margin: const EdgeInsets.all(6),
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 5),
-                                      decoration: BoxDecoration(
-                                        color: theme.liteGrey,
-                                        borderRadius: BorderRadius.circular(6),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: theme.grey,
-                                            blurRadius: 4,
-                                            offset: const Offset(
-                                                0, 1), // Shadow position
+                                    return Material(
+                                      child: InkWell(
+                                        onTap: (){Get.to(()=> PendingDetail(),arguments:forDisplay[index] );},
+
+                                        child: Container(
+                                          width: Get.width,
+                                          margin: const EdgeInsets.all(6),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 5),
+                                          decoration: BoxDecoration(
+                                            color: theme.liteGrey,
+                                            borderRadius: BorderRadius.circular(6),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: theme.grey,
+                                                blurRadius: 4,
+                                                offset: const Offset(
+                                                    0, 1), // Shadow position
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                      child: Material(
-                                        child: InkWell(
-                                          onTap: (){Get.to(()=> PendingDetail(),arguments:forDisplay[index] );},
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
                                             mainAxisAlignment:
