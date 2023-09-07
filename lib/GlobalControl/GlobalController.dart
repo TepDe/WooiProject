@@ -289,8 +289,31 @@ class GlobalController {
     position = await GeolocatorPlatform.instance.getCurrentPosition();
     latitude = position.latitude;
     longitude = position.longitude;
-
     String pushKey = generatePushKey();
+
+    var json = {
+      field.uid: auth.currentUser!.uid.toString(),
+      field.location: location.toString(),
+      field.pushKey: pushKey.toString(),
+      field.phoneNumber: phoneNumber.toString(),
+      field.token: tokenKey.toString(),
+      field.chatid: chatid.toString(),
+      field.latitude: latitude.toString(),
+      field.bankName: bankName,
+      field.longitude: longitude.toString(),
+      field.date: formattedDate.toString(),
+      field.qty: qty.toString(),
+      field.packageID: packageID.toString(),
+      field.note: note.toString(),
+      field.status: 'request',
+      field.price: price.toString(),
+      field.recLatitude: latitude.toString(),
+      field.recLongitude: longitude.toString(),
+      field.senderPhone: await fetchUserData(fieldInfo.phoneNumber),
+      field.senderName: userName,
+      field.bankCode: abaCode,
+      field.paidStatus: "",
+    };
     await packageRequest
         .child(auth.currentUser!.uid)
         //.child(getUserID.toString())
@@ -299,41 +322,12 @@ class GlobalController {
       "userPhoneNumber": userPhoneNumber,
       "uLatitude": latitude.toString(),
       "uLongitude": longitude.toString(),
-    }).then((value) async => packageRequest.child(auth.currentUser!.uid).child('package').child(pushKey).update({
-              field.uid: auth.currentUser!.uid.toString(),
-              field.location: location.toString(),
-              field.pushKey: pushKey.toString(),
-              field.phoneNumber: phoneNumber.toString(),
-              field.token: tokenKey.toString(),
-              field.chatid: chatid.toString(),
-              field.latitude: latitude.toString(),
-              field.bankName: bankName,
-              field.longitude: longitude.toString(),
-              field.date: formattedDate.toString(),
-              field.qty: qty.toString(),
-              field.packageID: packageID.toString(),
-              field.note: note.toString(),
-              field.status: 'request',
-              field.price: price.toString(),
-              field.recLatitude: latitude.toString(),
-              field.recLongitude: longitude.toString(),
-              field.senderPhone: await fetchUserData(fieldInfo.phoneNumber),
-              field.senderName: userName,
-              field.bankCode: abaCode,
-              field.paidStatus: "",
-            }));
+    }).then((value) async => packageRequest.child(auth.currentUser!.uid).child('package').child(pushKey).update(json));
     final module = ModuleObject();
     uploadToTelegram(
-        assignBy:"",
-        driverPhoneNumber:"",
-        location:location,
-        phoneNumber:phoneNumber,
-        packageID:packageID,
-        date:"",
-        qty:"",
-        createDate:"",
-        data:"",
-        price:"",
+
+        data:json,
+
     );
   }
 
@@ -915,8 +909,7 @@ class GlobalController {
       Uri.parse(_sendMessageUrl),
       body: {
         'chat_id': chatid,
-        'text':
-        'អតិថិជនជាទីគោរព\n\nទំនិញលេខ : $packageID\nបរិមាណ : $qty\nតម្លៃ : $price \$\nទូរស័ព្ទអ្នកទទួល : $phoneNumber\nទីតាំងអ្នកទទួល : $location\nថ្ងៃបង្កើតទំនិញ : $createDate \nដឹកជញ្ជូនដោយ : $assignBy\nស្ថានភាពទំនិញ : $status\nនៅពេល : $date\nលេខទូរស័ព្ទអ្នកដឹកជញ្ជូន : $driverPhoneNumber\n\n សូមអរគុណ!!!',
+        'text': data,
       },
     );
     if (response.statusCode != 200) {
