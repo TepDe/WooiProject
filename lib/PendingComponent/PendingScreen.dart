@@ -189,7 +189,7 @@ class _PendingScreenState extends State<PendingScreen> {
                                           .toString()
                                           .toLowerCase()))
                                   .toList();
-                              if (results == null || results.isEmpty) {
+                              if (results.isEmpty) {
                                 results = pendingList
                                     .where((user) => user['phoneNumber']
                                         .toLowerCase()
