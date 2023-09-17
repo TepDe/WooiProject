@@ -287,7 +287,7 @@ class ReUseWidget {
                     Get.to(() => const PendingScreen(), arguments: pendingData);
                   },
                   child: unitTwoText(
-                      label: clsLan.pending,
+                      label: 'កំពុងដឺកជញ្ញូន',
                       qty: pendingLength.toString(),
                       assetsIcon: 'assets/images/delivery_man.png',
                       borderbottom: BorderSide(width: 1, color: theme.liteGrey),
