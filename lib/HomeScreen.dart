@@ -428,7 +428,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     if (forSort[index][field.status] == 'complete') {
                                       Get.to(() => const CompleteDetail(), arguments: {"data":forSort[index]});
                                     } else if (forSort[index][field.status] == 'return') {
-                                      Get.to(() => const ReturnDetail(), arguments: {"data":forSort[index]});
+                                      Get.to(() => const ReturnDetail(), arguments: forSort[index]);
                                     }
                                   },
                                   value: forSort[index],
