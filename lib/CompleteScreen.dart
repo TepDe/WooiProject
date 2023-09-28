@@ -380,7 +380,7 @@ class _CompleteScreenState extends State<CompleteScreen> {
                                                   reUse.reUseRowText(
                                                       lableSize: 12.0,
                                                       titleColor: theme.grey,
-                                                      title: clsLan.date,
+                                                      title: clsLan.completeDate,
                                                       size: 12.0,
                                                       color: theme.black,
                                                       content:
