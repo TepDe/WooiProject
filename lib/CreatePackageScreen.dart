@@ -11,6 +11,7 @@ import 'package:wooiproject/Distination/clsDistin.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/GlobalControl/createModule.dart';
+import 'package:wooiproject/GlobalControl/moduleObject.dart';
 
 import 'GlobalControl/GlobalController.dart';
 import 'ViewScreen.dart';
@@ -67,37 +68,28 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
     });
   }
 
+  var generalInfo ={};
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    suggestionLocation();
     generatePackageID();
     fetchUserInformation();
+    onGetGeneral ();
     fetchToken();
     distince = clsDis.destination;
     forDisplay = clsDis.destination;
   }
+  onGetGeneral () async {
+    generalInfo = await glb.onGetGeneralInfo();
+  }
 
   final clsLan = ClsLanguage();
 
-  Future<void> suggestionLocation() async {
-    try {
-      final jsonString = await rootBundle.loadString('assets/distination_en.json');
-      var data = await json.decode(jsonString);
-      Map dist = data as Map;
-      dist.forEach((key, values) {
-        eng_distin.add(values[0]);
-        print(eng_distin);
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
-
   String getToken = '';
   String chatid = '';
-
+  ModuleObject modObj = ModuleObject();
   fetchToken() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     await FirebaseFirestore.instance
@@ -115,11 +107,6 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
   List eng_distin = [];
   List forDisplay = [];
   final clsDis = ClsDestination();
-
-  bool _validateInput(String input) {
-    RegExp regExp = RegExp(r'^[^0]\d*');
-    return regExp.hasMatch(input);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -236,12 +223,6 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                             .toLowerCase()
                             .contains(locationBox.text.toString().toLowerCase()))
                         .toList();
-                    results ??= eng_distin
-                        .where((user) => user
-                            .toLowerCase()
-                            .contains(locationBox.text.toString().toLowerCase()))
-                        .toList();
-
                     forDisplay = results;
                     setState(() {});
                   },
@@ -475,6 +456,8 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                   alertDialog(context);
                                   await glb
                                       .createPackage(
+                                    genChatID: generalInfo['chatid'],
+                                    genToken: generalInfo['token'],
                                     bankName: bankName.trim(),
                                     abaCode: bankCode.toString(),
                                     userName: userName.trim().toString(),
