@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final prefs = await SharedPreferences.getInstance();
     try {
       await FirebaseFirestore.instance.collection('Users').doc(auth.currentUser!.uid).get().then((doc) async {
-        data = await doc.data() as Map;
+        data = doc.data() as Map;
         if (data["accountType"] != "Users") {
           await reUse.reUseCircleDialog(
               disposeAllow: false,
@@ -127,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
   totalListLength() async {
     try {
       DatabaseReference refs = FirebaseDatabase.instance.ref('PackageRequest').child(auth.currentUser!.uid);
-      await refs.onValue.listen((event) {
+      refs.onValue.listen((event) {
         driverList.clear();
         totalPackageIndex.clear();
         DataSnapshot driver = event.snapshot;
@@ -150,11 +150,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   pendingListLength() async {
     try {
-      DatabaseReference refs = await FirebaseDatabase.instance.ref('Pending');
-      await refs.onValue.listen((event) async {
+      DatabaseReference refs = FirebaseDatabase.instance.ref('Pending');
+      refs.onValue.listen((event) async {
         pendingList.clear();
-        DataSnapshot driver = await event.snapshot;
-        Map<dynamic, dynamic> values = await driver.value as Map<dynamic, dynamic>;
+        DataSnapshot driver = event.snapshot;
+        Map<dynamic, dynamic> values = driver.value as Map<dynamic, dynamic>;
         values.forEach((key, value) async {
           Map data = await value[auth.currentUser!.uid] as Map<dynamic, dynamic>;
           data.forEach((key, value) {
@@ -175,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
         completeData.clear();
         forSort.clear();
         compSort.clear();
-        DataSnapshot driver = await event.snapshot;
+        DataSnapshot driver = event.snapshot;
         Map<dynamic, dynamic> values = driver.value as Map<dynamic, dynamic>;
         values.forEach((key, value) async {
           completeData.add(value);
@@ -191,12 +191,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> returnListLength() async {
     try {
-      DatabaseReference refs = await FirebaseDatabase.instance.ref('Return').child(auth.currentUser!.uid);
-      await refs.onValue.listen((event) async {
+      DatabaseReference refs = FirebaseDatabase.instance.ref('Return').child(auth.currentUser!.uid);
+      refs.onValue.listen((event) async {
         returnData.clear();
         forSort.clear();
-        DataSnapshot driver = await event.snapshot;
-        Map<dynamic, dynamic> values = await driver.value as Map<dynamic, dynamic>;
+        DataSnapshot driver = event.snapshot;
+        Map<dynamic, dynamic> values = driver.value as Map<dynamic, dynamic>;
         values.forEach((key, value) async {
           returnData.add(value);
           retSort.add(value);
@@ -249,10 +249,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   bool circleIndicator = false;
-  var _image = null;
-
-  // late File _image = 'assets/images/no_photo.png';
-
   double paddings = 10.0;
   final clsLan = ClsLanguage();
 
@@ -265,7 +261,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return File(imagePath);
   }
 
-  // List todayDateStrings=[];
   @override
   Widget build(BuildContext context) {
     forSort = mergeList(comp: compSort, ret: retSort);
