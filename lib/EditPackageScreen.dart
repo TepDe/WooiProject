@@ -64,6 +64,9 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
     } else {}
     setState(() {});
     fetchUserInformation();
+    setState(() {
+      forDisplay = clsDis.destination;
+    });
   }
 
   generatePackageID() {
@@ -224,7 +227,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                       List results = clsDis.destination
                           .where((user) => user.toLowerCase().contains(locationBox.text.toString().toLowerCase()))
                           .toList();
-                      if (results == null) {
+                      if (results == []) {
                         results = eng_distin
                             .where((user) => user.toLowerCase().contains(locationBox.text.toString().toLowerCase()))
                             .toList();
