@@ -299,6 +299,7 @@ class GlobalController {
   Future<void> createPackage(
       {price,
       userName,
+        generalInfo,
       bankName,
       userPhoneNumber,
       note,
@@ -340,7 +341,7 @@ class GlobalController {
         "price": price.toString(),
         "recLatitude": latitude.toString(),
         "recLongitude": longitude.toString(),
-        "senderPhone": fetchUserData(fieldInfo.phoneNumber).toString(),
+        "senderPhone": generalInfo['phoneNumber'],
         "senderName": userName.toString(),
         "bankCode": abaCode.toString(),
         "paidStatus": "",
