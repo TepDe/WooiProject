@@ -77,6 +77,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
     generatePackageID();
     fetchUserInformation();
     onGetGeneral ();
+    fetchUserData();
     fetchToken();
     distince = clsDis.destination;
     forDisplay = clsDis.destination;
@@ -84,7 +85,16 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
   onGetGeneral () async {
     generalInfo = await glb.onGetGeneralInfo();
   }
-
+  var userObject ={};
+  fetchUserData() async {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(auth.currentUser!.uid.toString())
+        .get()
+        .then((DocumentSnapshot documentSnapshot) async {
+      userObject = documentSnapshot.data() as Map;
+    });
+  }
   final clsLan = ClsLanguage();
 
   String getToken = '';
@@ -456,6 +466,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                   alertDialog(context);
                                   await glb
                                       .createPackage(
+                                    generalInfo: userObject,
                                     genChatID: generalInfo['chatid'],
                                     genToken: generalInfo['token'],
                                     bankName: bankName.trim(),
