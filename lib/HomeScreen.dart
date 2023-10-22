@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:intl/intl.dart'; // for date formatting and parsing
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:swipe_refresh/swipe_refresh.dart';
 import 'package:wooiproject/CompleteDetail.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
@@ -137,10 +139,10 @@ class _HomeScreenState extends State<HomeScreen> {
           data.forEach((key, value) async {
             totalPackageIndex.add(key);
             driverList.add(value);
-            setState(() {});
           });
         });
       });
+      setState(() {});
     } catch (e) {
       print('totalListLength $e');
     }
@@ -159,10 +161,10 @@ class _HomeScreenState extends State<HomeScreen> {
           Map data = await value[auth.currentUser!.uid] as Map<dynamic, dynamic>;
           data.forEach((key, value) {
             pendingList.add(value);
-            setState(() {});
           });
         });
       });
+      setState(() {});
     } catch (e) {
       print('pendingListLength $e');
     }
@@ -180,10 +182,10 @@ class _HomeScreenState extends State<HomeScreen> {
         values.forEach((key, value) async {
           completeData.add(value);
           compSort.add(value);
-          setState(() {});
         });
       });
-      mergeList(ret: completeData);
+      mergeList(comp: completeData);
+      setState(() {});
     } catch (e) {
       print('completeListLength $e');
     }
@@ -200,13 +202,13 @@ class _HomeScreenState extends State<HomeScreen> {
         values.forEach((key, value) async {
           returnData.add(value);
           retSort.add(value);
-          setState(() {});
         });
       });
+      mergeList(ret: returnData);
+      setState(() {});
     } catch (e) {
       print('returnListLength $e');
     }
-    mergeList(ret: returnData);
   }
 
   List mergeList({List? comp, List? ret}) {
@@ -259,6 +261,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<File> getImageFileFromPath(String imagePath) async {
     return File(imagePath);
+  }
+
+  final _controller = StreamController<SwipeRefreshState>.broadcast();
+
+  Stream<SwipeRefreshState> get _stream => _controller.stream;
+
+  @override
+  void dispose() {
+    _controller.close();
+    super.dispose();
+  }
+
+  Future<void> _refresh() async {
+    await Future<void>.delayed(const Duration(seconds: 3));
+    totalListLength();
+    pendingListLength();
+    returnListLength();
+    completeListLength();
+    forSort = mergeList(comp: compSort, ret: retSort);
+    setState(() {});
+    _controller.sink.add(SwipeRefreshState.hidden);
   }
 
   @override
@@ -378,62 +401,91 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.all(paddings),
-                child: reUse.unitTwoHomeScreen(
-                    context: context,
-                    totalPackageDataKey: totalPackageIndex,
-                    totalPackageData: driverList,
-                    returnData: returnData,
-                    completeData: completeData,
-                    returnLength: returnData.length,
-                    completeLength: completeData.length,
-                    pendingData: pendingList,
-                    totalLength: driverList.length,
-                    pendingLength: pendingList.length),
-              ),
-
-              //wr.unitThreeHomeScreen(icon: Icons.directions_car, lable: 'Car',price: '2143', funtion: 'motor',context: context),
-              // wr.unitThreeHomeScreen(icon: Icons.motorcycle, lable: 'Motorcycle',price: '2143', funtion: '',context: context),
-              //reUse.renderListView(),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: paddings),
-                child: reUse.reUseCreatePackage(context: context, padding: paddings, height: Get.height * 0.02),
-              ),
-              Row(
+              SwipeRefresh.material(
+                stateStream: _stream,
+                onRefresh: _refresh,
+                shrinkWrap: true,
                 children: [
-                  reUse.reUseText(content: "   ${clsLan.today} : ${forSort.length}", color: theme.grey),
-                  Divider(
-                    height: 1,
-                    color: theme.grey,
-                  ),
+                  Column(mainAxisSize: MainAxisSize.min, children: [
+                    Padding(
+                      padding: EdgeInsets.all(paddings),
+                      child: reUse.unitTwoHomeScreen(
+                          context: context,
+                          totalPackageDataKey: totalPackageIndex,
+                          totalPackageData: driverList,
+                          returnData: returnData,
+                          completeData: completeData,
+                          returnLength: returnData.length,
+                          completeLength: completeData.length,
+                          pendingData: pendingList,
+                          totalLength: driverList.length,
+                          pendingLength: pendingList.length),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: paddings),
+                      child: reUse.reUseCreatePackage(
+                          context: context,
+                          padding: paddings,
+                          height: Get.height * 0.02),
+                    ),
+                    Row(
+                      children: [
+                        reUse.reUseText(
+                            content: "   ${clsLan.today} : ${forSort.length}",
+                            color: theme.grey),
+                        Divider(
+                          height: 1,
+                          color: theme.grey,
+                        ),
+                      ],
+                    ),
+                    forSort.isNotEmpty
+                        ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SingleChildScrollView(
+                              child: ListView.builder(
+                                  physics:
+                                      const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  padding: const EdgeInsets.all(8),
+                                  itemCount: forSort.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return reUse.reUseTodayComponent(
+                                        onTap: () {
+                                          if (forSort[index]
+                                                  [field.status] ==
+                                              'complete') {
+                                            Get.to(
+                                                () =>
+                                                    const CompleteDetail(),
+                                                arguments: {
+                                                  "data": forSort[index]
+                                                });
+                                          } else if (forSort[index]
+                                                  [field.status] ==
+                                              'return') {
+                                            Get.to(
+                                                () => const ReturnDetail(),
+                                                arguments: forSort[index]);
+                                          }
+                                        },
+                                        value: forSort[index],
+                                        completeDate: forSort[index]
+                                            [field.completeDate],
+                                        returnDate: forSort[index]
+                                            [field.returnDate],
+                                        status: forSort[index]
+                                            [field.status]);
+                                  }),
+                            ),
+                          ],
+                        )
+                        : Container(),
+                  ]),
                 ],
               ),
-              forSort.isNotEmpty
-                  ? Flexible(
-                      child: SingleChildScrollView(
-                        child: ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.all(8),
-                            itemCount: forSort.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return reUse.reUseTodayComponent(
-                                  onTap: () {
-                                    if (forSort[index][field.status] == 'complete') {
-                                      Get.to(() => const CompleteDetail(), arguments: {"data":forSort[index]});
-                                    } else if (forSort[index][field.status] == 'return') {
-                                      Get.to(() => const ReturnDetail(), arguments: forSort[index]);
-                                    }
-                                  },
-                                  value: forSort[index],
-                                  completeDate: forSort[index][field.completeDate],
-                                  returnDate: forSort[index][field.returnDate],
-                                  status: forSort[index][field.status]);
-                            }),
-                      ),
-                    )
-                  : Container(),
             ],
           ),
         ));
