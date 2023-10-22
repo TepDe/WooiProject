@@ -355,7 +355,9 @@ class _PendingScreenState extends State<PendingScreen> {
                                                           title: clsLan.qty,
                                                           size: 14.0,
                                                           color: theme.black,
-                                                          content: '1',
+                                                          content: forDisplay[
+                                                          index]
+                                                          ['qty'],
                                                           weight:
                                                               FontWeight.w500),
                                                     ],
