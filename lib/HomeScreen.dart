@@ -84,7 +84,11 @@ class _HomeScreenState extends State<HomeScreen> {
   onGetUserData() async {
     final prefs = await SharedPreferences.getInstance();
     try {
-      await FirebaseFirestore.instance.collection('Users').doc(auth.currentUser!.uid).get().then((doc) async {
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(auth.currentUser!.uid)
+          .get()
+          .then((doc) async {
         data = doc.data() as Map;
         if (data["accountType"] != "Users") {
           await reUse.reUseCircleDialog(
@@ -128,7 +132,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   totalListLength() async {
     try {
-      DatabaseReference refs = FirebaseDatabase.instance.ref('PackageRequest').child(auth.currentUser!.uid);
+      DatabaseReference refs = FirebaseDatabase.instance
+          .ref('PackageRequest')
+          .child(auth.currentUser!.uid);
       refs.onValue.listen((event) {
         driverList.clear();
         totalPackageIndex.clear();
@@ -141,8 +147,8 @@ class _HomeScreenState extends State<HomeScreen> {
             driverList.add(value);
           });
         });
+        setState(() {});
       });
-      setState(() {});
     } catch (e) {
       print('totalListLength $e');
     }
@@ -158,13 +164,14 @@ class _HomeScreenState extends State<HomeScreen> {
         DataSnapshot driver = event.snapshot;
         Map<dynamic, dynamic> values = driver.value as Map<dynamic, dynamic>;
         values.forEach((key, value) async {
-          Map data = await value[auth.currentUser!.uid] as Map<dynamic, dynamic>;
+          Map data =
+              await value[auth.currentUser!.uid] as Map<dynamic, dynamic>;
           data.forEach((key, value) {
             pendingList.add(value);
           });
         });
+        setState(() {});
       });
-      setState(() {});
     } catch (e) {
       print('pendingListLength $e');
     }
@@ -172,7 +179,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   completeListLength() async {
     try {
-      DatabaseReference refs = FirebaseDatabase.instance.ref('Complete').child(auth.currentUser!.uid);
+      DatabaseReference refs = FirebaseDatabase.instance
+          .ref('Complete')
+          .child(auth.currentUser!.uid);
       refs.onValue.listen((event) async {
         completeData.clear();
         forSort.clear();
@@ -183,9 +192,9 @@ class _HomeScreenState extends State<HomeScreen> {
           completeData.add(value);
           compSort.add(value);
         });
+        setState(() {});
       });
       mergeList(comp: completeData);
-      setState(() {});
     } catch (e) {
       print('completeListLength $e');
     }
@@ -193,19 +202,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> returnListLength() async {
     try {
-      DatabaseReference refs = FirebaseDatabase.instance.ref('Return').child(auth.currentUser!.uid);
+      DatabaseReference refs =
+          FirebaseDatabase.instance.ref('Return').child(auth.currentUser!.uid);
       refs.onValue.listen((event) async {
         returnData.clear();
         forSort.clear();
+        retSort.clear();
         DataSnapshot driver = event.snapshot;
         Map<dynamic, dynamic> values = driver.value as Map<dynamic, dynamic>;
         values.forEach((key, value) async {
           returnData.add(value);
           retSort.add(value);
         });
+        setState(() {});
       });
       mergeList(ret: returnData);
-      setState(() {});
     } catch (e) {
       print('returnListLength $e');
     }
@@ -216,15 +227,20 @@ class _HomeScreenState extends State<HomeScreen> {
     List merge = comp! + ret!;
     List Result = [];
     merge.forEach((element) async {
-      DateTime frmDate = DateFormat("dd-MM-yyyy").parse(element[field.returnDate] ?? element[field.completeDate]);
-      if (frmDate.day == today.day && frmDate.month == today.month && frmDate.year == today.year) {
+      DateTime frmDate = DateFormat("dd-MM-yyyy")
+          .parse(element[field.returnDate] ?? element[field.completeDate]);
+      if (frmDate.day == today.day &&
+          frmDate.month == today.month &&
+          frmDate.year == today.year) {
         Result.add(element);
         setState(() {});
       }
     });
     Result.sort((a, b) {
-      DateTime dateA = DateFormat("dd-MM-yyyy  hh:mm a").parse(a[field.completeDate] ?? a[field.returnDate]);
-      DateTime dateB = DateFormat("dd-MM-yyyy  hh:mm a").parse(b[field.completeDate] ?? b[field.returnDate]);
+      DateTime dateA = DateFormat("dd-MM-yyyy  hh:mm a")
+          .parse(a[field.completeDate] ?? a[field.returnDate]);
+      DateTime dateB = DateFormat("dd-MM-yyyy  hh:mm a")
+          .parse(b[field.completeDate] ?? b[field.returnDate]);
       setState(() {});
       return dateB.compareTo(dateA);
     });
@@ -279,8 +295,6 @@ class _HomeScreenState extends State<HomeScreen> {
     pendingListLength();
     returnListLength();
     completeListLength();
-    forSort = mergeList(comp: compSort, ret: retSort);
-    setState(() {});
     _controller.sink.add(SwipeRefreshState.hidden);
   }
 
@@ -317,7 +331,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       reUse.reUseText(
-                          content: "សូមបង្ហាញកូដនេះដល់អ្នកដឹកជញ្ជូនរបស់យើងនៅពេលគាត់មកទទួលទំនិញ",
+                          content:
+                              "សូមបង្ហាញកូដនេះដល់អ្នកដឹកជញ្ជូនរបស់យើងនៅពេលគាត់មកទទួលទំនិញ",
                           maxLines: 3,
                           size: 14.0),
                     ],
@@ -345,7 +360,8 @@ class _HomeScreenState extends State<HomeScreen> {
               //   ),
               // ),
               Padding(
-                padding: EdgeInsets.only(top: 10, right: paddings, left: paddings),
+                padding:
+                    EdgeInsets.only(top: 10, right: paddings, left: paddings),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -356,35 +372,46 @@ class _HomeScreenState extends State<HomeScreen> {
                         weight: FontWeight.bold,
                         content: '${currentTime()}\nID $getUserID'),
                     FutureBuilder<String?>(
-                      future: SharedPreferences.getInstance().then((prefs) => prefs.getString(str.profileImg)),
+                      future: SharedPreferences.getInstance()
+                          .then((prefs) => prefs.getString(str.profileImg)),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           // Display a loading indicator while waiting for data
-                          return const Center(child: CircularProgressIndicator());
+                          return const Center(
+                              child: CircularProgressIndicator());
                         } else if (snapshot.hasError) {
                           // Handle error case
-                          return Center(child: Text('Error: ${snapshot.error}'));
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
                         } else if (snapshot.hasData && snapshot.data != null) {
                           String imagePath = snapshot.data!;
                           return FutureBuilder<File>(
                             future: getImageFileFromPath(imagePath),
                             builder: (context, fileSnapshot) {
-                              if (fileSnapshot.connectionState == ConnectionState.waiting) {
+                              if (fileSnapshot.connectionState ==
+                                  ConnectionState.waiting) {
                                 // Display a loading indicator while waiting for image file
-                                return const Center(child: CircularProgressIndicator());
+                                return const Center(
+                                    child: CircularProgressIndicator());
                               } else if (fileSnapshot.hasError) {
                                 // Handle error case
-                                return Center(child: Text('Error: ${fileSnapshot.error}'));
-                              } else if (fileSnapshot.hasData && fileSnapshot.data != null) {
+                                return Center(
+                                    child:
+                                        Text('Error: ${fileSnapshot.error}'));
+                              } else if (fileSnapshot.hasData &&
+                                  fileSnapshot.data != null) {
                                 File imageFile = fileSnapshot.data!;
                                 return SizedBox(
                                   height: imageSize,
                                   width: imageSize,
-                                  child: CircleAvatar(backgroundImage: FileImage(imageFile)),
+                                  child: CircleAvatar(
+                                      backgroundImage: FileImage(imageFile)),
                                 );
                               } else {
                                 // Image not found
-                                return const Center(child: Text('Image not found'));
+                                return const Center(
+                                    child: Text('Image not found'));
                               }
                             },
                           );
@@ -401,49 +428,47 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              SwipeRefresh.material(
-                stateStream: _stream,
-                onRefresh: _refresh,
-                shrinkWrap: true,
-                children: [
-                  Column(mainAxisSize: MainAxisSize.min, children: [
-                    Padding(
-                      padding: EdgeInsets.all(paddings),
-                      child: reUse.unitTwoHomeScreen(
-                          context: context,
-                          totalPackageDataKey: totalPackageIndex,
-                          totalPackageData: driverList,
-                          returnData: returnData,
-                          completeData: completeData,
-                          returnLength: returnData.length,
-                          completeLength: completeData.length,
-                          pendingData: pendingList,
-                          totalLength: driverList.length,
-                          pendingLength: pendingList.length),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: paddings),
-                      child: reUse.reUseCreatePackage(
-                          context: context,
-                          padding: paddings,
-                          height: Get.height * 0.02),
-                    ),
-                    Row(
-                      children: [
-                        reUse.reUseText(
-                            content: "   ${clsLan.today} : ${forSort.length}",
-                            color: theme.grey),
-                        Divider(
-                          height: 1,
-                          color: theme.grey,
-                        ),
-                      ],
-                    ),
-                    forSort.isNotEmpty
-                        ? Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SingleChildScrollView(
+              Flexible(
+                child: SwipeRefresh.material(
+                  stateStream: _stream,
+                  onRefresh: _refresh,
+                  shrinkWrap: true,
+                  children: [
+                    Column(mainAxisSize: MainAxisSize.min, children: [
+                      Padding(
+                        padding: EdgeInsets.all(paddings),
+                        child: reUse.unitTwoHomeScreen(
+                            context: context,
+                            totalPackageDataKey: totalPackageIndex,
+                            totalPackageData: driverList,
+                            returnData: returnData,
+                            completeData: completeData,
+                            returnLength: returnData.length,
+                            completeLength: completeData.length,
+                            pendingData: pendingList,
+                            totalLength: driverList.length,
+                            pendingLength: pendingList.length),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: paddings),
+                        child: reUse.reUseCreatePackage(
+                            context: context,
+                            padding: paddings,
+                            height: Get.height * 0.02),
+                      ),
+                      Row(
+                        children: [
+                          reUse.reUseText(
+                              content: "   ${clsLan.today} : ${forSort.length}",
+                              color: theme.grey),
+                          Divider(
+                            height: 1,
+                            color: theme.grey,
+                          ),
+                        ],
+                      ),
+                      forSort.isNotEmpty
+                          ? Flexible(
                               child: ListView.builder(
                                   physics:
                                       const NeverScrollableScrollPhysics(),
@@ -479,12 +504,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                         status: forSort[index]
                                             [field.status]);
                                   }),
-                            ),
-                          ],
-                        )
-                        : Container(),
-                  ]),
-                ],
+                            )
+                          : Container(),
+                    ]),
+                  ],
+                ),
               ),
             ],
           ),
@@ -492,11 +516,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List filterAndSortDatesForToday() {
-    DateTime today = DateFormat("dd-MM-yyyy  HH:mm a").parse(DateTime.now().toString());
+    DateTime today =
+        DateFormat("dd-MM-yyyy  HH:mm a").parse(DateTime.now().toString());
     List todayDateStrings = [];
     (returnData + completeData).forEach((element) {
-      DateTime data = DateFormat("dd-MM-yyyy  HH:mm a").parse(element[field.completeDate] ?? element[field.returnDate]);
-      if (data.day == today.day && data.month == today.month && data.year == today.year) {
+      DateTime data = DateFormat("dd-MM-yyyy  HH:mm a")
+          .parse(element[field.completeDate] ?? element[field.returnDate]);
+      if (data.day == today.day &&
+          data.month == today.month &&
+          data.year == today.year) {
         todayDateStrings.add(element);
       } else {}
     });
