@@ -68,18 +68,6 @@ class _AccountScreenState extends State<AccountScreen> {
     getImageFileFromPath(prefs.getString(str.profileImg).toString());
   }
 
-  getDatsa(getUid) async {
-    FirebaseFirestore.instance
-        .collection('Users')
-        .doc(getUid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      getUserID = documentSnapshot['qty'];
-      getToken = documentSnapshot['token'];
-      getChatId = documentSnapshot['chatid'];
-    });
-  }
-
   Future<void> insertTelegramToken() async {
     FirebaseFirestore.instance
         .collection('Users')
@@ -124,46 +112,52 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   fetchUserData() async {
-    await fetch
-        .doc(auth.currentUser!.uid.toString())
-        .get()
-        .then((DocumentSnapshot documentSnapshot) async {
-      userData = await documentSnapshot.data() as Map<String, dynamic>;
-      if (userData["accountType"] != "Users") {
-        return await reUse.reUseCircleDialog(
-            disposeAllow: false,
-            onTap: () => glb.isLogOut(),
-            context: context,
-            icon: Icons.wifi,
-            title: 'មិនមាន',
-            content: Center(
-              child: Text(
-                'គណនីនេះមិនមានទេ សូមពិនិត្យមើលម្តងទៀត!',
-                style: TextStyle(
-                  color: theme.black,
+    try{
+      await fetch
+          .doc(auth.currentUser!.uid.toString())
+          .get()
+          .then((DocumentSnapshot documentSnapshot) async {
+        userData = await documentSnapshot.data() as Map<String, dynamic>;
+        if (userData["accountType"] != "Users") {
+          return await reUse.reUseCircleDialog(
+              disposeAllow: false,
+              onTap: () => glb.isLogOut(),
+              context: context,
+              icon: Icons.wifi,
+              title: 'មិនមាន',
+              content: Center(
+                child: Text(
+                  'គណនីនេះមិនមានទេ សូមពិនិត្យមើលម្តងទៀត!',
+                  style: TextStyle(
+                    color: theme.black,
+                  ),
                 ),
-              ),
-            ));
-      } else if (userData["isBanned"] != "false") {
-        return await reUse.reUseCircleDialog(
-            disposeAllow: false,
-            onTap: () => glb.isLogOut(),
-            context: context,
-            icon: Icons.cancel_outlined,
-            title: 'ផ្អាក',
-            content: Center(
-              child: Text(
-                'បច្ចុប្បន្នគណនីនេះត្រូវបានផ្អាក',
-                style: TextStyle(
-                  color: theme.black,
+              ));
+        } else if (userData["isBanned"] != "false") {
+          return await reUse.reUseCircleDialog(
+              disposeAllow: false,
+              onTap: () => glb.isLogOut(),
+              context: context,
+              icon: Icons.cancel_outlined,
+              title: 'ផ្អាក',
+              content: Center(
+                child: Text(
+                  'បច្ចុប្បន្នគណនីនេះត្រូវបានផ្អាក',
+                  style: TextStyle(
+                    color: theme.black,
+                  ),
                 ),
-              ),
-            ));
-      }
-      imagePath =
-          await glb.getBankImage(bankName: userData[fieldInfo.bankName]);
-      setState(() {});
-    });
+              ));
+        }
+        imagePath =
+        await glb.getBankImage(bankName: userData[fieldInfo.bankName]);
+        setState(() {});
+      });
+    }catch(e){
+      FirebaseAuth.instance.signOut();
+      Get.to(()=> const LogInScreen());
+    }
+
   }
 
   final reUse = ReUseWidget();
