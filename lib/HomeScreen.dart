@@ -16,6 +16,7 @@ import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
+import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/ReturnDetail.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
@@ -80,54 +81,67 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   late Map data;
-
+var userInfo = FirebaseFirestore.instance
+    .collection('Users');
   onGetUserData() async {
     final prefs = await SharedPreferences.getInstance();
     try {
-      await FirebaseFirestore.instance
-          .collection('Users')
+      var information = await userInfo
           .doc(auth.currentUser!.uid)
-          .get()
-          .then((doc) async {
-        data = doc.data() as Map;
-        if (data["accountType"] != "Users") {
-          await reUse.reUseCircleDialog(
-              disposeAllow: false,
-              onTap: () => glb.isLogOut(),
-              context: context,
-              icon: Icons.wifi,
-              title: 'មិនមាន',
-              content: Center(
-                child: Text(
-                  'គណនីនេះមិនមានទេ សូមពិនិត្យមើលម្តងទៀត!',
-                  style: TextStyle(
-                    color: theme.black,
+          .get();
+      final bool doesDocExist = information.exists;
+      if(doesDocExist == false ){
+        auth.signOut();
+        Get.to(()=>const LogInScreen());
+      }else{
+        await userInfo
+            .doc(auth.currentUser!.uid)
+            .get()
+            .then((doc) async {
+          data = doc.data() as Map;
+          if (data["accountType"] != "Users") {
+            await reUse.reUseCircleDialog(
+                disposeAllow: false,
+                onTap: () => glb.isLogOut(),
+                context: context,
+                icon: Icons.wifi,
+                title: 'មិនមាន',
+                content: Center(
+                  child: Text(
+                    'គណនីនេះមិនមានទេ សូមពិនិត្យមើលម្តងទៀត!',
+                    style: TextStyle(
+                      color: theme.black,
+                    ),
                   ),
-                ),
-              ));
-          setState(() {});
-        } else if (data["isBanned"] != "false") {
-          await reUse.reUseCircleDialog(
-              disposeAllow: false,
-              onTap: () => glb.isLogOut(),
-              context: context,
-              icon: Icons.cancel_outlined,
-              title: 'ផ្អាក',
-              content: Center(
-                child: Text(
-                  'បច្ចុប្បន្នគណនីនេះត្រូវបានផ្អាក',
-                  style: TextStyle(
-                    color: theme.black,
+                ));
+            setState(() {});
+          } else if (data["isBanned"] != "false") {
+            await reUse.reUseCircleDialog(
+                disposeAllow: false,
+                onTap: () => glb.isLogOut(),
+                context: context,
+                icon: Icons.cancel_outlined,
+                title: 'ផ្អាក',
+                content: Center(
+                  child: Text(
+                    'បច្ចុប្បន្នគណនីនេះត្រូវបានផ្អាក',
+                    style: TextStyle(
+                      color: theme.black,
+                    ),
                   ),
-                ),
-              ));
+                ));
+            setState(() {});
+          }
+          getUserID = data['userID'];
+          await prefs.setString(str.userID, getUserID.toString());
           setState(() {});
-        }
-        getUserID = data['userID'];
-        await prefs.setString(str.userID, getUserID.toString());
-        setState(() {});
-      });
-    } catch (e) {}
+        });
+      }
+
+    } catch (e) {
+      // FirebaseAuth.instance.signOut();
+      // Get.to(()=> const LogInScreen());
+    }
   }
 
   totalListLength() async {
@@ -151,6 +165,8 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     } catch (e) {
       print('totalListLength $e');
+      FirebaseAuth.instance.signOut();
+      Get.to(()=> const LogInScreen());
     }
   }
 
@@ -173,7 +189,9 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {});
       });
     } catch (e) {
-      print('pendingListLength $e');
+      // print('pendingListLength $e');
+      // FirebaseAuth.instance.signOut();
+      // Get.to(()=> const LogInScreen());
     }
   }
 
@@ -196,7 +214,9 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       mergeList(comp: completeData);
     } catch (e) {
-      print('completeListLength $e');
+      // print('completeListLength $e');
+      // FirebaseAuth.instance.signOut();
+      // Get.to(()=> const LogInScreen());
     }
   }
 
@@ -218,7 +238,9 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       mergeList(ret: returnData);
     } catch (e) {
-      print('returnListLength $e');
+      // print('returnListLength $e');
+      // FirebaseAuth.instance.signOut();
+      // Get.to(()=> const LogInScreen());
     }
   }
 
