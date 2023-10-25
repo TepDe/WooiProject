@@ -47,14 +47,19 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    totalListLength();
-    completeListLength();
-    pendingListLength();
-    returnListLength();
     fetchImage();
-    onGetUserData();
     alertNoInternet();
+    onInitialize();
   }
+
+  Future<void> onInitialize() async {
+    await onGetUserData();
+    await totalListLength();
+    await completeListLength();
+    await pendingListLength();
+    await returnListLength();
+  }
+
 
   alertNoInternet() async {
     try {
