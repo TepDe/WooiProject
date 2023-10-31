@@ -381,7 +381,7 @@ class _RevenueListState extends State<RevenueList> {
                                     title: clsLan.complete,
                                     size: 12.0,
                                     color: theme.black,
-                                    content: "${forDisplay[index][field.completeDate]}",
+                                    content: "${glb.formatDateTime(forDisplay[index][field.completeDate])}",
                                     weight: FontWeight.w500),
                               ],
                             ),
