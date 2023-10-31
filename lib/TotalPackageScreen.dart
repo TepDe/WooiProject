@@ -3,13 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/EditPackageScreen.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
-import 'package:intl/intl.dart';
-
 import 'WidgetReUse/ReUseWidget.dart';
 import 'WidgetReUse/Themes.dart';
 
@@ -26,65 +23,48 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
   var argumentData = Get.arguments;
   List totalList = [];
   List keyList = [];
+  List sortList = [];
   List forDisplay = [];
   FirebaseAuth auth = FirebaseAuth.instance;
   bool isShow = false;
   final clsLan = ClsLanguage();
-
-  // totalListLength() async {
-  //   DatabaseReference refs = FirebaseDatabase.instance
-  //       .ref('PackageRequest')
-  //       .child(auth.currentUser!.uid);
-  //   refs.onValue.listen((event) async {
-  //     driverList.clear();
-  //     DataSnapshot driver = event.snapshot;
-  //     Map values = driver.value as Map;
-  //     values.forEach((key, values) {
-  //       Map data = values as Map;
-  //       data.forEach((key, value) async {
-  //         setState(() {
-  //           driverList.add(value);
-  //         });
-  //         isShow = true;
-  //       });
-  //     });
-  //   });
-  // }
-
-  _TotalPackageScreenState() {
-    totalList = argumentData[0]['data'];
-    forDisplay = totalList;
-    keyList = argumentData[1]['key'];
-    totalListLength();
-  }
-
   final field = FieldData();
   final fieldInfo = FieldInfo();
+  DatabaseReference requestDB = FirebaseDatabase.instance.ref('PackageRequest');
 
-  totalListLength() async {
+  Future<void> totalListLength() async {
     try {
-      DatabaseReference refs = FirebaseDatabase.instance
-          .ref('PackageRequest')
-          .child(auth.currentUser!.uid);
-      refs.onValue.listen((event) {
-        totalList.clear();
-        forDisplay.clear();
-        DataSnapshot driver = event.snapshot;
-        Map values = driver.value as Map;
-        values.forEach((key, values) async {
-          Map data = await values as Map;
-          data.forEach((key, value) async {
-            setState(() {
-              totalList.add(value);
-
-            });
+      final isRequestDB = await requestDB.child(auth.currentUser!.uid).onValue.first;
+      totalList.clear();
+      forDisplay.clear();
+      DataSnapshot driver = await isRequestDB.snapshot;
+      Map values = driver.value as Map;
+      values.forEach((key, values) async {
+        Map data = await values as Map;
+        data.forEach((key, value) async {
+          setState(() {
+            totalList.add(value);
+            sortList.add(value);
           });
-          forDisplay=totalList;
         });
       });
+      forDisplay = sortDateTime(totalList);
     } catch (e) {
       print('totalListLength $e');
     }
+  }
+
+  List sortDateTime(sortDateTime) {
+    DateTime parseDate(String dateString) {
+      return DateTime.parse(dateString);
+    }
+
+    sortDateTime.sort((a, b) {
+      DateTime dateA = parseDate(a["date"]);
+      DateTime dateB = parseDate(b["date"]);
+      return dateB.compareTo(dateA);
+    });
+    return sortDateTime;
   }
 
   @override
@@ -92,6 +72,14 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
     // TODO: implement initState
     super.initState();
     //totalListLength();
+    onInitialize();
+  }
+
+  Future<void> onInitialize() async {
+    totalList = argumentData[0]['data'];
+    forDisplay = totalList;
+    keyList = argumentData[1]['key'];
+    await totalListLength();
   }
 
   final search = TextEditingController();
@@ -102,11 +90,6 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    forDisplay.sort((a, b) {
-      DateTime dateA = DateFormat(" dd-MM-yyyy hh:mm a").parse(a['date'] ?? " 02-08-2023 09:23 AM");
-      DateTime dateB = DateFormat(" dd-MM-yyyy hh:mm a").parse(b['date'] ?? " 02-08-2023 09:23 AM");
-      return dateB.compareTo(dateA);
-    });
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -116,8 +99,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
               child: Column(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     decoration: const BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage("assets/images/PackageHead.png"),
@@ -141,10 +123,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                 ),
                                 label: Text(
                                   clsLan.totalPackage,
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: theme.deepPumpkin,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontSize: 18, color: theme.deepPumpkin, fontWeight: FontWeight.bold),
                                 ),
                               ),
                               // Padding(
@@ -191,8 +170,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                       onPressed: () {
                                         search.clear();
                                         //packageList!.clear(),
-                                        FocusManager.instance.primaryFocus
-                                            ?.unfocus();
+                                        FocusManager.instance.primaryFocus?.unfocus();
                                         forDisplay = totalList;
                                         setState(() {});
                                       },
@@ -210,8 +188,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                   BoxShadow(
                                     color: theme.grey,
                                     blurRadius: 3,
-                                    offset:
-                                        const Offset(0, 0), // Shadow position
+                                    offset: const Offset(0, 0), // Shadow position
                                   ),
                                 ],
                               ),
@@ -221,21 +198,16 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                     List results = totalList
                                         .where((user) => user['packageID']
                                             .toLowerCase()
-                                            .contains(search.text
-                                                .toString()
-                                                .toLowerCase()))
+                                            .contains(search.text.toString().toLowerCase()))
                                         .toList();
-                                    if (results == null || results.isEmpty)
+                                    if (results.isEmpty)
                                       results = totalList
                                           .where((user) => user['phoneNumber']
                                               .toLowerCase()
-                                              .contains(search.text
-                                                  .toString()
-                                                  .toLowerCase()))
+                                              .contains(search.text.toString().toLowerCase()))
                                           .toList();
                                     forDisplay = results;
-                                    FocusManager.instance.primaryFocus
-                                        ?.unfocus();
+                                    FocusManager.instance.primaryFocus?.unfocus();
                                     setState(() {});
                                   },
                                   icon: Icon(
@@ -252,10 +224,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       children: [
-                        reUse.reUseText(
-                            size: 14.0,
-                            content:
-                                '${clsLan.totalPackage} : ${forDisplay.length}'),
+                        reUse.reUseText(size: 14.0, content: '${clsLan.totalPackage} : ${forDisplay.length}'),
                         const Flexible(child: Divider()),
                         Container(
                           decoration: BoxDecoration(
@@ -317,8 +286,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                 return Container(
                                   width: Get.width,
                                   margin: const EdgeInsets.all(6),
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: padding),
+                                  padding: EdgeInsets.symmetric(horizontal: padding),
                                   decoration: BoxDecoration(
                                     color: theme.liteGrey,
                                     borderRadius: BorderRadius.circular(6),
@@ -326,8 +294,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                       BoxShadow(
                                         color: theme.grey,
                                         blurRadius: 4,
-                                        offset:
-                                            const Offset(0, 0), // Shadow position
+                                        offset: const Offset(0, 0), // Shadow position
                                       ),
                                     ],
                                   ),
@@ -338,60 +305,39 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                       Padding(
                                         padding: const EdgeInsets.only(top: 6),
                                         child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             reUse.reUseText(
                                                 weight: FontWeight.w400,
                                                 size: 14.0,
                                                 color: theme.darkGrey,
-                                                content: "${index+1}./  "+clsLan.packageID),
+                                                content: "${index + 1}./  " + clsLan.packageID),
                                             Row(
                                               children: [
                                                 reUse.reUseText(
                                                     weight: FontWeight.bold,
                                                     size: 16.0,
                                                     color: theme.blue,
-                                                    content:
-                                                        (forDisplay[index]['packageID']??"No Data")),
-                                                if (forDisplay[index]['status'] ==
-                                                    'pending')
+                                                    content: (forDisplay[index]['packageID'] ?? "No Data")),
+                                                if (forDisplay[index]['status'] == 'pending')
                                                   Container()
-                                                else if (forDisplay[index]
-                                                        ['status'] ==
-                                                    'complete')
+                                                else if (forDisplay[index]['status'] == 'complete')
                                                   Container()
-                                                else if (forDisplay[index]
-                                                        ['status'] ==
-                                                    'return')
+                                                else if (forDisplay[index]['status'] == 'return')
                                                   SizedBox(
                                                     height: 40,
                                                     width: 40,
                                                     child: PopupMenuButton<int>(
                                                       onSelected: (item) async {
-                                                        if (item == 0) {
-                                                          requestAgein(
-                                                              forDisplay[index]);
-                                                        } else {
-                                                          alertDialog();
-                                                          removeItem(
-                                                              keyIndex:
-                                                                  keyList[index],
-                                                              listIndex:
-                                                                  forDisplay[
-                                                                      index]);
-                                                          Get.back();
-                                                        }
+                                                        // if (item == 0) {
+                                                        //   requestAgein(forDisplay[index]);
+                                                        // } else {
+                                                        //   removeItem(data: forDisplay[index]);
+                                                        // }
                                                       },
                                                       itemBuilder: (context) => [
-                                                        PopupMenuItem<int>(
-                                                            value: 0,
-                                                            child: Text(clsLan
-                                                                .requestAgain)),
-                                                        PopupMenuItem<int>(
-                                                            value: 1,
-                                                            child: Text(
-                                                                clsLan.delete)),
+                                                        PopupMenuItem<int>(value: 0, child: Text(clsLan.requestAgain)),
+                                                        PopupMenuItem<int>(value: 1, child: Text(clsLan.delete)),
                                                       ],
                                                     ),
                                                   )
@@ -399,35 +345,38 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                   SizedBox(
                                                     height: 40,
                                                     width: 40,
-                                                    child: PopupMenuButton<int>(
-                                                      onSelected: (item) async {
-                                                        if (item == 0) {
-                                                          Get.to(
-                                                              ()=> EditPackageScreen(),
-                                                              arguments:
-                                                                  forDisplay[
-                                                                      index]);
-                                                        } else {
-                                                          alertDialog();
-                                                          removeItem(
-                                                              keyIndex:
-                                                                  keyList[index],
-                                                              listIndex:
-                                                                  forDisplay[
-                                                                      index]);
-                                                          Get.back();
-                                                        }
+                                                    child:
+                                                        // PopupMenuButton<int>(
+                                                        //   onSelected: (item) async {
+                                                        //     isAction(data: forDisplay[index], item: item);
+                                                        //   },
+                                                        //   itemBuilder: (context) => [
+                                                        //     PopupMenuItem<int>(value: 0, child: Text(clsLan.edit)),
+                                                        //     PopupMenuItem<int>(value: 1, child: Text(clsLan.delete)),
+                                                        //   ],
+                                                        // ),
+                                                        PopupMenuButton<String>(
+                                                      onSelected: (value) async {
+                                                        setState(() async {
+                                                          await isAction(data: forDisplay[index], item: value);
+                                                        });
                                                       },
-                                                      itemBuilder: (context) => [
-                                                        PopupMenuItem<int>(
-                                                            value: 0,
-                                                            child: Text(
-                                                                clsLan.edit)),
-                                                        PopupMenuItem<int>(
-                                                            value: 1,
-                                                            child: Text(
-                                                                clsLan.delete)),
-                                                      ],
+                                                      itemBuilder: (BuildContext context) {
+                                                        return <PopupMenuEntry<String>>[
+                                                          const PopupMenuItem<String>(
+                                                            value: 'item1',
+                                                            child: Text('Item 1'),
+                                                          ),
+                                                          const PopupMenuItem<String>(
+                                                            value: 'item2',
+                                                            child: Text('Item 2'),
+                                                          ),
+                                                          const PopupMenuItem<String>(
+                                                            value: 'item3',
+                                                            child: Text('Item 3'),
+                                                          ),
+                                                        ];
+                                                      },
                                                     ),
                                                   )
                                               ],
@@ -439,10 +388,8 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                         color: theme.grey,
                                       ),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
                                           reUse.reUseColumnText(
                                               titleColor: theme.darkGrey,
@@ -450,9 +397,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                               size: textSize,
                                               color: theme.black,
                                               lableSize: labelSize,
-                                              content: forDisplay[index]
-                                                      ['location'] ??
-                                                  "No Data",
+                                              content: forDisplay[index]['location'] ?? "No Data",
                                               weight: FontWeight.w500),
                                           reUse.reUseColumnText(
                                               titleColor: theme.darkGrey,
@@ -460,9 +405,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                               size: textSize,
                                               color: theme.black,
                                               lableSize: labelSize,
-                                              content: forDisplay[index]
-                                                      ['phoneNumber'] ??
-                                                  "No Data",
+                                              content: forDisplay[index]['phoneNumber'] ?? "No Data",
                                               weight: FontWeight.w500),
                                           reUse.reUseColumnText(
                                               titleColor: theme.darkGrey,
@@ -470,16 +413,13 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                               size: textSize,
                                               color: theme.black,
                                               lableSize: labelSize,
-                                              content: forDisplay[index]['qty'] ??
-                                                  "No Data",
+                                              content: forDisplay[index]['qty'] ?? "No Data",
                                               weight: FontWeight.w500),
                                         ],
                                       ),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
                                           reUse.reUseColumnText(
                                               titleColor: theme.grey,
@@ -501,29 +441,21 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                             child: Column(
                                               children: [
                                                 reUse.reUseText(
-                                                    size: labelSize,
-                                                    color: theme.darkGrey,
-                                                    content: clsLan.price),
+                                                    size: labelSize, color: theme.darkGrey, content: clsLan.price),
                                                 Container(
                                                   margin: EdgeInsets.all(8),
                                                   width: Get.width,
                                                   decoration: BoxDecoration(
                                                     color: theme.blue,
-                                                    borderRadius:
-                                                        BorderRadius.circular(6),
+                                                    borderRadius: BorderRadius.circular(6),
                                                   ),
-                                                  padding:
-                                                      const EdgeInsets.symmetric(
-                                                          horizontal: 10,
-                                                          vertical: 4),
+                                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                                   child: Center(
                                                       child: reUse.reUseText(
                                                           weight: FontWeight.bold,
                                                           size: 16.0,
                                                           color: theme.white,
-                                                          content:
-                                                              (forDisplay[index]
-                                                              ['price'] ?? "0") +" \$" )),
+                                                          content: (forDisplay[index]['price'] ?? "0") + " \$")),
                                                 ),
                                               ],
                                             ),
@@ -534,8 +466,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                         child: Row(
                                           children: [
                                             Padding(
-                                              padding:
-                                                  EdgeInsets.only(right: padding),
+                                              padding: EdgeInsets.only(right: padding),
                                               child: reUse.reUseText(
                                                   weight: FontWeight.bold,
                                                   size: 12.0,
@@ -546,16 +477,12 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                               child: Container(
                                                 padding: EdgeInsets.all(padding),
                                                 width: Get.width,
-                                                decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: theme.minGrey)),
+                                                decoration: BoxDecoration(border: Border.all(color: theme.minGrey)),
                                                 child: reUse.reUseTextNote(
                                                     weight: FontWeight.w400,
                                                     size: 14.0,
                                                     color: theme.black,
-                                                    content: forDisplay[index]
-                                                            ['note'] ??
-                                                        'No note'),
+                                                    content: forDisplay[index]['note'] ?? 'No note'),
                                               ),
                                             ),
                                           ],
@@ -564,8 +491,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                       Padding(
                                         padding: EdgeInsets.all(padding),
                                         child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Row(
                                               children: [
@@ -573,66 +499,47 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                     weight: FontWeight.w400,
                                                     size: 12.0,
                                                     color: theme.grey,
-                                                    content:
-                                                        '${clsLan.createDate} : '),
+                                                    content: '${clsLan.createDate} : '),
                                                 reUse.reUseText(
                                                     weight: FontWeight.w400,
                                                     size: 14.0,
                                                     color: theme.black,
-                                                    content: forDisplay[index]
-                                                        ['date']),
+                                                    content: glb.formatDateTime(forDisplay[index]['date'])),
                                               ],
                                             ),
-                                            if (forDisplay[index]['status'] ==
-                                                'pending')
+                                            if (forDisplay[index]['status'] == 'pending')
                                               Container(
                                                 decoration: BoxDecoration(
                                                   color: theme.litestOrange,
-                                                  borderRadius:
-                                                      BorderRadius.circular(6),
+                                                  borderRadius: BorderRadius.circular(6),
                                                 ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 4),
+                                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                                 child: reUse.reUseText(
                                                     weight: FontWeight.bold,
                                                     size: 10.0,
                                                     color: theme.orange,
                                                     content: clsLan.stPend),
                                               )
-                                            else if (forDisplay[index]
-                                                    ['status'] ==
-                                                'complete')
+                                            else if (forDisplay[index]['status'] == 'complete')
                                               Container(
                                                 decoration: BoxDecoration(
                                                   color: theme.litestGreen,
-                                                  borderRadius:
-                                                      BorderRadius.circular(6),
+                                                  borderRadius: BorderRadius.circular(6),
                                                 ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 4),
+                                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                                 child: reUse.reUseText(
                                                     weight: FontWeight.bold,
                                                     size: 12.0,
                                                     color: theme.green,
                                                     content: clsLan.stCom),
                                               )
-                                            else if (forDisplay[index]
-                                                    ['status'] ==
-                                                'return')
+                                            else if (forDisplay[index]['status'] == 'return')
                                               Container(
                                                 decoration: BoxDecoration(
                                                   color: theme.litestRed,
-                                                  borderRadius:
-                                                      BorderRadius.circular(6),
+                                                  borderRadius: BorderRadius.circular(6),
                                                 ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 4),
+                                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                                 child: reUse.reUseText(
                                                     weight: FontWeight.bold,
                                                     size: 12.0,
@@ -643,13 +550,9 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                               Container(
                                                 decoration: BoxDecoration(
                                                   color: theme.dirt,
-                                                  borderRadius:
-                                                      BorderRadius.circular(6),
+                                                  borderRadius: BorderRadius.circular(6),
                                                 ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 4),
+                                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                                 child: reUse.reUseText(
                                                     weight: FontWeight.bold,
                                                     size: 12.0,
@@ -696,11 +599,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
   String phoneNumber = "";
 
   fetchUserInformation() async {
-    FirebaseFirestore.instance
-        .collection('Users')
-        .doc(auth.currentUser!.uid)
-        .get()
-        .then((doc) async {
+    FirebaseFirestore.instance.collection('Users').doc(auth.currentUser!.uid).get().then((doc) async {
       Map data = doc.data() as Map;
       userName = data['firstname'] + ' ' + data['lastname'].toString();
       phoneNumber = data['phoneNumber'].toString();
@@ -709,8 +608,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
   }
 
   DatabaseReference userReturn = FirebaseDatabase.instance.ref("Return");
-  DatabaseReference driverReturn =
-      FirebaseDatabase.instance.ref("DriverReturn");
+  DatabaseReference driverReturn = FirebaseDatabase.instance.ref("DriverReturn");
 
   requestAgein(data) async {
     await fetchUserInformation();
@@ -738,9 +636,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
 
   refetchData() async {
     try {
-      DatabaseReference refs = FirebaseDatabase.instance
-          .ref('PackageRequest')
-          .child(auth.currentUser!.uid);
+      DatabaseReference refs = FirebaseDatabase.instance.ref('PackageRequest').child(auth.currentUser!.uid);
       refs.onValue.listen((event) {
         setState(() {});
         totalList.clear();
@@ -768,82 +664,30 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
     if (value == 'all') {
       forDisplay = totalList;
     } else {
-      List results = totalList
-          .where((user) => user['status']
-              .toLowerCase()
-              .contains(value.toString().toLowerCase()))
-          .toList();
+      List results =
+          totalList.where((user) => user['status'].toLowerCase().contains(value.toString().toLowerCase())).toList();
       forDisplay = results;
     }
   }
 
-  alertDialog() {
-    return showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return WillPopScope(
-          onWillPop: () async => false,
-          child: const AlertDialog(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            actions: [
-              Center(
-                child: SizedBox(
-                    height: 40, width: 40, child: CircularProgressIndicator()),
-              )
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  statusBox({value, backgrondcolor, color}) {
-    // if(value == 'request'){
-    //   backgrondcolor = theme.dirt;
-    // }else if(value == 'pending'){
-    //   backgrondcolor = theme.litestOrange;
-    // }else if(value == 'return'){
-    //   backgrondcolor = theme.litestRed;
-    // }else if(value == 'complete'){
-    //   backgrondcolor = theme.green;
-    // }else{
-    //   backgrondcolor = theme.blue;
-    // }
-    return Column(
-      children: [
-        reUse.reUseText(
-            size: labelSize, color: theme.grey, content: clsLan.price),
-        Container(
-          decoration: BoxDecoration(
-            color: backgrondcolor,
-            borderRadius: BorderRadius.circular(6),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          child: reUse.reUseText(
-              weight: FontWeight.bold,
-              size: 12.0,
-              color: theme.deepPumpkin,
-              content: value),
-        ),
-      ],
-    );
-  }
-
-  removeItem({keyIndex, listIndex}) async {
-    DatabaseReference packageRequest =
-        FirebaseDatabase.instance.ref("PackageRequest");
-    await packageRequest
-        .child(auth.currentUser!.uid)
-        .child('package')
-        .child(keyIndex)
-        .remove();
-    print(keyIndex);
-    print(listIndex);
-    totalList.removeWhere((item) => item == listIndex);
-    keyList.removeWhere((item) => item == keyIndex);
-    forDisplay = totalList;
-    setState(() {});
+  Future<void> isAction({required List data, item}) async {
+    if (item == 0) {
+      Get.to(() => EditPackageScreen(), arguments: data);
+    } else if (item == 1) {
+      reUse.reUseWaitingDialog(context);
+      //await removeItem(data: forDisplay[index]);
+    }
+    // print(data);
+    // print(data);
+    // // await requestDB
+    // //     .child(auth.currentUser!.uid)
+    // //     .child('package')
+    // //     .child(keyIndex)
+    // //     .remove();
+    // // print(keyIndex);
+    // // print(listIndex);
+    // totalList.removeWhere((item) => item == data);
+    // forDisplay = totalList;
+    // setState(() {});
   }
 }
