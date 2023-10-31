@@ -420,8 +420,8 @@ class _PendingScreenState extends State<PendingScreen> {
                                                     title: clsLan.date,
                                                     size: valueSize,
                                                     color: theme.black,
-                                                    content: forDisplay[index]
-                                                        [field.assignDate],
+                                                    content: glb.formatDateTime(forDisplay[index]
+                                                        [field.assignDate]),
                                                     weight: FontWeight.w500),
                                               ],
                                             ),
