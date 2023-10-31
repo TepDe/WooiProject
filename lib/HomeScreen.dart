@@ -58,8 +58,9 @@ class _HomeScreenState extends State<HomeScreen> {
     await completeListLength();
     await pendingListLength();
     await returnListLength();
+    forSort = mergeList(comp: compSort, ret: retSort);
+    setState(() {});
   }
-
 
   alertNoInternet() async {
     try {
@@ -86,23 +87,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   late Map data;
-var userInfo = FirebaseFirestore.instance
-    .collection('Users');
-  onGetUserData() async {
+  var userInfo = FirebaseFirestore.instance.collection('Users');
+
+  Future<void> onGetUserData() async {
     final prefs = await SharedPreferences.getInstance();
     try {
-      var information = await userInfo
-          .doc(auth.currentUser!.uid)
-          .get();
+      var information = await userInfo.doc(auth.currentUser!.uid).get();
       final bool doesDocExist = information.exists;
-      if(doesDocExist == false ){
+      if (doesDocExist == false) {
         auth.signOut();
-        Get.to(()=>const LogInScreen());
-      }else{
-        await userInfo
-            .doc(auth.currentUser!.uid)
-            .get()
-            .then((doc) async {
+        Get.to(() => const LogInScreen());
+      } else {
+        await userInfo.doc(auth.currentUser!.uid).get().then((doc) async {
           data = doc.data() as Map;
           if (data["accountType"] != "Users") {
             await reUse.reUseCircleDialog(
@@ -142,56 +138,49 @@ var userInfo = FirebaseFirestore.instance
           setState(() {});
         });
       }
-
     } catch (e) {
       // FirebaseAuth.instance.signOut();
       // Get.to(()=> const LogInScreen());
     }
   }
 
-  totalListLength() async {
+  DatabaseReference requestDB = FirebaseDatabase.instance.ref('PackageRequest');
+
+  Future<void> totalListLength() async {
     try {
-      DatabaseReference refs = FirebaseDatabase.instance
-          .ref('PackageRequest')
-          .child(auth.currentUser!.uid);
-      refs.onValue.listen((event) {
-        driverList.clear();
-        totalPackageIndex.clear();
-        DataSnapshot driver = event.snapshot;
-        Map<dynamic, dynamic> values = driver.value as Map<dynamic, dynamic>;
-        values.forEach((key, values) async {
-          Map<dynamic, dynamic> data = await values as Map<dynamic, dynamic>;
-          data.forEach((key, value) async {
-            totalPackageIndex.add(key);
-            driverList.add(value);
-          });
+      final isRequestDB = await requestDB.child(auth.currentUser!.uid).onValue.first;
+      driverList.clear();
+      totalPackageIndex.clear();
+      DataSnapshot driver = isRequestDB.snapshot;
+      Map values = driver.value as Map;
+      values.forEach((key, values) async {
+        Map data = await values as Map;
+        data.forEach((key, value) async {
+          totalPackageIndex.add(key);
+          driverList.add(value);
         });
-        setState(() {});
       });
     } catch (e) {
       print('totalListLength $e');
-      FirebaseAuth.instance.signOut();
-      Get.to(()=> const LogInScreen());
+      // FirebaseAuth.instance.signOut();
+      // Get.to(() => const LogInScreen());
     }
   }
 
   List pendingList = [];
+  DatabaseReference pendingDB = FirebaseDatabase.instance.ref('Pending');
 
-  pendingListLength() async {
+  Future<void> pendingListLength() async {
     try {
-      DatabaseReference refs = FirebaseDatabase.instance.ref('Pending');
-      refs.onValue.listen((event) async {
-        pendingList.clear();
-        DataSnapshot driver = event.snapshot;
-        Map<dynamic, dynamic> values = driver.value as Map<dynamic, dynamic>;
-        values.forEach((key, value) async {
-          Map data =
-              await value[auth.currentUser!.uid] as Map<dynamic, dynamic>;
-          data.forEach((key, value) {
-            pendingList.add(value);
-          });
+      final isPendingDB = await pendingDB.onValue.first;
+      pendingList.clear();
+      DataSnapshot driver = isPendingDB.snapshot;
+      Map<dynamic, dynamic> values = driver.value as Map<dynamic, dynamic>;
+      values.forEach((key, value) async {
+        Map data = await value[auth.currentUser!.uid] as Map<dynamic, dynamic>;
+        data.forEach((key, value) {
+          pendingList.add(value);
         });
-        setState(() {});
       });
     } catch (e) {
       // print('pendingListLength $e');
@@ -200,48 +189,38 @@ var userInfo = FirebaseFirestore.instance
     }
   }
 
-  completeListLength() async {
+  DatabaseReference completeDB = FirebaseDatabase.instance.ref('Complete');
+
+  Future<void> completeListLength() async {
     try {
-      DatabaseReference refs = FirebaseDatabase.instance
-          .ref('Complete')
-          .child(auth.currentUser!.uid);
-      refs.onValue.listen((event) async {
-        completeData.clear();
-        forSort.clear();
-        compSort.clear();
-        DataSnapshot driver = event.snapshot;
-        Map<dynamic, dynamic> values = driver.value as Map<dynamic, dynamic>;
-        values.forEach((key, value) async {
-          completeData.add(value);
-          compSort.add(value);
-        });
-        setState(() {});
+      final isCompleteDb = await completeDB.child(auth.currentUser!.uid).onValue.first;
+      completeData.clear();
+      forSort.clear();
+      compSort.clear();
+      DataSnapshot driver = isCompleteDb.snapshot;
+      Map values = driver.value as Map;
+      values.forEach((key, value) async {
+        completeData.add(value);
+        compSort.add(value);
       });
-      mergeList(comp: completeData);
-    } catch (e) {
-      // print('completeListLength $e');
-      // FirebaseAuth.instance.signOut();
-      // Get.to(()=> const LogInScreen());
-    }
+    } catch (e) {}
   }
+
+  DatabaseReference returnDB = FirebaseDatabase.instance.ref('Return');
 
   Future<void> returnListLength() async {
     try {
-      DatabaseReference refs =
-          FirebaseDatabase.instance.ref('Return').child(auth.currentUser!.uid);
-      refs.onValue.listen((event) async {
-        returnData.clear();
-        forSort.clear();
-        retSort.clear();
-        DataSnapshot driver = event.snapshot;
-        Map<dynamic, dynamic> values = driver.value as Map<dynamic, dynamic>;
-        values.forEach((key, value) async {
-          returnData.add(value);
-          retSort.add(value);
-        });
-        setState(() {});
+      final isReturnDB = await returnDB.child(auth.currentUser!.uid).onValue.first;
+      returnData.clear();
+      forSort.clear();
+      retSort.clear();
+      DataSnapshot driver = isReturnDB.snapshot;
+      Map<dynamic, dynamic> values = driver.value as Map<dynamic, dynamic>;
+      values.forEach((key, value) async {
+        returnData.add(value);
+        retSort.add(value);
       });
-      mergeList(ret: returnData);
+      setState(() {});
     } catch (e) {
       // print('returnListLength $e');
       // FirebaseAuth.instance.signOut();
@@ -250,28 +229,18 @@ var userInfo = FirebaseFirestore.instance
   }
 
   List mergeList({List? comp, List? ret}) {
-    forSort.clear();
     List merge = comp! + ret!;
-    List Result = [];
-    merge.forEach((element) async {
-      DateTime frmDate = DateFormat("dd-MM-yyyy")
-          .parse(element[field.returnDate] ?? element[field.completeDate]);
-      if (frmDate.day == today.day &&
-          frmDate.month == today.month &&
-          frmDate.year == today.year) {
-        Result.add(element);
-        setState(() {});
-      }
-    });
-    Result.sort((a, b) {
-      DateTime dateA = DateFormat("dd-MM-yyyy  hh:mm a")
-          .parse(a[field.completeDate] ?? a[field.returnDate]);
-      DateTime dateB = DateFormat("dd-MM-yyyy  hh:mm a")
-          .parse(b[field.completeDate] ?? b[field.returnDate]);
-      setState(() {});
+    DateTime parseDate(String dateString) {
+      return DateTime.parse(dateString);
+    }
+
+    merge.sort((a, b) {
+      DateTime dateA = parseDate(a["completeDate"] ?? a["returnDate"]);
+      DateTime dateB = parseDate(b["completeDate"] ?? b["returnDate"]);
       return dateB.compareTo(dateA);
     });
-    return Result;
+    print(merge);
+    return merge;
   }
 
   DateTime today = DateTime.now();
@@ -318,16 +287,12 @@ var userInfo = FirebaseFirestore.instance
 
   Future<void> _refresh() async {
     await Future<void>.delayed(const Duration(seconds: 3));
-    totalListLength();
-    pendingListLength();
-    returnListLength();
-    completeListLength();
+    onInitialize();
     _controller.sink.add(SwipeRefreshState.hidden);
   }
 
   @override
   Widget build(BuildContext context) {
-    forSort = mergeList(comp: compSort, ret: retSort);
     var imageSize = MediaQuery.of(context).size.height * 0.08;
     var qrSize = MediaQuery.of(context).size.height * 0.25;
     var flotBtn = MediaQuery.of(context).size.height * 0.08;
@@ -358,8 +323,7 @@ var userInfo = FirebaseFirestore.instance
                         ),
                       ),
                       reUse.reUseText(
-                          content:
-                              "សូមបង្ហាញកូដនេះដល់អ្នកដឹកជញ្ជូនរបស់យើងនៅពេលគាត់មកទទួលទំនិញ",
+                          content: "សូមបង្ហាញកូដនេះដល់អ្នកដឹកជញ្ជូនរបស់យើងនៅពេលគាត់មកទទួលទំនិញ",
                           maxLines: 3,
                           size: 14.0),
                     ],
@@ -373,22 +337,8 @@ var userInfo = FirebaseFirestore.instance
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Padding(
-              //   padding: EdgeInsets.only(top: 10, right: paddings, left: paddings),
-              //   child: reUse.unitOneHomeScreen(userID: '$greeting\nID $getUserID', context: context),
-              // ),
-              // SizedBox(
-              //   height: 100,
-              //   width: 100,
-              //   child: QrImageView(
-              //     data: '1234567890',
-              //     version: QrVersions.auto,
-              //     size: 200.0,
-              //   ),
-              // ),
               Padding(
-                padding:
-                    EdgeInsets.only(top: 10, right: paddings, left: paddings),
+                padding: EdgeInsets.only(top: 10, right: paddings, left: paddings),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -402,43 +352,33 @@ var userInfo = FirebaseFirestore.instance
                       future: SharedPreferences.getInstance()
                           .then((prefs) => prefs.getString(str.profileImg)),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
                           // Display a loading indicator while waiting for data
-                          return const Center(
-                              child: CircularProgressIndicator());
+                          return const Center(child: CircularProgressIndicator());
                         } else if (snapshot.hasError) {
                           // Handle error case
-                          return Center(
-                              child: Text('Error: ${snapshot.error}'));
+                          return Center(child: Text('Error: ${snapshot.error}'));
                         } else if (snapshot.hasData && snapshot.data != null) {
                           String imagePath = snapshot.data!;
                           return FutureBuilder<File>(
                             future: getImageFileFromPath(imagePath),
                             builder: (context, fileSnapshot) {
-                              if (fileSnapshot.connectionState ==
-                                  ConnectionState.waiting) {
+                              if (fileSnapshot.connectionState == ConnectionState.waiting) {
                                 // Display a loading indicator while waiting for image file
-                                return const Center(
-                                    child: CircularProgressIndicator());
+                                return const Center(child: CircularProgressIndicator());
                               } else if (fileSnapshot.hasError) {
                                 // Handle error case
-                                return Center(
-                                    child:
-                                        Text('Error: ${fileSnapshot.error}'));
-                              } else if (fileSnapshot.hasData &&
-                                  fileSnapshot.data != null) {
+                                return Center(child: Text('Error: ${fileSnapshot.error}'));
+                              } else if (fileSnapshot.hasData && fileSnapshot.data != null) {
                                 File imageFile = fileSnapshot.data!;
                                 return SizedBox(
                                   height: imageSize,
                                   width: imageSize,
-                                  child: CircleAvatar(
-                                      backgroundImage: FileImage(imageFile)),
+                                  child: CircleAvatar(backgroundImage: FileImage(imageFile)),
                                 );
                               } else {
                                 // Image not found
-                                return const Center(
-                                    child: Text('Image not found'));
+                                return const Center(child: Text('Image not found'));
                               }
                             },
                           );
@@ -479,15 +419,12 @@ var userInfo = FirebaseFirestore.instance
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: paddings),
                         child: reUse.reUseCreatePackage(
-                            context: context,
-                            padding: paddings,
-                            height: Get.height * 0.02),
+                            context: context, padding: paddings, height: Get.height * 0.02),
                       ),
                       Row(
                         children: [
                           reUse.reUseText(
-                              content: "   ${clsLan.today} : ${forSort.length}",
-                              color: theme.grey),
+                              content: "   ${clsLan.today} : ${forSort.length}", color: theme.grey),
                           Divider(
                             height: 1,
                             color: theme.grey,
@@ -497,39 +434,24 @@ var userInfo = FirebaseFirestore.instance
                       forSort.isNotEmpty
                           ? Flexible(
                               child: ListView.builder(
-                                  physics:
-                                      const NeverScrollableScrollPhysics(),
+                                  physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   padding: const EdgeInsets.all(8),
                                   itemCount: forSort.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
+                                  itemBuilder: (BuildContext context, int index) {
                                     return reUse.reUseTodayComponent(
                                         onTap: () {
-                                          if (forSort[index]
-                                                  [field.status] ==
-                                              'complete') {
-                                            Get.to(
-                                                () =>
-                                                    const CompleteDetail(),
-                                                arguments: {
-                                                  "data": forSort[index]
-                                                });
-                                          } else if (forSort[index]
-                                                  [field.status] ==
-                                              'return') {
-                                            Get.to(
-                                                () => const ReturnDetail(),
+                                          if (forSort[index][field.status] == 'complete') {
+                                            Get.to(() => const CompleteDetail(),
+                                                arguments: {"data": forSort[index]});
+                                          } else if (forSort[index][field.status] == 'return') {
+                                            Get.to(() => const ReturnDetail(),
                                                 arguments: forSort[index]);
                                           }
                                         },
                                         value: forSort[index],
-                                        completeDate: forSort[index]
-                                            [field.completeDate],
-                                        returnDate: forSort[index]
-                                            [field.returnDate],
-                                        status: forSort[index]
-                                            [field.status]);
+                                        dateTime: forSort[index]["completeDate"]??forSort[index]["returnDate"],
+                                        status: forSort[index][field.status]);
                                   }),
                             )
                           : Container(),
@@ -542,44 +464,10 @@ var userInfo = FirebaseFirestore.instance
         ));
   }
 
-  List filterAndSortDatesForToday() {
-    DateTime today =
-        DateFormat("dd-MM-yyyy  HH:mm a").parse(DateTime.now().toString());
-    List todayDateStrings = [];
-    (returnData + completeData).forEach((element) {
-      DateTime data = DateFormat("dd-MM-yyyy  HH:mm a")
-          .parse(element[field.completeDate] ?? element[field.returnDate]);
-      if (data.day == today.day &&
-          data.month == today.month &&
-          data.year == today.year) {
-        todayDateStrings.add(element);
-      } else {}
-    });
-    return todayDateStrings;
-  }
-
   List retSort = [];
   List forSort = [];
   List compSort = [];
   FirebaseAuth auth = FirebaseAuth.instance;
-
-// isNullUserID() async {
-//   final prefs = await SharedPreferences.getInstance();
-//
-//   CollectionReference users = FirebaseFirestore.instance.collection('Users');
-//   int? userID;
-//   var rng = Random();
-//   userID = rng.nextInt(999999);
-//   await users
-//       .doc(auth.currentUser!.uid)
-//       .update({'userID': userID}).then((value) async {
-//     await prefs.setString(str.userID, userID.toString());
-//
-//     print("User Updated");
-//   }).catchError((error) => print("Failed to update user: $error"));
-//   await checkID();
-//   setState(() {});
-// }
 }
 
 class QrData {
