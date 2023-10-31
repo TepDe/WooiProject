@@ -286,7 +286,7 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                                     width: 40,
                                                     child: PopupMenuButton<int>(
                                                       onSelected: (item) async {
-                                                        reUse.waitingDialog(context);
+                                                        reUse.reUseWaitingDialog(context);
                                                         await optionSelect(
                                                             opt: item,
                                                             data:
@@ -354,7 +354,7 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                               title: clsLan.returnTime,
                                               size: 12.0,
                                               color: theme.black,
-                                              content: "${forDisplay[index]['returnDate']}   ",
+                                              content: "${glb.formatDateTime(forDisplay[index]['returnDate'])}   ",
                                               weight: FontWeight.w500),
                                         ],
                                       ),
