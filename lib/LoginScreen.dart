@@ -197,7 +197,7 @@ class _LogInScreenState extends State<LogInScreen> {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(email: email, password: password);
       if (userCredential.isNull) {
       } else {
-        reUse.waitingDialog(context);
+        reUse.reUseWaitingDialog(context);
         var result = await glb.checkAccountType();
         if (result == "type") {
           Get.back();
