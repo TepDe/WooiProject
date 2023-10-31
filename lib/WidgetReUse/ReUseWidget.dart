@@ -989,11 +989,11 @@ class ReUseWidget {
                   int qty = int.parse(value) + 1;
                   print(qty);
                 } else if (function == 'pincode') {
-                  glb.insertTelegramToken();
+                  //glb.insertTelegramToken();
                 } else if (function == 'token') {
                   print(value);
                   print(value);
-                  glb.insertTelegramToken(token: value);
+                  //glb.insertTelegramToken(token: value);
                 } else if (function == 'nointernet') {
                   exit(0);
                 } else if (function == 'logOut') {
@@ -1030,94 +1030,6 @@ class ReUseWidget {
           ),
         ),
       ),
-    );
-  }
-
-  reUseOKCancelDialog({disposeAllow, data, context, icon, title, content, function}) {
-    return showDialog(
-      barrierDismissible: disposeAllow ?? true,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          actions: [
-            Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.topCenter,
-              children: [
-                Positioned(
-                  top: -60.0,
-                  child: CircleAvatar(
-                    radius: 60.0,
-                    backgroundColor: theme.white,
-                    child: Icon(
-                      icon,
-                      color: theme.orange,
-                      size: 100.0,
-                    ),
-                  ),
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: Get.height * 0.08, left: 4, right: 4),
-                      child: Text(
-                        title ?? "",
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20.0),
-                    // Text(
-                    //   content,
-                    //   textAlign: TextAlign.center,
-                    //   style: const TextStyle(
-                    //     fontSize: 16.0,
-                    //   ),
-                    // ),
-                    content ?? Container(),
-                    const SizedBox(height: 20.0),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Flexible(
-                          child: reUseCustomizeButton(
-                            value: data,
-                            function: "",
-                            textcolor: theme.orange,
-                            weight: FontWeight.bold,
-                            text: "Cancel",
-                            fontsize: 16.0,
-                            isBcColor: true,
-                          ),
-                        ),
-                        Flexible(
-                          child: reUseCustomizeButton(
-                              value: data,
-                              function: "editPro",
-                              textcolor: theme.orange,
-                              weight: FontWeight.bold,
-                              text: "OK",
-                              fontsize: 16.0,
-                              isBcColor: true,
-                              colorBC: theme.litestOrange),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        );
-      },
     );
   }
 
@@ -2022,7 +1934,6 @@ class ReUseWidget {
                       child: reUseCustomizeButton(
                           onTap: onTap,
                           value: data,
-                          function: function,
                           textcolor: theme.orange,
                           weight: FontWeight.bold,
                           text: "OK",
@@ -2152,8 +2063,9 @@ class ReUseWidget {
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                                     child: reUseCustomizeButton(
+                                        onTap: () => onTap,
                                         value: token.text,
-                                        function: function,
+                                        //function: function,
                                         textcolor: theme.orange,
                                         weight: FontWeight.bold,
                                         text: "OK",
@@ -2183,7 +2095,7 @@ class ReUseWidget {
     );
   }
 
-  waitingDialog(context) {
+  reUseWaitingDialog(context) {
     return showDialog(
       barrierDismissible: false,
       context: context,
@@ -2489,7 +2401,7 @@ class ReUseWidget {
             }));
   }
 
-  reUseTodayComponent({value, completeDate, returnDate, status, onTap}) {
+  reUseTodayComponent({value,dateTime, status, onTap}) {
     double size = 30;
     final field = FieldData();
     return Container(
@@ -2527,7 +2439,7 @@ class ReUseWidget {
                 ),
               ),
         subtitle: Text(
-          "${clsLan.date} : ${completeDate ?? returnDate}",
+          "${clsLan.date} : ${glb.formatDateTime(dateTime)}",
           style: TextStyle(
             fontSize: 12.0,
             color: theme.black,
@@ -2535,7 +2447,7 @@ class ReUseWidget {
           ),
         ),
         title: Text(
-          "${clsLan.packageID} : ${value[field.packageID]}",
+          "${clsLan.packageID} : ${value[field.packageID]??""}",
           style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w500, color: theme.black),
         ),
         trailing: reUseStatusBox(
@@ -2545,14 +2457,4 @@ class ReUseWidget {
       ),
     );
   }
-// reUseStatusBox(){
-//   return Container(
-//     decoration: BoxDecoration(
-//       color: theme.litestGreen,
-//       borderRadius: BorderRadius.circular(6),
-//     ),
-//     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-//     child: reUseText(size: 10.0, color: theme.liteGreen, content: clsLan.stCom, weight: FontWeight.w900),
-//   )
-// }
 }
