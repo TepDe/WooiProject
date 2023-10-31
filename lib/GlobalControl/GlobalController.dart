@@ -30,23 +30,9 @@ import '../ViewScreen.dart';
 import '../WidgetReUse/ReUseWidget.dart';
 
 class GlobalController {
-  var UID = '';
-  var userEmail = '';
   late Position position;
-  late LatLng currentPostion;
-  var latitude = 0.0;
-  var longitude = 0.0;
-  var getLatitude;
-  var getLocation;
-  var getLongitude;
-  var getIsGoOnline;
-  var getPhoneNumber;
-  var getField;
-  var getEmail;
-  var getPassword;
-  var getUserName;
-  var getUserID;
-  var getUid;
+  double latitude = 0.0;
+  double longitude = 0.0;
 
   Future<Position> requestUserPermissionLocation() async {
     await Geolocator.requestPermission()
@@ -58,25 +44,8 @@ class GlobalController {
     return await Geolocator.getCurrentPosition();
   }
 
-  getUserLocation() async {
-    position = await GeolocatorPlatform.instance.getCurrentPosition();
-    currentPostion = LatLng(position.latitude, position.longitude);
-    latitude = position.latitude;
-    longitude = position.longitude;
-    uploadLocation(la: latitude, long: longitude);
-  }
-
   DatabaseReference goOnline = FirebaseDatabase.instance.ref("Driver");
-  CollectionReference userSign =
-      FirebaseFirestore.instance.collection('UserSign');
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
-
-  uploadLocation({la, long}) async {
-    await userSign
-        .doc(UID)
-        .update({"latitude": la.toString(), "longitude": long.toString()});
-  }
 
   Future<String> fetchUserData(whichField) async {
     String whichOfField = '';
@@ -90,12 +59,6 @@ class GlobalController {
     return whichOfField;
   }
 
-  userLogOut() async {
-    await auth.signOut().then((value) => Get.to(const LogInScreen()));
-  }
-
-  onCreatePackage() {}
-  final str = StorageKey();
   CollectionReference documentStream =
       FirebaseFirestore.instance.collection('Users');
 
@@ -126,33 +89,9 @@ class GlobalController {
     } catch (e) {
       print('login screen error $e');
     }
-    //
-    // documentStream
-    //     .doc(auth.currentUser!.uid)
-    //     .get()
-    //     .then((DocumentSnapshot documentSnapshot) async {
-    //   Map data = documentSnapshot.data() as Map;
-    //   if (data['userID'] == null) {
-    //     Random random = Random();
-    //     int randomNumber = random.nextInt(999999);
-    //     documentStream
-    //         .doc(auth.currentUser!.uid)
-    //         .update({'userID': randomNumber.toString()})
-    //         .then((value) => print("User's Property Deleted"))
-    //         .catchError(
-    //             (error) => print("Failed to delete user's property: $error"));
-    //   } else {}
-    //   if (data['firstname'] == null ||
-    //       data['lastname'] == null ||
-    //       data['phoneNumber'] == null) {
-    //     Get.to(const SetUpScreen());
-    //   } else {
-    //     Get.to(const ViewScreen());
-    //   }
-    // });
   }
 
-  checkUserInformation() async {
+  Future<void> checkUserInformation() async {
     await documentStream
         .doc(auth.currentUser!.uid)
         .get()
@@ -180,116 +119,6 @@ class GlobalController {
     });
   }
 
-  globalSetData({email, password, uid}) {
-    var documentStream =
-        FirebaseFirestore.instance.collection('Users').doc(uid);
-    documentStream
-        .set({
-          'email': email,
-          'password': password,
-          'uid': uid,
-          'longitude': longitude,
-          'latitude': latitude
-        })
-        .then((value) => print("User Added"))
-        .catchError((error) => print("Failed to add user: $error"));
-  }
-
-  ///Working
-  // Future<void> checkUserID(uid) async {
-  //   // CollectionReference collectionReference =
-  //   //     FirebaseFirestores.instance.collection('Users').doc(uid);
-  //   var documentStream =
-  //       FirebaseFirestore.instance.collection('Users').doc(uid);
-  //   await documentStream.get().then((DocumentSnapshot documentSnapshot) {
-  //     var a = documentSnapshot['email'];
-  //     var asdd = documentSnapshot['password'];
-  //     var dsaa = documentSnapshot['uid'];
-  //     print('$a, $asdd, $dsaa');
-  //     print('$a, $asdd, $dsaa');
-  //   });
-  // }
-
-  checkUserID(uid) async {
-    await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(uid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) async {});
-    // FirebaseFirestore.instance
-    //     .collection('Users')
-    //     .doc(uid)
-    //     .get()
-    //     .then((DocumentSnapshot documentSnapshot) async {
-    //   Map data = documentSnapshot as Map;
-    //   print(data);
-    //   print(data);
-    //   data.forEach((key, value) {});
-    // });
-    print(getUserID);
-    print(getUserID);
-  }
-
-  Future<SharedPreferences> onSaveLocalStorage(
-      {latitude,
-      longitude,
-      isGoOnline,
-      phoneNumber,
-      email,
-      password,
-      userID,
-      userName,
-      uid}) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setDouble(str.latitude, latitude ?? 0.0);
-    await prefs.setDouble(str.longitude, longitude ?? 0.0);
-    await prefs.setBool(str.isGoOnline, isGoOnline ?? false);
-    await prefs.setInt(str.phoneNumber, phoneNumber ?? 0);
-    await prefs.setString(str.email, email ?? '');
-    await prefs.setString(str.uid, uid ?? '');
-    await prefs.setString(str.userID, userID ?? '');
-    await prefs.setString(str.password, password ?? '');
-    await prefs.setString(str.userName, userName ?? '');
-    return prefs;
-  }
-
-  Future<SharedPreferences> onGetLocalStorage() async {
-    final prefs = await SharedPreferences.getInstance();
-    getLatitude = prefs.getDouble(str.latitude);
-    getLongitude = prefs.getDouble(str.longitude);
-    getIsGoOnline = prefs.getBool(str.isGoOnline);
-    getPhoneNumber = prefs.getInt(str.phoneNumber);
-    getEmail = prefs.getString(str.email);
-    getUid = prefs.getString(str.uid);
-    getUserID = prefs.getString(str.userID);
-    getPassword = prefs.getString(str.password);
-    getUserName = prefs.getString(str.userName);
-    return prefs;
-  }
-
-  // Future<void> requestPackage({uid, phoneNumber, location}) async {
-  //   position = await GeolocatorPlatform.instance.getCurrentPosition();
-  //   latitude = position.latitude;
-  //   longitude = position.longitude;
-  //   DatabaseReference packageRequest =
-  //       FirebaseDatabase.instance.ref("PackageRequest");
-  //   await packageRequest
-  //       .child(auth.currentUser!.uid)
-  //       //.child(getUserID.toString())
-  //       .push()
-  //       .set({
-  //     "userName": 'Tep',
-  //     "uLatitude": latitude,
-  //     "uLongitude": longitude,
-  //     "package": {
-  //       "latitude": latitude,
-  //       "longitude": longitude,
-  //       "phoneNumber": phoneNumber,
-  //       "location": location,
-  //       //"qty": qty,
-  //     }
-  //   });
-  // }
   DatabaseReference packageRequest =
       FirebaseDatabase.instance.ref("PackageRequest");
 
@@ -316,35 +145,34 @@ class GlobalController {
 
       }) async {
     try{
-      DateTime now = DateTime.now();
-      String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
+
       position = await GeolocatorPlatform.instance.getCurrentPosition();
       latitude = position.latitude;
       longitude = position.longitude;
       String pushKey = generatePushKey();
 
       var json = {
-        "uid": auth.currentUser!.uid.toString(),
-        "location": location.toString(),
-        "pushKey": pushKey.toString(),
-        "phoneNumber": phoneNumber.toString(),
-        "token": tokenKey.toString(),
-        "chatid": chatid.toString(),
-        "latitude": latitude.toString(),
-        "bankName": bankName.toString(),
-        "longitude": longitude.toString(),
-        "date": formattedDate.toString(),
-        "qty": qty.toString(),
-        "packageID": packageID.toString(),
-        "note": note.toString(),
-        "status": 'request',
-        "price": price.toString(),
-        "recLatitude": latitude.toString(),
-        "recLongitude": longitude.toString(),
-        "senderPhone": generalInfo['phoneNumber'],
-        "senderName": userName.toString(),
-        "bankCode": abaCode.toString(),
+        "uid": "${auth.currentUser!.uid.toString()}",
+        "location": "${location.toString()}",
+        "pushKey": "${pushKey.toString()}",
+        "phoneNumber": "${phoneNumber.toString()}",
+        "token": "${tokenKey.toString()}",
+        "chatid": "${chatid.toString()}",
+        "latitude": "${latitude.toString()}",
+        "bankName": "${bankName.toString()}",
+        "longitude": "${longitude.toString()}",
+        "qty": "${qty.toString()}",
+        "packageID": "${packageID.toString()}",
+        "note": "${note.toString()}",
+        "price": "${price.toString()}",
+        "recLatitude": "${latitude.toString()}",
+        "recLongitude": "${longitude.toString()}",
+        "senderPhone": "${generalInfo['phoneNumber']}",
+        "senderName": "${userName.toString()}",
+        "bankCode": "${abaCode.toString()}",
         "paidStatus": "",
+        "status": 'request',
+        "date": DateTime.now().toString(),
       };
       await packageRequest
           .child(auth.currentUser!.uid)
@@ -383,160 +211,7 @@ class GlobalController {
     return id.toString();
   }
 
-  var iconDialog;
-  bool checker = false;
-  String title = '';
-
-  checkInput({location, phoneNumber, price, qty, context, note}) async {
-    if (phoneNumber == '') {
-      title = 'Error';
-      return 'Phone Number Must Include';
-    }
-    if (location == '') {
-      title = 'Error';
-      return 'Location Must Include';
-    }
-    if (price == '') {
-      title = 'Error';
-      return 'Price Must Include';
-    } else {
-      createPackage(
-          note: note.text.trim().toString(),
-          packageID: generatePackageID.toString(),
-          qty: qty.text.trim().toString(),
-          phoneNumber: phoneNumber.text.trim().toString(),
-          location: location.text.trim().toString());
-    }
-  }
-
-  changeIcon({value, location, phoneNumber, price, qty, context, note}) {
-    if (phoneNumber == '') {
-      title = 'Error';
-      return Icons.phone;
-    } else if (location == '') {
-      title = 'Error';
-      return Icons.location_on_rounded;
-    } else if (price == '') {
-      title = 'Error';
-      return Icons.monetization_on;
-    } else {
-      createPackage(
-          note: note.text.trim().toString(),
-          packageID: generatePackageID.toString(),
-          qty: qty.text.trim().toString(),
-          phoneNumber: phoneNumber.text.trim().toString(),
-          location: location.text.trim().toString());
-    }
-  }
-
-  List returnData = [];
-  List completeList = [];
-  List pendingList = [];
-  List totalPackageList = [];
-
-  returnListLength() async {
-    DatabaseReference refs =
-        FirebaseDatabase.instance.ref('Return').child(auth.currentUser!.uid);
-    refs.onValue.listen((event) async {
-      returnData.clear();
-      DataSnapshot driver = event.snapshot;
-      Map values = driver.value as Map;
-      values.forEach((key, value) async {
-        returnData.add(value);
-      });
-    });
-    return returnData;
-  }
-
-  completeListLength() async {
-    DatabaseReference refs =
-        FirebaseDatabase.instance.ref('Complete').child(auth.currentUser!.uid);
-    refs.onValue.listen((event) async {
-      completeList.clear();
-      DataSnapshot driver = event.snapshot;
-      Map values = driver.value as Map;
-      values.forEach((key, value) async {
-        completeList.add(value);
-      });
-    });
-    print(completeList);
-    print(completeList);
-    return completeList;
-  }
-
-  pendingListLength() async {
-    DatabaseReference refs = FirebaseDatabase.instance.ref('Pending');
-    refs.onValue.listen((event) async {
-      pendingList.clear();
-      DataSnapshot driver = event.snapshot;
-      Map values = driver.value as Map;
-      values.forEach((key, value) async {
-        Map data = value[auth.currentUser!.uid] as Map;
-        data.forEach((key, value) {
-          pendingList.add(value);
-        });
-      });
-    });
-    return pendingList;
-  }
-
-  totalListLength() async {
-    DatabaseReference refs = FirebaseDatabase.instance
-        .ref('PackageRequest')
-        .child(auth.currentUser!.uid);
-    refs.onValue.listen((event) async {
-      totalPackageList.clear();
-      DataSnapshot driver = event.snapshot;
-      Map values = driver.value as Map;
-      values.forEach((key, values) async {
-        Map data = values as Map;
-        data.forEach((key, value) {
-          totalPackageList.add(value);
-        });
-      });
-    });
-    return totalPackageList;
-  }
-
-  getTelegramTooken() {
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
-    users
-        .add({'name': 'John Doe', 'phone': '1234567890'})
-        .then((value) => print("User Added"))
-        .catchError((error) => print("Failed to add user: $error"));
-  }
-
   final users = FirebaseFirestore.instance.collection('Users');
-
-  insertTelegramToken({token}) async {
-    users.doc(auth.currentUser!.uid).update({
-      'token': token,
-    }).then((value) {
-      print("User Added");
-      FocusManager.instance.primaryFocus?.unfocus();
-      Get.back();
-    }).catchError((error) => print("Failed to add user: $error"));
-  }
-
-  insertABACode({abaCode}) async {
-    users.doc(auth.currentUser!.uid).update({
-      fieldInfo.ABACode: abaCode.toString(),
-    }).then((value) {
-      print("User Added");
-      FocusManager.instance.primaryFocus?.unfocus();
-      Get.back();
-    }).catchError((error) => print("Failed to add user: $error"));
-  }
-
-  insertTelegramChatID({chatid}) async {
-    users.doc(auth.currentUser!.uid).update({
-      'chatid': chatid,
-    }).then((value) {
-      print("User Added");
-      FocusManager.instance.primaryFocus?.unfocus();
-      Get.back();
-    }).catchError((error) => print("Failed to add user: $error"));
-  }
 
   deletePackage({witchDataBase, data, witchUID, witchPushKey}) async {
     await witchDataBase
@@ -601,8 +276,8 @@ class GlobalController {
       tokenKey,
       bankName,
       chatid}) async {
-    DateTime now = DateTime.now();
-    String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
+    // DateTime now = DateTime.now();
+    // String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
     position = await GeolocatorPlatform.instance.getCurrentPosition();
     latitude = position.latitude;
     longitude = position.longitude;
@@ -627,7 +302,7 @@ class GlobalController {
               field.chatid: chatid.toString(),
               field.latitude: latitude.toString(),
               field.longitude: longitude.toString(),
-              field.date: formattedDate.toString(),
+              field.date: DateTime.now().toString(),
               field.qty: qty.toString(),
               field.packageID: packageID.toString(),
               field.note: note.toString(),
@@ -648,8 +323,6 @@ class GlobalController {
   }
 
   Future<void> backToReturn({data}) async {
-    DateTime now = DateTime.now();
-    String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
     position = await GeolocatorPlatform.instance.getCurrentPosition();
     latitude = position.latitude;
     longitude = position.longitude;
@@ -666,7 +339,7 @@ class GlobalController {
       field.chatid: data[field.chatid].toString(),
       field.latitude: latitude.toString(),
       field.longitude: longitude.toString(),
-      field.date: formattedDate.toString(),
+      field.date: DateTime.now(),
       field.qty: data[field.qty].toString(),
       field.packageID: data[field.packageID].toString(),
       field.note: data[field.note].toString(),
@@ -965,12 +638,12 @@ class GlobalController {
       final String _sendMessageUrl =
           'https://api.telegram.org/bot$token/sendMessage';
       JsonModule jsonModule = JsonModule();
-      var jsonConver = jsonModule.toTelegramString(data);
+      var jsonConvert = jsonModule.toTelegramString(data);
       final response = await http.post(
         Uri.parse(_sendMessageUrl),
         body: {
           'chat_id': chatid,
-          'text': jsonConver,
+          'text': jsonConvert,
         },
       );
       if (response.statusCode != 200) {
@@ -979,5 +652,10 @@ class GlobalController {
     }catch(e){
 
     }
+  }
+
+  String formatDateTime (dateTime) {
+    DateTime result = DateTime.parse(dateTime);
+    return DateFormat('yyyy-MM-dd HH:mm aa').format(result);
   }
 }
