@@ -36,6 +36,10 @@ class _CompleteDetailState extends State<CompleteDetail> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    onInitialize();
+  }
+
+  Future<void> onInitialize() async {
     forDisplay = argumentData['data'];
     onGetGeneralInfo();
     if (argumentData['from'] != null) {
@@ -43,7 +47,6 @@ class _CompleteDetailState extends State<CompleteDetail> {
     } else {
       return;
     }
-    setState(() {});
   }
 
   onGetGeneralInfo() async {
@@ -109,7 +112,7 @@ class _CompleteDetailState extends State<CompleteDetail> {
                     size: valueSize,
                     lableSize: labelSize,
                     color: theme.black,
-                    content: forDisplay[field.date],
+                    content: glb.formatDateTime(forDisplay[field.date]),
                     weight: FontWeight.w500),
                 reUse.reUseRowText(
                     titleColor: theme.grey,
@@ -133,7 +136,7 @@ class _CompleteDetailState extends State<CompleteDetail> {
                     size: valueSize,
                     lableSize: labelSize,
                     color: theme.black,
-                    content: forDisplay[field.assignDate],
+                    content: glb.formatDateTime(forDisplay[field.assignDate]),
                     weight: FontWeight.w500),
                 reUse.reUseRowText(
                     lableSize: labelSize,
@@ -222,7 +225,8 @@ class _CompleteDetailState extends State<CompleteDetail> {
                           size: valueSize,
                           lableSize: labelSize,
                           color: theme.black,
-                          content: forDisplay[field.assignBy],
+                          content:
+                              "${forDisplay[field.dFirstName]} ${forDisplay[field.dLastName]}",
                           weight: FontWeight.w500),
                       reUse.reUseRowText(
                           titleColor: theme.grey,
@@ -258,58 +262,15 @@ class _CompleteDetailState extends State<CompleteDetail> {
                           )
                         ],
                       ),
-                      // reUse.reUseRowText(
-                      //     titleColor: theme.grey,
-                      //     title: clsLan.deliveryFee,
-                      //     size: valueSize,
-                      //     lableSize: labelSize,
-                      //     color: theme.black,
-                      //     content: "${object['feePrice']??""} ៛",
-                      //     weight: FontWeight.w500),
                       reUse.reUseRowText(
                           titleColor: theme.grey,
                           title: clsLan.completeDate,
                           size: valueSize,
                           lableSize: labelSize,
                           color: theme.black,
-                          content: forDisplay[field.completeDate],
+                          content: glb
+                              .formatDateTime(forDisplay[field.completeDate]),
                           weight: FontWeight.w500),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     Row(
-                      //       children: [
-                      //         reUse.reUseText(
-                      //             weight: FontWeight.w400,
-                      //             size: labelSize,
-                      //             color: theme.grey,
-                      //             content: '${clsLan.complete} : '),
-                      //         reUse.reUseText(
-                      //             weight: FontWeight.bold,
-                      //             size: valueSize,
-                      //             color: theme.black,
-                      //             content: forDisplay[field.returnDate]),
-                      //       ],
-                      //     ),
-                      //     // Container(
-                      //     //   decoration: BoxDecoration(
-                      //     //     color: theme.litestGreen,
-                      //     //     borderRadius: BorderRadius.circular(6),
-                      //     //   ),
-                      //     //   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      //     //   child: reUse.reUseText(
-                      //     //       weight: FontWeight.bold, size: 12.0, color: theme.liteGreen, content: clsLan.stCom),
-                      //     // )
-                      //   ],
-                      // ),
-                      // reUse.reUseRowText(
-                      //     titleColor: theme.grey,
-                      //     title: clsLan.qty,
-                      //     size: valueSize,
-                      //     lableSize: labelSize,
-                      //     color: theme.black,
-                      //     content: forDisplay['price'],
-                      //     weight: FontWeight.w500),
                     ],
                   ),
                 )
