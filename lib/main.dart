@@ -84,7 +84,6 @@ class MainController extends GetxController {
         // Get.to(HomeScreen());
         print('User is currently signed in!');
         request();
-        glb.UID = (user.uid).toString();
         isSignIn.value = false;
       }
     });
