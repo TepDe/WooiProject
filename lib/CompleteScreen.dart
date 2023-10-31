@@ -381,10 +381,11 @@ class _CompleteScreenState extends State<CompleteScreen> {
                                                       lableSize: 12.0,
                                                       titleColor: theme.grey,
                                                       title: clsLan.completeDate,
-                                                      size: 12.0,
+                                                      size: 14.0,
                                                       color: theme.black,
-                                                      content:
-                                                          "${forDisplay[index][field.completeDate]}   ",
+                                                      // content:
+                                                      //     "${forDisplay[index][field.completeDate]}   ",
+                                                      content: glb.formatDateTime(forDisplay[index][field.completeDate]) ,
                                                       weight: FontWeight.w500),
                                                 ],
                                               ),
