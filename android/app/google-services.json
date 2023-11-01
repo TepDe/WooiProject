@@ -44,14 +44,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "1093614007557-n9lh2djrhe85ifa9fjdkofkqpj35vnhv.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.wooidriver",
-            "certificate_hash": "91b349d78de32649d040319689674d475a873fba"
-          }
-        },
-        {
           "client_id": "1093614007557-t715icjjkmoptfmb5onajm72rmmjmsk1.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -81,11 +73,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "1093614007557-kf2tnbhmgbec5e908n9iflveo41jbrb6.apps.googleusercontent.com",
+          "client_id": "1093614007557-a0922qok5ms09gm69fj553meuk6llocg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.wooiproject",
-            "certificate_hash": "91b349d78de32649d040319689674d475a873fba"
+            "certificate_hash": "52830ebe80e9322e3f514722cf5937b81abb5cea"
           }
         },
         {

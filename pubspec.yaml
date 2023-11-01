@@ -30,37 +30,58 @@ dependencies:
   flutter:
     sdk: flutter
   get: any
-  geolocator: any
-  google_maps_flutter: any
-  firebase_core: any
-  firebase_storage: any
-  cloud_firestore: any
-  firebase_database: any
-  syncfusion_flutter_charts: any
+  geolocator: ^9.0.2
+  intl: ^0.18.1
+  google_maps_flutter: ^2.3.1
+  firebase_core:  ^2.21.0
+  firebase_storage: ^11.4.1
+  cloud_firestore: ^4.12.2
+  http: ^1.1.0
+  firebase_database: ^10.3.3
   shared_preferences: any
   fluttertoast: any
-  shimmer: any
-  teledart: any
-  dart_telegram_bot: any
-  firebase_messaging: any
+  firebase_messaging: ^14.7.3
   flutter_local_notifications: any
-  connectivity: any
+  location: ^4.3.0
 
+  permission_handler: ^11.0.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: any
-  firebase_auth: any
+  firebase_auth: ^4.12.1
+  image_picker: ^1.0.4
+  qr_flutter: ^4.1.0
+  swipe_refresh: ^1.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  firebase_core_platform_interface: any
+  flutter_launcher_icons: "^0.13.1"
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/macawlogo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/images/macawlogo.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "assets/images/macawlogo.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/images/macawlogo.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.0
+  flutter_lints: any
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -91,6 +112,11 @@ flutter:
     - assets/images/PendingHeadUser.png
     - assets/images/RevenueBtn.png
     - assets/images/TotalPaidBtn.png
+    - assets/images/wing.webp
+    - assets/images/aba.webp
+    - assets/images/vattanac.webp
+    - assets/images/no_photo.png
+    - assets/images/macawlogo.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
