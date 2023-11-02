@@ -37,7 +37,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
       final isRequestDB = await requestDB.child(auth.currentUser!.uid).onValue.first;
       totalList.clear();
       forDisplay.clear();
-      DataSnapshot driver = await isRequestDB.snapshot;
+      DataSnapshot driver = isRequestDB.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, values) async {
         Map data = await values as Map;
@@ -311,7 +311,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                 weight: FontWeight.w400,
                                                 size: 14.0,
                                                 color: theme.darkGrey,
-                                                content: "${index + 1}./  " + clsLan.packageID),
+                                                content: "${index + 1}./  ${clsLan.packageID}"),
                                             Row(
                                               children: [
                                                 reUse.reUseText(
@@ -327,53 +327,45 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                   SizedBox(
                                                     height: 40,
                                                     width: 40,
-                                                    child: PopupMenuButton<int>(
-                                                      onSelected: (item) async {
-                                                        // if (item == 0) {
-                                                        //   requestAgein(forDisplay[index]);
-                                                        // } else {
-                                                        //   removeItem(data: forDisplay[index]);
-                                                        // }
+                                                    child: PopupMenuButton<String>(
+                                                      onSelected: (value) {
+                                                        print(forDisplay[index]);
+                                                        isAction(
+                                                            data: forDisplay[index], value: value, context: context);
                                                       },
-                                                      itemBuilder: (context) => [
-                                                        PopupMenuItem<int>(value: 0, child: Text(clsLan.requestAgain)),
-                                                        PopupMenuItem<int>(value: 1, child: Text(clsLan.delete)),
-                                                      ],
+                                                      itemBuilder: (BuildContext context) {
+                                                        return <PopupMenuEntry<String>>[
+                                                          const PopupMenuItem<String>(
+                                                            value: 'requestAgain',
+                                                            child: Text('ហៅម្ដងទៀត'),
+                                                          ),
+                                                          const PopupMenuItem<String>(
+                                                            value: 'delete',
+                                                            child: Text('លុប'),
+                                                          ),
+                                                        ];
+                                                      },
                                                     ),
                                                   )
                                                 else
                                                   SizedBox(
                                                     height: 40,
                                                     width: 40,
-                                                    child:
-                                                        // PopupMenuButton<int>(
-                                                        //   onSelected: (item) async {
-                                                        //     isAction(data: forDisplay[index], item: item);
-                                                        //   },
-                                                        //   itemBuilder: (context) => [
-                                                        //     PopupMenuItem<int>(value: 0, child: Text(clsLan.edit)),
-                                                        //     PopupMenuItem<int>(value: 1, child: Text(clsLan.delete)),
-                                                        //   ],
-                                                        // ),
-                                                        PopupMenuButton<String>(
-                                                      onSelected: (value) async {
-                                                        setState(() async {
-                                                          await isAction(data: forDisplay[index], item: value);
-                                                        });
+                                                    child: PopupMenuButton<String>(
+                                                      onSelected: (value) {
+                                                        print(forDisplay[index]);
+                                                        isAction(
+                                                            data: forDisplay[index], value: value, context: context);
                                                       },
                                                       itemBuilder: (BuildContext context) {
                                                         return <PopupMenuEntry<String>>[
                                                           const PopupMenuItem<String>(
-                                                            value: 'item1',
-                                                            child: Text('Item 1'),
+                                                            value: 'edit',
+                                                            child: Text('កែ'),
                                                           ),
                                                           const PopupMenuItem<String>(
-                                                            value: 'item2',
-                                                            child: Text('Item 2'),
-                                                          ),
-                                                          const PopupMenuItem<String>(
-                                                            value: 'item3',
-                                                            child: Text('Item 3'),
+                                                            value: 'delete',
+                                                            child: Text('លុប'),
                                                           ),
                                                         ];
                                                       },
@@ -443,7 +435,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                                 reUse.reUseText(
                                                     size: labelSize, color: theme.darkGrey, content: clsLan.price),
                                                 Container(
-                                                  margin: EdgeInsets.all(8),
+                                                  margin: const EdgeInsets.all(8),
                                                   width: Get.width,
                                                   decoration: BoxDecoration(
                                                     color: theme.blue,
@@ -595,69 +587,16 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
     );
   }
 
-  String userName = "";
-  String phoneNumber = "";
-
-  fetchUserInformation() async {
-    FirebaseFirestore.instance.collection('Users').doc(auth.currentUser!.uid).get().then((doc) async {
-      Map data = doc.data() as Map;
-      userName = data['firstname'] + ' ' + data['lastname'].toString();
-      phoneNumber = data['phoneNumber'].toString();
-      setState(() {});
-    });
-  }
-
   DatabaseReference userReturn = FirebaseDatabase.instance.ref("Return");
   DatabaseReference driverReturn = FirebaseDatabase.instance.ref("DriverReturn");
 
-  requestAgein(data) async {
-    await fetchUserInformation();
-    await glb.backToReturn(data: data);
-    // await glb.deletePackage(witchDataBase: packageRequest,data:data);
-    await glb.deleteFromDriver(data: data, witchDataBase: driverReturn);
-    await glb.deleteFromReturn(data: data, witchDataBase: userReturn);
-    // totalList.removeWhere((item) => item == data);
-    // forDisplay.removeWhere((item) => item == data);
-    await refetchData();
-    // reUse.reUseCircleDialog(
-    //     context: context,
-    //     icon: Icons.check_circle_rounded,
-    //     title: 'Success',
-    //     content: Center(
-    //       child: Text(
-    //         'Your package is successfully request',
-    //         style: TextStyle(
-    //           color: theme.black,
-    //         ),
-    //       ),
-    //     ));
-    setState(() {});
-  }
-
-  refetchData() async {
+  Future<void> requestAgain(data) async {
     try {
-      DatabaseReference refs = FirebaseDatabase.instance.ref('PackageRequest').child(auth.currentUser!.uid);
-      refs.onValue.listen((event) {
-        setState(() {});
-        totalList.clear();
-        forDisplay.clear();
-        DataSnapshot driver = event.snapshot;
-        Map values = driver.value as Map;
-        values.forEach((key, values) async {
-          Map data = await values as Map;
-          data.forEach((key, value) async {
-            totalList.add(value);
-            setState(() {});
-          });
-        });
-      });
-    } catch (e) {
-      print('totalListLength $e');
-    }
-    setState(() {
-      print(totalList);
-      forDisplay = totalList;
-    });
+      await glb.backToReturn(data: data);
+      await glb.deleteFromDriver(data: data, witchDataBase: driverReturn);
+      await glb.deleteFromReturn(data: data, witchDataBase: userReturn);
+    } catch (e) {}
+    //await refetchData();
   }
 
   filterView(String value) {
@@ -670,24 +609,53 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
     }
   }
 
-  Future<void> isAction({required List data, item}) async {
-    if (item == 0) {
-      Get.to(() => EditPackageScreen(), arguments: data);
-    } else if (item == 1) {
-      reUse.reUseWaitingDialog(context);
-      //await removeItem(data: forDisplay[index]);
+  Future<void> isAction({data, value, context}) async {
+    reUse.reUseWaitingDialog(context);
+    if (value == 'edit') {
+      Navigator.pop(context);
+      Get.to(() => const EditPackageScreen(), arguments: data);
+    } else if (value == "requestAgain") {
+      await requestAgain(data);
+      Navigator.pop(context);
+      reUse.reUseCircleDialog(
+          context: context,
+          icon: Icons.check_circle_rounded,
+          title: 'ជោគជ័យ',
+          content: Center(
+            child: Text(
+              'ទំនិញរបស់លោកអ្នកហៅបានជោគជ័យ',
+              style: TextStyle(
+                color: theme.black,
+              ),
+            ),
+          ));
+    } else if (value == "delete") {
+      try {
+        await requestDB.child(auth.currentUser!.uid).child('package').child(data["pushKey"]).remove();
+        setState(() {
+          totalList.removeWhere((item) => item == data);
+          forDisplay.removeWhere((item) => item == data);
+        });
+        Navigator.pop(context);
+        reUse.reUseCircleDialog(
+            context: context,
+            icon: Icons.check_circle_rounded,
+            title: 'ជោគជ័យ',
+            content: Center(
+              child: Text(
+                'ទំនិញរបស់លោកអ្នកហៅបានជោគជ័យ',
+                style: TextStyle(
+                  color: theme.black,
+                ),
+              ),
+            ));
+      } catch (e) {
+        reUse.reUseCircleDialog(
+            onTap: () => Get.back(),
+            context: context,
+            title: 'បរាជ័យ',
+            content: reUse.reUseText(content: "បរាជ័យ សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ"));
+      }
     }
-    // print(data);
-    // print(data);
-    // // await requestDB
-    // //     .child(auth.currentUser!.uid)
-    // //     .child('package')
-    // //     .child(keyIndex)
-    // //     .remove();
-    // // print(keyIndex);
-    // // print(listIndex);
-    // totalList.removeWhere((item) => item == data);
-    // forDisplay = totalList;
-    // setState(() {});
   }
 }
