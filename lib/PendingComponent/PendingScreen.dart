@@ -2,12 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/PendingComponent/PendingDetail.dart';
-import 'package:wooiproject/ViewScreen.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
@@ -301,8 +299,7 @@ class _PendingScreenState extends State<PendingScreen> {
                                                 reUse.reUseRowText(
                                                     lableSize: labelSize,
                                                     titleColor: theme.grey,
-                                                    title: "${index + 1}./  " +
-                                                        clsLan.packageID,
+                                                    title: "${index + 1}./  ${clsLan.packageID}",
                                                     size: 16.0,
                                                     color: theme.blue,
                                                     content: forDisplay[index]
@@ -373,8 +370,7 @@ class _PendingScreenState extends State<PendingScreen> {
                                                     reUse.reUseColumnText(
                                                         lableSize: 12,
                                                         titleColor: theme.grey,
-                                                        title: clsLan.assignBy +
-                                                            " :",
+                                                        title: "${clsLan.assignBy} :",
                                                         size: 0.0,
                                                         color: theme.black,
                                                         content: '',
@@ -383,15 +379,11 @@ class _PendingScreenState extends State<PendingScreen> {
                                                     reUse.reUseColumnText(
                                                         lableSize: 12,
                                                         titleColor: theme.grey,
-                                                        title:
-                                                            clsLan.driverPhone,
+                                                        title: clsLan.driverPhone,
                                                         size: 14.0,
                                                         color: theme.black,
-                                                        content:
-                                                            forDisplay[index]
-                                                                [field.dPhone],
-                                                        weight:
-                                                            FontWeight.w500),
+                                                        content: forDisplay[index]["dPhone"],
+                                                        weight: FontWeight.w500),
                                                     reUse.reUseColumnText(
                                                         lableSize: 12,
                                                         titleColor: theme.grey,
@@ -399,14 +391,7 @@ class _PendingScreenState extends State<PendingScreen> {
                                                             clsLan.driverName,
                                                         size: 14.0,
                                                         color: theme.black,
-                                                        content: forDisplay[
-                                                                    index][
-                                                                field
-                                                                    .dLastName] +
-                                                            ' ' +
-                                                            forDisplay[index][
-                                                                field
-                                                                    .dFirstName],
+                                                        content: "${forDisplay[index][field.dFirstName]} ${forDisplay[index][field.dLastName]}",
                                                         weight:
                                                             FontWeight.w500),
                                                   ],
