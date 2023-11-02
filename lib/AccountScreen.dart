@@ -1,12 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +15,6 @@ import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/PaidScreen.dart';
 import 'package:wooiproject/RevenueList.dart';
-import 'package:wooiproject/SetUpScreen.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
@@ -32,35 +28,20 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  List lists = [];
   final str = StorageKey();
   var glb = GlobalController();
-  String getLatitude = '';
-  String getLongitude = '';
-  String getFirstName = '';
-  String getLastName = '';
-  String getIsGoOnline = '';
-  String getPhoneNumber = '';
-  String getEmail = '';
-  String getPassword = '';
-  String getUserName = '';
-  String getUserID = '';
-  String getToken = '';
-  String getChatId = '';
-  String getUid = '';
-  String getLocation = '';
-  String getQty = '';
-
-  bool cantEdit = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    //fetchLocalStorage();
-    fetchUserData();
-    totalRevenue();
-    fetchImage();
+    onInitialize();
+  }
+
+  Future<void> onInitialize() async {
+    await fetchUserData();
+    await totalRevenue();
+    await fetchImage();
   }
 
   fetchImage() async {
@@ -68,29 +49,10 @@ class _AccountScreenState extends State<AccountScreen> {
     getImageFileFromPath(prefs.getString(str.profileImg).toString());
   }
 
-  Future<void> insertTelegramToken() async {
-    FirebaseFirestore.instance
-        .collection('Users')
-        .doc(auth.currentUser!.uid)
-        .get()
-        .then((value) {
-      print(value);
-      print(value);
-      if (value.data()?.containsKey('telegramToken') == true) {
-        print('true');
-        print('true');
-      } else {
-        print('false');
-        print('false');
-      }
-    });
-  }
-
   var fetch = FirebaseFirestore.instance.collection('Users');
   var userData = {};
   var imagePath;
   File? _image;
-  final passwordBox = TextEditingController();
   final strKey = StorageKey();
 
   Future<void> pickImage() async {
@@ -112,14 +74,14 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   fetchUserData() async {
-    try{
+    try {
       await fetch
           .doc(auth.currentUser!.uid.toString())
           .get()
           .then((DocumentSnapshot documentSnapshot) async {
-        userData = await documentSnapshot.data() as Map<String, dynamic>;
+        userData = documentSnapshot.data() as Map<String, dynamic>;
         if (userData["accountType"] != "Users") {
-          return await reUse.reUseCircleDialog(
+          reUse.reUseCircleDialog(
               disposeAllow: false,
               onTap: () => glb.isLogOut(),
               context: context,
@@ -134,7 +96,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
               ));
         } else if (userData["isBanned"] != "false") {
-          return await reUse.reUseCircleDialog(
+          reUse.reUseCircleDialog(
               disposeAllow: false,
               onTap: () => glb.isLogOut(),
               context: context,
@@ -150,14 +112,28 @@ class _AccountScreenState extends State<AccountScreen> {
               ));
         }
         imagePath =
-        await glb.getBankImage(bankName: userData[fieldInfo.bankName]);
+            await glb.getBankImage(bankName: userData[fieldInfo.bankName]);
         setState(() {});
       });
-    }catch(e){
-      FirebaseAuth.instance.signOut();
-      Get.to(()=> const LogInScreen());
-    }
+    } catch (e) {
+      reUse.reUseCircleDialog(
+          disposeAllow: false,
+          onTap: () => glb.isLogOut(),
+          context: context,
+          icon: Icons.cancel_outlined,
+          title: 'មានបញ្ហា',
+          content: Center(
+            child: Text(
+              'សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ',
+              style: TextStyle(
+                color: theme.black,
+              ),
+            ),
+          ));
 
+      // FirebaseAuth.instance.signOut();
+      // Get.to(()=> const LogInScreen());
+    }
   }
 
   final reUse = ReUseWidget();
@@ -175,8 +151,6 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Future<File> getImageFileFromPath(String imagePath) async {
     final prefs = await SharedPreferences.getInstance();
-    print(prefs.getString(str.profileImg).toString());
-    print(prefs.getString(str.profileImg).toString());
     return File(prefs.getString(str.profileImg).toString());
   }
 
@@ -384,7 +358,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       leading: const Icon(Icons.password_rounded)),
                   reUse.reUseSettingItem(
                       trailing: Text(
-                        "${userData[fieldInfo.phoneNumber]??"មិនមាន"}",
+                        "${userData[fieldInfo.phoneNumber] ?? "មិនមាន"}",
                         style: TextStyle(color: theme.grey),
                       ),
                       title: Text(clsLan.phoneNumber),
@@ -429,7 +403,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         trailing: SizedBox(
                             width: textWidth,
                             child: Text(
-                              "${userData[fieldInfo.bankCode]??"មិនមាន"}",
+                              "${userData[fieldInfo.bankCode] ?? "មិនមាន"}",
                               maxLines: 1,
                               style: TextStyle(
                                   color: theme.grey,
@@ -460,7 +434,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         trailing: SizedBox(
                             width: textWidth,
                             child: Text(
-                              "${userData[fieldInfo.token]??"មិនមាន"}",
+                              "${userData[fieldInfo.token] ?? "មិនមាន"}",
                               maxLines: 1,
                               style: TextStyle(
                                   color: theme.grey,
@@ -491,7 +465,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         trailing: SizedBox(
                             width: textWidth,
                             child: Text(
-                              "${userData[fieldInfo.chatid]??"មិនមាន"}",
+                              "${userData[fieldInfo.chatid] ?? "មិនមាន"}",
                               maxLines: 1,
                               style: TextStyle(
                                   color: theme.grey,
@@ -689,7 +663,7 @@ class _AccountScreenState extends State<AccountScreen> {
   totalRevenue() async {
     List mainData = [];
     try {
-      DatabaseReference refs = await FirebaseDatabase.instance
+      DatabaseReference refs = FirebaseDatabase.instance
           .ref('Complete')
           .child(auth.currentUser!.uid);
       refs.onValue.listen((event) async {
@@ -697,7 +671,7 @@ class _AccountScreenState extends State<AccountScreen> {
         paidPrice.clear();
         revenue = 0.0;
         paid = 0.0;
-        DataSnapshot driver = await event.snapshot;
+        DataSnapshot driver = event.snapshot;
         Map values = driver.value as Map;
         values.forEach((key, value) async {
           mainData.add(value);
@@ -706,9 +680,7 @@ class _AccountScreenState extends State<AccountScreen> {
           } else {
             revenuePrice.add(value);
           }
-          setState(() {
-
-          });
+          setState(() {});
         });
         calculation(mainData);
       });
