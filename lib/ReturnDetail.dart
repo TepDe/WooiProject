@@ -92,7 +92,7 @@ class _ReturnDetailState extends State<ReturnDetail> {
                     size: valueSize,
                     lableSize: labelSize,
                     color: theme.black,
-                    content: forDisplay[field.date],
+                    content: glb.formatDateTime(forDisplay[field.date]),
                     weight: FontWeight.w500),
                 reUse.reUseRowText(
                     titleColor: theme.grey,
@@ -116,7 +116,7 @@ class _ReturnDetailState extends State<ReturnDetail> {
                     size: valueSize,
                     lableSize: labelSize,
                     color: theme.black,
-                    content: forDisplay[field.assignDate],
+                    content: glb.formatDateTime(forDisplay[field.assignDate]),
                     weight: FontWeight.w500),
                 reUse.reUseRowText(
                     lableSize: labelSize,
@@ -132,7 +132,15 @@ class _ReturnDetailState extends State<ReturnDetail> {
                     title: clsLan.bankCode,
                     size: valueSize,
                     color: theme.black,
-                    content: "${forDisplay["bankName"].toString().toUpperCase()}",
+                    content: forDisplay["bankName"].toString().toUpperCase(),
+                    weight: FontWeight.w500),
+                reUse.reUseRowText(
+                    lableSize: labelSize,
+                    titleColor: theme.grey,
+                    title: clsLan.bankCode,
+                    size: valueSize,
+                    color: theme.black,
+                    content: forDisplay["bankCode"].toString().toUpperCase(),
                     weight: FontWeight.w500),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -192,20 +200,22 @@ class _ReturnDetailState extends State<ReturnDetail> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       reUse.reUseRowText(
+                          lableSize: 12,
                           titleColor: theme.grey,
-                          title: clsLan.driverName,
-                          size: valueSize,
-                          lableSize: labelSize,
+                          title:
+                          clsLan.driverName,
+                          size: 14.0,
                           color: theme.black,
-                          content: forDisplay[field.assignBy],
-                          weight: FontWeight.w500),
+                          content: "${forDisplay[field.dFirstName]} ${forDisplay[field.dLastName]}",
+                          weight:
+                          FontWeight.w500),
                       reUse.reUseRowText(
                           titleColor: theme.grey,
                           title: clsLan.driverPhone,
                           size: valueSize,
                           lableSize: labelSize,
                           color: theme.black,
-                          content: forDisplay[field.dPhone],
+                          content: forDisplay["dPhone"],
                           weight: FontWeight.w500),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -213,7 +223,7 @@ class _ReturnDetailState extends State<ReturnDetail> {
                           reUse.reUseText(
                               size: labelSize, weight: FontWeight.w500, color: theme.grey, content: clsLan.price),
                           Container(
-                            margin: EdgeInsets.symmetric(vertical: 8),
+                            margin: const EdgeInsets.symmetric(vertical: 8),
                             decoration: BoxDecoration(
                               color: theme.blue,
                               borderRadius: BorderRadius.circular(3),
@@ -236,42 +246,7 @@ class _ReturnDetailState extends State<ReturnDetail> {
                           color: theme.black,
                           content: forDisplay[field.returnDate],
                           weight: FontWeight.w500),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     Row(
-                      //       children: [
-                      //         reUse.reUseText(
-                      //             weight: FontWeight.w400,
-                      //             size: labelSize,
-                      //             color: theme.grey,
-                      //             content: '${clsLan.complete} : '),
-                      //         reUse.reUseText(
-                      //             weight: FontWeight.bold,
-                      //             size: valueSize,
-                      //             color: theme.black,
-                      //             content: forDisplay[field.returnDate]),
-                      //       ],
-                      //     ),
-                      //     // Container(
-                      //     //   decoration: BoxDecoration(
-                      //     //     color: theme.litestGreen,
-                      //     //     borderRadius: BorderRadius.circular(6),
-                      //     //   ),
-                      //     //   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      //     //   child: reUse.reUseText(
-                      //     //       weight: FontWeight.bold, size: 12.0, color: theme.liteGreen, content: clsLan.stCom),
-                      //     // )
-                      //   ],
-                      // ),
-                      // reUse.reUseRowText(
-                      //     titleColor: theme.grey,
-                      //     title: clsLan.qty,
-                      //     size: valueSize,
-                      //     lableSize: labelSize,
-                      //     color: theme.black,
-                      //     content: forDisplay['price'],
-                      //     weight: FontWeight.w500),
+
                     ],
                   ),
                 )
