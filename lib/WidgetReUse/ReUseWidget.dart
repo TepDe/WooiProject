@@ -377,13 +377,13 @@ class ReUseWidget {
         children: [
           Text(
             '$label',
-            style: TextStyle(fontSize: 12, color: theme.grey, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 14, color: theme.darkGrey, fontWeight: FontWeight.w500),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Image.asset(
-                assetsIcon ?? null,
+                assetsIcon,
                 height: 30,
                 width: 30,
                 color: assetsIconColor ?? theme.orange,
@@ -932,6 +932,7 @@ class ReUseWidget {
         label: Text(
           clsLan.create,
           style: TextStyle(
+            fontSize: 17,
             color: theme.orange,
           ),
         ),
