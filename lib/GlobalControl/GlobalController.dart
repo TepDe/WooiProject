@@ -228,7 +228,7 @@ class GlobalController {
         .remove();
   }
 
-  deleteFromReturn({witchDataBase, data, witchUID, witchPushKey}) async {
+  Future<void> deleteFromReturn({witchDataBase, data, witchUID, witchPushKey}) async {
     await witchDataBase
         .child(data[field.uid])
         .child(data[field.pushKey])
@@ -339,7 +339,7 @@ class GlobalController {
       field.chatid: data[field.chatid].toString(),
       field.latitude: latitude.toString(),
       field.longitude: longitude.toString(),
-      field.date: DateTime.now(),
+      field.date: DateTime.now().toString(),
       field.qty: data[field.qty].toString(),
       field.packageID: data[field.packageID].toString(),
       field.note: data[field.note].toString(),
@@ -347,10 +347,6 @@ class GlobalController {
       field.price: data[field.price].toString(),
       field.recLatitude: data[field.recLatitude].toString(),
       field.recLongitude: data[field.recLongitude].toString(),
-      field.senderPhone: data[field.senderPhone].toString(),
-      field.driverUID: data[field.driverUID].toString(),
-      field.dLastName: data[field.dLastName].toString(),
-      field.dFirstName: data[field.dFirstName].toString(),
     });
   }
 
@@ -531,7 +527,7 @@ class GlobalController {
     return filteredList[0]['name'];
   }
 
-  getBank({bankName}) {
+  int getBank({bankName}) {
     int index = payWay.indexWhere((person) => person['name'] == bankName);
     return index;
   }
