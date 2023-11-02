@@ -115,7 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ));
-            setState(() {});
           } else if (data["isBanned"] != "false") {
             await reUse.reUseCircleDialog(
                 disposeAllow: false,
@@ -131,11 +130,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ));
-            setState(() {});
           }
           getUserID = data['userID'];
           await prefs.setString(str.userID, getUserID.toString());
-          setState(() {});
         });
       }
     } catch (e) {
@@ -219,8 +216,9 @@ class _HomeScreenState extends State<HomeScreen> {
       values.forEach((key, value) async {
         returnData.add(value);
         retSort.add(value);
+        setState(() {});
+
       });
-      setState(() {});
     } catch (e) {
       // print('returnListLength $e');
       // FirebaseAuth.instance.signOut();
