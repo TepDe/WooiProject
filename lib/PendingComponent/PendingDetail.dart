@@ -95,7 +95,7 @@ class _PendingDetailState extends State<PendingDetail> {
                     size: valueSize,
                     lableSize: labelSize,
                     color: theme.black,
-                    content: forDisplay[field.date],
+                    content: glb.formatDateTime(forDisplay[field.date]),
                     weight: FontWeight.w500),
                 reUse.reUseRowText(
                     titleColor: theme.grey,
@@ -119,7 +119,7 @@ class _PendingDetailState extends State<PendingDetail> {
                     size: valueSize,
                     lableSize: labelSize,
                     color: theme.black,
-                    content: forDisplay[field.assignDate],
+                    content: glb.formatDateTime(forDisplay[field.assignDate]),
                     weight: FontWeight.w500),
                 reUse.reUseRowText(
                     lableSize: labelSize,
@@ -135,7 +135,7 @@ class _PendingDetailState extends State<PendingDetail> {
                     title: clsLan.bankCode,
                     size: valueSize,
                     color: theme.black,
-                    content: "${forDisplay["bankName"].toString().toUpperCase()}",
+                    content: forDisplay["bankName"].toString().toUpperCase(),
                     weight: FontWeight.w500),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -200,11 +200,7 @@ class _PendingDetailState extends State<PendingDetail> {
                           size: valueSize,
                           lableSize: labelSize,
                           color: theme.black,
-                          content: forDisplay
-                          [field.dLastName] +
-                              ' ' +
-                              forDisplay
-                              [field.dFirstName],
+                          content: "${forDisplay[field.dFirstName]} ${forDisplay[field.dLastName]}",
                           weight: FontWeight.w500),
                       reUse.reUseRowText(
                           titleColor: theme.grey,
@@ -212,7 +208,7 @@ class _PendingDetailState extends State<PendingDetail> {
                           size: valueSize,
                           lableSize: labelSize,
                           color: theme.black,
-                          content: forDisplay[field.dPhone],
+                          content: forDisplay["dPhone"],
                           weight: FontWeight.w500),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -220,7 +216,7 @@ class _PendingDetailState extends State<PendingDetail> {
                           reUse.reUseText(
                               size: labelSize, weight: FontWeight.w500, color: theme.grey, content: clsLan.price),
                           Container(
-                            margin: EdgeInsets.symmetric(vertical: 8),
+                            margin: const EdgeInsets.symmetric(vertical: 8),
                             decoration: BoxDecoration(
                               color: theme.blue,
                               borderRadius: BorderRadius.circular(3),
