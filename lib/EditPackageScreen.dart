@@ -191,7 +191,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                       FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
                       FilteringTextInputFormatter.digitsOnly,
                     ],
-                    maxLength: 10,
+                    maxLength: 15,
                     onChanged: (value) async {},
                     decoration: InputDecoration(
                       //icon: Icon(textIcon ?? null),
@@ -295,7 +295,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                     Flexible(
                       flex: 6,
                       child: reUse.reuseTextField(
-                          mixLength: 4,
+                          mixLength: 9,
                           controller: priceBox,
                           formater: [
                             FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
