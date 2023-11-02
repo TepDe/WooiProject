@@ -176,8 +176,8 @@ class _HomeScreenState extends State<HomeScreen> {
       pendingList.clear();
       DataSnapshot driver = isPendingDB.snapshot;
       Map<dynamic, dynamic> values = driver.value as Map<dynamic, dynamic>;
-      values.forEach((key, value) async {
-        Map data = await value[auth.currentUser!.uid] as Map<dynamic, dynamic>;
+      values.forEach((key, value) {
+        Map data = value[auth.currentUser!.uid] as Map<dynamic, dynamic>;
         data.forEach((key, value) {
           pendingList.add(value);
         });
@@ -239,7 +239,6 @@ class _HomeScreenState extends State<HomeScreen> {
       DateTime dateB = parseDate(b["completeDate"] ?? b["returnDate"]);
       return dateB.compareTo(dateA);
     });
-    print(merge);
     return merge;
   }
 
