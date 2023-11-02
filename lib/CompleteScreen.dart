@@ -31,29 +31,38 @@ class _CompleteScreenState extends State<CompleteScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print(argumentData);
-    print(argumentData);
     if (argumentData == []) {
       completeList = [];
       forDisplay = [];
     } else {
       completeList = argumentData;
-      forDisplay = argumentData;
+      forDisplay = mergeList(data: argumentData);
       setState(() {});
     }
   }
+  List mergeList({data}) {
+    DateTime parseDate(String dateString) {
+      return DateTime.parse(dateString);
+    }
 
+    data.sort((a, b) {
+      DateTime dateA = parseDate(a["completeDate"]);
+      DateTime dateB = parseDate(b["completeDate"]);
+      return dateB.compareTo(dateA);
+    });
+    return data;
+  }
   final search = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    forDisplay.sort((a, b) {
-      DateTime dateA = DateFormat("dd-MM-yyyy  hh:mm a")
-          .parse(a['completeDate'] ?? "01-01-2001  09:23 AM");
-      DateTime dateB = DateFormat("dd-MM-yyyy  hh:mm a")
-          .parse(b['completeDate'] ?? "01-01-2001  09:23 AM");
-      return dateB.compareTo(dateA);
-    });
+    // forDisplay.sort((a, b) {
+    //   DateTime dateA = DateFormat("dd-MM-yyyy  hh:mm a")
+    //       .parse(a['completeDate'] ?? "01-01-2001  09:23 AM");
+    //   DateTime dateB = DateFormat("dd-MM-yyyy  hh:mm a")
+    //       .parse(b['completeDate'] ?? "01-01-2001  09:23 AM");
+    //   return dateB.compareTo(dateA);
+    // });
     return Scaffold(
       body: SafeArea(
         child: Column(
