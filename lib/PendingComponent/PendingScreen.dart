@@ -21,14 +21,14 @@ class _PendingScreenState extends State<PendingScreen> {
   final theme = ThemesApp();
   final glb = GlobalController();
   var argumentData = Get.arguments;
+  final clsLan = ClsLanguage();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     pendingList = argumentData;
-    forDisplay = pendingList;
-    //pendingListLength();
+    forDisplay = argumentData;
   }
 
   var labelSize = 14.0;
@@ -38,22 +38,6 @@ class _PendingScreenState extends State<PendingScreen> {
   List forDisplay = [];
   final searchController = TextEditingController();
 
-  pendingListLength() async {
-    DatabaseReference refs = FirebaseDatabase.instance.ref('Pending');
-    refs.onValue.listen((event) async {
-      pendingList.clear();
-      DataSnapshot driver = event.snapshot;
-      Map values = driver.value as Map;
-      values.forEach((key, value) async {
-        Map data = value[auth.currentUser!.uid] as Map;
-        data.forEach((key, value) {
-          setState(() {
-            pendingList.add(value);
-          });
-        });
-      });
-    });
-  }
 
   double padding = 2.0;
   final field = FieldData();
@@ -360,6 +344,9 @@ class _PendingScreenState extends State<PendingScreen> {
                                                     ],
                                                   ),
                                                 ),
+                                                Divider(
+                                                  color: theme.darkGrey,
+                                                ),
                                                 Row(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
@@ -402,7 +389,7 @@ class _PendingScreenState extends State<PendingScreen> {
                                                 reUse.reUseRowText(
                                                     lableSize: labelSize,
                                                     titleColor: theme.grey,
-                                                    title: clsLan.date,
+                                                    title: clsLan.assignDate,
                                                     size: valueSize,
                                                     color: theme.black,
                                                     content: glb.formatDateTime(forDisplay[index]
@@ -427,6 +414,4 @@ class _PendingScreenState extends State<PendingScreen> {
       ),
     );
   }
-
-  final clsLan = ClsLanguage();
 }
