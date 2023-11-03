@@ -208,7 +208,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                 height: imageSize,
                                 width: imageSize,
                                 child: InkWell(
-                                  onTap: () => pickImage(),
+                                  onTap: () async => await pickImage(),
                                   child: CircleAvatar(
                                       backgroundImage: FileImage(imageFile)),
                                 ),
