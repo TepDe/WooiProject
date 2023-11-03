@@ -34,8 +34,9 @@ class _PendingDetailState extends State<PendingDetail> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    forDisplay = argumentData;
-    setState(() {});
+    setState(() {
+      forDisplay = argumentData;
+    });
   }
   String getBank() {
     var result = glb.payWay.where((person) => person['name'] == forDisplay['bankName']);
