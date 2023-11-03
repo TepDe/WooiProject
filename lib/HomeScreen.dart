@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
         print('connected');
       }
     } on SocketException catch (_) {
-      return reUse.reUseCircleDialog(
+       reUse.reUseCircleDialog(
           function: 'nointernet',
           disposeAllow: false,
           context: context,
@@ -150,9 +150,9 @@ class _HomeScreenState extends State<HomeScreen> {
       totalPackageIndex.clear();
       DataSnapshot driver = isRequestDB.snapshot;
       Map values = driver.value as Map;
-      values.forEach((key, values) async {
-        Map data = await values as Map;
-        data.forEach((key, value) async {
+      values.forEach((key, values) {
+        Map data = values as Map;
+        data.forEach((key, value) {
           totalPackageIndex.add(key);
           driverList.add(value);
         });
@@ -172,11 +172,17 @@ class _HomeScreenState extends State<HomeScreen> {
       final isPendingDB = await pendingDB.onValue.first;
       pendingList.clear();
       DataSnapshot driver = isPendingDB.snapshot;
-      Map<dynamic, dynamic> values = driver.value as Map<dynamic, dynamic>;
+      Map values = driver.value as Map;
       values.forEach((key, value) {
-        Map data = value[auth.currentUser!.uid] as Map<dynamic, dynamic>;
+        Map data = value as Map;
         data.forEach((key, value) {
-          pendingList.add(value);
+          if( key.toString() == auth.currentUser?.uid.toString()){
+            Map data = value as Map;
+            data.forEach((key, value) {
+              pendingList.add(value);
+              setState(() {});
+            });
+          }
         });
       });
     } catch (e) {
@@ -212,12 +218,11 @@ class _HomeScreenState extends State<HomeScreen> {
       forSort.clear();
       retSort.clear();
       DataSnapshot driver = isReturnDB.snapshot;
-      Map<dynamic, dynamic> values = driver.value as Map<dynamic, dynamic>;
+      Map values = driver.value as Map;
       values.forEach((key, value) async {
         returnData.add(value);
         retSort.add(value);
         setState(() {});
-
       });
     } catch (e) {
       // print('returnListLength $e');
