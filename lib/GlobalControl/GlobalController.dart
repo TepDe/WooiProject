@@ -35,9 +35,7 @@ class GlobalController {
   double longitude = 0.0;
 
   Future<Position> requestUserPermissionLocation() async {
-    await Geolocator.requestPermission()
-        .then((value) {})
-        .onError((error, stackTrace) async {
+    await Geolocator.requestPermission().then((value) {}).onError((error, stackTrace) async {
       await Geolocator.requestPermission();
       print("ERROR" + error.toString());
     });
@@ -59,8 +57,7 @@ class GlobalController {
     return whichOfField;
   }
 
-  CollectionReference documentStream =
-      FirebaseFirestore.instance.collection('Users');
+  CollectionReference documentStream = FirebaseFirestore.instance.collection('Users');
 
   Future<void> storeUser({email, password, uid}) async {
     position = await GeolocatorPlatform.instance.getCurrentPosition();
@@ -92,10 +89,7 @@ class GlobalController {
   }
 
   Future<void> checkUserInformation() async {
-    await documentStream
-        .doc(auth.currentUser!.uid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) async {
+    await documentStream.doc(auth.currentUser!.uid).get().then((DocumentSnapshot documentSnapshot) async {
       Map data = documentSnapshot.data() as Map;
       if (data['userID'] == null) {
         Random random = Random();
@@ -104,8 +98,7 @@ class GlobalController {
             .doc(auth.currentUser!.uid)
             .update({'userID': randomNumber.toString()})
             .then((value) => print("User's Property Deleted"))
-            .catchError(
-                (error) => print("Failed to delete user's property: $error"));
+            .catchError((error) => print("Failed to delete user's property: $error"));
       } else {}
       if (data['firstname'] == null ||
           data['lastname'] == null ||
@@ -119,8 +112,7 @@ class GlobalController {
     });
   }
 
-  DatabaseReference packageRequest =
-      FirebaseDatabase.instance.ref("PackageRequest");
+  DatabaseReference packageRequest = FirebaseDatabase.instance.ref("PackageRequest");
 
   final field = FieldData();
   final fieldInfo = FieldInfo();
@@ -128,7 +120,7 @@ class GlobalController {
   Future<void> createPackage(
       {price,
       userName,
-        generalInfo,
+      generalInfo,
       bankName,
       userPhoneNumber,
       note,
@@ -141,11 +133,9 @@ class GlobalController {
       abaCode,
       chatid,
       data,
-        genToken, genChatID
-
-      }) async {
-    try{
-
+      genToken,
+      genChatID}) async {
+    try {
       position = await GeolocatorPlatform.instance.getCurrentPosition();
       latitude = position.latitude;
       longitude = position.longitude;
@@ -176,26 +166,20 @@ class GlobalController {
       };
       await packageRequest
           .child(auth.currentUser!.uid)
-      //.child(getUserID.toString())
+          //.child(getUserID.toString())
           .update({
         "userName": userName,
         "userPhoneNumber": userPhoneNumber,
         "uLatitude": latitude.toString(),
         "uLongitude": longitude.toString(),
-      }).then((value) async => packageRequest
-          .child(auth.currentUser!.uid)
-          .child('package')
-          .child(pushKey)
-          .update(json));
+      }).then((value) async =>
+              packageRequest.child(auth.currentUser!.uid).child('package').child(pushKey).update(json));
       await uploadToTelegram(
         chatid: genChatID,
         token: genToken,
         data: json,
       );
-    }catch(e){
-
-    }
-
+    } catch (e) {}
   }
 
   String generatePushKey() {
@@ -214,33 +198,28 @@ class GlobalController {
   final users = FirebaseFirestore.instance.collection('Users');
 
   deletePackage({witchDataBase, data, witchUID, witchPushKey}) async {
-    await witchDataBase
-        .child(auth.currentUser!.uid)
-        .child('package')
-        .child(witchPushKey)
-        .remove();
+    await witchDataBase.child(auth.currentUser!.uid).child('package').child(witchPushKey).remove();
   }
 
-  deleteFromDriver({witchDataBase, data, witchUID, witchPushKey}) async {
-    await witchDataBase
-        .child(data[field.driverUID])
-        .child(data[field.pushKey])
-        .remove();
+  Future<void> deleteFromDriver({witchDataBase, data, witchUID, witchPushKey}) async {
+    try {
+      await witchDataBase.child(data[field.driverUID]).child(data[field.pushKey]).remove();
+    } catch (e) {}
   }
 
   Future<void> deleteFromReturn({witchDataBase, data, witchUID, witchPushKey}) async {
-    await witchDataBase
-        .child(data[field.uid])
-        .child(data[field.pushKey])
-        .remove();
+    try{
+      await witchDataBase.child(data[field.uid]).child(data[field.pushKey]).remove();
+    }catch(e){
+
+    }
   }
 
   deleteUserPackage({witchDataBase, data, witchUID, witchPushKey}) async {
     await witchDataBase.child(data[field.driverUID]);
   }
 
-  storeSetUpAccount(
-      {bankName, phoneNumber, firstname, lastname, bankCode}) async {
+  storeSetUpAccount({bankName, phoneNumber, firstname, lastname, bankCode}) async {
     try {
       users
           .doc(auth.currentUser!.uid)
@@ -252,8 +231,7 @@ class GlobalController {
             'lastname': lastname,
           })
           .then((value) => print("User's Property Deleted"))
-          .catchError(
-              (error) => print("Failed to delete user's property: $error"));
+          .catchError((error) => print("Failed to delete user's property: $error"));
       Get.to(() => ViewScreen());
     } catch (e) {
       final reUse = ReUseWidget();
@@ -289,11 +267,8 @@ class GlobalController {
       "userPhoneNumber": userPhoneNumber,
       "uLatitude": latitude.toString(),
       "uLongitude": longitude.toString(),
-    }).then((value) async => packageRequest
-                .child(auth.currentUser!.uid)
-                .child('package')
-                .child(data[field.pushKey])
-                .update({
+    }).then((value) async =>
+            packageRequest.child(auth.currentUser!.uid).child('package').child(data[field.pushKey]).update({
               field.uid: auth.currentUser!.uid.toString(),
               field.location: location.toString(),
               field.pushKey: data[field.pushKey].toString(),
@@ -312,42 +287,42 @@ class GlobalController {
               field.bankName: bankName,
               field.recLatitude: latitude.toString(),
               field.recLongitude: longitude.toString(),
-              field.senderPhone:
-                  await fetchUserData(fieldInfo.phoneNumber).toString(),
+              field.senderPhone: await fetchUserData(fieldInfo.phoneNumber).toString(),
             }));
   }
 
   updateStatus({uid, key, status}) async {
-    await packageRequest.child(uid).child('package').child(key).update(
-        {'status': status, field.packageID: auth.currentUser!.uid.toString()});
+    await packageRequest
+        .child(uid)
+        .child('package')
+        .child(key)
+        .update({'status': status, field.packageID: auth.currentUser!.uid.toString()});
   }
 
   Future<void> backToReturn({data}) async {
-    position = await GeolocatorPlatform.instance.getCurrentPosition();
-    latitude = position.latitude;
-    longitude = position.longitude;
-    await packageRequest
-        .child(auth.currentUser!.uid)
-        .child('package')
-        .child(data[field.pushKey])
-        .update({
-      field.uid: data[field.uid].toString(),
-      field.location: data[field.location].toString(),
-      field.pushKey: data[field.pushKey].toString(),
-      field.phoneNumber: data[field.phoneNumber].toString(),
-      field.token: data[field.token].toString(),
-      field.chatid: data[field.chatid].toString(),
-      field.latitude: latitude.toString(),
-      field.longitude: longitude.toString(),
-      field.date: DateTime.now().toString(),
-      field.qty: data[field.qty].toString(),
-      field.packageID: data[field.packageID].toString(),
-      field.note: data[field.note].toString(),
-      field.status: 'request',
-      field.price: data[field.price].toString(),
-      field.recLatitude: data[field.recLatitude].toString(),
-      field.recLongitude: data[field.recLongitude].toString(),
-    });
+    try {
+      position = await GeolocatorPlatform.instance.getCurrentPosition();
+      latitude = position.latitude;
+      longitude = position.longitude;
+      await packageRequest.child(auth.currentUser!.uid).child('package').child(data[field.pushKey]).update({
+        field.uid: data[field.uid].toString(),
+        field.location: data[field.location].toString(),
+        field.pushKey: data[field.pushKey].toString(),
+        field.phoneNumber: data[field.phoneNumber].toString(),
+        field.token: data[field.token].toString(),
+        field.chatid: data[field.chatid].toString(),
+        field.latitude: latitude.toString(),
+        field.longitude: longitude.toString(),
+        field.date: DateTime.now().toString(),
+        field.qty: data[field.qty].toString(),
+        field.packageID: data[field.packageID].toString(),
+        field.note: data[field.note].toString(),
+        field.status: 'request',
+        field.price: data[field.price].toString(),
+        field.recLatitude: data[field.recLatitude].toString(),
+        field.recLongitude: data[field.recLongitude].toString(),
+      });
+    } catch (e) {}
   }
 
   alertNoInternet(context) async {
@@ -431,8 +406,8 @@ class GlobalController {
     try {
       statusMessage.value = "Verifying... " + otp;
       // Create a PhoneAuthCredential with the code
-      PhoneAuthCredential credential = PhoneAuthProvider.credential(
-          verificationId: firebaseVerificationId, smsCode: otp);
+      PhoneAuthCredential credential =
+          PhoneAuthProvider.credential(verificationId: firebaseVerificationId, smsCode: otp);
       // Sign the user in (or link) with the credential
       await auth.signInWithCredential(credential);
     } catch (e) {
@@ -520,10 +495,7 @@ class GlobalController {
   List filteredList = [];
 
   Future<String> selectPayWay(data) async {
-    filteredList = payWay
-        .where((item) =>
-            item['name'].toLowerCase().toString().trim().contains(data))
-        .toList();
+    filteredList = payWay.where((item) => item['name'].toLowerCase().toString().trim().contains(data)).toList();
     return filteredList[0]['name'];
   }
 
@@ -533,8 +505,7 @@ class GlobalController {
   }
 
   getBankImage({bankName}) {
-    var object =
-        payWay.where((item) => item['name'].contains(bankName)).toList();
+    var object = payWay.where((item) => item['name'].contains(bankName)).toList();
     return object;
   }
 
@@ -582,10 +553,7 @@ class GlobalController {
       required bool allowDialog}) async {
     final reUse = ReUseWidget();
     bool isReady = false;
-    await FirebaseFirestore.instance
-        .collection(firebaseFireStore)
-        .doc(data)
-        .update({
+    await FirebaseFirestore.instance.collection(firebaseFireStore).doc(data).update({
       field: value,
     }).then((value) async {
       isReady = true;
@@ -596,8 +564,7 @@ class GlobalController {
             onTap: () => Get.back(),
             context: context,
             title: 'បរាជ័យ',
-            content: reUse.reUseText(
-                content: "បរាជ័យ សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ"));
+            content: reUse.reUseText(content: "បរាជ័យ សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ"));
       } else {}
     });
     return isReady;
@@ -630,9 +597,8 @@ class GlobalController {
     chatid,
     data,
   }) async {
-    try{
-      final String _sendMessageUrl =
-          'https://api.telegram.org/bot$token/sendMessage';
+    try {
+      final String _sendMessageUrl = 'https://api.telegram.org/bot$token/sendMessage';
       JsonModule jsonModule = JsonModule();
       var jsonConvert = jsonModule.toTelegramString(data);
       final response = await http.post(
@@ -645,12 +611,10 @@ class GlobalController {
       if (response.statusCode != 200) {
         print('Failed to send message: ${response.statusCode}');
       }
-    }catch(e){
-
-    }
+    } catch (e) {}
   }
 
-  String formatDateTime (dateTime) {
+  String formatDateTime(dateTime) {
     DateTime result = DateTime.parse(dateTime);
     return DateFormat('yyyy-MM-dd HH:mm aa').format(result);
   }
