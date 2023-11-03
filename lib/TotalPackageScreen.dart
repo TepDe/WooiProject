@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -37,15 +36,15 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
       final isRequestDB = await requestDB.child(auth.currentUser!.uid).onValue.first;
       totalList.clear();
       forDisplay.clear();
+      sortList.clear();
       DataSnapshot driver = isRequestDB.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, values) async {
         Map data = await values as Map;
         data.forEach((key, value) async {
-          setState(() {
-            totalList.add(value);
-            sortList.add(value);
-          });
+          totalList.add(value);
+          sortList.add(value);
+          setState(() {});
         });
       });
       forDisplay = sortDateTime(totalList);
@@ -200,12 +199,13 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                                             .toLowerCase()
                                             .contains(search.text.toString().toLowerCase()))
                                         .toList();
-                                    if (results.isEmpty)
+                                    if (results.isEmpty) {
                                       results = totalList
                                           .where((user) => user['phoneNumber']
                                               .toLowerCase()
                                               .contains(search.text.toString().toLowerCase()))
                                           .toList();
+                                    }
                                     forDisplay = results;
                                     FocusManager.instance.primaryFocus?.unfocus();
                                     setState(() {});
