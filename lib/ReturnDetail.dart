@@ -23,7 +23,7 @@ class _ReturnDetailState extends State<ReturnDetail> {
   final field = FieldData();
   final fieldInfo = FieldInfo();
 
-  var forDisplay;
+  var forDisplay={};
 
   var labelSize = 14.0;
   var valueSize = 14.0;
@@ -244,7 +244,7 @@ class _ReturnDetailState extends State<ReturnDetail> {
                           size: valueSize,
                           lableSize: labelSize,
                           color: theme.black,
-                          content: forDisplay[field.returnDate],
+                          content: glb.formatDateTime(forDisplay[field.returnDate]),
                           weight: FontWeight.w500),
 
                     ],
