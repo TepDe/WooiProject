@@ -40,8 +40,8 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Future<void> onInitialize() async {
     await fetchUserData();
-    await totalRevenue();
     await fetchImage();
+    await totalRevenue();
   }
 
   fetchImage() async {
@@ -75,10 +75,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   fetchUserData() async {
     try {
-      await fetch
-          .doc(auth.currentUser!.uid.toString())
-          .get()
-          .then((DocumentSnapshot documentSnapshot) async {
+      await fetch.doc(auth.currentUser!.uid.toString()).get().then((DocumentSnapshot documentSnapshot) async {
         userData = documentSnapshot.data() as Map<String, dynamic>;
         if (userData["accountType"] != "Users") {
           reUse.reUseCircleDialog(
@@ -111,8 +108,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
               ));
         }
-        imagePath =
-            await glb.getBankImage(bankName: userData[fieldInfo.bankName]);
+        imagePath = await glb.getBankImage(bankName: userData[fieldInfo.bankName]);
         setState(() {});
       });
     } catch (e) {
@@ -172,14 +168,12 @@ class _AccountScreenState extends State<AccountScreen> {
                   SizedBox(
                     height: viewHeight2,
                   ),
-                  reUse.reUseText(
-                      content: 'គណនី', weight: FontWeight.bold, size: 18.0),
+                  reUse.reUseText(content: 'គណនី', weight: FontWeight.bold, size: 18.0),
                   SizedBox(
                     height: viewHeight2,
                   ),
                   FutureBuilder<String?>(
-                    future: SharedPreferences.getInstance()
-                        .then((prefs) => prefs.getString(str.profileImg)),
+                    future: SharedPreferences.getInstance().then((prefs) => prefs.getString(str.profileImg)),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         // Display a loading indicator while waiting for data
@@ -192,31 +186,25 @@ class _AccountScreenState extends State<AccountScreen> {
                         return FutureBuilder<File>(
                           future: getImageFileFromPath(imagePath),
                           builder: (context, fileSnapshot) {
-                            if (fileSnapshot.connectionState ==
-                                ConnectionState.waiting) {
+                            if (fileSnapshot.connectionState == ConnectionState.waiting) {
                               // Display a loading indicator while waiting for image file
-                              return const Center(
-                                  child: CircularProgressIndicator());
+                              return const Center(child: CircularProgressIndicator());
                             } else if (fileSnapshot.hasError) {
                               // Handle error case
-                              return Center(
-                                  child: Text('Error: ${fileSnapshot.error}'));
-                            } else if (fileSnapshot.hasData &&
-                                fileSnapshot.data != null) {
+                              return Center(child: Text('Error: ${fileSnapshot.error}'));
+                            } else if (fileSnapshot.hasData && fileSnapshot.data != null) {
                               File imageFile = fileSnapshot.data!;
                               return SizedBox(
                                 height: imageSize,
                                 width: imageSize,
                                 child: InkWell(
                                   onTap: () async => await pickImage(),
-                                  child: CircleAvatar(
-                                      backgroundImage: FileImage(imageFile)),
+                                  child: CircleAvatar(backgroundImage: FileImage(imageFile)),
                                 ),
                               );
                             } else {
                               // Image not found
-                              return const Center(
-                                  child: Text('Image not found'));
+                              return const Center(child: Text('Image not found'));
                             }
                           },
                         );
@@ -238,8 +226,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     height: viewHeight2,
                   ),
                   reUse.reUseText(
-                      content:
-                          "${userData[fieldInfo.firstName] ?? " "} ${userData[fieldInfo.lastName] ?? " "}",
+                      content: "${userData[fieldInfo.firstName] ?? " "} ${userData[fieldInfo.lastName] ?? " "}",
                       weight: FontWeight.bold,
                       size: 20.0,
                       color: theme.black),
@@ -249,10 +236,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       size: 12.0,
                       color: theme.grey),
                   reUse.reUseText(
-                      content: glb.auth.currentUser!.uid,
-                      weight: FontWeight.bold,
-                      size: 12.0,
-                      color: theme.grey),
+                      content: glb.auth.currentUser!.uid, weight: FontWeight.bold, size: 12.0, color: theme.grey),
                   Row(
                     children: [
                       Flexible(
@@ -265,10 +249,8 @@ class _AccountScreenState extends State<AccountScreen> {
                             witchClick: "revenue",
                             valueTextSize: 20.0,
                             onTap: () {
-                              Get.to(() => const RevenueList(), arguments: {
-                                "data": revenuePrice,
-                                "price": revenue.toStringAsFixed(2)
-                              });
+                              Get.to(() => const RevenueList(),
+                                  arguments: {"data": revenuePrice, "price": revenue.toStringAsFixed(2)});
                             },
                             labelTextSize: 14.0,
                             valueColor: theme.grey,
@@ -281,10 +263,8 @@ class _AccountScreenState extends State<AccountScreen> {
                             // assetImage: "assets/images/TotalPaidBtn.png",
                             value: "\$ ${paid.toStringAsFixed(2)}",
                             onTap: () {
-                              Get.to(() => const PaidScreen(), arguments: {
-                                "data": paidPrice,
-                                "price": paid.toStringAsFixed(2)
-                              });
+                              Get.to(() => const PaidScreen(),
+                                  arguments: {"data": paidPrice, "price": paid.toStringAsFixed(2)});
                             },
                             title: clsLan.paid,
                             valueTextSize: 20.0,
@@ -307,14 +287,10 @@ class _AccountScreenState extends State<AccountScreen> {
                             color: theme.black),
                         TextButton.icon(
                           onPressed: () {
-                            Get.to(() => const EditProfileScreen(),
-                                arguments: userData);
+                            Get.to(() => const EditProfileScreen(), arguments: userData);
                           },
                           icon: Icon(Icons.edit, color: theme.darkGrey),
-                          label: reUse.reUseText(
-                              content: 'Edit',
-                              size: 16.0,
-                              color: theme.darkGrey),
+                          label: reUse.reUseText(content: 'Edit', size: 16.0, color: theme.darkGrey),
                         )
                       ],
                     ),
@@ -384,8 +360,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   //     leading: const Icon(Icons.monetization_on)),
                   Container(
                     height: 60,
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
                       color: theme.white,
                       borderRadius: BorderRadius.circular(6),
@@ -405,9 +380,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             child: Text(
                               "${userData[fieldInfo.bankCode] ?? "មិនមាន"}",
                               maxLines: 1,
-                              style: TextStyle(
-                                  color: theme.grey,
-                                  overflow: TextOverflow.ellipsis),
+                              style: TextStyle(color: theme.grey, overflow: TextOverflow.ellipsis),
                             )),
                         leading: const Text("123"),
                       ),
@@ -415,8 +388,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                   Container(
                     height: 60,
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
                       color: theme.white,
                       borderRadius: BorderRadius.circular(6),
@@ -436,9 +408,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             child: Text(
                               "${userData[fieldInfo.token] ?? "មិនមាន"}",
                               maxLines: 1,
-                              style: TextStyle(
-                                  color: theme.grey,
-                                  overflow: TextOverflow.ellipsis),
+                              style: TextStyle(color: theme.grey, overflow: TextOverflow.ellipsis),
                             )),
                         leading: const Icon(Icons.telegram_rounded),
                       ),
@@ -446,8 +416,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                   Container(
                     height: 60,
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
                       color: theme.white,
                       borderRadius: BorderRadius.circular(6),
@@ -467,9 +436,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             child: Text(
                               "${userData[fieldInfo.chatid] ?? "មិនមាន"}",
                               maxLines: 1,
-                              style: TextStyle(
-                                  color: theme.grey,
-                                  overflow: TextOverflow.ellipsis),
+                              style: TextStyle(color: theme.grey, overflow: TextOverflow.ellipsis),
                             )),
                         leading: const Icon(Icons.telegram_rounded),
                       ),
@@ -513,34 +480,6 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
       ),
     );
-  }
-
-  List driverList = [];
-
-  onFetchDriver() {
-    DatabaseReference refs = FirebaseDatabase.instance.ref('Driver');
-    refs.onValue.listen((event) {
-      DataSnapshot latitude = event.snapshot.child('latitude');
-      DataSnapshot longitude = event.snapshot.child('longitude');
-      // Map driver = dataValues.value as Map;
-      driverList.forEach((element) {
-        element.latitude = latitude as double;
-        element.longitude = longitude as double;
-      });
-
-      //
-      // markerList.add(Marker(
-      //   //add first marker
-      //   markerId: MarkerId(showLocation.toString()),
-      //   position: LatLng(312, 21313), //position of marker
-      //   infoWindow: const InfoWindow(
-      //     //popup info
-      //     title: 'Marker Title First ',
-      //     snippet: 'My Custom Subtitle',
-      //   ),
-      //   icon: BitmapDescriptor.defaultMarker, //Icon for Marker
-      // ));
-    });
   }
 
   reUseCircleDialog({data, context, icon, title, content, function}) {
@@ -592,8 +531,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     content,
                     const SizedBox(height: 20.0),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       child: reUseButton(text: "OK"),
                     ),
                   ],
@@ -603,34 +541,6 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
         );
       },
-    );
-  }
-
-  var receivedID = '';
-  bool otpFieldVisibility = false;
-  String verificationId = '';
-  String phoneNumber = "+855 78 344 511";
-  String authStatus = "";
-  String otp = "";
-
-  Future<void> verifyUserPhoneNumber() async {
-    await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        await auth.signInWithCredential(credential);
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        if (e.code == 'invalid-phone-number') {
-          print('The provided phone number is not valid.');
-        }
-      },
-      codeSent: (String verificationId, int? resendToken) async {
-        String smsCode = 'xxxx';
-        PhoneAuthCredential credential = PhoneAuthProvider.credential(
-            verificationId: verificationId, smsCode: smsCode);
-        await auth.signInWithCredential(credential);
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {},
     );
   }
 
@@ -648,8 +558,7 @@ class _AccountScreenState extends State<AccountScreen> {
         },
         child: Text(
           text,
-          style: TextStyle(
-              color: textColor, fontWeight: FontWeight.bold, fontSize: 14),
+          style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 14),
         ),
       ),
     );
@@ -659,31 +568,29 @@ class _AccountScreenState extends State<AccountScreen> {
   List paidPrice = [];
   double revenue = 0.0;
   double paid = 0.0;
+  DatabaseReference completeDB = FirebaseDatabase.instance.ref('Complete');
 
   totalRevenue() async {
     List mainData = [];
     try {
-      DatabaseReference refs = FirebaseDatabase.instance
-          .ref('Complete')
-          .child(auth.currentUser!.uid);
-      refs.onValue.listen((event) async {
-        revenuePrice.clear();
-        paidPrice.clear();
-        revenue = 0.0;
-        paid = 0.0;
-        DataSnapshot driver = event.snapshot;
-        Map values = driver.value as Map;
-        values.forEach((key, value) async {
-          mainData.add(value);
-          if (value[field.paidStatus] == 'paid') {
-            paidPrice.add(value);
-          } else {
-            revenuePrice.add(value);
-          }
+      final isCompleteDB = await completeDB.child(auth.currentUser!.uid).onValue.first;
+      revenuePrice.clear();
+      paidPrice.clear();
+      revenue = 0.0;
+      paid = 0.0;
+      DataSnapshot dataSnapshot = isCompleteDB.snapshot;
+      Map values = dataSnapshot.value as Map;
+      values.forEach((key, value) async {
+        mainData.add(value);
+        if (value[field.paidStatus] == 'paid') {
+          paidPrice.add(value);
           setState(() {});
-        });
-        calculation(mainData);
+        } else {
+          revenuePrice.add(value);
+          setState(() {});
+        }
       });
+      calculation(mainData);
     } catch (e) {
       print('completeListLength $e');
     }
@@ -693,10 +600,11 @@ class _AccountScreenState extends State<AccountScreen> {
     for (int a = 0; a < data.length; a++) {
       if (data[a][field.paidStatus] == 'paid') {
         paid += double.parse(data[a][field.price]);
+        setState(() {});
       } else {
         revenue += double.parse(data[a][field.price]);
+        setState(() {});
       }
-      setState(() {});
     }
   }
 }
