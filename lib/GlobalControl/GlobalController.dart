@@ -164,6 +164,7 @@ class GlobalController {
         "status": 'request',
         "date": DateTime.now().toString(),
       };
+      final updatePath = "package/$pushKey"; // Path to the new data
       await packageRequest
           .child(auth.currentUser!.uid)
           //.child(getUserID.toString())
@@ -172,8 +173,8 @@ class GlobalController {
         "userPhoneNumber": userPhoneNumber,
         "uLatitude": latitude.toString(),
         "uLongitude": longitude.toString(),
-      }).then((value) async =>
-              packageRequest.child(auth.currentUser!.uid).child('package').child(pushKey).update(json));
+        updatePath: json
+      });
       await uploadToTelegram(
         chatid: genChatID,
         token: genToken,
@@ -208,11 +209,9 @@ class GlobalController {
   }
 
   Future<void> deleteFromReturn({witchDataBase, data, witchUID, witchPushKey}) async {
-    try{
+    try {
       await witchDataBase.child(data[field.uid]).child(data[field.pushKey]).remove();
-    }catch(e){
-
-    }
+    } catch (e) {}
   }
 
   deleteUserPackage({witchDataBase, data, witchUID, witchPushKey}) async {
@@ -598,11 +597,11 @@ class GlobalController {
     data,
   }) async {
     try {
-      final String _sendMessageUrl = 'https://api.telegram.org/bot$token/sendMessage';
+      final String sendMessageUrl = 'https://api.telegram.org/bot$token/sendMessage';
       JsonModule jsonModule = JsonModule();
       var jsonConvert = jsonModule.toTelegramString(data);
       final response = await http.post(
-        Uri.parse(_sendMessageUrl),
+        Uri.parse(sendMessageUrl),
         body: {
           'chat_id': chatid,
           'text': jsonConvert,
