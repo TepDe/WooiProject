@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
         print('connected');
       }
     } on SocketException catch (_) {
-       reUse.reUseCircleDialog(
+      reUse.reUseCircleDialog(
           function: 'nointernet',
           disposeAllow: false,
           context: context,
@@ -145,17 +145,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> totalListLength() async {
     try {
-      final isRequestDB = await requestDB.child(auth.currentUser!.uid).onValue.first;
+      final isRequestDB = await requestDB.child(auth.currentUser!.uid).child("package").onValue.first;
       driverList.clear();
       totalPackageIndex.clear();
       DataSnapshot driver = isRequestDB.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, values) {
-        Map data = values as Map;
-        data.forEach((key, value) {
-          totalPackageIndex.add(key);
-          driverList.add(value);
-        });
+        totalPackageIndex.add(values);
+        driverList.add(values);
+        setState(() {});
       });
     } catch (e) {
       print('totalListLength $e');
@@ -169,21 +167,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> pendingListLength() async {
     try {
-      final isPendingDB = await pendingDB.onValue.first;
+      final isPendingDB = await pendingDB.child(auth.currentUser!.uid).onValue.first;
       pendingList.clear();
       DataSnapshot driver = isPendingDB.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, value) {
-        Map data = value as Map;
-        data.forEach((key, value) {
-          if( key.toString() == auth.currentUser?.uid.toString()){
-            Map data = value as Map;
-            data.forEach((key, value) {
-              pendingList.add(value);
-              setState(() {});
-            });
-          }
-        });
+        pendingList.add(value);
+        setState(() {});
       });
     } catch (e) {
       // print('pendingListLength $e');
@@ -205,6 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
       values.forEach((key, value) async {
         completeData.add(value);
         compSort.add(value);
+        setState(() {});
       });
     } catch (e) {}
   }
@@ -351,8 +342,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         weight: FontWeight.bold,
                         content: '${currentTime()}\nID $getUserID'),
                     FutureBuilder<String?>(
-                      future: SharedPreferences.getInstance()
-                          .then((prefs) => prefs.getString(str.profileImg)),
+                      future: SharedPreferences.getInstance().then((prefs) => prefs.getString(str.profileImg)),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           // Display a loading indicator while waiting for data
@@ -420,13 +410,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: paddings),
-                        child: reUse.reUseCreatePackage(
-                            context: context, padding: paddings, height: Get.height * 0.02),
+                        child: reUse.reUseCreatePackage(context: context, padding: paddings, height: Get.height * 0.02),
                       ),
                       Row(
                         children: [
-                          reUse.reUseText(
-                              content: "   ${clsLan.today} : ${forSort.length}", color: theme.grey),
+                          reUse.reUseText(content: "   ${clsLan.today} : ${forSort.length}", color: theme.grey),
                           Divider(
                             height: 1,
                             color: theme.grey,
@@ -444,15 +432,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     return reUse.reUseTodayComponent(
                                         onTap: () {
                                           if (forSort[index][field.status] == 'complete') {
-                                            Get.to(() => const CompleteDetail(),
-                                                arguments: {"data": forSort[index]});
+                                            Get.to(() => const CompleteDetail(), arguments: {"data": forSort[index]});
                                           } else if (forSort[index][field.status] == 'return') {
-                                            Get.to(() => const ReturnDetail(),
-                                                arguments: forSort[index]);
+                                            Get.to(() => const ReturnDetail(), arguments: forSort[index]);
                                           }
                                         },
                                         value: forSort[index],
-                                        dateTime: forSort[index]["completeDate"]??forSort[index]["returnDate"],
+                                        dateTime: forSort[index]["completeDate"] ?? forSort[index]["returnDate"],
                                         status: forSort[index][field.status]);
                                   }),
                             )
