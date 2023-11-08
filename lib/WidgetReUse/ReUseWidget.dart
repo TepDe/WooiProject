@@ -268,7 +268,6 @@ class ReUseWidget {
                     // );
                     Get.to(() => const TotalPackageScreen(), arguments: [
                       {'data': totalPackageData},
-                      {'key': totalPackageDataKey}
                     ]);
                   },
                   child: unitTwoText(
