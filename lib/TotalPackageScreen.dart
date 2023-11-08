@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:swipe_refresh/swipe_refresh.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/EditPackageScreen.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
@@ -76,9 +79,12 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
 
   Future<void> onInitialize() async {
     totalList = argumentData[0]['data'];
-    forDisplay = totalList;
-    keyList = argumentData[1]['key'];
-    await totalListLength();
+    if (totalList.isNotEmpty) {
+      forDisplay = totalList;
+      setState(() {});
+    } else {
+      await totalListLength();
+    }
   }
 
   final search = TextEditingController();
@@ -86,7 +92,14 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
   double padding = 8.0;
   double labelSize = 10.0;
   double textSize = 14.0;
+  final _controller = StreamController<SwipeRefreshState>.broadcast();
 
+  Stream<SwipeRefreshState> get _stream => _controller.stream;
+  Future<void> _refresh() async {
+    await Future<void>.delayed(const Duration(seconds: 3));
+    await totalListLength();
+    _controller.sink.add(SwipeRefreshState.hidden);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -270,300 +283,309 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                     ),
                   ),
                   Flexible(
-                    child: Scrollbar(
-                      thickness: 6,
-                      radius: const Radius.circular(6.0),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding: const EdgeInsets.all(8),
-                              itemCount: forDisplay.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Container(
-                                  width: Get.width,
-                                  margin: const EdgeInsets.all(6),
-                                  padding: EdgeInsets.symmetric(horizontal: padding),
-                                  decoration: BoxDecoration(
-                                    color: theme.liteGrey,
-                                    borderRadius: BorderRadius.circular(6),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: theme.grey,
-                                        blurRadius: 4,
-                                        offset: const Offset(0, 0), // Shadow position
-                                      ),
-                                    ],
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 6),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            reUse.reUseText(
-                                                weight: FontWeight.w400,
-                                                size: 14.0,
-                                                color: theme.darkGrey,
-                                                content: "${index + 1}./  ${clsLan.packageID}"),
-                                            Row(
-                                              children: [
-                                                reUse.reUseText(
-                                                    weight: FontWeight.bold,
-                                                    size: 16.0,
-                                                    color: theme.blue,
-                                                    content: (forDisplay[index]['packageID'] ?? "No Data")),
-                                                if (forDisplay[index]['status'] == 'pending')
-                                                  Container()
-                                                else if (forDisplay[index]['status'] == 'complete')
-                                                  Container()
-                                                else if (forDisplay[index]['status'] == 'return')
-                                                  SizedBox(
-                                                    height: 40,
-                                                    width: 40,
-                                                    child: PopupMenuButton<String>(
-                                                      onSelected: (value) {
-                                                        print(forDisplay[index]);
-                                                        isAction(
-                                                            data: forDisplay[index], value: value, context: context);
-                                                      },
-                                                      itemBuilder: (BuildContext context) {
-                                                        return <PopupMenuEntry<String>>[
-                                                          const PopupMenuItem<String>(
-                                                            value: 'requestAgain',
-                                                            child: Text('ហៅម្ដងទៀត'),
-                                                          ),
-                                                          const PopupMenuItem<String>(
-                                                            value: 'delete',
-                                                            child: Text('លុប'),
-                                                          ),
-                                                        ];
-                                                      },
-                                                    ),
-                                                  )
-                                                else
-                                                  SizedBox(
-                                                    height: 40,
-                                                    width: 40,
-                                                    child: PopupMenuButton<String>(
-                                                      onSelected: (value) {
-                                                        print(forDisplay[index]);
-                                                        isAction(
-                                                            data: forDisplay[index], value: value, context: context);
-                                                      },
-                                                      itemBuilder: (BuildContext context) {
-                                                        return <PopupMenuEntry<String>>[
-                                                          const PopupMenuItem<String>(
-                                                            value: 'edit',
-                                                            child: Text('កែ'),
-                                                          ),
-                                                          const PopupMenuItem<String>(
-                                                            value: 'delete',
-                                                            child: Text('លុប'),
-                                                          ),
-                                                        ];
-                                                      },
-                                                    ),
-                                                  )
-                                              ],
+                    child: SwipeRefresh.material(
+                      stateStream: _stream,
+                      onRefresh: _refresh,
+                      shrinkWrap: true,
+                      children: [
+                        Flexible(
+                          child: Scrollbar(
+                            thickness: 6,
+                            radius: const Radius.circular(6.0),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    padding: const EdgeInsets.all(8),
+                                    itemCount: forDisplay.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return Container(
+                                        width: Get.width,
+                                        margin: const EdgeInsets.all(6),
+                                        padding: EdgeInsets.symmetric(horizontal: padding),
+                                        decoration: BoxDecoration(
+                                          color: theme.liteGrey,
+                                          borderRadius: BorderRadius.circular(6),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: theme.grey,
+                                              blurRadius: 4,
+                                              offset: const Offset(0, 0), // Shadow position
                                             ),
                                           ],
                                         ),
-                                      ),
-                                      Divider(
-                                        color: theme.grey,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          reUse.reUseColumnText(
-                                              titleColor: theme.darkGrey,
-                                              title: clsLan.receiverLocation,
-                                              size: textSize,
-                                              color: theme.black,
-                                              lableSize: labelSize,
-                                              content: forDisplay[index]['location'] ?? "No Data",
-                                              weight: FontWeight.w500),
-                                          reUse.reUseColumnText(
-                                              titleColor: theme.darkGrey,
-                                              title: clsLan.receiverPhoneNumber,
-                                              size: textSize,
-                                              color: theme.black,
-                                              lableSize: labelSize,
-                                              content: forDisplay[index]['phoneNumber'] ?? "No Data",
-                                              weight: FontWeight.w500),
-                                          reUse.reUseColumnText(
-                                              titleColor: theme.darkGrey,
-                                              title: clsLan.qty,
-                                              size: textSize,
-                                              color: theme.black,
-                                              lableSize: labelSize,
-                                              content: forDisplay[index]['qty'] ?? "No Data",
-                                              weight: FontWeight.w500),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          reUse.reUseColumnText(
-                                              titleColor: theme.grey,
-                                              title: '',
-                                              size: textSize,
-                                              color: theme.black,
-                                              lableSize: labelSize,
-                                              content: '',
-                                              weight: FontWeight.w500),
-                                          reUse.reUseColumnText(
-                                              titleColor: theme.grey,
-                                              title: '',
-                                              size: textSize,
-                                              color: theme.black,
-                                              lableSize: labelSize,
-                                              content: '',
-                                              weight: FontWeight.w500),
-                                          Flexible(
-                                            child: Column(
-                                              children: [
-                                                reUse.reUseText(
-                                                    size: labelSize, color: theme.darkGrey, content: clsLan.price),
-                                                Container(
-                                                  margin: const EdgeInsets.all(8),
-                                                  width: Get.width,
-                                                  decoration: BoxDecoration(
-                                                    color: theme.blue,
-                                                    borderRadius: BorderRadius.circular(6),
-                                                  ),
-                                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                                  child: Center(
-                                                      child: reUse.reUseText(
-                                                          weight: FontWeight.bold,
-                                                          size: 16.0,
-                                                          color: theme.white,
-                                                          content: (forDisplay[index]['price'] ?? "0") + " \$")),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Flexible(
-                                        child: Row(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             Padding(
-                                              padding: EdgeInsets.only(right: padding),
-                                              child: reUse.reUseText(
-                                                  weight: FontWeight.bold,
-                                                  size: 12.0,
-                                                  color: theme.darkGrey,
-                                                  content: '${clsLan.note} :'),
+                                              padding: const EdgeInsets.only(top: 6),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  reUse.reUseText(
+                                                      weight: FontWeight.w400,
+                                                      size: 14.0,
+                                                      color: theme.darkGrey,
+                                                      content: "${index + 1}./  ${clsLan.packageID}"),
+                                                  Row(
+                                                    children: [
+                                                      reUse.reUseText(
+                                                          weight: FontWeight.bold,
+                                                          size: 16.0,
+                                                          color: theme.blue,
+                                                          content: (forDisplay[index]['packageID'] ?? "No Data")),
+                                                      if (forDisplay[index]['status'] == 'pending')
+                                                        Container()
+                                                      else if (forDisplay[index]['status'] == 'complete')
+                                                        Container()
+                                                      else if (forDisplay[index]['status'] == 'return')
+                                                          SizedBox(
+                                                            height: 40,
+                                                            width: 40,
+                                                            child: PopupMenuButton<String>(
+                                                              onSelected: (value) {
+                                                                isAction(
+                                                                    data: forDisplay[index], value: value, context: context);
+                                                              },
+                                                              itemBuilder: (BuildContext context) {
+                                                                return <PopupMenuEntry<String>>[
+                                                                  const PopupMenuItem<String>(
+                                                                    value: 'requestAgain',
+                                                                    child: Text('ហៅម្ដងទៀត'),
+                                                                  ),
+                                                                  const PopupMenuItem<String>(
+                                                                    value: 'delete',
+                                                                    child: Text('លុប'),
+                                                                  ),
+                                                                ];
+                                                              },
+                                                            ),
+                                                          )
+                                                        else
+                                                          SizedBox(
+                                                            height: 40,
+                                                            width: 40,
+                                                            child: PopupMenuButton<String>(
+                                                              onSelected: (value) {
+                                                                isAction(
+                                                                    data: forDisplay[index], value: value, context: context);
+                                                              },
+                                                              itemBuilder: (BuildContext context) {
+                                                                return <PopupMenuEntry<String>>[
+                                                                  const PopupMenuItem<String>(
+                                                                    value: 'edit',
+                                                                    child: Text('កែ'),
+                                                                  ),
+                                                                  const PopupMenuItem<String>(
+                                                                    value: 'delete',
+                                                                    child: Text('លុប'),
+                                                                  ),
+                                                                ];
+                                                              },
+                                                            ),
+                                                          )
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Divider(
+                                              color: theme.grey,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                reUse.reUseColumnText(
+                                                    titleColor: theme.darkGrey,
+                                                    title: clsLan.receiverLocation,
+                                                    size: textSize,
+                                                    color: theme.black,
+                                                    lableSize: labelSize,
+                                                    content: forDisplay[index]['location'] ?? "No Data",
+                                                    weight: FontWeight.w500),
+                                                reUse.reUseColumnText(
+                                                    titleColor: theme.darkGrey,
+                                                    title: clsLan.receiverPhoneNumber,
+                                                    size: textSize,
+                                                    color: theme.black,
+                                                    lableSize: labelSize,
+                                                    content: forDisplay[index]['phoneNumber'] ?? "No Data",
+                                                    weight: FontWeight.w500),
+                                                reUse.reUseColumnText(
+                                                    titleColor: theme.darkGrey,
+                                                    title: clsLan.qty,
+                                                    size: textSize,
+                                                    color: theme.black,
+                                                    lableSize: labelSize,
+                                                    content: forDisplay[index]['qty'] ?? "No Data",
+                                                    weight: FontWeight.w500),
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                reUse.reUseColumnText(
+                                                    titleColor: theme.grey,
+                                                    title: '',
+                                                    size: textSize,
+                                                    color: theme.black,
+                                                    lableSize: labelSize,
+                                                    content: '',
+                                                    weight: FontWeight.w500),
+                                                reUse.reUseColumnText(
+                                                    titleColor: theme.grey,
+                                                    title: '',
+                                                    size: textSize,
+                                                    color: theme.black,
+                                                    lableSize: labelSize,
+                                                    content: '',
+                                                    weight: FontWeight.w500),
+                                                Flexible(
+                                                  child: Column(
+                                                    children: [
+                                                      reUse.reUseText(
+                                                          size: labelSize, color: theme.darkGrey, content: clsLan.price),
+                                                      Container(
+                                                        margin: const EdgeInsets.all(8),
+                                                        width: Get.width,
+                                                        decoration: BoxDecoration(
+                                                          color: theme.blue,
+                                                          borderRadius: BorderRadius.circular(6),
+                                                        ),
+                                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                                        child: Center(
+                                                            child: reUse.reUseText(
+                                                                weight: FontWeight.bold,
+                                                                size: 16.0,
+                                                                color: theme.white,
+                                                                content: (forDisplay[index]['price'] ?? "0") + " \$")),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
                                             ),
                                             Flexible(
-                                              child: Container(
-                                                padding: EdgeInsets.all(padding),
-                                                width: Get.width,
-                                                decoration: BoxDecoration(border: Border.all(color: theme.minGrey)),
-                                                child: reUse.reUseTextNote(
-                                                    weight: FontWeight.w400,
-                                                    size: 14.0,
-                                                    color: theme.black,
-                                                    content: forDisplay[index]['note'] ?? 'No note'),
+                                              child: Row(
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only(right: padding),
+                                                    child: reUse.reUseText(
+                                                        weight: FontWeight.bold,
+                                                        size: 12.0,
+                                                        color: theme.darkGrey,
+                                                        content: '${clsLan.note} :'),
+                                                  ),
+                                                  Flexible(
+                                                    child: Container(
+                                                      padding: EdgeInsets.all(padding),
+                                                      width: Get.width,
+                                                      decoration: BoxDecoration(border: Border.all(color: theme.minGrey)),
+                                                      child: reUse.reUseTextNote(
+                                                          weight: FontWeight.w400,
+                                                          size: 14.0,
+                                                          color: theme.black,
+                                                          content: forDisplay[index]['note'] ?? 'No note'),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.all(padding),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      reUse.reUseText(
+                                                          weight: FontWeight.w400,
+                                                          size: 12.0,
+                                                          color: theme.grey,
+                                                          content: '${clsLan.createDate} : '),
+                                                      reUse.reUseText(
+                                                          weight: FontWeight.w400,
+                                                          size: 14.0,
+                                                          color: theme.black,
+                                                          content: glb.formatDateTime(forDisplay[index]['date'])),
+                                                    ],
+                                                  ),
+                                                  if (forDisplay[index]['status'] == 'pending')
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        color: theme.litestOrange,
+                                                        borderRadius: BorderRadius.circular(6),
+                                                      ),
+                                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                                      child: reUse.reUseText(
+                                                          weight: FontWeight.bold,
+                                                          size: 10.0,
+                                                          color: theme.orange,
+                                                          content: clsLan.stPend),
+                                                    )
+                                                  else if (forDisplay[index]['status'] == 'complete')
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        color: theme.litestGreen,
+                                                        borderRadius: BorderRadius.circular(6),
+                                                      ),
+                                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                                      child: reUse.reUseText(
+                                                          weight: FontWeight.bold,
+                                                          size: 12.0,
+                                                          color: theme.green,
+                                                          content: clsLan.stCom),
+                                                    )
+                                                  else if (forDisplay[index]['status'] == 'return')
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                          color: theme.litestRed,
+                                                          borderRadius: BorderRadius.circular(6),
+                                                        ),
+                                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                                        child: reUse.reUseText(
+                                                            weight: FontWeight.bold,
+                                                            size: 12.0,
+                                                            color: theme.liteRed,
+                                                            content: clsLan.stReturn),
+                                                      )
+                                                    else
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                          color: theme.dirt,
+                                                          borderRadius: BorderRadius.circular(6),
+                                                        ),
+                                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                                        child: reUse.reUseText(
+                                                            weight: FontWeight.bold,
+                                                            size: 12.0,
+                                                            color: theme.deepPumpkin,
+                                                            content: clsLan.stReq),
+                                                      )
+                                                ],
                                               ),
                                             ),
                                           ],
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.all(padding),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                reUse.reUseText(
-                                                    weight: FontWeight.w400,
-                                                    size: 12.0,
-                                                    color: theme.grey,
-                                                    content: '${clsLan.createDate} : '),
-                                                reUse.reUseText(
-                                                    weight: FontWeight.w400,
-                                                    size: 14.0,
-                                                    color: theme.black,
-                                                    content: glb.formatDateTime(forDisplay[index]['date'])),
-                                              ],
-                                            ),
-                                            if (forDisplay[index]['status'] == 'pending')
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color: theme.litestOrange,
-                                                  borderRadius: BorderRadius.circular(6),
-                                                ),
-                                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                                child: reUse.reUseText(
-                                                    weight: FontWeight.bold,
-                                                    size: 10.0,
-                                                    color: theme.orange,
-                                                    content: clsLan.stPend),
-                                              )
-                                            else if (forDisplay[index]['status'] == 'complete')
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color: theme.litestGreen,
-                                                  borderRadius: BorderRadius.circular(6),
-                                                ),
-                                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                                child: reUse.reUseText(
-                                                    weight: FontWeight.bold,
-                                                    size: 12.0,
-                                                    color: theme.green,
-                                                    content: clsLan.stCom),
-                                              )
-                                            else if (forDisplay[index]['status'] == 'return')
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color: theme.litestRed,
-                                                  borderRadius: BorderRadius.circular(6),
-                                                ),
-                                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                                child: reUse.reUseText(
-                                                    weight: FontWeight.bold,
-                                                    size: 12.0,
-                                                    color: theme.liteRed,
-                                                    content: clsLan.stReturn),
-                                              )
-                                            else
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color: theme.dirt,
-                                                  borderRadius: BorderRadius.circular(6),
-                                                ),
-                                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                                child: reUse.reUseText(
-                                                    weight: FontWeight.bold,
-                                                    size: 12.0,
-                                                    color: theme.deepPumpkin,
-                                                    content: clsLan.stReq),
-                                              )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                                      );
+                                    },
                                   ),
-                                );
-                              },
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
+                          ),
+                        )
+
+                      ],
                     ),
-                  )
+                  ),
+
                   // isShow == true
                   //     ? driverList == []
                   //         ? Flexible(child: Center(child: Text('No Package')))
