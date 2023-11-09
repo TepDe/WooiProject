@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
@@ -8,7 +7,7 @@ import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
 class PendingDetail extends StatefulWidget {
-  const PendingDetail({Key? key}) : super(key: key);
+  const PendingDetail({super.key});
 
   @override
   State<PendingDetail> createState() => _PendingDetailState();
@@ -23,7 +22,7 @@ class _PendingDetailState extends State<PendingDetail> {
   final field = FieldData();
   final fieldInfo = FieldInfo();
 
-  var forDisplay;
+  Map forDisplay ={};
 
   var labelSize = 14.0;
   var valueSize = 14.0;
