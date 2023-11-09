@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show Color;
 class ThemesApp{
   var deepOrange = const Color(0xffffac30);
   var liteOrange = const Color(0xffffdda1);
