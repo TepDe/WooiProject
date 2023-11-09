@@ -7,7 +7,7 @@ import 'package:wooiproject/HomeScreen.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
 class ViewScreen extends StatefulWidget {
-  const ViewScreen({Key? key}) : super(key: key);
+  const ViewScreen({super.key});
 
   @override
   State<ViewScreen> createState() => _ViewScreenState();
