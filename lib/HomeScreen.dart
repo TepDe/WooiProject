@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:intl/intl.dart'; // for date formatting and parsing
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swipe_refresh/swipe_refresh.dart';
@@ -22,7 +20,7 @@ import 'package:wooiproject/WidgetReUse/Themes.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -66,7 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       final result = await InternetAddress.lookup('example.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        print('connected');
       }
     } on SocketException catch (_) {
       reUse.reUseCircleDialog(
@@ -156,8 +153,9 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {});
       });
     } catch (e) {
-      print('totalListLength $e');
-      // FirebaseAuth.instance.signOut();
+      if (kDebugMode) {
+        print(e);
+      }      // FirebaseAuth.instance.signOut();
       // Get.to(() => const LogInScreen());
     }
   }
@@ -197,7 +195,11 @@ class _HomeScreenState extends State<HomeScreen> {
         compSort.add(value);
         setState(() {});
       });
-    } catch (e) {}
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
   }
 
   DatabaseReference returnDB = FirebaseDatabase.instance.ref('Return');
@@ -456,13 +458,4 @@ class _HomeScreenState extends State<HomeScreen> {
   List forSort = [];
   List compSort = [];
   FirebaseAuth auth = FirebaseAuth.instance;
-}
-
-class QrData {
-  String phoneNumber = '';
-  String email = '';
-  String firstname = '';
-  String lastname = '';
-  String userID = '';
-// QrData({required this.phoneNumber, required this.email, required this.firstname, required this.lastname, required this.userID});
 }
