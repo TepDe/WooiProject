@@ -10,7 +10,7 @@ import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+  const EditProfileScreen({super.key});
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -30,8 +30,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final chatID = TextEditingController();
   String packageID = '';
   double textSize = 14;
-  List distince = [];
-  List eng_distin = [];
   List forDisplay = [];
   String userName = '';
   String phoneNumber = '';
@@ -353,11 +351,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         );
       },
     );
-  }
-
-  void handleListItemTap(int index) {
-    // Perform actions using the index
-    print('Index: $index');
   }
 
   bool hasNullValues(obj) {
