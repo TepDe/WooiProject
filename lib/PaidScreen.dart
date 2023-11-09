@@ -9,7 +9,7 @@ import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
 class PaidScreen extends StatefulWidget {
-  const PaidScreen({Key? key}) : super(key: key);
+  const PaidScreen({super.key});
 
   @override
   State<PaidScreen> createState() => _PaidScreenState();
@@ -30,8 +30,6 @@ class _PaidScreenState extends State<PaidScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print(argumentData);
-    print(argumentData);
     if (argumentData == []) {
       completeList = [];
       forDisplay = [];
