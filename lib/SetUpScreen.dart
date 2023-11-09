@@ -1,21 +1,17 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/LoginScreen.dart';
-import 'package:wooiproject/ViewScreen.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 import 'GlobalControl/GlobalController.dart';
 
 class SetUpScreen extends StatefulWidget {
-  const SetUpScreen({Key? key}) : super(key: key);
+  const SetUpScreen({super.key});
 
   @override
   State<SetUpScreen> createState() => _SetUpScreenState();
@@ -62,8 +58,6 @@ class _SetUpScreenState extends State<SetUpScreen> {
     super.initState();
     fetchUserData();
   }
-
-  var ctime;
 
   @override
   Widget build(BuildContext context) {
