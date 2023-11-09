@@ -1,25 +1,19 @@
-import 'dart:convert';
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:wooiproject/Distination/clsDistin.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
-import 'package:wooiproject/GlobalControl/createModule.dart';
 import 'package:wooiproject/GlobalControl/moduleObject.dart';
-
 import 'GlobalControl/GlobalController.dart';
-import 'ViewScreen.dart';
 import 'WidgetReUse/ReUseWidget.dart';
 import 'WidgetReUse/Themes.dart';
 
 class CreatePackageScreen extends StatefulWidget {
-  const CreatePackageScreen({Key? key}) : super(key: key);
+  const CreatePackageScreen({super.key});
 
   @override
   State<CreatePackageScreen> createState() => _CreatePackageScreenState();
@@ -54,11 +48,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
   final inFor = FieldInfo();
 
   fetchUserInformation() async {
-    FirebaseFirestore.instance
-        .collection('Users')
-        .doc(auth.currentUser!.uid)
-        .get()
-        .then((doc) async {
+    FirebaseFirestore.instance.collection('Users').doc(auth.currentUser!.uid).get().then((doc) async {
       Map data = doc.data() as Map;
       userName = data['firstname'] + ' ' + data['lastname'].toString();
       phoneNumber = data['phoneNumber'].toString();
@@ -68,7 +58,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
     });
   }
 
-  var generalInfo ={};
+  var generalInfo = {};
 
   @override
   void initState() {
@@ -76,16 +66,19 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
     super.initState();
     generatePackageID();
     fetchUserInformation();
-    onGetGeneral ();
+    onGetGeneral();
     fetchUserData();
     fetchToken();
     distince = clsDis.destination;
     forDisplay = clsDis.destination;
   }
-  onGetGeneral () async {
+
+  onGetGeneral() async {
     generalInfo = await glb.onGetGeneralInfo();
   }
-  var userObject ={};
+
+  var userObject = {};
+
   fetchUserData() async {
     await FirebaseFirestore.instance
         .collection('Users')
@@ -95,11 +88,13 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
       userObject = documentSnapshot.data() as Map;
     });
   }
+
   final clsLan = ClsLanguage();
 
   String getToken = '';
   String chatid = '';
   ModuleObject modObj = ModuleObject();
+
   fetchToken() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     await FirebaseFirestore.instance
@@ -159,11 +154,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                         size: 16.0,
                         color: theme.grey,
                       ),
-                      reUse.reUseText(
-                          content: packageID,
-                          size: 26.0,
-                          color: theme.black,
-                          weight: FontWeight.bold),
+                      reUse.reUseText(content: packageID, size: 26.0, color: theme.black, weight: FontWeight.bold),
                     ],
                   ),
                 ),
@@ -174,10 +165,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   child: reUse.reUseText(
-                      content: 'លេខទូរស័ព្ទអ្នកទទួល :',
-                      size: textSize,
-                      weight: FontWeight.w500,
-                      color: theme.black),
+                      content: 'លេខទូរស័ព្ទអ្នកទទួល :', size: textSize, weight: FontWeight.w500, color: theme.black),
                 ),
                 // Padding(
                 //   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -234,9 +222,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                     //inputFormatters: formater,
                     onChanged: (value) {
                       List results = clsDis.destination
-                          .where((user) => user
-                              .toLowerCase()
-                              .contains(locationBox.text.toString().toLowerCase()))
+                          .where((user) => user.toLowerCase().contains(locationBox.text.toString().toLowerCase()))
                           .toList();
                       forDisplay = results;
                       setState(() {});
@@ -244,7 +230,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                     decoration: InputDecoration(
                       suffixIcon: IconButton(
                         onPressed: () {
-                          forDisplay=clsDis.destination;
+                          forDisplay = clsDis.destination;
 
                           locationBox.clear();
                           locationBox.text = '';
@@ -252,7 +238,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                         },
                         icon: const Icon(Icons.close),
                       ),
-                      hintText: locationBox.text.toString() ?? '',
+                      hintText: locationBox.text.toString(),
                       //icon: Icon(textIcon ?? null),
                       // fillColor: theme.liteGrey,
                       border: OutlineInputBorder(
@@ -265,7 +251,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric( horizontal: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: reUse.reUseText(
                       content: 'ទីតាំង : ${forDisplay.length}',
                       size: textSize,
@@ -284,8 +270,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                             return SizedBox(
                               child: TextButton(
                                 onPressed: () {
-                                  locationBox.text =
-                                      forDisplay[index].toString().trim().toLowerCase();
+                                  locationBox.text = forDisplay[index].toString().trim().toLowerCase();
                                 },
                                 child: Text(forDisplay[index]),
                               ),
@@ -322,10 +307,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10, top: 10),
                   child: reUse.reUseText(
-                      content: clsLan.qty + " :",
-                      size: textSize,
-                      weight: FontWeight.w500,
-                      color: theme.black),
+                      content: clsLan.qty + " :", size: textSize, weight: FontWeight.w500, color: theme.black),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -351,8 +333,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      reUse.reUseText(
-                          content: 'ចំណាំ :', size: textSize, color: theme.black),
+                      reUse.reUseText(content: 'ចំណាំ :', size: textSize, color: theme.black),
                       Container(
                         alignment: Alignment.center,
                         child: TextFormField(
@@ -366,9 +347,8 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                               ),
 
                               // hintText: "Enter Remarks",
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(width: 1, color: theme.hiLiteBlue))),
+                              focusedBorder:
+                                  OutlineInputBorder(borderSide: BorderSide(width: 1, color: theme.hiLiteBlue))),
                         ),
                       ),
                     ],
@@ -469,6 +449,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                         ));
                                   } else {
                                     alertDialog(context);
+                                    String modPrice = glb.removeLeadingZeros(priceBox.text.trim());
                                     await glb
                                         .createPackage(
                                       generalInfo: userObject,
@@ -480,15 +461,10 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                       userPhoneNumber: phoneNumber.trim().toString(),
                                       tokenKey: getToken.trim().toString(),
                                       chatid: chatid.trim().toString(),
-                                      price: priceBox.text
-                                          .trim()
-                                          .toString(),
+                                      price: modPrice,
                                       note: noteBox.text.trim().toString(),
                                       packageID: packageID.toString(),
-                                      qty: qtyBox.text
-                                          .replaceAll(RegExp('^0'), '')
-                                          .trim()
-                                          .toString(),
+                                      qty: qtyBox.text.replaceAll(RegExp('^0'), '').trim().toString(),
                                       phoneNumber: phoneBox.text.trim().toString(),
                                       location: locationBox.text.trim().toString(),
                                     )
@@ -496,7 +472,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                       phoneBox.clear();
                                       priceBox.clear();
                                       locationBox.clear();
-                                      qtyBox.text='1';
+                                      qtyBox.text = '1';
                                       noteBox.clear();
                                     });
                                     Get.back();
@@ -531,10 +507,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
 
                                   Text(
                                     'OK',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: theme.white,
-                                        fontWeight: FontWeight.bold),
+                                    style: TextStyle(fontSize: 16, color: theme.white, fontWeight: FontWeight.bold),
                                   )
                                 ],
                               ),
@@ -568,8 +541,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
             backgroundColor: Colors.transparent,
             actions: [
               Center(
-                child:
-                    SizedBox(height: 40, width: 40, child: CircularProgressIndicator()),
+                child: SizedBox(height: 40, width: 40, child: CircularProgressIndicator()),
               )
             ],
           ),
