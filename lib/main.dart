@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/ViewScreen.dart';
@@ -25,7 +24,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +88,7 @@ class MyApp extends StatelessWidget {
 // }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -119,7 +118,6 @@ class _MyHomePageState extends State<MyHomePage> {
     await Geolocator.requestPermission()
         .then((value) {})
         .onError((error, stackTrace) {
-      print('$error' + "" + '$stackTrace');
       printError();
     });
     protect = true;
