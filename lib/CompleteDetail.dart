@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
@@ -8,7 +7,7 @@ import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
 class CompleteDetail extends StatefulWidget {
-  const CompleteDetail({Key? key}) : super(key: key);
+  const CompleteDetail({super.key});
 
   @override
   State<CompleteDetail> createState() => _CompleteDetailState();
