@@ -19,7 +19,7 @@ import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
 class AccountScreen extends StatefulWidget {
-  const AccountScreen({Key? key}) : super(key: key);
+  const AccountScreen({super.key});
 
   @override
   State<AccountScreen> createState() => _AccountScreenState();
@@ -112,21 +112,6 @@ class _AccountScreenState extends State<AccountScreen> {
         setState(() {});
       });
     } catch (e) {
-      reUse.reUseCircleDialog(
-          disposeAllow: false,
-          onTap: () => glb.isLogOut(),
-          context: context,
-          icon: Icons.cancel_outlined,
-          title: 'មានបញ្ហា',
-          content: Center(
-            child: Text(
-              'សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ',
-              style: TextStyle(
-                color: theme.black,
-              ),
-            ),
-          ));
-
       // FirebaseAuth.instance.signOut();
       // Get.to(()=> const LogInScreen());
     }
@@ -592,7 +577,9 @@ class _AccountScreenState extends State<AccountScreen> {
       });
       calculation(mainData);
     } catch (e) {
-      print('completeListLength $e');
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
