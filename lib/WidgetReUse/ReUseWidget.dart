@@ -1,12 +1,7 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wooiproject/CompleteScreen.dart';
@@ -14,18 +9,14 @@ import 'package:wooiproject/CreatePackageScreen.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
-import 'package:wooiproject/HomeScreen.dart';
 import 'package:wooiproject/LoginScreen.dart';
-import 'package:wooiproject/MapScreen.dart';
 import 'package:wooiproject/PaidScreen.dart';
 import 'package:wooiproject/PendingComponent/PendingScreen.dart';
 import 'package:wooiproject/ReturnScreen.dart';
 import 'package:wooiproject/RevenueList.dart';
 import 'package:wooiproject/TotalPackageScreen.dart';
 import 'package:wooiproject/ViewScreen.dart';
-import 'package:wooiproject/WidgetReUse/SuperController.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
-import 'package:flutter/services.dart';
 
 class ReUseWidget {
   topButtonLeft({function, icon}) {
@@ -46,7 +37,7 @@ class ReUseWidget {
                 color: Colors.black,
                 onPressed: () {
                   if (function == 'home') {
-                    Get.to(()=> ViewScreen());
+                    Get.to(()=> const ViewScreen());
                   }
                 },
                 icon: Icon(icon)),
@@ -56,36 +47,8 @@ class ReUseWidget {
     );
   }
 
-  final msc = Get.put(MapScreenController());
   late GoogleMapController mapController;
   final theme = ThemesApp();
-
-  topButtonRight({function, icon}) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Align(
-        alignment: Alignment.topRight,
-        child: Container(
-          height: 50,
-          width: 50,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
-            color: Colors.yellow,
-          ),
-          child: IconButton(
-              splashColor: Colors.grey,
-              color: Colors.black,
-              onPressed: () {
-                if (function == 'crlocation') {
-                  msc.request();
-                  msc.moveCamera();
-                }
-              },
-              icon: Icon(icon)),
-        ),
-      ),
-    );
-  }
 
   topBarHomeScreen() {
     return const Padding(
@@ -130,99 +93,6 @@ class ReUseWidget {
           ],
         ),
       ],
-    );
-  }
-
-  reUseTopBar({name, context}) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            name,
-            style: TextStyle(color: theme.deepOrange, fontSize: 28, fontWeight: FontWeight.bold),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Your activity will record down here",
-                  style: TextStyle(color: theme.grey, fontSize: 12, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "15",
-                  style: TextStyle(color: theme.grey, fontSize: 12, fontWeight: FontWeight.bold),
-                ),
-              ),
-              reUseSquareButton(icon: Icons.filter_alt_rounded),
-            ],
-          ),
-          Divider(
-            color: theme.grey,
-          ),
-        ],
-      ),
-    );
-  }
-
-  // reUseSquareButton({icon}) {
-  //   return Material(
-  //     color: Colors.transparent,
-  //     child: InkWell(
-  //       onTap: () {},
-  //       splashColor: Colors.red,
-  //       child: Container(
-  //         height: 50,
-  //         width: 50,
-  //         decoration: BoxDecoration(
-  //           color: theme.litestOrange,
-  //           borderRadius: BorderRadius.circular(10),
-  //           // boxShadow: [
-  //           //   BoxShadow(
-  //           //     color: Colors.grey,
-  //           //     blurRadius: 1,
-  //           //     //offset: Offset(4, 8), // Shadow position
-  //           //   ),
-  //           // ],
-  //         ),
-  //         child: InkWell(
-  //           onTap: () {},
-  //           child: Icon(
-  //             icon ?? null,
-  //             color: theme.orange,
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  reUseSquareButton({icon}) {
-    return Container(
-      width: 40,
-      height: 40,
-      alignment: Alignment.center,
-      child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(100),
-        child: InkWell(
-          onTap: () {
-            print("tapped");
-          },
-          child: Icon(
-            icon ?? null,
-            color: theme.orange,
-          ),
-        ),
-      ),
-      color: theme.litestOrange,
     );
   }
 
@@ -302,7 +172,7 @@ class ReUseWidget {
                   child: InkWell(
                     onTap: () {
                       Get.to(
-                        () => CompleteScreen(),
+                        () => const CompleteScreen(),
                         arguments: completeData,
                       );
                     },
@@ -319,7 +189,7 @@ class ReUseWidget {
                   child: InkWell(
                     onTap: () {
                       Get.to(
-                        () => ReturnScreen(),
+                        () => const ReturnScreen(),
                         arguments: returnData,
                       );
                     },
@@ -412,65 +282,6 @@ class ReUseWidget {
     );
   }
 
-  unitThreeHomeScreen({icon, lable, price, funtion, context, latitude, longitude}) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 12.0, left: 18, right: 18),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(20),
-        splashColor: Colors.transparent,
-        onTap: () {
-          Get.to(MapScreen());
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: theme.midGrey,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              const BoxShadow(
-                color: Colors.grey,
-                blurRadius: 2,
-                //offset: Offset(4, 8), // Shadow position
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Row(
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Icon(
-                    icon,
-                    size: 60,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 18.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: Text(lable,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 15, color: theme.black, fontWeight: FontWeight.bold)),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: Text(price,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 15, color: theme.black, fontWeight: FontWeight.bold)),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   unitProfile() {
     return const Padding(
@@ -496,242 +307,10 @@ class ReUseWidget {
     );
   }
 
-  signInForm() {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            controller: nameControl,
-            decoration: const InputDecoration(
-              fillColor: Colors.blue,
-              border: OutlineInputBorder(),
-              hintText: 'Name',
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            controller: phoneControl,
-            decoration: const InputDecoration(
-              fillColor: Colors.blue,
-              border: OutlineInputBorder(),
-              hintText: 'Phone Number',
-            ),
-          ),
-        ),
-        // reuseTextField(label: 'Phone Number'),
-        reUseButton(label: 'Confirm', function: 'storeUserLogin')
-      ],
-    );
-  }
-
   final nameControl = TextEditingController();
   final phoneControl = TextEditingController();
   final dialogPhoneNum = TextEditingController();
 
-  reUseHeader(
-      {TextEditingController? searchcontroll, headercolor, title, List? packageList, label, titleColor, context}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      decoration: const BoxDecoration(
-          //color: headercolor,
-          //borderRadius: BorderRadius.circular(6),
-          // boxShadow: [
-          //   BoxShadow(
-          //     color: theme.grey,
-          //     blurRadius: 4,
-          //     offset: Offset(0, 1), // Shadow position
-          //   ),
-          // ],
-          ),
-      child: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  height: 40,
-                  width: 40,
-                  // decoration: BoxDecoration(
-                  //   color: theme.litestOrange,
-                  //   borderRadius: BorderRadius.circular(60),
-                  //   boxShadow: [
-                  //     BoxShadow(
-                  //       color: theme.minGrey,
-                  //       blurRadius: 6,
-                  //       offset: const Offset(0, 0), // Shadow position
-                  //     ),
-                  //   ],
-                  // ),
-                  child: IconButton(
-                      splashRadius: 25,
-                      onPressed: () {
-                        Get.back();
-                      },
-                      icon: Icon(
-                        Icons.arrow_back_ios_new_outlined,
-                        color: theme.black,
-                      )),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 18.0),
-                  child: Text(
-                    title ?? '',
-                    style: TextStyle(fontSize: 18, color: titleColor, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.search,
-                      color: Colors.transparent,
-                    )),
-              ],
-            ),
-          ),
-          Row(
-            children: [
-              Flexible(
-                flex: 5,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 12.0),
-                  child: TextFormField(
-                    autofocus: false,
-                    controller: searchcontroll,
-                    decoration: InputDecoration(
-                      filled: true,
-                      hintStyle: const TextStyle(fontSize: 12),
-
-                      fillColor: theme.midGrey,
-                      hintText: 'Search ID or Phone number',
-                      border: OutlineInputBorder(
-                        // borderSide:
-                        //      BorderSide(color:theme.minGrey ,width: 0.0),
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide.none,
-                      ),
-                      suffixIcon: IconButton(
-                        splashColor: Colors.transparent,
-                        onPressed: () => {
-                          searchcontroll!.clear(),
-                          //packageList!.clear(),
-                          FocusManager.instance.primaryFocus?.unfocus(),
-                        },
-                        icon: const Icon(Icons.close),
-                      ),
-
-                      // contentPadding:
-                      // EdgeInsets.only(left: 14.0, bottom: 12.0, top: 12.0),
-                      // focusedBorder: OutlineInputBorder(
-                      //   borderSide: BorderSide(color: Colors.white),
-                      //   borderRadius: BorderRadius.circular(25.7),
-                      //
-                      // ),
-                      // enabledBorder: UnderlineInputBorder(
-                      //   borderSide: BorderSide(color: Colors.red),
-                      //   borderRadius: BorderRadius.circular(25.7),
-                      // ),
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: theme.liteBlue,
-                  borderRadius: BorderRadius.circular(6),
-                  boxShadow: [
-                    BoxShadow(
-                      color: theme.minGrey,
-                      blurRadius: 6,
-                      offset: const Offset(0, 0), // Shadow position
-                    ),
-                  ],
-                ),
-                child: IconButton(
-                    splashRadius: 20,
-                    onPressed: () {
-                      List results = packageList!
-                          .where((user) =>
-                              user['packageID'].toLowerCase().contains(searchcontroll!.text.toString().toLowerCase()))
-                          .toList();
-                      print(results);
-                      print(results);
-                    },
-                    icon: Icon(
-                      Icons.search,
-                      color: theme.blue,
-                    )),
-              )
-            ],
-          ),
-          Row(
-            children: [
-              reUseText(content: 'Total : '),
-              const Flexible(child: Divider()),
-              Container(
-                decoration: BoxDecoration(
-                  color: theme.litestOrange,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: IconButton(
-                    splashRadius: 20,
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.filter_alt_outlined,
-                      color: theme.orange,
-                    )),
-              )
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  reUseTopHeader({headercolor, title, label, titleColor}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      decoration: BoxDecoration(
-        color: headercolor,
-        //borderRadius: BorderRadius.circular(6),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: theme.grey,
-        //     blurRadius: 4,
-        //     offset: Offset(0, 1), // Shadow position
-        //   ),
-        // ],
-      ),
-      child: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            child: Row(
-              children: [
-                IconButton(
-                    splashRadius: 25,
-                    onPressed: () {
-                      Get.back();
-                    },
-                    icon: const Icon(Icons.arrow_back_ios_new_outlined)),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    title ?? '',
-                    style: TextStyle(fontSize: 18, color: titleColor, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   reUseText({content, size, weight, color, maxLines}) {
     return Text(
@@ -749,7 +328,7 @@ class ReUseWidget {
   reUseTextNote({content, size, weight, color}) {
     return Text(
       content ?? "",
-      maxLines: 5,
+      maxLines: 10,
       style: TextStyle(fontSize: size ?? 12, color: color ?? theme.black, fontWeight: weight ?? FontWeight.normal),
     );
   }
@@ -809,36 +388,6 @@ class ReUseWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  final gsc = Get.put(GlbSuperController());
-
-  reUseButton({label, function}) {
-    return Container(
-      width: Get.width,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(backgroundColor: theme.deepOrange),
-        child: Text(
-          "$label",
-          style: const TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        onPressed: () {
-          if (function == 'storeUserLogin') {
-            print('${nameControl.text} ${phoneControl.text}');
-            gsc.storeUserLogin(name: nameControl.text, phone: phoneControl.text);
-            // gsc.storeUserLogin(name: '',phone:'' );
-          }
-          if (function == 'requestDriver') {
-            if (gsc.requestStatus == 'Request') {
-              gsc.onRequestLocation();
-              gsc.requestStatus.value = 'Cancel';
-            } else if (gsc.requestStatus == 'Cancel') {
-              gsc.removeRequest();
-            }
-          }
-        },
       ),
     );
   }
@@ -987,12 +536,10 @@ class ReUseWidget {
                   );
                 } else if (function == 'add') {
                   int qty = int.parse(value) + 1;
-                  print(qty);
                 } else if (function == 'pincode') {
                   //glb.insertTelegramToken();
                 } else if (function == 'token') {
-                  print(value);
-                  print(value);
+
                   //glb.insertTelegramToken(token: value);
                 } else if (function == 'nointernet') {
                   exit(0);
@@ -1517,7 +1064,7 @@ class ReUseWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           reUseText(size: 12.0, weight: FontWeight.bold, color: theme.grey, content: 'Status'),
-                          Container(
+                          SizedBox(
                             width: 100,
                             child: reUseText(
                                 size: 12.0,
@@ -1539,8 +1086,6 @@ class ReUseWidget {
   double reUseReturnPadding = 2.0;
 
   reUsePendingList({removeStatus, List? pkc}) {
-    print(pkc);
-    print(pkc);
     return Flexible(
       child: SingleChildScrollView(
         child: Column(
