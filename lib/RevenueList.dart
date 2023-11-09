@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:wooiproject/CompleteDetail.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
@@ -10,7 +9,7 @@ import 'package:wooiproject/WidgetReUse/Themes.dart';
 import 'package:intl/intl.dart';
 
 class RevenueList extends StatefulWidget {
-  const RevenueList({Key? key}) : super(key: key);
+  const RevenueList({super.key});
 
   @override
   State<RevenueList> createState() => _RevenueListState();
@@ -31,8 +30,6 @@ class _RevenueListState extends State<RevenueList> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print(argumentData);
-    print(argumentData);
     if (argumentData == []) {
       completeList = [];
       forDisplay = [];
@@ -101,7 +98,7 @@ class _RevenueListState extends State<RevenueList> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${clsLan.revenue}",
+                            clsLan.revenue,
                             style: TextStyle(
                                 color: theme.blue,
                                 fontSize: 18,
@@ -268,7 +265,7 @@ class _RevenueListState extends State<RevenueList> {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(6),
                           onTap: () {
-                            Get.to(()=> CompleteDetail(), arguments: {"data":forDisplay[index],"from":"revenue"});
+                            Get.to(()=> const CompleteDetail(), arguments: {"data":forDisplay[index],"from":"revenue"});
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -381,7 +378,7 @@ class _RevenueListState extends State<RevenueList> {
                                     title: clsLan.complete,
                                     size: 12.0,
                                     color: theme.black,
-                                    content: "${glb.formatDateTime(forDisplay[index][field.completeDate])}",
+                                    content: glb.formatDateTime(forDisplay[index][field.completeDate]),
                                     weight: FontWeight.w500),
                               ],
                             ),
