@@ -2,14 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:wooiproject/CompleteDetail.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
-import 'package:intl/intl.dart';
 
 class CompleteScreen extends StatefulWidget {
   const CompleteScreen({Key? key}) : super(key: key);
@@ -187,7 +185,7 @@ class _CompleteScreenState extends State<CompleteScreen> {
                                       .contains(
                                           search.text.toString().toLowerCase()))
                                   .toList();
-                              if (results == null || results.isEmpty) {
+                              if (results.isEmpty) {
                                 results = completeList
                                     .where((user) => user['phoneNumber']
                                         .toLowerCase()
