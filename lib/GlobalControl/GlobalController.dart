@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,19 +11,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooiproject/Distination/language.dart';
-import 'package:wooiproject/EditProfileScreen.dart';
-import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/GlobalControl/jsonModule.dart';
-import 'package:wooiproject/GlobalControl/moduleObject.dart';
 import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/SetUpScreen.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
-
 import '../ViewScreen.dart';
 import '../WidgetReUse/ReUseWidget.dart';
 
@@ -37,7 +28,6 @@ class GlobalController {
   Future<Position> requestUserPermissionLocation() async {
     await Geolocator.requestPermission().then((value) {}).onError((error, stackTrace) async {
       await Geolocator.requestPermission();
-      print("ERROR" + error.toString());
     });
     return await Geolocator.getCurrentPosition();
   }
@@ -84,7 +74,9 @@ class GlobalController {
       });
       await checkUserInformation();
     } catch (e) {
-      print('login screen error $e');
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -97,17 +89,17 @@ class GlobalController {
         await documentStream
             .doc(auth.currentUser!.uid)
             .update({'userID': randomNumber.toString()})
-            .then((value) => print("User's Property Deleted"))
-            .catchError((error) => print("Failed to delete user's property: $error"));
+            .then((value){})
+            .catchError((error) {});
       } else {}
       if (data['firstname'] == null ||
           data['lastname'] == null ||
           data['phoneNumber'] == null ||
           data['bankCode'] == null ||
           data['bankName'] == null) {
-        Get.to(() => SetUpScreen());
+        Get.to(() => const SetUpScreen());
       } else {
-        Get.to(() => ViewScreen());
+        Get.to(() => const ViewScreen());
       }
     });
   }
@@ -142,24 +134,24 @@ class GlobalController {
       String pushKey = generatePushKey();
 
       var json = {
-        "uid": "${auth.currentUser!.uid.toString()}",
-        "location": "${location.toString()}",
-        "pushKey": "${pushKey.toString()}",
-        "phoneNumber": "${phoneNumber.toString()}",
-        "token": "${tokenKey.toString()}",
-        "chatid": "${chatid.toString()}",
-        "latitude": "${latitude.toString()}",
-        "bankName": "${bankName.toString()}",
-        "longitude": "${longitude.toString()}",
-        "qty": "${qty.toString()}",
-        "packageID": "${packageID.toString()}",
-        "note": "${note.toString()}",
-        "price": "${price.toString()}",
-        "recLatitude": "${latitude.toString()}",
-        "recLongitude": "${longitude.toString()}",
+        "uid": auth.currentUser!.uid.toString(),
+        "location": location.toString(),
+        "pushKey": pushKey.toString(),
+        "phoneNumber": phoneNumber.toString(),
+        "token": tokenKey.toString(),
+        "chatid": chatid.toString(),
+        "latitude": latitude.toString(),
+        "bankName": bankName.toString(),
+        "longitude": longitude.toString(),
+        "qty": qty.toString(),
+        "packageID": packageID.toString(),
+        "note": note.toString(),
+        "price": price.toString(),
+        "recLatitude": latitude.toString(),
+        "recLongitude": longitude.toString(),
         "senderPhone": "${generalInfo['phoneNumber']}",
-        "senderName": "${userName.toString()}",
-        "bankCode": "${abaCode.toString()}",
+        "senderName": userName.toString(),
+        "bankCode": abaCode.toString(),
         "paidStatus": "",
         "status": 'request',
         "date": DateTime.now().toString(),
@@ -180,7 +172,11 @@ class GlobalController {
         token: genToken,
         data: json,
       );
-    } catch (e) {}
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
   }
 
   String generatePushKey() {
@@ -205,13 +201,17 @@ class GlobalController {
   Future<void> deleteFromDriver({witchDataBase, data, witchUID, witchPushKey}) async {
     try {
       await witchDataBase.child(data[field.driverUID]).child(data[field.pushKey]).remove();
-    } catch (e) {}
+    } catch (e) {if (kDebugMode) {
+      print(e);
+    }}
   }
 
   Future<void> deleteFromReturn({witchDataBase, data, witchUID, witchPushKey}) async {
     try {
       await witchDataBase.child(data[field.uid]).child(data[field.pushKey]).remove();
-    } catch (e) {}
+    } catch (e) {if (kDebugMode) {
+      print(e);
+    }}
   }
 
   deleteUserPackage({witchDataBase, data, witchUID, witchPushKey}) async {
@@ -229,9 +229,9 @@ class GlobalController {
             'firstname': firstname,
             'lastname': lastname,
           })
-          .then((value) => print("User's Property Deleted"))
-          .catchError((error) => print("Failed to delete user's property: $error"));
-      Get.to(() => ViewScreen());
+          .then((value) {})
+          .catchError((error) {});
+      Get.to(() => const ViewScreen());
     } catch (e) {
       final reUse = ReUseWidget();
       reUse.reUseCircleDialog(function: 'error', content: const Text("error"));
@@ -321,7 +321,9 @@ class GlobalController {
         field.recLatitude: data[field.recLatitude].toString(),
         field.recLongitude: data[field.recLongitude].toString(),
       });
-    } catch (e) {}
+    } catch (e) { if (kDebugMode) {
+      print(e);
+    }}
   }
 
   alertNoInternet(context) async {
@@ -330,7 +332,9 @@ class GlobalController {
     try {
       final result = await InternetAddress.lookup('example.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        print('connected');
+        if (kDebugMode) {
+          print(e);
+        }
       }
     } on SocketException catch (_) {
       reUse.reUseCircleDialog(
@@ -350,84 +354,6 @@ class GlobalController {
     }
   }
 
-  var showPrefix = false;
-  var isLogin = true;
-  var otp = "";
-  var isOtpSent = false;
-  var resendAfter = 30;
-  var resendOTP = false;
-  var firebaseVerificationId = "";
-  var statusMessage = "".obs;
-  var statusMessageColor = Colors.black;
-  late Timer timer;
-
-  String phoneNumber = '+85578344511';
-
-  getOtp() async {
-    try {
-      FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
-        verificationCompleted: (PhoneAuthCredential credential) {},
-        verificationFailed: (FirebaseAuthException e) {},
-        codeSent: (String verificationId, int? resendToken) {
-          firebaseVerificationId = verificationId;
-          isOtpSent = true;
-          statusMessage.value = "OTP sent to " + phoneNumber;
-          startResendOtpTimer();
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {},
-      );
-    } catch (e) {
-      if (e is FirebaseAuthException) {
-        print(e);
-      }
-    }
-  }
-
-  resendOtp() async {
-    resendOTP = false;
-    FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: '+91' + phoneNumber,
-      verificationCompleted: (PhoneAuthCredential credential) {},
-      verificationFailed: (FirebaseAuthException e) {},
-      codeSent: (String verificationId, int? resendToken) {
-        firebaseVerificationId = verificationId;
-        isOtpSent = true;
-        statusMessage.value = "OTP re-sent to +91" + phoneNumber;
-        startResendOtpTimer();
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {},
-    );
-  }
-
-  verifyOTP() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    try {
-      statusMessage.value = "Verifying... " + otp;
-      // Create a PhoneAuthCredential with the code
-      PhoneAuthCredential credential =
-          PhoneAuthProvider.credential(verificationId: firebaseVerificationId, smsCode: otp);
-      // Sign the user in (or link) with the credential
-      await auth.signInWithCredential(credential);
-    } catch (e) {
-      statusMessage.value = "Invalid  OTP";
-      statusMessageColor = Colors.red;
-    }
-  }
-
-  startResendOtpTimer() {
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (resendAfter != 0) {
-        resendAfter--;
-      } else {
-        resendAfter = 30;
-        resendOTP = true;
-        timer.cancel();
-      }
-    });
-  }
-
-  bool isSuccessEditProfile = false;
   final clsLan = ClsLanguage();
 
   editProfile({value, context}) async {
@@ -443,7 +369,6 @@ class GlobalController {
         'bankCode': value.bankCode,
         'bankName': value.bankName,
       }).then((value) async {
-        print("User Added");
         Navigator.pop(context);
         await reUse.reUseCircleDialog(
             context: context,
@@ -458,7 +383,6 @@ class GlobalController {
               ),
             ));
       }).catchError((error) async {
-        print("Failed to add user: $error");
         await reUse.reUseCircleDialog(
             context: context,
             icon: Icons.close_rounded,
@@ -473,7 +397,9 @@ class GlobalController {
             ));
       });
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -535,7 +461,6 @@ class GlobalController {
         }
       });
     } on FirebaseFirestore catch (e) {
-      print(e);
       Get.back();
       result = e.toString();
     }
@@ -580,13 +505,13 @@ class GlobalController {
   }
 
   onGetGeneralInfo() async {
-    var object;
+    Map object = {};
     await FirebaseFirestore.instance
         .collection("General")
         .doc("GeneralInfo")
         .get()
         .then((DocumentSnapshot documentSnapshot) async {
-      object = documentSnapshot.data();
+      object = documentSnapshot.data() as Map;
     });
     return object;
   }
@@ -608,13 +533,21 @@ class GlobalController {
         },
       );
       if (response.statusCode != 200) {
-        print('Failed to send message: ${response.statusCode}');
       }
-    } catch (e) {}
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
   }
 
   String formatDateTime(dateTime) {
     DateTime result = DateTime.parse(dateTime);
     return DateFormat('yyyy-MM-dd HH:mm aa').format(result);
+  }
+
+  String removeLeadingZeros(String input) {
+    double number = double.parse(input);
+    return number.toString();
   }
 }
