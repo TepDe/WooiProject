@@ -1,12 +1,10 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:wooiproject/Distination/clsDistin.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
@@ -15,7 +13,7 @@ import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
 class EditPackageScreen extends StatefulWidget {
-  const EditPackageScreen({Key? key}) : super(key: key);
+  const EditPackageScreen({super.key});
 
   @override
   State<EditPackageScreen> createState() => _EditPackageScreenState();
@@ -35,7 +33,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
   String packageID = '';
   double textSize = 14;
   List distince = [];
-  List eng_distin = [];
+  List engDistin = [];
   List forDisplay = [];
   String userName = '';
   String phoneNumber = '';
@@ -51,8 +49,6 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print(argumentData);
-    print(argumentData);
     phoneBox.text = argumentData[fieldData.phoneNumber] ?? clsLan.notIncludeYet;
     locationBox.text = argumentData[fieldData.location] ?? clsLan.notIncludeYet;
     priceBox.text = argumentData[fieldData.price] ?? clsLan.notIncludeYet;
@@ -150,7 +146,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       reUse.reUseText(
-                        content: clsLan.packageID + ' : ',
+                        content: '${clsLan.packageID} : ',
                         size: 16.0,
                         color: theme.grey,
                       ),
@@ -228,12 +224,10 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                           .where((user) => user.toLowerCase().contains(locationBox.text.toString().toLowerCase()))
                           .toList();
                       if (results == []) {
-                        results = eng_distin
+                        results = engDistin
                             .where((user) => user.toLowerCase().contains(locationBox.text.toString().toLowerCase()))
                             .toList();
                       }
-                      print(results);
-                      print(results);
                       forDisplay = results;
                       setState(() {});
                     },
@@ -246,7 +240,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                         },
                         icon: const Icon(Icons.close),
                       ),
-                      hintText: locationBox.text.toString() ?? '',
+                      hintText: locationBox.text.toString(),
                       //icon: Icon(textIcon ?? null),
                       // fillColor: theme.liteGrey,
                       border: OutlineInputBorder(
@@ -284,7 +278,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10, top: 10),
                   child: reUse.reUseText(
-                      content: clsLan.price + " : ( សូមបញ្ចូលតំលៃគិតជាដុល្លារ )",
+                      content: "${clsLan.price} : ( សូមបញ្ចូលតំលៃគិតជាដុល្លារ )",
                       size: textSize,
                       weight: FontWeight.w500,
                       color: theme.black),
@@ -313,7 +307,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10, top: 10),
                   child: reUse.reUseText(
-                      content: clsLan.qty + " :", size: textSize, weight: FontWeight.w500, color: theme.black),
+                      content: "${clsLan.qty} :", size: textSize, weight: FontWeight.w500, color: theme.black),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
