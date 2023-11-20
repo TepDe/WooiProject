@@ -548,6 +548,6 @@ class GlobalController {
 
   String removeLeadingZeros(String input) {
     double number = double.parse(input);
-    return number.toString();
+    return number.toStringAsFixed(2);
   }
 }
