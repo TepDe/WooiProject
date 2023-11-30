@@ -451,7 +451,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                     alertDialog(context);
                                     String modPrice = glb.removeLeadingZeros(priceBox.text.trim());
                                     await glb
-                                        .createPackage(
+                                        .onCreatePackage(
                                       generalInfo: userObject,
                                       genChatID: generalInfo['chatid'],
                                       genToken: generalInfo['token'],
