@@ -313,7 +313,7 @@ class ReUseWidget {
   final dialogPhoneNum = TextEditingController();
 
 
-  reUseText({content, size, weight, color, maxLines}) {
+  Widget reUseText({content, size, weight, color, maxLines}) {
     return Text(
       content ?? '',
       maxLines: maxLines ?? 2,
