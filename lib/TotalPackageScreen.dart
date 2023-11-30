@@ -10,6 +10,7 @@ import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/EditPackageScreen.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
+import 'package:wooiproject/ViewScreen.dart';
 import 'WidgetReUse/ReUseWidget.dart';
 import 'WidgetReUse/Themes.dart';
 
@@ -112,7 +113,7 @@ class _TotalPackageScreenState extends State<TotalPackageScreen> {
                       children: [
                         TextButton.icon(
                           onPressed: () {
-                            Get.back();
+                            Get.to(()=> const ViewScreen());
                           },
                           icon: Icon(
                             Icons.arrow_back_ios_new_outlined,
