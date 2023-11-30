@@ -31,56 +31,30 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
   final priceBox = TextEditingController();
   final qtyBox = TextEditingController();
   final noteBox = TextEditingController();
-  String packageID = '';
   double textSize = 14;
-  List distince = [];
   List engDistin = [];
   List forDisplay = [];
-  String userName = '';
-  String phoneNumber = '';
-  String bankCode = '';
-  String bankName = '';
-  String getToken = '';
-  String chatid = '';
   var argumentData = Get.arguments;
   final fieldData = FieldData();
-  FirebaseAuth auth = FirebaseAuth.instance;
+  Map userData = {};
+  final field = FieldInfo();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    onInitial();
+  }
+
+  Future<void> onInitial() async {
     phoneBox.text = argumentData[fieldData.phoneNumber] ?? clsLan.notIncludeYet;
     locationBox.text = argumentData[fieldData.location] ?? clsLan.notIncludeYet;
     priceBox.text = argumentData[fieldData.price] ?? clsLan.notIncludeYet;
     qtyBox.text = argumentData[fieldData.qty] ?? clsLan.notIncludeYet;
     noteBox.text = argumentData[fieldData.note] ?? clsLan.notIncludeYet;
-    packageID = argumentData[fieldData.packageID] ?? clsLan.notIncludeYet;
-    if (packageID == "") {
-      generatePackageID();
-    } else {}
-    setState(() {});
-    fetchUserInformation();
+    userData = await glb.onFetchUserData();
     setState(() {
       forDisplay = clsDis.destination;
-    });
-  }
-
-  generatePackageID() {
-    Random random = Random();
-    int randomNumber = random.nextInt(9999);
-    String format = 'PK00';
-    packageID = format + randomNumber.toString();
-  }
-
-  fetchUserInformation() async {
-    FirebaseFirestore.instance.collection('Users').doc(auth.currentUser!.uid).get().then((doc) async {
-      Map data = doc.data() as Map;
-      userName = data['firstname'] + ' ' + data['lastname'].toString();
-      phoneNumber = data['phoneNumber'].toString();
-      bankCode = data['bankCode'].toString();
-      bankName = data['bankName'].toString();
-      setState(() {});
     });
   }
 
@@ -120,7 +94,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                       // );
                       DatabaseReference packageRequest = FirebaseDatabase.instance.ref("PackageRequest");
                       await packageRequest
-                          .child(auth.currentUser!.uid)
+                          .child(glb.auth.currentUser!.uid)
                           .child('package')
                           .child(argumentData[fieldData.pushKey])
                           .remove()
@@ -148,7 +122,8 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                       size: 16.0,
                       color: theme.grey,
                     ),
-                    reUse.reUseText(content: packageID, size: 26.0, color: theme.black, weight: FontWeight.bold),
+                    reUse.reUseText(
+                        content: argumentData['packageID'], size: 26.0, color: theme.black, weight: FontWeight.bold),
                   ],
                 ),
               ),
@@ -198,9 +173,6 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                     hintStyle: const TextStyle(fontSize: 12),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 18,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20, bottom: 10),
@@ -270,9 +242,6 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                         })
                     : const SizedBox(),
               ),
-              const SizedBox(
-                height: 18,
-              ),
               Padding(
                 padding: const EdgeInsets.only(left: 20, bottom: 10, top: 10),
                 child: reUse.reUseText(
@@ -328,14 +297,12 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 18,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: reUse.reUseText(content: 'ចំណាំ :', size: textSize, color: theme.black),
               ),
-              const SizedBox(
-                height: 18,
-              ),
-              reUse.reUseText(content: 'ចំណាំ :', size: textSize, color: theme.black),
               Container(
+                margin: const EdgeInsets.symmetric(horizontal: 10),
                 alignment: Alignment.center,
                 child: TextField(
                   controller: noteBox,
@@ -358,6 +325,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                 children: [
                   Flexible(
                     child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
                       height: 50,
                       width: Get.width,
                       decoration: BoxDecoration(
@@ -430,17 +398,17 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                                   alertDialog(context);
                                   await glb
                                       .editPackage(
-                                          bankName: bankName.trim().toString(),
-                                          bankCode: bankCode.trim().toString(),
+                                          userData: userData,
+                                          bankName: userData[field.bankName],
+                                          bankCode: userData[field.bankCode],
                                           data: argumentData,
-                                          userName: userName.trim().toString(),
-                                          userPhoneNumber: phoneNumber.trim().toString(),
-                                          tokenKey: getToken.trim().toString(),
-                                          chatid: chatid.trim().toString(),
-                                          price: priceBox.text.trim().toString(),
+                                          userName: "${userData[field.firstName]} ${userData[field.lastName]}",
+                                          token: userData[field.token],
+                                          chatid: userData[field.chatid],
+                                          userPhoneNumber: userData[field.phoneNumber],
                                           note: noteBox.text.toString(),
-                                          packageID: packageID.toString(),
                                           qty: qtyBox.text.trim().toString(),
+                                          price: priceBox.text.trim().toString(),
                                           phoneNumber: phoneBox.text.trim().toString(),
                                           location: locationBox.text.trim().toString())
                                       .then((value) {
@@ -458,10 +426,6 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                                             ),
                                           ),
                                         ));
-                                  });
-
-                                  setState(() {
-                                    packageID = glb.generatePackageID();
                                   });
                                 }
                               }
