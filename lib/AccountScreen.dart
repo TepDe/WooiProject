@@ -80,7 +80,10 @@ class _AccountScreenState extends State<AccountScreen> {
         if (userData["accountType"] != "Users") {
           reUse.reUseCircleDialog(
               disposeAllow: false,
-              onTap: () => glb.isLogOut(),
+              onTap: () {
+                glb.auth.signOut();
+                Get.to(() => const LogInScreen());
+              },
               context: context,
               icon: Icons.wifi,
               title: 'មិនមាន',
@@ -95,7 +98,10 @@ class _AccountScreenState extends State<AccountScreen> {
         } else if (userData["isBanned"] != "false") {
           reUse.reUseCircleDialog(
               disposeAllow: false,
-              onTap: () => glb.isLogOut(),
+              onTap: ()  {
+                glb.auth.signOut();
+                Get.to(() => const LogInScreen());
+              },
               context: context,
               icon: Icons.cancel_outlined,
               title: 'ផ្អាក',
@@ -439,7 +445,8 @@ class _AccountScreenState extends State<AccountScreen> {
                             title: 'Log out',
                             onTap: () async {
                               reUse.reUseWaitingDialog(context);
-                              await glb.isLogOut();
+                              glb.auth.signOut();
+                              Get.to(() => const LogInScreen());
                             },
                             content: Center(
                               child: Text(
