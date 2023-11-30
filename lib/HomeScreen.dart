@@ -63,8 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
   alertNoInternet() async {
     try {
       final result = await InternetAddress.lookup('example.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-      }
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {}
     } on SocketException catch (_) {
       reUse.reUseCircleDialog(
           function: 'nointernet',
@@ -100,7 +99,10 @@ class _HomeScreenState extends State<HomeScreen> {
           if (data["accountType"] != "Users") {
             await reUse.reUseCircleDialog(
                 disposeAllow: false,
-                onTap: () => glb.isLogOut(),
+                onTap: () {
+                  glb.auth.signOut();
+                  Get.to(() => const LogInScreen());
+                },
                 context: context,
                 icon: Icons.wifi,
                 title: 'មិនមាន',
@@ -115,7 +117,10 @@ class _HomeScreenState extends State<HomeScreen> {
           } else if (data["isBanned"] != "false") {
             await reUse.reUseCircleDialog(
                 disposeAllow: false,
-                onTap: () => glb.isLogOut(),
+                onTap: () {
+                  glb.auth.signOut();
+                  Get.to(() => const LogInScreen());
+                },
                 context: context,
                 icon: Icons.cancel_outlined,
                 title: 'ផ្អាក',
@@ -155,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       if (kDebugMode) {
         print(e);
-      }      // FirebaseAuth.instance.signOut();
+      } // FirebaseAuth.instance.signOut();
       // Get.to(() => const LogInScreen());
     }
   }
