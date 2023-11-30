@@ -107,7 +107,7 @@ class _ReturnDetailState extends State<ReturnDetail> {
                     size: valueSize,
                     lableSize: labelSize,
                     color: theme.black,
-                    content: forDisplay[field.qty],
+                    content: "${forDisplay[field.qty]} Qty",
                     weight: FontWeight.w500),
                 reUse.reUseRowText(
                     titleColor: theme.grey,
