@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
@@ -37,10 +38,7 @@ class _SetUpScreenState extends State<SetUpScreen> {
   final fieldInfo = FieldInfo();
 
   fetchUserData() async {
-    fetch
-        .doc(auth.currentUser!.uid.toString())
-        .get()
-        .then((DocumentSnapshot documentSnapshot) async {
+    fetch.doc(auth.currentUser!.uid.toString()).get().then((DocumentSnapshot documentSnapshot) async {
       userData = documentSnapshot.data() as Map<String, dynamic>;
       lastName.text = userData['lastname'] ?? "";
       firstName.text = userData["firstname"] ?? "";
@@ -108,18 +106,12 @@ class _SetUpScreenState extends State<SetUpScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(
-                          top: Get.height * 0.15,
-                          left: Get.width * 0.05,
-                          right: Get.width * 0.05),
+                      padding: EdgeInsets.only(top: Get.height * 0.15, left: Get.width * 0.05, right: Get.width * 0.05),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           reUse.reUseText(
-                              content: clsLan.register,
-                              color: theme.black,
-                              size: 25.0,
-                              weight: FontWeight.bold),
+                              content: clsLan.register, color: theme.black, size: 25.0, weight: FontWeight.bold),
                           reUse.reUseText(
                             content: clsLan.fillRequirement,
                             size: 12.0,
@@ -175,6 +167,10 @@ class _SetUpScreenState extends State<SetUpScreen> {
                             height: Get.height * 0.03,
                           ),
                           reUse.reUseTextBox(
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
                             controller: phoneNumber,
                             keyboardType: TextInputType.number,
                             hind: clsLan.phoneNumber,
@@ -183,50 +179,38 @@ class _SetUpScreenState extends State<SetUpScreen> {
                             height: Get.height * 0.03,
                           ),
                           reUse.reUseText(
-                              content: clsLan.payWay,
-                              size: textSize,
-                              weight: FontWeight.w500,
-                              color: theme.black),
+                              content: clsLan.payWay, size: textSize, weight: FontWeight.w500, color: theme.black),
                           SizedBox(
                               height: 100,
                               child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   padding: const EdgeInsets.all(8),
                                   itemCount: glb.payWay.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
+                                  itemBuilder: (BuildContext context, int index) {
                                     return Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 8.0),
+                                      padding: const EdgeInsets.only(right: 8.0),
                                       child: SizedBox(
                                         height: 100,
                                         child: InkWell(
                                           onTap: () async {
                                             selectedItemIndex = index;
-                                            bankName = await glb.selectPayWay(
-                                                glb.payWay[index]['name']);
+                                            bankName = await glb.selectPayWay(glb.payWay[index]['name']);
                                             setState(() {});
                                           },
                                           child: Stack(
                                             alignment: Alignment.center,
                                             children: [
-                                              Image(
-                                                  image: AssetImage(glb
-                                                      .payWay[index]["img"])),
+                                              Image(image: AssetImage(glb.payWay[index]["img"])),
                                               CircleAvatar(
                                                 minRadius: 20,
-                                                backgroundColor: index ==
-                                                        selectedItemIndex
-                                                    ? Colors
-                                                        .white // Change the color of the selected item
+                                                backgroundColor: index == selectedItemIndex
+                                                    ? Colors.white // Change the color of the selected item
                                                     : Colors.transparent,
                                                 child: Icon(
                                                   Icons.check_circle,
                                                   size: 50,
-                                                  color: index ==
-                                                          selectedItemIndex
-                                                      ? Colors
-                                                          .blue // Change the color of the selected item
+                                                  color: index == selectedItemIndex
+                                                      ? Colors.blue // Change the color of the selected item
                                                       : Colors.transparent,
                                                 ),
                                               )
@@ -240,6 +224,10 @@ class _SetUpScreenState extends State<SetUpScreen> {
                             height: Get.height * 0.03,
                           ),
                           reUse.reUseTextBox(
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
                             controller: bankCode,
                             keyboardType: TextInputType.number,
                             hind: clsLan.receiveCode,
@@ -262,14 +250,13 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                       //   ),
                                       // ),
                                       onPressed: () async {
-                                        await FirebaseAuth.instance.signOut().then(
-                                            (value) =>
-                                                Get.to(() => const LogInScreen()));
+                                        await FirebaseAuth.instance
+                                            .signOut()
+                                            .then((value) => Get.to(() => const LogInScreen()));
                                       },
                                       child: reUse.reUseText(content: "Log Out")),
                                 ),
                               ),
-
                               Flexible(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
@@ -293,8 +280,7 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                               ),
                                             ),
                                           ));
-                                    } else if (lastName.text.trim().toString() ==
-                                        '') {
+                                    } else if (lastName.text.trim().toString() == '') {
                                       await reUse.reUseCircleDialog(
                                           context: context,
                                           icon: Icons.account_circle_rounded,
@@ -307,10 +293,7 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                               ),
                                             ),
                                           ));
-                                    } else if (phoneNumber.text
-                                            .trim()
-                                            .toString() ==
-                                        '') {
+                                    } else if (phoneNumber.text.trim().toString() == '') {
                                       await reUse.reUseCircleDialog(
                                           context: context,
                                           icon: Icons.phone_rounded,
@@ -366,10 +349,7 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                               actions: [
                                                 Center(
                                                   child: SizedBox(
-                                                      height: 40,
-                                                      width: 40,
-                                                      child:
-                                                          CircularProgressIndicator()),
+                                                      height: 40, width: 40, child: CircularProgressIndicator()),
                                                 )
                                               ],
                                             ),
@@ -398,9 +378,7 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                     children: [
                                       Text(
                                         clsLan.continues,
-                                        style: TextStyle(
-                                            color: theme.white,
-                                            fontWeight: FontWeight.w700),
+                                        style: TextStyle(color: theme.white, fontWeight: FontWeight.w700),
                                       ),
                                       const Icon(Icons.navigate_next_rounded),
                                     ],
