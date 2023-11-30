@@ -35,14 +35,14 @@ class GlobalController {
   DatabaseReference goOnline = FirebaseDatabase.instance.ref("Driver");
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  Future<String> fetchUserData(whichField) async {
-    String whichOfField = '';
+  Future<Map> onFetchUserData() async {
+    Map whichOfField = {};
     await FirebaseFirestore.instance
         .collection('Users')
         .doc(auth.currentUser!.uid.toString())
         .get()
         .then((DocumentSnapshot documentSnapshot) async {
-      whichOfField = await documentSnapshot[whichField];
+      whichOfField = documentSnapshot.data() as Map;
     });
     return whichOfField;
   }
@@ -248,6 +248,7 @@ class GlobalController {
 
   Future<void> editPackage(
       {price,
+      userData,
       data,
       userName,
       userPhoneNumber,
@@ -266,36 +267,25 @@ class GlobalController {
     position = await GeolocatorPlatform.instance.getCurrentPosition();
     latitude = position.latitude;
     longitude = position.longitude;
-    await packageRequest
-        .child(auth.currentUser!.uid)
-        //.child(getUserID.toString())
-        .update({
-      "userName": userName,
-      "userPhoneNumber": userPhoneNumber,
-      "uLatitude": latitude.toString(),
-      "uLongitude": longitude.toString(),
-    }).then((value) async =>
-            packageRequest.child(auth.currentUser!.uid).child('package').child(data[field.pushKey]).update({
-              field.uid: auth.currentUser!.uid.toString(),
-              field.location: location.toString(),
-              field.pushKey: data[field.pushKey].toString(),
-              field.phoneNumber: phoneNumber.toString(),
-              field.token: tokenKey.toString(),
-              field.chatid: chatid.toString(),
-              field.latitude: latitude.toString(),
-              field.longitude: longitude.toString(),
-              field.date: DateTime.now().toString(),
-              field.qty: qty.toString(),
-              field.packageID: packageID.toString(),
-              field.note: note.toString(),
-              field.status: 'request',
-              field.price: price.toString(),
-              field.bankCode: bankCode,
-              field.bankName: bankName,
-              field.recLatitude: latitude.toString(),
-              field.recLongitude: longitude.toString(),
-              field.senderPhone: await fetchUserData(fieldInfo.phoneNumber).toString(),
-            }));
+    packageRequest.child(auth.currentUser!.uid).child('package').child(data[field.pushKey]).update({
+      field.uid: auth.currentUser!.uid.toString(),
+      field.location: location.toString(),
+      field.pushKey: data[field.pushKey].toString(),
+      field.phoneNumber: phoneNumber.toString(),
+      field.token: tokenKey.toString(),
+      field.chatid: chatid.toString(),
+      field.latitude: latitude.toString(),
+      field.longitude: longitude.toString(),
+      field.date: DateTime.now().toString(),
+      field.qty: qty.toString(),
+      field.note: note.toString(),
+      field.status: 'request',
+      field.price: price.toString(),
+      field.bankCode: bankCode,
+      field.bankName: bankName,
+      field.recLatitude: latitude.toString(),
+      field.recLongitude: longitude.toString(),
+    });
   }
 
   updateStatus({uid, key, status}) async {
