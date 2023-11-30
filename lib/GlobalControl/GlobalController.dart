@@ -89,7 +89,7 @@ class GlobalController {
         await documentStream
             .doc(auth.currentUser!.uid)
             .update({'userID': randomNumber.toString()})
-            .then((value){})
+            .then((value) {})
             .catchError((error) {});
       } else {}
       if (data['firstname'] == null ||
@@ -109,7 +109,7 @@ class GlobalController {
   final field = FieldData();
   final fieldInfo = FieldInfo();
 
-  Future<void> createPackage(
+  Future<void> onCreatePackage(
       {price,
       userName,
       generalInfo,
@@ -156,22 +156,26 @@ class GlobalController {
         "status": 'request',
         "date": DateTime.now().toString(),
       };
-      final updatePath = "package/$pushKey"; // Path to the new data
-      await packageRequest
-          .child(auth.currentUser!.uid)
-          //.child(getUserID.toString())
-          .update({
-        "userName": userName,
-        "userPhoneNumber": userPhoneNumber,
-        "uLatitude": latitude.toString(),
-        "uLongitude": longitude.toString(),
-        updatePath: json
-      });
-      await uploadToTelegram(
-        chatid: genChatID,
-        token: genToken,
-        data: json,
-      );
+
+      if (isFormDataValid(json) == true) {
+      } else {
+        final updatePath = "package/$pushKey"; // Path to the new data
+        await packageRequest
+            .child(auth.currentUser!.uid)
+            //.child(getUserID.toString())
+            .update({
+          "userName": userName,
+          "userPhoneNumber": userPhoneNumber,
+          "uLatitude": latitude.toString(),
+          "uLongitude": longitude.toString(),
+          updatePath: json
+        });
+        await uploadToTelegram(
+          chatid: genChatID,
+          token: genToken,
+          data: json,
+        );
+      }
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -201,17 +205,21 @@ class GlobalController {
   Future<void> deleteFromDriver({witchDataBase, data, witchUID, witchPushKey}) async {
     try {
       await witchDataBase.child(data[field.driverUID]).child(data[field.pushKey]).remove();
-    } catch (e) {if (kDebugMode) {
-      print(e);
-    }}
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
   }
 
   Future<void> deleteFromReturn({witchDataBase, data, witchUID, witchPushKey}) async {
     try {
       await witchDataBase.child(data[field.uid]).child(data[field.pushKey]).remove();
-    } catch (e) {if (kDebugMode) {
-      print(e);
-    }}
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
   }
 
   deleteUserPackage({witchDataBase, data, witchUID, witchPushKey}) async {
@@ -321,9 +329,11 @@ class GlobalController {
         field.recLatitude: data[field.recLatitude].toString(),
         field.recLongitude: data[field.recLongitude].toString(),
       });
-    } catch (e) { if (kDebugMode) {
-      print(e);
-    }}
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
   }
 
   alertNoInternet(context) async {
@@ -494,17 +504,17 @@ class GlobalController {
     return isReady;
   }
 
-  isLogOut() async {
-    await updateOneField(
-        field: 'signInToken',
-        value: "false",
-        firebaseFireStore: "Users",
-        data: auth.currentUser!.uid,
-        allowDialog: true);
-    await auth.signOut().then((value) => Get.to(() => const LogInScreen()));
-  }
+  // isLogOut() async {
+  //   await updateOneField(
+  //       field: 'signInToken',
+  //       value: "false",
+  //       firebaseFireStore: "Users",
+  //       data: auth.currentUser!.uid,
+  //       allowDialog: true);
+  //   await auth.signOut().then((value) => Get.to(() => const LogInScreen()));
+  // }
 
-  onGetGeneralInfo() async {
+  Future<Map> onGetGeneralInfo() async {
     Map object = {};
     await FirebaseFirestore.instance
         .collection("General")
@@ -532,8 +542,7 @@ class GlobalController {
           'text': jsonConvert,
         },
       );
-      if (response.statusCode != 200) {
-      }
+      if (response.statusCode != 200) {}
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -549,5 +558,61 @@ class GlobalController {
   String removeLeadingZeros(String input) {
     double number = double.parse(input);
     return number.toStringAsFixed(2);
+  }
+
+  List onSearch(List lstObject, String search) {
+    List result = [];
+
+    // Define the list of keys to search for
+    List<String> keysToSearch = ["phoneNumber", "packageID"];
+    for (String key in keysToSearch) {
+      result = lstObject.where((food) => food.containsKey(key) && food[key].toString().contains(search)).toList();
+      if (result.isNotEmpty) {
+        break; // Exit the loop if a match is found
+      }
+    }
+    return result;
+  }
+
+  bool isFormDataValid(Map data) {
+    bool result = data["packageID"] == "" &&
+        data["price"] == "" &&
+        data["senderPhone"] == "" &&
+        data["pushKey"] == "" &&
+        data["location"] == "" &&
+        data["date"] == "" &&
+        data["phoneNumber"] == "" &&
+        data["uid"] == "";
+    return result;
+  }
+
+  List sortNewest(List objList, String key) {
+    objList.sort((a, b) {
+      DateTime dateA = DateTime.parse(a[key]);
+      DateTime dateB = DateTime.parse(b[key]);
+      return dateB.compareTo(dateA);
+    });
+    return objList;
+  }
+
+  List sortOldest(List objList, String key) {
+    objList.sort((a, b) {
+      DateTime dateA = DateTime.parse(a[key]);
+      DateTime dateB = DateTime.parse(b[key]);
+      return dateA.compareTo(dateB);
+    });
+    return objList;
+  }
+
+  List onSortToday(List objList, String key) {
+    DateTime today = DateTime.now();
+    today = DateTime(today.year, today.month, today.day);
+    objList = objList
+        .where((obj) =>
+            DateTime.parse(obj[key]).year == today.year &&
+            DateTime.parse(obj[key]).month == today.month &&
+            DateTime.parse(obj[key]).day == today.day)
+        .toList();
+    return objList;
   }
 }
