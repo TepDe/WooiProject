@@ -193,19 +193,45 @@ class _ReturnScreenState extends State<ReturnScreen> {
                   children: [
                     reUse.reUseText(size: 14.0, content: '${clsLan.totalPackage} : ${forDisplay.length}'),
                     const Flexible(child: Divider()),
-                    // Container(
-                    //   decoration: BoxDecoration(
-                    //     color: theme.litestOrange,
-                    //     borderRadius: BorderRadius.circular(6),
-                    //   ),
-                    //   child: IconButton(
-                    //       splashRadius: 20,
-                    //       onPressed: () {},
-                    //       icon: Icon(
-                    //         Icons.filter_alt_outlined,
-                    //         color: theme.orange,
-                    //       )),
-                    // )
+                    Container(
+                      decoration: BoxDecoration(
+                        color: theme.litestRed,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: PopupMenuButton<String>(
+                        icon: Icon(
+                          Icons.sort_rounded,
+                          color: theme.red,
+                        ),
+                        itemBuilder: (BuildContext context) {
+                          return [
+                            const PopupMenuItem<String>(
+                              value: 'new',
+                              child: Text("ថ្មីបំផុត"),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'old',
+                              child: Text("ចាស់បំផុត"),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'today',
+                              child: Text("ថ្ងៃនេះ"),
+                            ),
+                          ];
+                        },
+                        onSelected: (String value) {
+                          List lstData = List.from(returnList);
+                          if (value == "old") {
+                            forDisplay = glb.sortOldest(lstData, "returnDate");
+                          } else if (value == "new") {
+                            forDisplay = glb.sortNewest(lstData, "returnDate");
+                          } else {
+                            forDisplay = glb.onSortToday(lstData, "returnDate");
+                          }
+                          setState(() {});
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
