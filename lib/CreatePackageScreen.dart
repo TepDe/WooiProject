@@ -23,7 +23,6 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
   final reUse = ReUseWidget();
   final theme = ThemesApp();
   final glb = GlobalController();
-
   final phoneBox = TextEditingController();
   final locationBox = TextEditingController();
   final priceBox = TextEditingController();
@@ -31,6 +30,42 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
   final noteBox = TextEditingController();
   double textSize = 14;
   String packageID = '';
+  String userName = '';
+  String phoneNumber = '';
+  String bankName = '';
+  String bankCode = '';
+  final field = FieldInfo();
+  Map userObject = {};
+  final clsLan = ClsLanguage();
+  String getToken = '';
+  String chatid = '';
+  ModuleObject modObj = ModuleObject();
+  var generalInfo = {};
+  List eng_distin = [];
+  List forDisplay = [];
+  final clsDis = ClsDestination();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    onInitial();
+  }
+
+  Future<void> onInitial() async {
+    generatePackageID();
+    generalInfo = await glb.onGetGeneralInfo();
+    userObject = await glb.onFetchUserData();
+    userName = "${userObject[field.firstName]} ${userObject[field.lastName]}";
+    phoneNumber = userObject[field.phoneNumber];
+    bankName = userObject[field.bankName];
+    bankCode = userObject[field.bankCode];
+    getToken = userObject[field.token] ?? "";
+    chatid = userObject[field.chatid] ?? "";
+    setState(() {
+      forDisplay = clsDis.destination;
+    });
+  }
 
   generatePackageID() {
     Random random = Random();
@@ -38,80 +73,6 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
     String format = 'PK00';
     packageID = format + randomNumber.toString();
   }
-
-  FirebaseAuth auth = FirebaseAuth.instance;
-
-  String userName = '';
-  String phoneNumber = '';
-  String bankName = '';
-  String bankCode = '';
-  final inFor = FieldInfo();
-
-  fetchUserInformation() async {
-    FirebaseFirestore.instance.collection('Users').doc(auth.currentUser!.uid).get().then((doc) async {
-      Map data = doc.data() as Map;
-      userName = data['firstname'] + ' ' + data['lastname'].toString();
-      phoneNumber = data['phoneNumber'].toString();
-      bankName = data['bankName'].toString();
-      bankCode = data[inFor.bankCode].toString();
-      setState(() {});
-    });
-  }
-
-  var generalInfo = {};
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    generatePackageID();
-    fetchUserInformation();
-    onGetGeneral();
-    fetchUserData();
-    fetchToken();
-    distince = clsDis.destination;
-    forDisplay = clsDis.destination;
-  }
-
-  onGetGeneral() async {
-    generalInfo = await glb.onGetGeneralInfo();
-  }
-
-  var userObject = {};
-
-  fetchUserData() async {
-    await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(auth.currentUser!.uid.toString())
-        .get()
-        .then((DocumentSnapshot documentSnapshot) async {
-      userObject = documentSnapshot.data() as Map;
-    });
-  }
-
-  final clsLan = ClsLanguage();
-
-  String getToken = '';
-  String chatid = '';
-  ModuleObject modObj = ModuleObject();
-
-  fetchToken() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(auth.currentUser!.uid.toString())
-        .get()
-        .then((DocumentSnapshot documentSnapshot) async {
-      getToken = await documentSnapshot['token'];
-      chatid = await documentSnapshot['chatid'];
-    });
-    setState(() {});
-  }
-
-  List distince = [];
-  List eng_distin = [];
-  List forDisplay = [];
-  final clsDis = ClsDestination();
 
   @override
   Widget build(BuildContext context) {
@@ -307,7 +268,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10, top: 10),
                   child: reUse.reUseText(
-                      content: clsLan.qty + " :", size: textSize, weight: FontWeight.w500, color: theme.black),
+                      content: "${clsLan.qty} :", size: textSize, weight: FontWeight.w500, color: theme.black),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -474,22 +435,22 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                       locationBox.clear();
                                       qtyBox.text = '1';
                                       noteBox.clear();
-                                    });
-                                    Get.back();
-                                    reUse.reUseCircleDialog(
-                                        context: context,
-                                        icon: Icons.check_circle_rounded,
-                                        title: 'ជោគជ័យ',
-                                        content: Center(
-                                          child: Text(
-                                            'ទំនិញរបស់លោកអ្នកហៅបានជោគជ័យ',
-                                            style: TextStyle(
-                                              color: theme.black,
+                                      Get.back();
+                                      reUse.reUseCircleDialog(
+                                          context: context,
+                                          icon: Icons.check_circle_rounded,
+                                          title: 'ជោគជ័យ',
+                                          content: Center(
+                                            child: Text(
+                                              'ទំនិញរបស់លោកអ្នកហៅបានជោគជ័យ',
+                                              style: TextStyle(
+                                                color: theme.black,
+                                              ),
                                             ),
-                                          ),
-                                        ));
-                                    setState(() {
-                                      packageID = glb.generatePackageID();
+                                          ));
+                                      setState(() {
+                                        packageID = glb.generatePackageID();
+                                      });
                                     });
                                   }
                                 }
