@@ -248,7 +248,7 @@ class GlobalController {
 
   Future<void> editPackage(
       {price,
-      userData,
+      required Map userData,
       data,
       userName,
       userPhoneNumber,
@@ -259,11 +259,9 @@ class GlobalController {
       phoneNumber,
       location,
       qty,
-      tokenKey,
+      token,
       bankName,
       chatid}) async {
-    // DateTime now = DateTime.now();
-    // String formattedDate = DateFormat(' dd-MM-yyyy HH:mm aa').format(now);
     position = await GeolocatorPlatform.instance.getCurrentPosition();
     latitude = position.latitude;
     longitude = position.longitude;
@@ -272,7 +270,7 @@ class GlobalController {
       field.location: location.toString(),
       field.pushKey: data[field.pushKey].toString(),
       field.phoneNumber: phoneNumber.toString(),
-      field.token: tokenKey.toString(),
+      field.token: token.toString(),
       field.chatid: chatid.toString(),
       field.latitude: latitude.toString(),
       field.longitude: longitude.toString(),
@@ -285,6 +283,7 @@ class GlobalController {
       field.bankName: bankName,
       field.recLatitude: latitude.toString(),
       field.recLongitude: longitude.toString(),
+      field.senderName : "${userData[field.firstname]} ${userData[field.lastname]}"
     });
   }
 
