@@ -26,7 +26,6 @@ class FieldData {
   String senderName = "senderName";
   String paidStatus = "paidStatus";
   String receiveCode = "receiveCode";
-  String chatID = "chatID";
   String bankCode = "bankCode";
   String bankName = "bankName";
   String completeDate = "completeDate";
@@ -35,6 +34,10 @@ class FieldData {
   String accountType = "accountType";
   String isBanned = "isBanned";
   String signInToken = "signInToken";
+  String firstname = "firstname";
+  String lastname = "lastname";
+  String uLatitude = "uLatitude";
+  String uLongitude = "uLongitude";
 }
 
 
