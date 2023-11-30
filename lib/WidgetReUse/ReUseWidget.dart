@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -392,9 +393,10 @@ class ReUseWidget {
     );
   }
 
-  reUseTextBox({hind, icon, controller, obscureText, keyboardType, suffixIcon, suffixIconOnTap}) {
+  reUseTextBox({inputFormatters ,hind, icon, controller, obscureText, keyboardType, suffixIcon, suffixIconOnTap}) {
     return TextFormField(
       keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
       decoration: InputDecoration(
           fillColor: theme.liteGrey,
           //<-- SEE HERE
@@ -534,8 +536,6 @@ class ReUseWidget {
                     textColor: Colors.white,
                     fontSize: 16.0,
                   );
-                } else if (function == 'add') {
-                  int qty = int.parse(value) + 1;
                 } else if (function == 'pincode') {
                   //glb.insertTelegramToken();
                 } else if (function == 'token') {
