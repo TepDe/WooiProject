@@ -26,17 +26,20 @@ class _PendingScreenState extends State<PendingScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    pendingList = argumentData;
-    forDisplay = argumentData;
+    onInitialize();
   }
 
   var labelSize = 14.0;
   var valueSize = 14.0;
-  FirebaseAuth auth = FirebaseAuth.instance;
   List pendingList = [];
   List forDisplay = [];
   final searchController = TextEditingController();
 
+  onInitialize() {
+    pendingList = argumentData;
+    forDisplay = glb.sortNewest(argumentData, "assignDate");
+    setState(() {});
+  }
 
   double padding = 2.0;
   final field = FieldData();
@@ -74,10 +77,7 @@ class _PendingScreenState extends State<PendingScreen> {
                           ),
                           label: Text(
                             clsLan.stPend,
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: theme.orange,
-                                fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 18, color: theme.orange, fontWeight: FontWeight.bold),
                           ),
                         ),
                         // Padding(
@@ -163,23 +163,7 @@ class _PendingScreenState extends State<PendingScreen> {
                         child: IconButton(
                             splashRadius: 20,
                             onPressed: () {
-                              List results = pendingList
-                                  .where((user) => user['packageID']
-                                      .toLowerCase()
-                                      .contains(searchController.text
-                                          .toString()
-                                          .toLowerCase()))
-                                  .toList();
-                              if (results.isEmpty) {
-                                results = pendingList
-                                    .where((user) => user['phoneNumber']
-                                        .toLowerCase()
-                                        .contains(searchController.text
-                                            .toString()
-                                            .toLowerCase()))
-                                    .toList();
-                              }
-                              forDisplay = results;
+                              forDisplay = glb.onSearch(pendingList, searchController.text);
                               FocusManager.instance.primaryFocus?.unfocus();
                               setState(() {});
                             },
@@ -210,25 +194,48 @@ class _PendingScreenState extends State<PendingScreen> {
                 children: [
                   Padding(
                     padding: EdgeInsets.all(padding),
-                    child: reUse.reUseText(
-                        content:
-                            '${clsLan.totalPackage} : ${forDisplay.length}'),
+                    child: reUse.reUseText(content: '${clsLan.totalPackage} : ${forDisplay.length}   '),
                   ),
-
                   const Flexible(child: Divider()),
-                  // Container(
-                  //   decoration: BoxDecoration(
-                  //     color: theme.litestOrange,
-                  //     borderRadius: BorderRadius.circular(6),
-                  //   ),
-                  //   child: IconButton(
-                  //       splashRadius: 20,
-                  //       onPressed: () {},
-                  //       icon: Icon(
-                  //         Icons.filter_alt_outlined,
-                  //         color: theme.orange,
-                  //       )),
-                  // )
+                  Container(
+                    decoration: BoxDecoration(
+                      color: theme.litestOrange,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: PopupMenuButton<String>(
+                      icon: Icon(
+                        Icons.sort_rounded,
+                        color: theme.deepOrange,
+                      ),
+                      itemBuilder: (BuildContext context) {
+                        return [
+                          const PopupMenuItem<String>(
+                            value: 'new',
+                            child: Text("ថ្មីបំផុត"),
+                          ),
+                          const PopupMenuItem<String>(
+                            value: 'old',
+                            child: Text("ចាស់បំផុត"),
+                          ),
+                          const PopupMenuItem<String>(
+                            value: 'today',
+                            child: Text("ថ្ងៃនេះ"),
+                          ),
+                        ];
+                      },
+                      onSelected: (String value) {
+                        List lstData = List.from(pendingList);
+                        if (value == "old") {
+                          forDisplay = glb.sortOldest(lstData, "assignDate");
+                        } else if (value == "new") {
+                          forDisplay = glb.sortNewest(lstData, "assignDate");
+                        } else {
+                          forDisplay = glb.onSortToday(lstData, "assignDate");
+                        }
+                        setState(() {});
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -247,8 +254,7 @@ class _PendingScreenState extends State<PendingScreen> {
                                   physics: const NeverScrollableScrollPhysics(),
                                   padding: const EdgeInsets.all(8),
                                   itemCount: forDisplay.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
+                                  itemBuilder: (BuildContext context, int index) {
                                     return Container(
                                       width: Get.width,
                                       margin: const EdgeInsets.all(6),
@@ -259,8 +265,7 @@ class _PendingScreenState extends State<PendingScreen> {
                                           BoxShadow(
                                             color: theme.grey,
                                             blurRadius: 4,
-                                            offset: const Offset(
-                                                0, 1), // Shadow position
+                                            offset: const Offset(0, 1), // Shadow position
                                           ),
                                         ],
                                       ),
@@ -268,16 +273,13 @@ class _PendingScreenState extends State<PendingScreen> {
                                         color: Colors.transparent,
                                         child: InkWell(
                                           onTap: () {
-                                            Get.to(() => const PendingDetail(),
-                                                arguments: forDisplay[index]);
+                                            Get.to(() => const PendingDetail(), arguments: forDisplay[index]);
                                           },
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 reUse.reUseRowText(
                                                     lableSize: labelSize,
@@ -285,61 +287,41 @@ class _PendingScreenState extends State<PendingScreen> {
                                                     title: "${index + 1}./  ${clsLan.packageID}",
                                                     size: 16.0,
                                                     color: theme.blue,
-                                                    content: forDisplay[index]
-                                                        ['packageID'],
+                                                    content: forDisplay[index]['packageID'],
                                                     weight: FontWeight.w500),
                                                 Divider(
                                                   color: theme.grey,
                                                 ),
                                                 Padding(
-                                                  padding:
-                                                      EdgeInsets.all(padding),
+                                                  padding: EdgeInsets.all(padding),
                                                   child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
                                                       reUse.reUseColumnText(
-                                                          titleColor:
-                                                              theme.grey,
-                                                          title: clsLan
-                                                              .receiverLocation,
+                                                          titleColor: theme.grey,
+                                                          title: clsLan.receiverLocation,
                                                           lableSize: 11,
                                                           size: 14.0,
                                                           color: theme.black,
-                                                          content:
-                                                              forDisplay[index]
-                                                                  ['location'],
-                                                          weight:
-                                                              FontWeight.w500),
+                                                          content: forDisplay[index]['location'],
+                                                          weight: FontWeight.w500),
                                                       reUse.reUseColumnText(
                                                           lableSize: 11,
-                                                          titleColor:
-                                                              theme.grey,
-                                                          title: clsLan
-                                                              .receiverPhoneNumber,
+                                                          titleColor: theme.grey,
+                                                          title: clsLan.receiverPhoneNumber,
                                                           size: 14.0,
                                                           color: theme.black,
-                                                          content: forDisplay[
-                                                                  index]
-                                                              ['phoneNumber'],
-                                                          weight:
-                                                              FontWeight.w500),
+                                                          content: forDisplay[index]['phoneNumber'],
+                                                          weight: FontWeight.w500),
                                                       reUse.reUseColumnText(
                                                           lableSize: 11,
-                                                          titleColor:
-                                                              theme.grey,
+                                                          titleColor: theme.grey,
                                                           title: clsLan.qty,
                                                           size: 14.0,
                                                           color: theme.black,
-                                                          content: forDisplay[
-                                                          index]
-                                                          ['qty'],
-                                                          weight:
-                                                              FontWeight.w500),
+                                                          content: forDisplay[index]['qty'],
+                                                          weight: FontWeight.w500),
                                                     ],
                                                   ),
                                                 ),
@@ -347,11 +329,8 @@ class _PendingScreenState extends State<PendingScreen> {
                                                   color: theme.darkGrey,
                                                 ),
                                                 Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
                                                     reUse.reUseColumnText(
                                                         lableSize: 12,
@@ -360,8 +339,7 @@ class _PendingScreenState extends State<PendingScreen> {
                                                         size: 0.0,
                                                         color: theme.black,
                                                         content: '',
-                                                        weight:
-                                                            FontWeight.w500),
+                                                        weight: FontWeight.w500),
                                                     reUse.reUseColumnText(
                                                         lableSize: 12,
                                                         titleColor: theme.grey,
@@ -373,13 +351,12 @@ class _PendingScreenState extends State<PendingScreen> {
                                                     reUse.reUseColumnText(
                                                         lableSize: 12,
                                                         titleColor: theme.grey,
-                                                        title:
-                                                            clsLan.driverName,
+                                                        title: clsLan.driverName,
                                                         size: 14.0,
                                                         color: theme.black,
-                                                        content: "${forDisplay[index][field.dFirstName]} ${forDisplay[index][field.dLastName]}",
-                                                        weight:
-                                                            FontWeight.w500),
+                                                        content:
+                                                            "${forDisplay[index][field.dFirstName]} ${forDisplay[index][field.dLastName]}",
+                                                        weight: FontWeight.w500),
                                                   ],
                                                 ),
                                                 Divider(
@@ -391,8 +368,7 @@ class _PendingScreenState extends State<PendingScreen> {
                                                     title: clsLan.assignDate,
                                                     size: valueSize,
                                                     color: theme.black,
-                                                    content: glb.formatDateTime(forDisplay[index]
-                                                        [field.assignDate]),
+                                                    content: glb.formatDateTime(forDisplay[index][field.assignDate]),
                                                     weight: FontWeight.w500),
                                               ],
                                             ),
