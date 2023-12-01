@@ -30,9 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final reUse = ReUseWidget();
   final theme = ThemesApp();
   List driverList = [];
-  List totalPackageIndex = [];
-  List completeData = [];
-  List returnData = [];
+  List lstRequest = [];
+  List lstComplete = [];
+  List lstReturn = [];
   final field = FieldData();
   int doubleClick = 0;
   final glb = GlobalController();
@@ -52,10 +52,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> onInitialize() async {
     await onGetUserData();
-    await totalListLength();
-    await completeListLength();
-    await pendingListLength();
-    await returnListLength();
+    latPending = await glb.onGetPendingPackage();
+    lstReturn = await glb.onGetReturnPackage();
+    lstRequest = await glb.onGetRequestPackage();
+    lstComplete = await glb.onGetCompletePackage();
+    driverList = lstRequest;
+    compSort = List.from(lstComplete);
+    retSort = List.from(lstReturn);
     forSort = mergeList(comp: compSort, ret: retSort);
     setState(() {});
   }
@@ -142,92 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // Get.to(()=> const LogInScreen());
     }
   }
-
-  DatabaseReference requestDB = FirebaseDatabase.instance.ref('PackageRequest');
-
-  Future<void> totalListLength() async {
-    try {
-      final isRequestDB = await requestDB.child(auth.currentUser!.uid).child("package").onValue.first;
-      driverList.clear();
-      totalPackageIndex.clear();
-      DataSnapshot driver = isRequestDB.snapshot;
-      Map values = driver.value as Map;
-      values.forEach((key, values) {
-        totalPackageIndex.add(values);
-        driverList.add(values);
-        setState(() {});
-      });
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      } // FirebaseAuth.instance.signOut();
-      // Get.to(() => const LogInScreen());
-    }
-  }
-
-  List pendingList = [];
-  DatabaseReference pendingDB = FirebaseDatabase.instance.ref('Pending');
-
-  Future<void> pendingListLength() async {
-    try {
-      final isPendingDB = await pendingDB.child(auth.currentUser!.uid).onValue.first;
-      pendingList.clear();
-      DataSnapshot driver = isPendingDB.snapshot;
-      Map values = driver.value as Map;
-      values.forEach((key, value) {
-        pendingList.add(value);
-        setState(() {});
-      });
-    } catch (e) {
-      // print('pendingListLength $e');
-      // FirebaseAuth.instance.signOut();
-      // Get.to(()=> const LogInScreen());
-    }
-  }
-
-  DatabaseReference completeDB = FirebaseDatabase.instance.ref('Complete');
-
-  Future<void> completeListLength() async {
-    try {
-      final isCompleteDb = await completeDB.child(auth.currentUser!.uid).onValue.first;
-      completeData.clear();
-      forSort.clear();
-      compSort.clear();
-      DataSnapshot driver = isCompleteDb.snapshot;
-      Map values = driver.value as Map;
-      values.forEach((key, value) async {
-        completeData.add(value);
-        compSort.add(value);
-        setState(() {});
-      });
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-  }
-
-  DatabaseReference returnDB = FirebaseDatabase.instance.ref('Return');
-
-  Future<void> returnListLength() async {
-    try {
-      final isReturnDB = await returnDB.child(auth.currentUser!.uid).onValue.first;
-      returnData.clear();
-      forSort.clear();
-      retSort.clear();
-      DataSnapshot driver = isReturnDB.snapshot;
-      Map values = driver.value as Map;
-      values.forEach((key, value) async {
-        returnData.add(value);
-        retSort.add(value);
-        setState(() {});
-      });
-    } catch (e) {
-      // print('returnListLength $e');
-      // FirebaseAuth.instance.signOut();
-      // Get.to(()=> const LogInScreen());
-    }
-  }
+  List latPending = [];
 
   List mergeList({List? comp, List? ret}) {
     List merge = comp! + ret!;
@@ -405,15 +323,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: EdgeInsets.all(paddings),
                         child: reUse.unitTwoHomeScreen(
                             context: context,
-                            totalPackageDataKey: totalPackageIndex,
+                            totalPackageDataKey: lstRequest,
                             totalPackageData: driverList,
-                            returnData: returnData,
-                            completeData: completeData,
-                            returnLength: returnData.length,
-                            completeLength: completeData.length,
-                            pendingData: pendingList,
+                            returnData: lstReturn,
+                            completeData: lstComplete,
+                            returnLength: lstReturn.length,
+                            completeLength: lstComplete.length,
+                            pendingData: latPending,
                             totalLength: driverList.length,
-                            pendingLength: pendingList.length),
+                            pendingLength: latPending.length),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: paddings),
