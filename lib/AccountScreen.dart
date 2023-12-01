@@ -238,7 +238,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             value: "\$ ${revenue.toStringAsFixed(2)}",
                             textColor: theme.black,
                             witchClick: "revenue",
-                            valueTextSize: 20.0,
+                            valueTextSize: 15.0,
                             onTap: () {
                               Get.to(() => const RevenueList(),
                                   arguments: {"data": revenuePrice, "price": revenue.toStringAsFixed(2)});
@@ -258,7 +258,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                   arguments: {"data": paidPrice, "price": paid.toStringAsFixed(2)});
                             },
                             title: clsLan.paid,
-                            valueTextSize: 20.0,
+                            valueTextSize: 15.0,
                             labelTextSize: 14.0,
                             valueColor: theme.grey,
                             textColor: theme.black,
