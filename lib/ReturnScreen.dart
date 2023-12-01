@@ -162,18 +162,7 @@ class _ReturnScreenState extends State<ReturnScreen> {
                           child: IconButton(
                               splashRadius: 20,
                               onPressed: () {
-                                List results = returnList
-                                    .where((user) =>
-                                        user['packageID'].toLowerCase().contains(search.text.toString().toLowerCase()))
-                                    .toList();
-                                if (results.isEmpty) {
-                                  results = returnList
-                                      .where((user) => user['phoneNumber']
-                                          .toLowerCase()
-                                          .contains(search.text.toString().toLowerCase()))
-                                      .toList();
-                                }
-                                forDisplay = results;
+                                forDisplay = glb.onSearch(returnList, search.text);
                                 FocusManager.instance.primaryFocus?.unfocus();
                                 setState(() {});
                               },
