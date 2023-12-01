@@ -23,21 +23,16 @@ class _PaidScreenState extends State<PaidScreen> {
   final glb = GlobalController();
   final search = TextEditingController();
   var argumentData = Get.arguments;
-  List completeList = [];
+  List lstComplete = [];
   List forDisplay = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (argumentData == []) {
-      completeList = [];
-      forDisplay = [];
-    } else {
-      completeList = argumentData['data'];
-      forDisplay = argumentData['data'];
-      setState(() {});
-    }
+    lstComplete = argumentData['data'];
+    forDisplay = List.from(lstComplete);
+    setState(() {});
   }
 
   @override
@@ -155,7 +150,7 @@ class _PaidScreenState extends State<PaidScreen> {
                                 onPressed: () {
                                   search.clear();
                                   //packageList!.clear(),
-                                  forDisplay = completeList;
+                                  forDisplay = lstComplete;
                                   FocusManager.instance.primaryFocus?.unfocus();
                                   setState(() {});
                                 },
@@ -192,22 +187,7 @@ class _PaidScreenState extends State<PaidScreen> {
                         child: IconButton(
                             splashRadius: 20,
                             onPressed: () {
-                              List results = completeList
-                                  .where((user) => user['packageID']
-                                      .toLowerCase()
-                                      .contains(
-                                          search.text.toString().toLowerCase()))
-                                  .toList();
-                              if (results.isEmpty) {
-                                results = completeList
-                                    .where((user) => user['phoneNumber']
-                                        .toLowerCase()
-                                        .contains(search.text
-                                            .toString()
-                                            .toLowerCase()))
-                                    .toList();
-                              }
-                              forDisplay = results;
+                              forDisplay = glb.onSearch(lstComplete, search.text);
                               setState(() {});
                               FocusManager.instance.primaryFocus?.unfocus();
                             },
@@ -225,26 +205,51 @@ class _PaidScreenState extends State<PaidScreen> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  reUse.reUseText(
-                      content: '${clsLan.totalPackage} : ${forDisplay.length}'),
+                  reUse.reUseText(content: '${clsLan.totalPackage} : ${forDisplay.length}'),
                   const Flexible(child: Divider()),
-                  // Container(
-                  //   decoration: BoxDecoration(
-                  //     color: theme.litestOrange,
-                  //     borderRadius: BorderRadius.circular(6),
-                  //   ),
-                  //   child: IconButton(
-                  //       splashRadius: 20,
-                  //       onPressed: () {},
-                  //       icon: Icon(
-                  //         Icons.filter_alt_outlined,
-                  //         color: theme.orange,
-                  //       )),
-                  // )
+                  Container(
+                    decoration: BoxDecoration(
+                      color: theme.litestOrange,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: PopupMenuButton<String>(
+                      icon: Icon(
+                        Icons.sort_rounded,
+                        color: theme.orange,
+                      ),
+                      itemBuilder: (BuildContext context) {
+                        return [
+                          const PopupMenuItem<String>(
+                            value: 'new',
+                            child: Text("ថ្មីបំផុត"),
+                          ),
+                          const PopupMenuItem<String>(
+                            value: 'old',
+                            child: Text("ចាស់បំផុត"),
+                          ),
+                          const PopupMenuItem<String>(
+                            value: 'today',
+                            child: Text("ថ្ងៃនេះ"),
+                          ),
+                        ];
+                      },
+                      onSelected: (String value) {
+                        List lstData = List.from(lstComplete);
+                        if (value == "old") {
+                          forDisplay = glb.sortOldest(lstData, "completeDate");
+                        } else if (value == "new") {
+                          forDisplay = glb.sortNewest(lstData, "completeDate");
+                        } else {
+                          forDisplay = glb.onSortToday(lstData, "completeDate");
+                        }
+                        setState(() {});
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
-            forDisplay != []
+            forDisplay.isNotEmpty
                 ? Flexible(
                     child: Scrollbar(
                       thickness: 6,
@@ -259,8 +264,7 @@ class _PaidScreenState extends State<PaidScreen> {
                                   physics: const NeverScrollableScrollPhysics(),
                                   padding: const EdgeInsets.all(8),
                                   itemCount: forDisplay.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
+                                  itemBuilder: (BuildContext context, int index) {
                                     return Container(
                                       width: Get.width,
                                       margin: const EdgeInsets.all(6),
@@ -272,51 +276,38 @@ class _PaidScreenState extends State<PaidScreen> {
                                           BoxShadow(
                                             color: theme.minGrey,
                                             blurRadius: 4,
-                                            offset: const Offset(
-                                                0, 0), // Shadow position
+                                            offset: const Offset(0, 0), // Shadow position
                                           ),
                                         ],
                                       ),
                                       child: Material(
                                         color: Colors.transparent,
                                         child: InkWell(
-                                          borderRadius:
-                                              BorderRadius.circular(6),
+                                          borderRadius: BorderRadius.circular(6),
                                           onTap: () {
                                             Get.to(() => const CompleteDetail(),
-                                                arguments: {
-                                                  "data": forDisplay[index],
-                                                  "from": "paid"
-                                                });
+                                                arguments: {"data": forDisplay[index], "from": "paid"});
                                           },
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
                                                     reUse.reUseText(
                                                         weight: FontWeight.w400,
                                                         size: 12.0,
                                                         color: theme.grey,
-                                                        content:
-                                                            clsLan.packageID),
+                                                        content: clsLan.packageID),
                                                     Row(
                                                       children: [
                                                         reUse.reUseText(
-                                                            weight:
-                                                                FontWeight.bold,
+                                                            weight: FontWeight.bold,
                                                             size: 16.0,
                                                             color: theme.blue,
-                                                            content: forDisplay[
-                                                                    index]
-                                                                ['packageID']),
+                                                            content: forDisplay[index]['packageID']),
                                                         // SizedBox(
                                                         //   height: 40,
                                                         //   width: 40,
@@ -345,75 +336,53 @@ class _PaidScreenState extends State<PaidScreen> {
                                                   ],
                                                 ),
                                                 Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(6.0),
+                                                  padding: const EdgeInsets.all(6.0),
                                                   child: Divider(
                                                     height: 1,
                                                     color: theme.grey,
                                                   ),
                                                 ),
                                                 Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(3.0),
+                                                  padding: const EdgeInsets.all(3.0),
                                                   child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
                                                       reUse.reUseColumnText(
-                                                          titleColor:
-                                                              theme.grey,
-                                                          title: clsLan
-                                                              .receiverLocation,
+                                                          titleColor: theme.grey,
+                                                          title: clsLan.receiverLocation,
                                                           lableSize: 11,
                                                           size: 14.0,
                                                           color: theme.black,
-                                                          content:
-                                                              forDisplay[index]
-                                                                  ['location'],
-                                                          weight:
-                                                              FontWeight.w500),
+                                                          content: forDisplay[index]['location'],
+                                                          weight: FontWeight.w500),
                                                       reUse.reUseColumnText(
-                                                          titleColor:
-                                                              theme.grey,
-                                                          title: clsLan
-                                                              .receiverPhoneNumber,
+                                                          titleColor: theme.grey,
+                                                          title: clsLan.receiverPhoneNumber,
                                                           lableSize: 11,
                                                           size: 14.0,
                                                           color: theme.black,
-                                                          content: forDisplay[
-                                                                  index]
-                                                              ['phoneNumber'],
-                                                          weight:
-                                                              FontWeight.w500),
+                                                          content: forDisplay[index]['phoneNumber'],
+                                                          weight: FontWeight.w500),
                                                       reUse.reUseColumnText(
-                                                          titleColor:
-                                                              theme.grey,
+                                                          titleColor: theme.grey,
                                                           title: clsLan.price,
                                                           lableSize: 11,
                                                           size: 14.0,
                                                           color: theme.black,
-                                                          content: forDisplay[
-                                                                      index]
-                                                                  ['price'] +
-                                                              " \$",
-                                                          weight:
-                                                              FontWeight.w500),
+                                                          content: forDisplay[index]['price'] + " \$",
+                                                          weight: FontWeight.w500),
                                                     ],
                                                   ),
                                                 ),
                                                 Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(6.0),
+                                                  padding: const EdgeInsets.all(6.0),
                                                   child: Divider(
                                                     height: 1,
                                                     color: theme.grey,
                                                   ),
                                                 ),
                                                 Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
                                                     reUse.reUseText(
                                                         size: 12.0,
@@ -422,24 +391,15 @@ class _PaidScreenState extends State<PaidScreen> {
                                                         content: clsLan.status),
                                                     Container(
                                                       decoration: BoxDecoration(
-                                                        color:
-                                                            theme.litestOrange,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(6),
+                                                        color: theme.litestOrange,
+                                                        borderRadius: BorderRadius.circular(6),
                                                       ),
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal: 10,
-                                                          vertical: 4),
+                                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                                       child: reUse.reUseText(
                                                           size: 12.0,
-                                                          color:
-                                                              theme.deepPumpkin,
-                                                          content:
-                                                              clsLan.readyPaid,
-                                                          weight:
-                                                              FontWeight.w600),
+                                                          color: theme.deepPumpkin,
+                                                          content: clsLan.readyPaid,
+                                                          weight: FontWeight.w600),
                                                     ),
                                                   ],
                                                 ),
@@ -456,8 +416,7 @@ class _PaidScreenState extends State<PaidScreen> {
                       ),
                     ),
                   )
-                : Flexible(
-                    child: Center(child: reUse.reUseText(content: "មិនមាន")))
+                : Flexible(child: Center(child: reUse.reUseText(content: "មិនមាន")))
           ],
         ),
       ),
