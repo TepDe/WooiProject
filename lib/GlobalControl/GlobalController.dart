@@ -14,7 +14,6 @@ import 'package:get/get.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/GlobalControl/jsonModule.dart';
-import 'package:wooiproject/LoginScreen.dart';
 import 'package:wooiproject/SetUpScreen.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 import '../ViewScreen.dart';
@@ -105,6 +104,7 @@ class GlobalController {
   }
 
   DatabaseReference packageRequest = FirebaseDatabase.instance.ref("PackageRequest");
+  DatabaseReference completeDB = FirebaseDatabase.instance.ref("Complete");
 
   final field = FieldData();
   final fieldInfo = FieldInfo();
@@ -283,7 +283,7 @@ class GlobalController {
       field.bankName: bankName,
       field.recLatitude: latitude.toString(),
       field.recLongitude: longitude.toString(),
-      field.senderName : "${userData[field.firstname]} ${userData[field.lastname]}"
+      field.senderName: "${userData[field.firstname]} ${userData[field.lastname]}"
     });
   }
 
@@ -553,7 +553,7 @@ class GlobalController {
     List result = [];
 
     // Define the list of keys to search for
-    List<String> keysToSearch = ["phoneNumber", "packageID"];
+    List<String> keysToSearch = ["phoneNumber", "packageID", "location","price"];
     for (String key in keysToSearch) {
       result = lstObject.where((food) => food.containsKey(key) && food[key].toString().contains(search)).toList();
       if (result.isNotEmpty) {
@@ -603,5 +603,77 @@ class GlobalController {
             DateTime.parse(obj[key]).day == today.day)
         .toList();
     return objList;
+  }
+
+  Future<List> onGetRequestPackage() async {
+    List result = [];
+    try {
+      final isRequestDB = await packageRequest.child(auth.currentUser!.uid).child("package").onValue.first;
+      DataSnapshot driver = isRequestDB.snapshot;
+      Map values = driver.value as Map;
+      values.forEach((key, values) {
+        result.add(values);
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return result;
+  }
+
+  Future<List> onGetCompletePackage() async {
+    List result = [];
+    try {
+      final isCompleteDb = await completeDB.child(auth.currentUser!.uid).onValue.first;
+      DataSnapshot driver = isCompleteDb.snapshot;
+      Map values = driver.value as Map;
+      values.forEach((key, value) async {
+        result.add(value);
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return result;
+  }
+
+  DatabaseReference pendingDB = FirebaseDatabase.instance.ref('Pending');
+
+  Future<List> onGetPendingPackage() async {
+    List result = [];
+    try {
+      final isPendingDB = await pendingDB.child(auth.currentUser!.uid).onValue.first;
+      DataSnapshot driver = isPendingDB.snapshot;
+      Map values = driver.value as Map;
+      values.forEach((key, value) {
+        result.add(value);
+      });
+    } catch (e) {
+      // print('pendingListLength $e');
+      // FirebaseAuth.instance.signOut();
+      // Get.to(()=> const LogInScreen());
+    }
+    return result;
+  }
+
+  DatabaseReference returnDB = FirebaseDatabase.instance.ref('Return');
+
+  Future<List> onGetReturnPackage() async {
+    List result = [];
+    try {
+      final isReturnDB = await returnDB.child(auth.currentUser!.uid).onValue.first;
+      DataSnapshot driver = isReturnDB.snapshot;
+      Map values = driver.value as Map;
+      values.forEach((key, value) async {
+        result.add(value);
+      });
+    } catch (e) {
+      // print('returnListLength $e');
+      // FirebaseAuth.instance.signOut();
+      // Get.to(()=> const LogInScreen());
+    }
+    return result;
   }
 }
