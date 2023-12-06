@@ -87,18 +87,18 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Map data = {};
+  Map userData = {};
   var userInfo = FirebaseFirestore.instance.collection('Users');
 
   Future<void> onGetUserData(context) async {
     try {
-      data = await glb.onGetUserInfo();
+      userData = await glb.onGetUserInfo();
       generalInfo = await glb.onGetGeneralInfo();
-      if (data.isEmpty) {
+      if (userData.isEmpty) {
         auth.signOut();
         Get.to(() => const LogInScreen());
       } else {
-        if (data["accountType"] == "Users" && data["isBanned"] == "false" && "1" == generalInfo["version"]) {
+        if (userData["accountType"] == "Users" && userData["isBanned"] == "false" && "1" == generalInfo["version"]) {
         } else {
           reUse.reUseCircleDialog(
             disposeAllow: false,
@@ -107,11 +107,11 @@ class _HomeScreenState extends State<HomeScreen> {
               Get.to(() => const LogInScreen());
             },
             context: context,
-            icon: data["accountType"] != "Users" ? Icons.wifi : Icons.cancel_outlined,
-            title: data["accountType"] != "Users" ? 'មិនមាន' : 'ផ្អាក',
+            icon: userData["accountType"] != "Users" ? Icons.wifi : Icons.cancel_outlined,
+            title: userData["accountType"] != "Users" ? 'មិនមាន' : 'ផ្អាក',
             content: Center(
               child: Text(
-                data["accountType"] != "Users"
+                userData["accountType"] != "Users"
                     ? 'គណនីនេះមិនមានទេ សូមពិនិត្យមើលម្តងទៀត!'
                     : 'បច្ចុប្បន្នគណនីនេះត្រូវបានផ្អាក',
                 style: TextStyle(
@@ -215,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: qrSize,
                         child: QrImageView(
                           data:
-                              "${data['phoneNumber']},${data['email']},${data['firstname']},${data['lastname']},${auth.currentUser!.uid}",
+                              "${userData['phoneNumber']},${userData['email']},${userData['firstname']},${userData['lastname']},${auth.currentUser!.uid}",
                           version: QrVersions.auto,
                           size: qrSize,
                         ),
@@ -245,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         size: 20.0,
                         color: theme.black,
                         weight: FontWeight.bold,
-                        content: '${currentTime()}\nID ${data.isEmpty ? "" : data['userID']}'),
+                        content: '${currentTime()}\nID ${userData.isEmpty ? "" : userData['userID']}'),
                     FutureBuilder<String?>(
                       future: SharedPreferences.getInstance().then((prefs) => prefs.getString(str.profileImg)),
                       builder: (context, snapshot) {
