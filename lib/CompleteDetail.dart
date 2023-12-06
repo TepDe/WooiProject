@@ -22,7 +22,7 @@ class _CompleteDetailState extends State<CompleteDetail> {
   final field = FieldData();
   final fieldInfo = FieldInfo();
 
-  var forDisplay;
+  Map forDisplay = {};
 
   var labelSize = 14.0;
   var valueSize = 14.0;
@@ -240,7 +240,7 @@ class _CompleteDetailState extends State<CompleteDetail> {
                           size: valueSize,
                           lableSize: labelSize,
                           color: theme.black,
-                          content: forDisplay["dPhone"],
+                          content: forDisplay[field.dPhoneNumber],
                           weight: FontWeight.w500),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
