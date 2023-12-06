@@ -39,7 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final glb = GlobalController();
   List distince = [];
 
-  String getUserID = '';
   final str = StorageKey();
 
   @override
@@ -47,12 +46,12 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     fetchImage();
-    alertNoInternet();
     onInitialize();
   }
 
+  Map generalInfo = {};
+
   Future<void> onInitialize() async {
-    await onGetUserData();
     latPending = await glb.onGetPendingPackage();
     lstReturn = await glb.onGetReturnPackage();
     lstRequest = await glb.onGetRequestPackage();
@@ -66,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  alertNoInternet() async {
+  alertNoInternet(context) async {
     try {
       final result = await InternetAddress.lookup('example.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {}
@@ -88,64 +87,45 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  late Map data;
+  Map data = {};
   var userInfo = FirebaseFirestore.instance.collection('Users');
 
-  Future<void> onGetUserData() async {
-    final prefs = await SharedPreferences.getInstance();
+  Future<void> onGetUserData(context) async {
     try {
-      var information = await userInfo.doc(auth.currentUser!.uid).get();
-      final bool doesDocExist = information.exists;
-      if (doesDocExist == false) {
+      data = await glb.onGetUserInfo();
+      generalInfo = await glb.onGetGeneralInfo();
+      if (data.isEmpty) {
         auth.signOut();
         Get.to(() => const LogInScreen());
       } else {
-        await userInfo.doc(auth.currentUser!.uid).get().then((doc) async {
-          data = doc.data() as Map;
-          if (data["accountType"] != "Users") {
-            await reUse.reUseCircleDialog(
-                disposeAllow: false,
-                onTap: () {
-                  glb.auth.signOut();
-                  Get.to(() => const LogInScreen());
-                },
-                context: context,
-                icon: Icons.wifi,
-                title: 'មិនមាន',
-                content: Center(
-                  child: Text(
-                    'គណនីនេះមិនមានទេ សូមពិនិត្យមើលម្តងទៀត!',
-                    style: TextStyle(
-                      color: theme.black,
-                    ),
-                  ),
-                ));
-          } else if (data["isBanned"] != "false") {
-            await reUse.reUseCircleDialog(
-                disposeAllow: false,
-                onTap: () {
-                  glb.auth.signOut();
-                  Get.to(() => const LogInScreen());
-                },
-                context: context,
-                icon: Icons.cancel_outlined,
-                title: 'ផ្អាក',
-                content: Center(
-                  child: Text(
-                    'បច្ចុប្បន្នគណនីនេះត្រូវបានផ្អាក',
-                    style: TextStyle(
-                      color: theme.black,
-                    ),
-                  ),
-                ));
-          }
-          getUserID = data['userID'];
-          await prefs.setString(str.userID, getUserID.toString());
-        });
+        if (data["accountType"] == "Users" && data["isBanned"] == "false" && "1" == generalInfo["version"]) {
+        } else {
+          reUse.reUseCircleDialog(
+            disposeAllow: false,
+            onTap: () {
+              glb.auth.signOut();
+              Get.to(() => const LogInScreen());
+            },
+            context: context,
+            icon: data["accountType"] != "Users" ? Icons.wifi : Icons.cancel_outlined,
+            title: data["accountType"] != "Users" ? 'មិនមាន' : 'ផ្អាក',
+            content: Center(
+              child: Text(
+                data["accountType"] != "Users"
+                    ? 'គណនីនេះមិនមានទេ សូមពិនិត្យមើលម្តងទៀត!'
+                    : 'បច្ចុប្បន្នគណនីនេះត្រូវបានផ្អាក',
+                style: TextStyle(
+                  color: theme.black,
+                ),
+              ),
+            ),
+          );
+        }
       }
     } catch (e) {
-      // FirebaseAuth.instance.signOut();
-      // Get.to(()=> const LogInScreen());
+      // Handle errors, e.g., sign out and navigate to the login screen
+      auth.signOut();
+      Get.to(() => const LogInScreen());
     }
   }
 
@@ -209,6 +189,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    alertNoInternet(context);
+    onGetUserData(context);
     var imageSize = MediaQuery.of(context).size.height * 0.08;
     var qrSize = MediaQuery.of(context).size.height * 0.25;
     var flotBtn = MediaQuery.of(context).size.height * 0.08;
@@ -263,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         size: 20.0,
                         color: theme.black,
                         weight: FontWeight.bold,
-                        content: '${currentTime()}\nID $getUserID'),
+                        content: '${currentTime()}\nID ${data.isEmpty ? "" : data['userID']}'),
                     FutureBuilder<String?>(
                       future: SharedPreferences.getInstance().then((prefs) => prefs.getString(str.profileImg)),
                       builder: (context, snapshot) {
