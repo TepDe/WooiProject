@@ -6,6 +6,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swipe_refresh/swipe_refresh.dart';
@@ -60,7 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
     compSort = List.from(lstComplete);
     retSort = List.from(lstReturn);
     forSort = mergeList(comp: compSort, ret: retSort);
-    setState(() {});
+    setState(() {
+      forSort = glb.onSortTodayTwoKey(forSort);
+    });
   }
 
   alertNoInternet() async {
@@ -145,6 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // Get.to(()=> const LogInScreen());
     }
   }
+
   List latPending = [];
 
   List mergeList({List? comp, List? ret}) {
@@ -196,12 +200,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final _controller = StreamController<SwipeRefreshState>.broadcast();
 
   Stream<SwipeRefreshState> get _stream => _controller.stream;
-
-  @override
-  void dispose() {
-    _controller.close();
-    super.dispose();
-  }
 
   Future<void> _refresh() async {
     await Future<void>.delayed(const Duration(seconds: 3));
