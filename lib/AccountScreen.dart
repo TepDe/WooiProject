@@ -222,12 +222,10 @@ class _AccountScreenState extends State<AccountScreen> {
                       size: 20.0,
                       color: theme.black),
                   reUse.reUseText(
-                      content: 'ID : ${userData[fieldInfo.userID]}',
+                      content: 'ID : ${userData["userID"]}',
                       weight: FontWeight.bold,
-                      size: 12.0,
-                      color: theme.grey),
-                  reUse.reUseText(
-                      content: glb.auth.currentUser!.uid, weight: FontWeight.bold, size: 12.0, color: theme.grey),
+                      size: 14.0,
+                      color: theme.black),
                   Row(
                     children: [
                       Flexible(
