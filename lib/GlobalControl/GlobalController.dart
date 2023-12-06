@@ -24,6 +24,8 @@ class GlobalController {
   double latitude = 0.0;
   double longitude = 0.0;
 
+  String currentVersion = "2";
+
   Future<Position> requestUserPermissionLocation() async {
     await Geolocator.requestPermission().then((value) {}).onError((error, stackTrace) async {
       await Geolocator.requestPermission();
@@ -508,6 +510,18 @@ class GlobalController {
     await FirebaseFirestore.instance
         .collection("General")
         .doc("GeneralInfo")
+        .get()
+        .then((DocumentSnapshot documentSnapshot) async {
+      object = documentSnapshot.data() as Map;
+    });
+    return object;
+  }
+
+  Future<Map> onGetUserInfo() async {
+    Map object = {};
+    await FirebaseFirestore.instance
+        .collection("Users")
+        .doc(auth.currentUser?.uid)
         .get()
         .then((DocumentSnapshot documentSnapshot) async {
       object = documentSnapshot.data() as Map;
