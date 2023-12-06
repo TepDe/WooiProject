@@ -541,7 +541,7 @@ class GlobalController {
 
   String formatDateTime(dateTime) {
     DateTime result = DateTime.parse(dateTime);
-    return DateFormat('yyyy-MM-dd HH:mm aa').format(result);
+    return DateFormat('dd-MM-yyyy HH:mm aa').format(result);
   }
 
   String removeLeadingZeros(String input) {
@@ -553,7 +553,7 @@ class GlobalController {
     List result = [];
 
     // Define the list of keys to search for
-    List<String> keysToSearch = ["phoneNumber", "packageID", "location","price"];
+    List<String> keysToSearch = ["phoneNumber", "packageID", "location", "price"];
     for (String key in keysToSearch) {
       result = lstObject.where((food) => food.containsKey(key) && food[key].toString().contains(search)).toList();
       if (result.isNotEmpty) {
@@ -675,5 +675,17 @@ class GlobalController {
       // Get.to(()=> const LogInScreen());
     }
     return result;
+  }
+
+  List onSortTodayTwoKey(List objList) {
+    DateTime today = DateTime.now();
+    today = DateTime(today.year, today.month, today.day);
+    objList = objList
+        .where((obj) =>
+            DateTime.parse(obj["completeDate"]?? obj["returnDate"]).year == today.year &&
+            DateTime.parse(obj["completeDate"]?? obj["returnDate"]).month == today.month &&
+            DateTime.parse(obj["completeDate"]?? obj["returnDate"]).day == today.day)
+        .toList();
+    return objList;
   }
 }
