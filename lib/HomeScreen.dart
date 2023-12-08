@@ -45,13 +45,15 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    fetchImage();
-    onInitialize();
+    onGetUserData(context).then((value){
+      onInitialize();
+    });
   }
 
   Map generalInfo = {};
 
   Future<void> onInitialize() async {
+    await fetchImage();
     latPending = await glb.onGetPendingPackage();
     lstReturn = await glb.onGetReturnPackage();
     lstRequest = await glb.onGetRequestPackage();
@@ -168,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
   double paddings = 10.0;
   final clsLan = ClsLanguage();
 
-  fetchImage() async {
+  Future<void> fetchImage() async {
     final prefs = await SharedPreferences.getInstance();
     getImageFileFromPath(prefs.getString(str.profileImg).toString());
   }
@@ -190,7 +192,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     alertNoInternet(context);
-    onGetUserData(context);
     var imageSize = MediaQuery.of(context).size.height * 0.08;
     var qrSize = MediaQuery.of(context).size.height * 0.25;
     var flotBtn = MediaQuery.of(context).size.height * 0.08;
