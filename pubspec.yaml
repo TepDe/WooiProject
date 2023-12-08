@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.2 <3.0.0"
+  sdk: '>=3.1.5 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -29,8 +29,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  get: any
-  geolocator: ^9.0.2
+  get: ^4.6.0
+  geolocator: ^10.1.0
   intl: ^0.18.1
   google_maps_flutter: ^2.3.1
   firebase_core:  ^2.21.0
@@ -38,44 +38,21 @@ dependencies:
   cloud_firestore: ^4.12.2
   http: ^1.1.0
   firebase_database: ^10.3.3
-  shared_preferences: any
-  fluttertoast: any
-  firebase_messaging: ^14.7.3
-  flutter_local_notifications: any
-  location: ^4.3.0
-
+  shared_preferences: ^2.2.2
+  location: ^5.0.3
+  fluttertoast: ^8.2.2
   permission_handler: ^11.0.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: any
   firebase_auth: ^4.12.1
   image_picker: ^1.0.4
   qr_flutter: ^4.1.0
   swipe_refresh: ^1.0.2
+  cupertino_icons: ^1.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  firebase_core_platform_interface: any
-  flutter_launcher_icons: "^0.13.1"
-flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/images/macawlogo.png"
-  min_sdk_android: 21 # android min sdk min:16, default 21
-  web:
-    generate: true
-    image_path: "assets/images/macawlogo.png"
-    background_color: "#hexcode"
-    theme_color: "#hexcode"
-  windows:
-    generate: true
-    image_path: "assets/images/macawlogo.png"
-    icon_size: 48 # min:48, max:256, default: 48
-  macos:
-    generate: true
-    image_path: "assets/images/macawlogo.png"
-
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
