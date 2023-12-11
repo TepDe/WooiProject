@@ -11,6 +11,7 @@
     <application
             android:name="${applicationName}"
             android:label="Macaw"
+            android:enableOnBackInvokedCallback="true"
     >
 
         <meta-data

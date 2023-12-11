@@ -163,7 +163,10 @@ class _LogInScreenState extends State<LogInScreen> {
                               'បន្ត',
                               style: TextStyle(color: theme.white, fontWeight: FontWeight.w700),
                             ),
-                            const Icon(Icons.navigate_next_rounded),
+                            Icon(
+                              Icons.navigate_next_rounded,
+                              color: theme.white,
+                            ),
                           ],
                         ),
                       ),
@@ -189,6 +192,8 @@ class _LogInScreenState extends State<LogInScreen> {
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(email: email, password: password);
       if (userCredential.isNull) {
+        auth.signOut();
+        Navigator.pop(context);
       } else {
         reUse.reUseWaitingDialog(context);
         Map userObj = await glb.onGetUserData();
@@ -204,7 +209,7 @@ class _LogInScreenState extends State<LogInScreen> {
           Navigator.pop(context);
           reUse.reUseCircleDialog(
               disposeAllow: false,
-              onTap: ()  {
+              onTap: () {
                 Get.to(() => const LogInScreen());
               },
               context: context,
@@ -233,7 +238,7 @@ class _LogInScreenState extends State<LogInScreen> {
       Navigator.pop(context);
       reUse.reUseCircleDialog(
           disposeAllow: false,
-          onTap: ()  {
+          onTap: () {
             Navigator.pop(context);
           },
           context: context,
