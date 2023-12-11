@@ -36,7 +36,7 @@ class GlobalController {
   DatabaseReference goOnline = FirebaseDatabase.instance.ref("Driver");
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  Future<Map> onFetchUserData() async {
+  Future<Map> onGetUserData() async {
     Map whichOfField = {};
     await FirebaseFirestore.instance
         .collection('Users')
@@ -48,7 +48,7 @@ class GlobalController {
     return whichOfField;
   }
 
-  CollectionReference documentStream = FirebaseFirestore.instance.collection('Users');
+  CollectionReference userDB = FirebaseFirestore.instance.collection('Users');
 
   Future<void> storeUser({email, password, uid}) async {
     position = await GeolocatorPlatform.instance.getCurrentPosition();
@@ -62,7 +62,7 @@ class GlobalController {
         if (documentSnapshot.exists) {
           return;
         } else {
-          await documentStream.doc(auth.currentUser!.uid).set({
+          await userDB.doc(auth.currentUser!.uid).set({
             'email': email.toString(),
             'password': password.toString(),
             'uid': auth.currentUser!.uid.toString(),
@@ -82,12 +82,12 @@ class GlobalController {
   }
 
   Future<void> checkUserInformation() async {
-    await documentStream.doc(auth.currentUser!.uid).get().then((DocumentSnapshot documentSnapshot) async {
+    await userDB.doc(auth.currentUser!.uid).get().then((DocumentSnapshot documentSnapshot) async {
       Map data = documentSnapshot.data() as Map;
       if (data['userID'] == null) {
         Random random = Random();
         int randomNumber = random.nextInt(999999);
-        await documentStream
+        await userDB
             .doc(auth.currentUser!.uid)
             .update({'userID': randomNumber.toString()})
             .then((value) {})
@@ -198,7 +198,6 @@ class GlobalController {
     return id.toString();
   }
 
-  final users = FirebaseFirestore.instance.collection('Users');
 
   deletePackage({witchDataBase, data, witchUID, witchPushKey}) async {
     await witchDataBase.child(auth.currentUser!.uid).child('package').child(witchPushKey).remove();
@@ -230,7 +229,7 @@ class GlobalController {
 
   storeSetUpAccount({bankName, phoneNumber, firstname, lastname, bankCode}) async {
     try {
-      users
+      userDB
           .doc(auth.currentUser!.uid)
           .update({
             fieldInfo.bankCode: bankCode,
@@ -361,7 +360,7 @@ class GlobalController {
     final reUse = ReUseWidget();
     final theme = ThemesApp();
     try {
-      await documentStream.doc(auth.currentUser!.uid).update({
+      await userDB.doc(auth.currentUser!.uid).update({
         'firstname': value.firstName,
         'lastname': value.lastName,
         'phoneNumber': value.phoneNumber,

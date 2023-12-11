@@ -53,7 +53,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
   Future<void> onInitial() async {
     generatePackageID();
     generalInfo = await glb.onGetGeneralInfo();
-    userObject = await glb.onFetchUserData();
+    userObject = await glb.onGetUserData();
     userName = "${userObject[field.firstName]} ${userObject[field.lastName]}";
     phoneNumber = userObject[field.phoneNumber];
     bankName = userObject[field.bankName];

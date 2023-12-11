@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -59,9 +58,9 @@ class _LogInScreenState extends State<LogInScreen> {
                       ),
                       reUse.reUseTextBox(
                           suffixIconOnTap: () {
-                            if(obscureText == false){
+                            if (obscureText == false) {
                               obscureText = true;
-                            }else{
+                            } else {
                               obscureText = false;
                             }
                             setState(() {});
@@ -159,7 +158,7 @@ class _LogInScreenState extends State<LogInScreen> {
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                           children: [
+                          children: [
                             Text(
                               'បន្ត',
                               style: TextStyle(color: theme.white, fontWeight: FontWeight.w700),
@@ -178,6 +177,7 @@ class _LogInScreenState extends State<LogInScreen> {
       ),
     );
   }
+
   FirebaseAuth auth = FirebaseAuth.instance;
 
   final glb = GlobalController();
@@ -185,43 +185,39 @@ class _LogInScreenState extends State<LogInScreen> {
   var userEmail = TextEditingController();
   var userPassword = TextEditingController();
 
-  onUserSignIn({email, password, context}) async {
+  Future<void> onUserSignIn({email, password, context}) async {
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(email: email, password: password);
       if (userCredential.isNull) {
       } else {
         reUse.reUseWaitingDialog(context);
-        var result = await glb.checkAccountType();
-        if (result == "type") {
-          Get.back();
-          auth.signOut();
-          await onDialogOK(context: context, title: 'មិនមាន', content: 'គណនីនេះមិនមានទេ សូមពិនិត្យមើលម្តងទៀត!');
-        }
-        // else if (result == "token") {
-        //   Get.back();auth.signOut();
-        //   await onDialogOK(context: context, title: 'ផ្សេងទៀត', content: 'គណនីនេះកំពុងប្រើនៅលើឧបករណ៍ផ្សេងទៀត');
-        //
-        // }
-        else if (result == "banned") {
-          Get.back();auth.signOut();
-          await onDialogOK(context: context, title: 'ផ្អាក', content: 'បច្ចុប្បន្នគណនីនេះត្រូវបានផ្អាក');
-
-        } else if (result == "") {
-          Get.back();auth.signOut();
-          await onDialogOK(context: context, title: 'មិនមាន', content: 'គណនីនេះមិនមានទេ សូមពិនិត្យមើលម្តងទៀត!');
-
-        } else if (result == "true") {
-          // await glb.updateOneField(
-          //     field: 'signInToken',
-          //     firebaseFireStore: 'Users',
-          //     value: "true",
-          //     data: auth.currentUser!.uid,
-          //     allowDialog: false);
+        Map userObj = await glb.onGetUserData();
+        Map generalInfo = await glb.onGetGeneralInfo();
+        if (userObj["accountType"] == "Users" && userObj["isBanned"] == "false" && generalInfo["version"] == "1") {
           await glb.storeUser(
             uid: auth.currentUser!.uid,
             email: email.toString(),
             password: password.toString(),
           );
+        } else {
+          auth.signOut();
+          Navigator.pop(context);
+          reUse.reUseCircleDialog(
+              disposeAllow: false,
+              onTap: ()  {
+                Get.to(() => const LogInScreen());
+              },
+              context: context,
+              icon: Icons.cancel_outlined,
+              title: 'មានបញ្ហា',
+              content: Center(
+                child: Text(
+                  'ព្យាយាមម្តងទៀតនៅពេលក្រោយ',
+                  style: TextStyle(
+                    color: theme.black,
+                  ),
+                ),
+              ));
         }
       }
     } on FirebaseAuthException catch (e) {
@@ -233,9 +229,24 @@ class _LogInScreenState extends State<LogInScreen> {
         onDialogOK(context: context, title: 'Not Found', content: 'This User is not found please check and again!');
       }
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      auth.signOut();
+      Navigator.pop(context);
+      reUse.reUseCircleDialog(
+          disposeAllow: false,
+          onTap: ()  {
+            Navigator.pop(context);
+          },
+          context: context,
+          icon: Icons.cancel_outlined,
+          title: 'មានបញ្ហា',
+          content: Center(
+            child: Text(
+              'ព្យាយាមម្តងទៀតនៅពេលក្រោយ',
+              style: TextStyle(
+                color: theme.black,
+              ),
+            ),
+          ));
     }
   }
 

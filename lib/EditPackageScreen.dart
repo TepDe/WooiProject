@@ -49,7 +49,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
     priceBox.text = argumentData[fieldData.price] ?? clsLan.notIncludeYet;
     qtyBox.text = argumentData[fieldData.qty] ?? clsLan.notIncludeYet;
     noteBox.text = argumentData[fieldData.note] ?? clsLan.notIncludeYet;
-    userData = await glb.onFetchUserData();
+    userData = await glb.onGetUserData();
     setState(() {
       forDisplay = clsDis.destination;
     });

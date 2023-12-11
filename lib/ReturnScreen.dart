@@ -277,11 +277,19 @@ class _ReturnScreenState extends State<ReturnScreen> {
                                                         content: '${index + 1}./  ${clsLan.packageID}'),
                                                     Row(
                                                       children: [
+                                                        forDisplay[index]['returnStatus'] != null
+                                                            ? Image.asset(
+                                                                'assets/images/return-box.png',
+                                                                height: Get.height * 0.04,
+                                                                width: Get.width * 0.04,
+                                                                color: theme.red,
+                                                              )
+                                                            : const SizedBox(),
                                                         reUse.reUseText(
                                                             weight: FontWeight.bold,
                                                             size: 16.0,
                                                             color: theme.blue,
-                                                            content: forDisplay[index]['packageID'] ?? "No ID"),
+                                                            content: "    ${forDisplay[index]['packageID']}"),
                                                         SizedBox(
                                                           height: 40,
                                                           width: 40,

@@ -229,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   icon: Icons.qr_code_scanner_rounded);
             },
-            child: Icon(Icons.qr_code_scanner_rounded, size: flotIcon),
+            child: Icon(Icons.qr_code_scanner_rounded,color: theme.white, size: flotIcon),
           ),
         ),
         body: SafeArea(
