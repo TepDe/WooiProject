@@ -93,10 +93,10 @@ class GlobalController {
             .then((value) {})
             .catchError((error) {});
       } else {}
-      if (data['firstname'] == null ||
-          data['lastname'] == null ||
-          data['phoneNumber'] == null ||
-          data['bankCode'] == null ||
+      if (data['firstname'] == null &&
+          data['lastname'] == null &&
+          data['phoneNumber'] == null &&
+          data['bankCode'] == null &&
           data['bankName'] == null) {
         Get.to(() => const SetUpScreen());
       } else {
