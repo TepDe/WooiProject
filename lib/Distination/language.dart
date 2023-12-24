@@ -69,5 +69,6 @@ class ClsLanguage {
   String assignDate = "ពេលមកទទួលទំនិញ";
   String completeDate = 'ពេលបញ្ចប់';
   String deliveryFee = 'តំលៃដឹកជញ្ជូន';
+  String bankName = "ធនាគារ";
 
 }

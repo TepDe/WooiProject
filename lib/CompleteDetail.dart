@@ -148,7 +148,7 @@ class _CompleteDetailState extends State<CompleteDetail> {
                 reUse.reUseRowText(
                     lableSize: labelSize,
                     titleColor: theme.grey,
-                    title: clsLan.bankCode,
+                    title: clsLan.bankName,
                     size: valueSize,
                     color: theme.black,
                     content:
@@ -160,7 +160,7 @@ class _CompleteDetailState extends State<CompleteDetail> {
                     title: clsLan.bankCode,
                     size: valueSize,
                     color: theme.black,
-                    content: forDisplay["bankCode"].toString().toUpperCase(),
+                    content: forDisplay["bankCode"].toString(),
                     weight: FontWeight.w500),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
