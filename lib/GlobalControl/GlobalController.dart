@@ -198,7 +198,6 @@ class GlobalController {
     return id.toString();
   }
 
-
   deletePackage({witchDataBase, data, witchUID, witchPushKey}) async {
     await witchDataBase.child(auth.currentUser!.uid).child('package').child(witchPushKey).remove();
   }
@@ -356,7 +355,7 @@ class GlobalController {
 
   final clsLan = ClsLanguage();
 
-  editProfile({value, context}) async {
+  Future<void> editProfile({value, context}) async {
     final reUse = ReUseWidget();
     final theme = ThemesApp();
     try {
@@ -368,35 +367,24 @@ class GlobalController {
         'chatid': value.chatid,
         'bankCode': value.bankCode,
         'bankName': value.bankName,
-      }).then((value) async {
-        Navigator.pop(context);
-        await reUse.reUseCircleDialog(
-            context: context,
-            icon: Icons.check_circle_rounded,
-            title: clsLan.stCom,
-            content: Center(
-              child: Text(
-                clsLan.updatedAccount,
-                style: TextStyle(
-                  color: theme.black,
-                ),
-              ),
-            ));
-      }).catchError((error) async {
-        await reUse.reUseCircleDialog(
-            context: context,
-            icon: Icons.close_rounded,
-            title: clsLan.fail,
-            content: Center(
-              child: Text(
-                clsLan.tryAgain,
-                style: TextStyle(
-                  color: theme.black,
-                ),
-              ),
-            ));
       });
     } catch (e) {
+      reUse.reUseCircleDialog(
+          context: context,
+          icon: Icons.close_rounded,
+          title: clsLan.fail,
+          onTap: () {
+            Get.back();
+            Get.back();
+          },
+          content: Center(
+            child: Text(
+              clsLan.tryAgain,
+              style: TextStyle(
+                color: theme.black,
+              ),
+            ),
+          ));
       if (kDebugMode) {
         print(e);
       }
@@ -529,8 +517,8 @@ class GlobalController {
   }
 
   uploadToTelegram({
-    token,
-    chatid,
+    required String token,
+    required String chatid,
     data,
   }) async {
     try {
@@ -542,6 +530,30 @@ class GlobalController {
         body: {
           'chat_id': chatid,
           'text': jsonConvert,
+        },
+      );
+      if (response.statusCode != 200) {}
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  onUserChangeInfo({
+    required String token,
+    required String chatid,
+    data,
+  }) async {
+    try {
+      final String sendMessageUrl = 'https://api.telegram.org/bot$token/sendMessage';
+      // JsonModule jsonModule = JsonModule();
+      // var jsonConvert = jsonModule.toTelegramString(data);
+      final response = await http.post(
+        Uri.parse(sendMessageUrl),
+        body: {
+          'chat_id': chatid,
+          'text': data,
         },
       );
       if (response.statusCode != 200) {}
@@ -695,9 +707,9 @@ class GlobalController {
     today = DateTime(today.year, today.month, today.day);
     objList = objList
         .where((obj) =>
-            DateTime.parse(obj["completeDate"]?? obj["returnDate"]).year == today.year &&
-            DateTime.parse(obj["completeDate"]?? obj["returnDate"]).month == today.month &&
-            DateTime.parse(obj["completeDate"]?? obj["returnDate"]).day == today.day)
+            DateTime.parse(obj["completeDate"] ?? obj["returnDate"]).year == today.year &&
+            DateTime.parse(obj["completeDate"] ?? obj["returnDate"]).month == today.month &&
+            DateTime.parse(obj["completeDate"] ?? obj["returnDate"]).day == today.day)
         .toList();
     return objList;
   }

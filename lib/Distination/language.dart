@@ -55,7 +55,7 @@ class ClsLanguage {
   String changeInfo = "តើអ្នកពិតជាចង់ផ្លាស់ប្តូរព័ត៌មានរបស់អ្នកមែនទេ?";
   String change = "ផ្លាស់ប្តូរ";
   String empty = "ទទេ";
-  String emptyFill = "សូមបំពេញព័ត៌មានដែលខ្វះខាត";
+  String emptyFill = "តើអ្នកចង់បំពេញព័ត៌មានដែលខ្វះខាតដែរ រឺ ទេ ?";
   String remainEmpty = "ខ្វះព័ត៌មាន";
   String payWay = "ជំរើសបង់ប្រាក់";
   String exit = "ចេញ";

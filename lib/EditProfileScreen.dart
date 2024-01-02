@@ -49,7 +49,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     onInitialize();
   }
 
-  onInitialize(){
+  Map generalInfo = {};
+
+  Future<void> onInitialize() async {
+    generalInfo = await glb.onGetGeneralInfo();
     mainData = argumentData;
     firstName.text = mainData[fieldInfo.firstName] ?? '';
     lastName.text = mainData[fieldInfo.lastName] ?? '';
@@ -61,7 +64,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     selectedBank = glb.getBank(bankName: bankName);
     setState(() {});
   }
-
 
   String bankName = "";
   int bankIndex = -1;
@@ -87,10 +89,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       // );
                       Get.back();
                     },
-                    icon: Icon(Icons.arrow_back_rounded,
-                        color: theme.black, size: 30),
-                    label: reUse.reUseText(
-                        content: "Back", size: 20.0, weight: FontWeight.w500),
+                    icon: Icon(Icons.arrow_back_rounded, color: theme.black, size: 30),
+                    label: reUse.reUseText(content: "Back", size: 20.0, weight: FontWeight.w500),
                   ),
                 ],
               ),
@@ -106,7 +106,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               reUse.reUseColumnTextField(
                   suffixTap: () {
                     firstName.clear();
-                    setState(() {});
                   },
                   label: clsLan.fname,
                   controller: firstName,
@@ -114,32 +113,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               reUse.reUseColumnTextField(
                   suffixTap: () {
                     lastName.clear();
-                    setState(() {});
                   },
                   label: clsLan.lname,
                   controller: lastName,
                   hintText: ""),
               reUse.reUseColumnTextField(
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
                     FilteringTextInputFormatter.digitsOnly,
                   ],
                   suffixTap: () {
                     phoneBox.clear();
-                    setState(() {});
                   },
                   label: clsLan.phoneNumber,
                   controller: phoneBox,
                   hintText: ""),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: reUse.reUseText(
-                    content: clsLan.payWay,
-                    size: textSize,
-                    weight: FontWeight.w500),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: reUse.reUseText(content: clsLan.payWay, size: textSize, weight: FontWeight.w500),
               ),
               SizedBox(
                   height: 100,
@@ -155,28 +147,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             child: InkWell(
                               onTap: () async {
                                 selectedBank = index;
-                                bankName = await glb
-                                    .selectPayWay(glb.payWay[index]['name']);
+                                bankName = await glb.selectPayWay(glb.payWay[index]['name']);
                                 setState(() {});
                               },
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: [
-                                  Image(
-                                      image: AssetImage(
-                                          glb.payWay[index]["img"])),
+                                  Image(image: AssetImage(glb.payWay[index]["img"])),
                                   CircleAvatar(
                                     minRadius: 20,
                                     backgroundColor: index == selectedBank
-                                        ? Colors
-                                            .white // Change the color of the selected item
+                                        ? Colors.white // Change the color of the selected item
                                         : Colors.transparent,
                                     child: Icon(
                                       Icons.check_circle,
                                       size: 50,
                                       color: index == selectedBank
-                                          ? Colors
-                                              .blue // Change the color of the selected item
+                                          ? Colors.blue // Change the color of the selected item
                                           : Colors.transparent,
                                     ),
                                   )
@@ -187,8 +174,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         );
                       })),
               reUse.reUseColumnTextField(
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: false),
+                  keyboardType: const TextInputType.numberWithOptions(decimal: false),
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
                     FilteringTextInputFormatter.digitsOnly,
@@ -248,29 +234,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 chatid: chatID.text.trim().toString(),
                                 bankName: bankName,
                                 bankCode: bankCode.text.trim().toString());
-                            if (firstName.text ==
-                                    mainData[fieldInfo.firstName] &&
-                                lastName.text ==
-                                    mainData[fieldInfo.lastName] &&
-                                phoneBox.text ==
-                                    mainData[fieldInfo.phoneNumber] &&
-                                telegramToken.text ==
-                                    mainData[fieldInfo.token] &&
-                                chatID.text == mainData[fieldInfo.chatid] &&
-                                bankCode.text ==
-                                    mainData[fieldInfo.bankCode] &&
-                                bankName == mainData[fieldInfo.bankName]) {
-                              Get.back();
-                            } else if (firstName.text.isEmpty ||
-                                lastName.text.isEmpty ||
-                                phoneBox.text.isEmpty ||
-                                bankCode.text.isEmpty ||
+                            if (firstName.text == "" ||
+                                lastName.text == "" ||
+                                phoneBox.text == "" ||
+                                bankCode.text == "" ||
                                 bankName == "") {
-                              await reUse.reUseCircleDialog(
-                                  function: '',
+                              reUse.reUseCircleDialog(
                                   context: context,
                                   icon: Icons.close_rounded,
-                                  title: clsLan.empty,
+                                  title: "សូមបំពេញព័ត៌មានដែលទទេ",
+                                  onTap: ()=> Get.back(),
                                   content: Center(
                                     child: Text(
                                       clsLan.emptyFill,
@@ -280,27 +253,48 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     ),
                                   ));
                             } else {
-                              // await reUse.reUseOKCancelDialog(
-                              //     data: profile,
-                              //     icon: Icons.account_circle,
-                              //     content: Text(clsLan.changeInfo),
-                              //     context: context,
-                              //     title: clsLan.change);
-                              await reUse.reUseYesNoDialog(
-                                  icon: Icons.account_circle,
-                                  content: Text(clsLan.emptyFill),
-                                  context: context,
-                                  noText: clsLan.exit,
-                                  yesText: clsLan.continues,
-                                  noTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  yesTap: () async {
-                                    await glb.editProfile(
-                                        value: profile, context: context);
-                                    setState(() {});
-                                  },
-                                  title: clsLan.change);
+                              if (firstName.text == mainData[fieldInfo.firstName] &&
+                                  lastName.text == mainData[fieldInfo.lastName] &&
+                                  phoneBox.text == mainData[fieldInfo.phoneNumber] &&
+                                  telegramToken.text == mainData[fieldInfo.token] &&
+                                  chatID.text == mainData[fieldInfo.chatid] &&
+                                  bankCode.text == mainData[fieldInfo.bankCode] &&
+                                  bankName == mainData[fieldInfo.bankName]) {
+                                Get.back();
+                              } else {
+                                await reUse.reUseYesNoDialog(
+                                    icon: Icons.account_circle,
+                                    content: Center(child: Text(clsLan.emptyFill)),
+                                    context: context,
+                                    noText: clsLan.exit,
+                                    yesText: clsLan.continues,
+                                    noTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    yesTap: () async {
+                                      Get.back();
+                                      reUse.reUseWaitingDialog(context);
+                                      String userInfo = "||==========||\n\n${auth.currentUser!.uid}" +
+                                          "\n${mainData[fieldInfo.firstName] ?? "មិនមាន"} | => | ${firstName.text} : ឈ្មោះដំបូង" +
+                                          "\n${mainData[fieldInfo.lastName] ?? "មិនមាន"} | => | ${lastName.text} : នាមត្រកូល" +
+                                          "\n${mainData[fieldInfo.phoneNumber] ?? "មិនមាន"} | => | ${phoneBox.text} : លេខទូរសព្ទ" +
+                                          "\n${mainData[fieldInfo.bankCode] ?? "មិនមាន"} | => | ${bankCode.text} : លេខកូដធនាគារ" +
+                                          "\n${mainData[fieldInfo.bankName] ?? "មិនមាន"} | => | ${bankName} : ឈ្មោះ​របស់​ធនាគារ" +
+                                          "\n${mainData[fieldInfo.token] ?? "មិនមាន"} | => | ${telegramToken.text} : Telegram Token" +
+                                          "\n${mainData[fieldInfo.chatid] ?? "មិនមាន"} | => | ${chatID.text} : Telegram ChatID" +
+                                          "\n${glb.formatDateTime(DateTime.now().toString())} : ពេលវេលាផ្លាស់ប្តូរ" +
+                                          "\n\n||==========||";
+                                      try {
+                                        await glb.editProfile(value: profile, context: context);
+                                        await glb.onUserChangeInfo(
+                                            token: generalInfo['userEditToken'],
+                                            chatid: generalInfo['pendingChatId'],
+                                            data: userInfo);
+                                        Get.back();
+                                      } catch (e) {}
+                                    },
+                                    title: clsLan.change);
+                              }
                             }
                           },
                           child: Row(
@@ -308,10 +302,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             children: [
                               Text(
                                 'UPDATE',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: theme.white,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 16, color: theme.white, fontWeight: FontWeight.bold),
                               )
                             ],
                           ),
@@ -343,8 +334,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             backgroundColor: Colors.transparent,
             actions: [
               Center(
-                child: SizedBox(
-                    height: 40, width: 40, child: CircularProgressIndicator()),
+                child: SizedBox(height: 40, width: 40, child: CircularProgressIndicator()),
               )
             ],
           ),
