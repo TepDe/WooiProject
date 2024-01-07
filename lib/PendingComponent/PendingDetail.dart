@@ -208,7 +208,7 @@ class _PendingDetailState extends State<PendingDetail> {
                           size: valueSize,
                           lableSize: labelSize,
                           color: theme.black,
-                          content: forDisplay["dPhone"],
+                          content: forDisplay["dPhoneNumber"],
                           weight: FontWeight.w500),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
