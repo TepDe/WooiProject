@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
         auth.signOut();
         Get.to(() => const LogInScreen());
       } else {
-        if (userData["accountType"] == "Users" && userData["isBanned"] == "false" && "1" == generalInfo["version"]) {
+        if (userData["accountType"] == "Users" && userData["isBanned"] == "false" && "712023" == generalInfo["userVersion"]) {
         } else {
           reUse.reUseCircleDialog(
             disposeAllow: false,
