@@ -42,6 +42,9 @@ class _AccountScreenState extends State<AccountScreen> {
     await fetchUserData();
     await fetchImage();
     await totalRevenue();
+    setState(() {
+      isDispose = true;
+    });
   }
 
   fetchImage() async {
@@ -135,6 +138,7 @@ class _AccountScreenState extends State<AccountScreen> {
   final clsLan = ClsLanguage();
 
   bool hindPassowrd = true;
+  bool isDispose = false;
 
   Future<File> getImageFileFromPath(String imagePath) async {
     final prefs = await SharedPreferences.getInstance();
@@ -465,7 +469,17 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                 ],
               ),
+            ),
+            isDispose == false
+                ? Container(
+              height: Get.height,
+              width: Get.width,
+              color: Colors.black.withOpacity(0.2),
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
             )
+                : Container()
           ],
         ),
       ),

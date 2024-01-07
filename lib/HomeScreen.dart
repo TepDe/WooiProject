@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    onGetUserData(context).then((value){
+    onGetUserData(context).then((value) {
       onInitialize();
     });
   }
@@ -64,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
     forSort = mergeList(comp: compSort, ret: retSort);
     setState(() {
       forSort = glb.onSortTodayTwoKey(forSort);
+      isDispose = true;
     });
   }
 
@@ -167,6 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   bool circleIndicator = false;
+  bool isDispose = false;
   double paddings = 10.0;
   final clsLan = ClsLanguage();
 
@@ -229,132 +231,145 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   icon: Icons.qr_code_scanner_rounded);
             },
-            child: Icon(Icons.qr_code_scanner_rounded,color: theme.white, size: flotIcon),
+            child: Icon(Icons.qr_code_scanner_rounded, color: theme.white, size: flotIcon),
           ),
         ),
-        body: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 10, right: paddings, left: paddings),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    reUse.reUseText(
-                        size: 20.0,
-                        color: theme.black,
-                        weight: FontWeight.bold,
-                        content: '${currentTime()}\nID ${userData.isEmpty ? "" : userData['userID']}'),
-                    FutureBuilder<String?>(
-                      future: SharedPreferences.getInstance().then((prefs) => prefs.getString(str.profileImg)),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          // Display a loading indicator while waiting for data
-                          return const Center(child: CircularProgressIndicator());
-                        } else if (snapshot.hasError) {
-                          // Handle error case
-                          return Center(child: Text('Error: ${snapshot.error}'));
-                        } else if (snapshot.hasData && snapshot.data != null) {
-                          String imagePath = snapshot.data!;
-                          return FutureBuilder<File>(
-                            future: getImageFileFromPath(imagePath),
-                            builder: (context, fileSnapshot) {
-                              if (fileSnapshot.connectionState == ConnectionState.waiting) {
-                                // Display a loading indicator while waiting for image file
-                                return const Center(child: CircularProgressIndicator());
-                              } else if (fileSnapshot.hasError) {
-                                // Handle error case
-                                return Center(child: Text('Error: ${fileSnapshot.error}'));
-                              } else if (fileSnapshot.hasData && fileSnapshot.data != null) {
-                                File imageFile = fileSnapshot.data!;
-                                return SizedBox(
-                                  height: imageSize,
-                                  width: imageSize,
-                                  child: CircleAvatar(backgroundImage: FileImage(imageFile)),
-                                );
-                              } else {
-                                // Image not found
-                                return const Center(child: Text('Image not found'));
-                              }
-                            },
-                          );
-                        } else {
-                          // No image stored
-                          return Icon(
-                            Icons.account_circle_rounded,
-                            size: imageSize,
-                            color: theme.grey,
-                          );
-                        }
-                      },
+        body: Stack(
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 10, right: paddings, left: paddings),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      reUse.reUseText(
+                          size: 20.0,
+                          color: theme.black,
+                          weight: FontWeight.bold,
+                          content: '${currentTime()}\nID ${userData.isEmpty ? "" : userData['userID']}'),
+                      FutureBuilder<String?>(
+                        future: SharedPreferences.getInstance().then((prefs) => prefs.getString(str.profileImg)),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            // Display a loading indicator while waiting for data
+                            return const Center(child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            // Handle error case
+                            return Center(child: Text('Error: ${snapshot.error}'));
+                          } else if (snapshot.hasData && snapshot.data != null) {
+                            String imagePath = snapshot.data!;
+                            return FutureBuilder<File>(
+                              future: getImageFileFromPath(imagePath),
+                              builder: (context, fileSnapshot) {
+                                if (fileSnapshot.connectionState == ConnectionState.waiting) {
+                                  // Display a loading indicator while waiting for image file
+                                  return const Center(child: CircularProgressIndicator());
+                                } else if (fileSnapshot.hasError) {
+                                  // Handle error case
+                                  return Center(child: Text('Error: ${fileSnapshot.error}'));
+                                } else if (fileSnapshot.hasData && fileSnapshot.data != null) {
+                                  File imageFile = fileSnapshot.data!;
+                                  return SizedBox(
+                                    height: imageSize,
+                                    width: imageSize,
+                                    child: CircleAvatar(backgroundImage: FileImage(imageFile)),
+                                  );
+                                } else {
+                                  // Image not found
+                                  return const Center(child: Text('Image not found'));
+                                }
+                              },
+                            );
+                          } else {
+                            // No image stored
+                            return Icon(
+                              Icons.account_circle_rounded,
+                              size: imageSize,
+                              color: theme.grey,
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Flexible(
+                  child: SwipeRefresh.material(
+                    stateStream: _stream,
+                    onRefresh: _refresh,
+                    shrinkWrap: true,
+                    children: [
+                      Column(mainAxisSize: MainAxisSize.min, children: [
+                        Padding(
+                          padding: EdgeInsets.all(paddings),
+                          child: reUse.unitTwoHomeScreen(
+                              context: context,
+                              totalPackageDataKey: lstRequest,
+                              totalPackageData: driverList,
+                              returnData: lstReturn,
+                              completeData: lstComplete,
+                              returnLength: lstReturn.length,
+                              completeLength: lstComplete.length,
+                              pendingData: latPending,
+                              totalLength: driverList.length,
+                              pendingLength: latPending.length),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: paddings),
+                          child:
+                              reUse.reUseCreatePackage(context: context, padding: paddings, height: Get.height * 0.02),
+                        ),
+                        Row(
+                          children: [
+                            reUse.reUseText(content: "   ${clsLan.today} : ${forSort.length}", color: theme.grey),
+                            Divider(
+                              height: 1,
+                              color: theme.grey,
+                            ),
+                          ],
+                        ),
+                        forSort.isNotEmpty
+                            ? Flexible(
+                                child: ListView.builder(
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.all(8),
+                                    itemCount: forSort.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return reUse.reUseTodayComponent(
+                                          onTap: () {
+                                            if (forSort[index][field.status] == 'complete') {
+                                              Get.to(() => const CompleteDetail(), arguments: {"data": forSort[index]});
+                                            } else if (forSort[index][field.status] == 'return') {
+                                              Get.to(() => const ReturnDetail(), arguments: forSort[index]);
+                                            }
+                                          },
+                                          value: forSort[index],
+                                          dateTime: forSort[index]["completeDate"] ?? forSort[index]["returnDate"],
+                                          status: forSort[index][field.status]);
+                                    }),
+                              )
+                            : Container(),
+                      ]),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            isDispose == false
+                ? Container(
+                    height: Get.height,
+                    width: Get.width,
+                    color: Colors.black.withOpacity(0.2),
+                    child: const Center(
+                      child: CircularProgressIndicator(),
                     ),
-                  ],
-                ),
-              ),
-              Flexible(
-                child: SwipeRefresh.material(
-                  stateStream: _stream,
-                  onRefresh: _refresh,
-                  shrinkWrap: true,
-                  children: [
-                    Column(mainAxisSize: MainAxisSize.min, children: [
-                      Padding(
-                        padding: EdgeInsets.all(paddings),
-                        child: reUse.unitTwoHomeScreen(
-                            context: context,
-                            totalPackageDataKey: lstRequest,
-                            totalPackageData: driverList,
-                            returnData: lstReturn,
-                            completeData: lstComplete,
-                            returnLength: lstReturn.length,
-                            completeLength: lstComplete.length,
-                            pendingData: latPending,
-                            totalLength: driverList.length,
-                            pendingLength: latPending.length),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: paddings),
-                        child: reUse.reUseCreatePackage(context: context, padding: paddings, height: Get.height * 0.02),
-                      ),
-                      Row(
-                        children: [
-                          reUse.reUseText(content: "   ${clsLan.today} : ${forSort.length}", color: theme.grey),
-                          Divider(
-                            height: 1,
-                            color: theme.grey,
-                          ),
-                        ],
-                      ),
-                      forSort.isNotEmpty
-                          ? Flexible(
-                              child: ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  padding: const EdgeInsets.all(8),
-                                  itemCount: forSort.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return reUse.reUseTodayComponent(
-                                        onTap: () {
-                                          if (forSort[index][field.status] == 'complete') {
-                                            Get.to(() => const CompleteDetail(), arguments: {"data": forSort[index]});
-                                          } else if (forSort[index][field.status] == 'return') {
-                                            Get.to(() => const ReturnDetail(), arguments: forSort[index]);
-                                          }
-                                        },
-                                        value: forSort[index],
-                                        dateTime: forSort[index]["completeDate"] ?? forSort[index]["returnDate"],
-                                        status: forSort[index][field.status]);
-                                  }),
-                            )
-                          : Container(),
-                    ]),
-                  ],
-                ),
-              ),
-            ],
-          ),
+                  )
+                : Container()
+          ],
         ));
   }
 
