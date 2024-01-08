@@ -14,4 +14,5 @@ class StorageKey {
   String password = 'password';
   String cantEdit = 'cantEdit';
   String profileImg = 'profileImg';
+  String userLocation = 'userLocation';
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
@@ -11,7 +12,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooiproject/Distination/language.dart';
+import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/GlobalControl/jsonModule.dart';
 import 'package:wooiproject/SetUpScreen.dart';
@@ -227,6 +230,7 @@ class GlobalController {
   }
 
   storeSetUpAccount({bankName, phoneNumber, firstname, lastname, bankCode}) async {
+    position = await GeolocatorPlatform.instance.getCurrentPosition();
     try {
       userDB
           .doc(auth.currentUser!.uid)
@@ -236,6 +240,8 @@ class GlobalController {
             'phoneNumber': phoneNumber,
             'firstname': firstname,
             'lastname': lastname,
+            'longitude': position.longitude,
+            'latitude': position.latitude,
           })
           .then((value) {})
           .catchError((error) {});
@@ -712,5 +718,36 @@ class GlobalController {
             DateTime.parse(obj["completeDate"] ?? obj["returnDate"]).day == today.day)
         .toList();
     return objList;
+  }
+  final strKey = StorageKey();
+
+  Future<void> onContinueSave({required String key, required Map obj}) async {
+    List deleteAccount = [];
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jsonString = prefs.getString(key);
+    if (jsonString != null && jsonString.isNotEmpty) {
+      deleteAccount = json.decode(jsonString);
+      deleteAccount.add(obj);
+      String saving = json.encode(deleteAccount);
+      prefs.setString(strKey.userLocation, saving);
+    } else {
+      // If the string is null or empty, return an empty list
+      deleteAccount.add(obj);
+      String saving = json.encode(deleteAccount);
+      prefs.setString(strKey.userLocation, saving);
+    }
+  }
+
+  Future<List> onRemoveSaving({required String key, required int index}) async {
+    List deleteAccount = [];
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jsonString = prefs.getString(key);
+    if (jsonString != null && jsonString.isNotEmpty) {
+      deleteAccount = json.decode(jsonString);
+      deleteAccount.removeAt(index);
+      String saving = json.encode(deleteAccount);
+      prefs.setString(strKey.userLocation, saving);
+    } else {}
+    return deleteAccount;
   }
 }

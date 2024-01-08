@@ -198,7 +198,7 @@ class _LogInScreenState extends State<LogInScreen> {
         reUse.reUseWaitingDialog(context);
         Map userObj = await glb.onGetUserData();
         Map generalInfo = await glb.onGetGeneralInfo();
-        if (userObj["accountType"] == "Users" && userObj["isBanned"] == "false" && generalInfo["version"] == "1") {
+        if (userObj["accountType"] == "Users" && userObj["isBanned"] == "false" && generalInfo["userVersion"] == "712023") {
           await glb.storeUser(
             uid: auth.currentUser!.uid,
             email: email.toString(),

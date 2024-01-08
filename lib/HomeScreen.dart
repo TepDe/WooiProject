@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -101,7 +103,9 @@ class _HomeScreenState extends State<HomeScreen> {
         auth.signOut();
         Get.to(() => const LogInScreen());
       } else {
-        if (userData["accountType"] == "Users" && userData["isBanned"] == "false" && "712023" == generalInfo["userVersion"]) {
+        if (userData["accountType"] == "Users" &&
+            userData["isBanned"] == "false" &&
+            "712023" == generalInfo["userVersion"]) {
         } else {
           reUse.reUseCircleDialog(
             disposeAllow: false,
