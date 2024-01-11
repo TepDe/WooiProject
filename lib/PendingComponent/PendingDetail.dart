@@ -132,10 +132,18 @@ class _PendingDetailState extends State<PendingDetail> {
                 reUse.reUseRowText(
                     lableSize: labelSize,
                     titleColor: theme.grey,
-                    title: clsLan.bankCode,
+                    title: clsLan.bankName,
                     size: valueSize,
                     color: theme.black,
                     content: forDisplay["bankName"].toString().toUpperCase(),
+                    weight: FontWeight.w500),
+                reUse.reUseRowText(
+                    lableSize: labelSize,
+                    titleColor: theme.grey,
+                    title: clsLan.bankCode,
+                    size: valueSize,
+                    color: theme.black,
+                    content: forDisplay[field.bankCode].toString().toUpperCase(),
                     weight: FontWeight.w500),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -159,24 +167,24 @@ class _PendingDetailState extends State<PendingDetail> {
                       color: theme.black,
                       content: forDisplay['note'] ?? "(មិនមានបញ្ចូល)"),
                 ),
-                reUse.reUseText(
-                    weight: FontWeight.w500, size: labelSize, color: theme.grey, content: '${clsLan.returnReason} : '),
-                Container(
-                  width: Get.width,
-                  height: forDisplay['note'] == '' ? 100 : null,
-                  margin: const EdgeInsets.symmetric(vertical: 15.0),
-                  padding: const EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: Colors.white,
-                    border: Border.all(color: theme.midGrey, width: 1.5),
-                  ),
-                  child: reUse.reUseTextNote(
-                      weight: FontWeight.w400,
-                      size: 14.0,
-                      color: theme.black,
-                      content: forDisplay['returnNote'] ?? ""),
-                ),
+                // reUse.reUseText(
+                //     weight: FontWeight.w500, size: labelSize, color: theme.grey, content: '${clsLan.returnReason} : '),
+                // Container(
+                //   width: Get.width,
+                //   height: forDisplay['note'] == '' ? 100 : null,
+                //   margin: const EdgeInsets.symmetric(vertical: 15.0),
+                //   padding: const EdgeInsets.all(10.0),
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(5),
+                //     color: Colors.white,
+                //     border: Border.all(color: theme.midGrey, width: 1.5),
+                //   ),
+                //   child: reUse.reUseTextNote(
+                //       weight: FontWeight.w400,
+                //       size: 14.0,
+                //       color: theme.black,
+                //       content: forDisplay['returnNote'] ?? ""),
+                // ),
                 Container(
                   width: Get.width,
                   padding: const EdgeInsets.all(10),

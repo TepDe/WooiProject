@@ -128,7 +128,7 @@ class _ReturnDetailState extends State<ReturnDetail> {
                 reUse.reUseRowText(
                     lableSize: labelSize,
                     titleColor: theme.grey,
-                    title: clsLan.bankCode,
+                    title: clsLan.bankName,
                     size: valueSize,
                     color: theme.black,
                     content: forDisplay["bankName"].toString().toUpperCase(),

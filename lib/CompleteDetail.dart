@@ -167,27 +167,27 @@ class _CompleteDetailState extends State<CompleteDetail> {
                   child: SizedBox(
                       height: 100, child: Image(image: AssetImage(getBank()))),
                 ),
-                reUse.reUseText(
-                    weight: FontWeight.w500,
-                    size: labelSize,
-                    color: theme.grey,
-                    content: '${clsLan.note} : '),
-                Container(
-                  width: Get.width,
-                  height: forDisplay['note'] == '' ? 100 : null,
-                  margin: const EdgeInsets.symmetric(vertical: 15.0),
-                  padding: const EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: Colors.white,
-                    border: Border.all(color: theme.midGrey, width: 1.5),
-                  ),
-                  child: reUse.reUseTextNote(
-                      weight: FontWeight.w400,
-                      size: 14.0,
-                      color: theme.black,
-                      content: forDisplay['note'] ?? "(មិនមានបញ្ចូល)"),
-                ),
+                // reUse.reUseText(
+                //     weight: FontWeight.w500,
+                //     size: labelSize,
+                //     color: theme.grey,
+                //     content: '${clsLan.note} : '),
+                // Container(
+                //   width: Get.width,
+                //   height: forDisplay['note'] == '' ? 100 : null,
+                //   margin: const EdgeInsets.symmetric(vertical: 15.0),
+                //   padding: const EdgeInsets.all(10.0),
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(5),
+                //     color: Colors.white,
+                //     border: Border.all(color: theme.midGrey, width: 1.5),
+                //   ),
+                //   child: reUse.reUseTextNote(
+                //       weight: FontWeight.w400,
+                //       size: 14.0,
+                //       color: theme.black,
+                //       content: forDisplay['note'] ?? "(មិនមានបញ្ចូល)"),
+                // ),
                 reUse.reUseText(
                     weight: FontWeight.w500,
                     size: labelSize,
