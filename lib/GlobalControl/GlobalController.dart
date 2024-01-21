@@ -4,17 +4,15 @@ import 'dart:io';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:teledart/teledart.dart';
-import 'package:teledart/telegram.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';

@@ -34,7 +34,6 @@ dependencies:
   intl: ^0.18.1
   google_maps_flutter: ^2.3.1
   firebase_core:  ^2.21.0
-  firebase_storage: ^11.4.1
   cloud_firestore: ^4.12.2
   http: ^1.1.0
   firebase_database: ^10.3.3
@@ -50,7 +49,8 @@ dependencies:
   swipe_refresh: ^1.0.2
   cupertino_icons: ^1.0.2
   teledart: ^0.6.1
-
+  firebase_storage: ^11.6.0
+  flutter_image_compress: ^2.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

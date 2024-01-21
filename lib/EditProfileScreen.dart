@@ -1,7 +1,11 @@
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:wooiproject/Distination/clsDistin.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
@@ -53,6 +57,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Future<void> onInitialize() async {
     generalInfo = await glb.onGetGeneralInfo();
+    await onGetQrCode();
     mainData = argumentData;
     firstName.text = mainData[fieldInfo.firstName] ?? '';
     lastName.text = mainData[fieldInfo.lastName] ?? '';
@@ -203,6 +208,37 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   controller: chatID,
                   hintText: ""),
               SizedBox(height: Get.height * 0.01),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child:
+                    reUse.reUseText(content: "Qr កូតរបស់អ្នក", size: 16.0, weight: FontWeight.w500, color: theme.black),
+              ),
+              imageURL == ""
+                  ? imageBytes == null
+                      ? const Center(child: Text('No image selected.'))
+                      : Center(
+                          child: SizedBox(
+                              height: Get.height * 0.5, width: Get.width * 0.5, child: Image.file(imageBytes!)))
+                  : const SizedBox(),
+              imageURL != ""
+                  ? Center(
+                      child: SizedBox(height: Get.height * 0.5, width: Get.width * 0.5, child: Image.network(imageURL)))
+                  : const Center(child: CircularProgressIndicator()),
+              SizedBox(
+                width: Get.width * 1,
+                child: ElevatedButton(
+                  onPressed: _pickImage,
+                  child: reUse.reUseText(
+                      content: "រើស Qr កូតរបស់អ្នក", size: 16.0, weight: FontWeight.w500, color: theme.black),
+                ),
+              ),
+              SizedBox(
+                width: Get.width * 1,
+                child: ElevatedButton(
+                  onPressed: _uploadImage,
+                  child: reUse.reUseText(content: "បង្ហោះ", size: 16.0, weight: FontWeight.w500, color: theme.black),
+                ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -243,7 +279,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   context: context,
                                   icon: Icons.close_rounded,
                                   title: "សូមបំពេញព័ត៌មានដែលទទេ",
-                                  onTap: ()=> Get.back(),
+                                  onTap: () => Get.back(),
                                   content: Center(
                                     child: Text(
                                       clsLan.emptyFill,
@@ -320,6 +356,71 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
       ),
     );
+  }
+
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    imageURL = "";
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (pickedFile != null) {
+        //_loadImageBytes(pickedFile.path);
+        final fileBytes = File(pickedFile.path);
+        setState(() {
+          imageBytes = fileBytes;
+        });
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  final Reference ref = FirebaseStorage.instance.ref('QrCodeImage');
+  File? imageBytes;
+  String imageURL = ''; // Store the download URL of the image
+
+  Future<void> onGetQrCode() async {
+    try {
+      FirebaseStorage storage = FirebaseStorage.instance;
+      final ref = storage.ref('QrCodeImage').child(auth.currentUser!.uid.toString());
+      String downloadURL = await ref.getDownloadURL();
+      setState(() {
+        imageURL = downloadURL;
+      });
+    } catch (e) {
+      print('Error downloading image: $e');
+    }
+  }
+
+  Future<void> _uploadImage() async {
+    if (imageBytes == null) {
+      print('No image selected.');
+      return;
+    }
+    try {
+      FirebaseStorage storage = FirebaseStorage.instance;
+      final storageReference = storage.ref('QrCodeImage').child(glb.auth.currentUser!.uid.toString());
+      var metadata = SettableMetadata(
+        contentType: "image/jpeg",
+      );
+      final uploadTask = storageReference.putFile(imageBytes!, metadata);
+      TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
+      String downloadURL = await taskSnapshot.ref.getDownloadURL();
+      print('Image uploaded successfully. Download URL: $downloadURL');
+    } catch (e) {
+      print('Error uploading image: $e');
+    }
+  }
+
+  Future<File> _writeUint8ListToFile(Uint8List uint8List) async {
+    // Create a temporary file
+    File tempFile = File('${DateTime.now().millisecondsSinceEpoch}.jpg');
+
+    // Write the Uint8List to the file
+    await tempFile.writeAsBytes(uint8List);
+
+    return tempFile;
   }
 
   alertDialog(context) {

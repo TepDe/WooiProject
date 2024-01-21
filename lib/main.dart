@@ -17,6 +17,7 @@ void main() async {
           apiKey: 'AIzaSyCXD78daMICVTVAXsmzNTvlk5TjDAgGdNQ',
           appId: '1:1093614007557:android:9efb550fcadd369394f36c',
           messagingSenderId: '1093614007557',
+          storageBucket: "wooi-c715e.appspot.com",
           projectId: 'wooi-c715e'));
   /// PRODUCTION DATABASE
   // await Firebase.initializeApp(
@@ -26,8 +27,7 @@ void main() async {
   //         messagingSenderId: '1093614007557',
   //         databaseURL: "https://macawproduction-8fff6-default-rtdb.firebaseio.com",
   //         projectId: "macawproduction-8fff6"));
-  runApp(
-      const GetMaterialApp(debugShowCheckedModeBanner: false, home: MyApp()));
+  runApp(const GetMaterialApp(debugShowCheckedModeBanner: false, home: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -122,9 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   request() async {
-    await Geolocator.requestPermission()
-        .then((value) {})
-        .onError((error, stackTrace) {
+    await Geolocator.requestPermission().then((value) {}).onError((error, stackTrace) {
       printError();
     });
     protect = true;
@@ -134,9 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<Position> requestUserPermissionLocation() async {
-    await Geolocator.requestPermission()
-        .then((value) {})
-        .onError((error, stackTrace) async {
+    await Geolocator.requestPermission().then((value) {}).onError((error, stackTrace) async {
       await Geolocator.requestPermission();
     });
     return await Geolocator.getCurrentPosition();

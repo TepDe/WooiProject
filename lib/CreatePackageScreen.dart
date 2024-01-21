@@ -109,7 +109,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       reUse.reUseText(
-                        content: clsLan.packageID + ' : ',
+                        content: '${clsLan.packageID} : ',
                         size: 16.0,
                         color: theme.grey,
                       ),
@@ -243,7 +243,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   child: reUse.reUseText(
-                      content: clsLan.price + " : ( សូមបញ្ចូលតំលៃគិតជាដុល្លារ )",
+                      content: "${clsLan.price} : ( សូមបញ្ចូលតំលៃគិតជាដុល្លារ )",
                       size: textSize,
                       weight: FontWeight.w500,
                       color: theme.black),
