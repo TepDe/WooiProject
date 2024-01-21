@@ -13,6 +13,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:teledart/teledart.dart';
+import 'package:teledart/telegram.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/StorageKey.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
@@ -180,6 +182,10 @@ class GlobalController {
           token: genToken,
           data: json,
         );
+        String groupChatId = '-4109393904'; // Replace with your group's username or ID
+        String botToken = '6682560929:AAGK8VhT_k1QyuvupI1X6aqGtQvucjsYarM';
+        sentToGroup(json);
+        await sendMessageToGroup(groupChatId: groupChatId, message: sentToGroup(json), botToken: botToken);
       }
     } catch (e) {
       if (kDebugMode) {
@@ -187,6 +193,40 @@ class GlobalController {
       }
     }
   }
+
+  String sentToGroup(objData) {
+    return "សួស្ដីអ្នកទាំងអស់គ្នា\n\n====================\n\nអតិថិជនឈ្មោះ : ${objData[field.senderName]}\nលេខទូរស័ព្ទរបស់អតិថិជន : ${objData[field.senderPhone]}"+
+        "\nលេខកូដធនាគារ : ${objData[field.bankCode]}\nឈ្មោះរបស់ធនាគារ : ${objData[field.bankName].toString().toUpperCase()}\nពេលហៅ : ${formatDateTime(objData[field.date])}\n\n------------------------------\n\n" +
+        "ទីតាំងទំនិញ : ${objData[field.location]}\nទូរស័ព្ទអ្នកទទួល : ${objData[field.phoneNumber]}\nតំលៃ : ${objData[field.price]} \$\nលេខសម្គាល់កញ្ចប់ : ${objData[field.packageID]}\nចំនួន : ${objData[field.qty]}\nចំណាំ : \n${objData[field.note]}" +
+        "\n\n------------------------------\n\nទីតាំង Map : ${"https://www.google.com/maps/place/11%C2%B035'34.5%22N+104%C2%B050'18.6%22E/@${objData[field.latitude]},${objData[field.longitude]},17z/data=!3m1!4b1!4m4!3m3!8m2!3d11.5929048!4d104.8385093?entry=ttu"}";
+  }
+
+  Future<void> sendMessageToGroup(
+      {required String groupChatId, required String message, required String botToken}) async {
+    final url = 'https://api.telegram.org/bot$botToken/sendMessage';
+    final response = await http.post(Uri.parse(url), body: {
+      'chat_id': groupChatId,
+      'text': message,
+    });
+
+    if (response.statusCode == 200) {
+      print('Message sent successfully');
+    } else {
+      print('Failed to send message. Status code: ${response.statusCode}');
+      print('Response body: ${response.body}');
+    }
+  }
+
+  // toqwerywef(){
+  //   var telegram = "6682560929:AAGK8VhT_k1QyuvupI1X6aqGtQvucjsYarM";
+  //   var teledart = TeleDart(telegram, Event().);
+  //
+  //   teledart.start().then((me) => print('${me.username} is initialised'));
+  //
+  //   teledart.onMessage(entityType: 'bot_command', keyword: 'start')
+  //       .listen((message) => teledart.telegram.sendMessage(message.chat.id, message.chat.id.toString()));
+  //
+  // }
 
   String generatePushKey() {
     String pushKey = packageRequest.push().key.toString().trim();
@@ -719,6 +759,7 @@ class GlobalController {
         .toList();
     return objList;
   }
+
   final strKey = StorageKey();
 
   Future<void> onContinueSave({required String key, required Map obj}) async {
