@@ -75,9 +75,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,19 +211,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child:
-                    reUse.reUseText(content: "Qr កូតរបស់អ្នក", size: 16.0, weight: FontWeight.w500, color: theme.black),
+                    reUse.reUseText(content: "Qr កូតរបស់អ្នក", size: 18.0, weight: FontWeight.w500, color: theme.black),
               ),
-              imageURL == ""
-                  ? imageBytes == null
-                      ? const Center(child: Text('No image selected.'))
+              urlImage != ""
+                  ? Center(
+                      child: SizedBox(
+                        height: Get.height * 0.5,
+                        width: Get.width * 0.5,
+                        child: Image.network(urlImage),
+                      ),
+                    )
+                  : previewImg == null
+                      ? const Center(child: Text("data"))
                       : Center(
                           child: SizedBox(
-                              height: Get.height * 0.5, width: Get.width * 0.5, child: Image.file(imageBytes!)))
-                  : const SizedBox(),
-              imageURL != ""
-                  ? Center(
-                      child: SizedBox(height: Get.height * 0.5, width: Get.width * 0.5, child: Image.network(imageURL)))
-                  : const Center(child: CircularProgressIndicator()),
+                            height: Get.height * 0.5,
+                            width: Get.width * 0.5,
+                            child: Image.file(previewImg!),
+                          ),
+                        ),
               SizedBox(
                 width: Get.width * 1,
                 child: ElevatedButton(
@@ -235,7 +241,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               SizedBox(
                 width: Get.width * 1,
                 child: ElevatedButton(
-                  onPressed: _uploadImage,
+                  onPressed: () async {
+                    if (urlImageTwo != "") {
+                      reUse.reUseCircleDialog(
+                          context: context,
+                          icon: Icons.qr_code_scanner,
+                          title: 'ផ្លាស់ប្តូរលេខកូដ Qr',
+                          onTap: () async {
+                            reUse.reUseWaitingDialog(context);
+                            await _uploadImage(context);
+                          },
+                          content: Center(
+                            child: Text(
+                              'តើអ្នកចង់ផ្លាស់ប្តូរកូដ Qr ចាស់របស់អ្នកមែនឬ?',
+                              style: TextStyle(
+                                color: theme.black,
+                              ),
+                            ),
+                          ));
+                    } else {}
+                  },
                   child: reUse.reUseText(content: "បង្ហោះ", size: 16.0, weight: FontWeight.w500, color: theme.black),
                 ),
               ),
@@ -295,7 +320,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   telegramToken.text == mainData[fieldInfo.token] &&
                                   chatID.text == mainData[fieldInfo.chatid] &&
                                   bankCode.text == mainData[fieldInfo.bankCode] &&
-                                  bankName == mainData[fieldInfo.bankName]) {
+                                  bankName == mainData[fieldInfo.bankName] &&
+                                  previewImg == null) {
                                 Get.back();
                               } else {
                                 await reUse.reUseYesNoDialog(
@@ -326,8 +352,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                             token: generalInfo['userEditToken'],
                                             chatid: generalInfo['pendingChatId'],
                                             data: userInfo);
+                                        if (previewImg != null) {
+                                          await _uploadImage(context);
+                                        }
                                         Get.back();
-                                      } catch (e) {}
+                                        reUse.reUseCircleDialog(icon: Icons.check_circle,content: Text("ជោគជ័យ"),title: "គណនីអាប់ដេតជោគជ័យ",onTap: () => Get.back());
+                                      } catch (e) {
+                                        Get.back();
+                                        reUse.reUseCircleDialog(icon: Icons.cancel);
+                                      }
                                     },
                                     title: clsLan.change);
                               }
@@ -361,14 +394,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImage() async {
-    imageURL = "";
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
       if (pickedFile != null) {
-        //_loadImageBytes(pickedFile.path);
         final fileBytes = File(pickedFile.path);
         setState(() {
-          imageBytes = fileBytes;
+          previewImg = fileBytes;
+          urlImage = '';
         });
       } else {
         print('No image selected.');
@@ -377,8 +409,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   final Reference ref = FirebaseStorage.instance.ref('QrCodeImage');
-  File? imageBytes;
-  String imageURL = ''; // Store the download URL of the image
+  File? previewImg;
+  String urlImage = ''; // Store the download URL of the image
+  String urlImageTwo = ''; // Store the download URL of the image
 
   Future<void> onGetQrCode() async {
     try {
@@ -386,15 +419,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       final ref = storage.ref('QrCodeImage').child(auth.currentUser!.uid.toString());
       String downloadURL = await ref.getDownloadURL();
       setState(() {
-        imageURL = downloadURL;
+        urlImage = downloadURL;
+        urlImageTwo = downloadURL;
       });
     } catch (e) {
       print('Error downloading image: $e');
     }
   }
 
-  Future<void> _uploadImage() async {
-    if (imageBytes == null) {
+  Future<void> _uploadImage(context) async {
+    urlImage = "";
+    if (previewImg == null) {
       print('No image selected.');
       return;
     }
@@ -404,23 +439,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       var metadata = SettableMetadata(
         contentType: "image/jpeg",
       );
-      final uploadTask = storageReference.putFile(imageBytes!, metadata);
+      final uploadTask = storageReference.putFile(previewImg!, metadata);
       TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
       String downloadURL = await taskSnapshot.ref.getDownloadURL();
       print('Image uploaded successfully. Download URL: $downloadURL');
     } catch (e) {
+      Navigator.pop(context);
       print('Error uploading image: $e');
     }
-  }
-
-  Future<File> _writeUint8ListToFile(Uint8List uint8List) async {
-    // Create a temporary file
-    File tempFile = File('${DateTime.now().millisecondsSinceEpoch}.jpg');
-
-    // Write the Uint8List to the file
-    await tempFile.writeAsBytes(uint8List);
-
-    return tempFile;
   }
 
   alertDialog(context) {

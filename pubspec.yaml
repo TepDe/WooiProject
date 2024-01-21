@@ -50,7 +50,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   teledart: ^0.6.1
   firebase_storage: ^11.6.0
-  flutter_image_compress: ^2.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
