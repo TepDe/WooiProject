@@ -9,24 +9,27 @@ import 'dart:async';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   /// DEVELOPMENT DATABASE
-  await Firebase.initializeApp(
-      options: const FirebaseOptions(
-          authDomain: 'wooi-c715e.web.app',
-          databaseURL: "https://wooi-c715e-default-rtdb.firebaseio.com",
-          apiKey: 'AIzaSyCXD78daMICVTVAXsmzNTvlk5TjDAgGdNQ',
-          appId: '1:1093614007557:android:9efb550fcadd369394f36c',
-          messagingSenderId: '1093614007557',
-          storageBucket: "wooi-c715e.appspot.com",
-          projectId: 'wooi-c715e'));
-  /// PRODUCTION DATABASE
   // await Firebase.initializeApp(
   //     options: const FirebaseOptions(
-  //         apiKey: "AIzaSyDz7MalonN-BxrNkBjdmj9w1hrRvN0N0hc",
-  //         appId: "1:465350719340:android:75108ec5c673679a176549",
+  //         authDomain: 'wooi-c715e.web.app',
+  //         databaseURL: "https://wooi-c715e-default-rtdb.firebaseio.com",
+  //         apiKey: 'AIzaSyCXD78daMICVTVAXsmzNTvlk5TjDAgGdNQ',
+  //         appId: '1:1093614007557:android:9efb550fcadd369394f36c',
   //         messagingSenderId: '1093614007557',
-  //         databaseURL: "https://macawproduction-8fff6-default-rtdb.firebaseio.com",
-  //         projectId: "macawproduction-8fff6"));
+  //         storageBucket: "wooi-c715e.appspot.com",
+  //         projectId: 'wooi-c715e'));
+
+  /// PRODUCTION DATABASE
+  await Firebase.initializeApp(
+      options: const FirebaseOptions(
+          apiKey: "AIzaSyDz7MalonN-BxrNkBjdmj9w1hrRvN0N0hc",
+          appId: "1:465350719340:android:75108ec5c673679a176549",
+          messagingSenderId: '1093614007557',
+          databaseURL: "https://macawproduction-8fff6-default-rtdb.firebaseio.com",
+          storageBucket: "macawproduction-8fff6.appspot.com",
+          projectId: "macawproduction-8fff6"));
   runApp(const GetMaterialApp(debugShowCheckedModeBanner: false, home: MyApp()));
 }
 

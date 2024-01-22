@@ -222,7 +222,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                     )
                   : previewImg == null
-                      ? const Center(child: Text("data"))
+                      ? const Center(child: Text("មិនមាន"))
                       : Center(
                           child: SizedBox(
                             height: Get.height * 0.5,
