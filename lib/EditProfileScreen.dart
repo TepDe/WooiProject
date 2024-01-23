@@ -250,6 +250,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           onTap: () async {
                             reUse.reUseWaitingDialog(context);
                             await _uploadImage(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
                           },
                           content: Center(
                             child: Text(
@@ -259,7 +261,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               ),
                             ),
                           ));
-                    } else {}
+                    } else {
+                      reUse.reUseWaitingDialog(context);
+                      await _uploadImage(context);
+                      Navigator.pop(context);
+                    }
                   },
                   child: reUse.reUseText(content: "បង្ហោះ", size: 16.0, weight: FontWeight.w500, color: theme.black),
                 ),
@@ -370,7 +376,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                'UPDATE',
+                                'រក្សាទុក',
                                 style: TextStyle(fontSize: 16, color: theme.white, fontWeight: FontWeight.bold),
                               )
                             ],
@@ -416,7 +422,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Future<void> onGetQrCode() async {
     try {
       FirebaseStorage storage = FirebaseStorage.instance;
-      final ref = storage.ref('QrCodeImage').child(auth.currentUser!.uid.toString());
+      final ref = storage.ref('QrCodeImage').child(auth.currentUser!.uid);
       String downloadURL = await ref.getDownloadURL();
       setState(() {
         urlImage = downloadURL;
@@ -435,7 +441,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
     try {
       FirebaseStorage storage = FirebaseStorage.instance;
-      final storageReference = storage.ref('QrCodeImage').child(glb.auth.currentUser!.uid.toString());
+      final storageReference = storage.ref("QrCodeImage").child(glb.auth.currentUser!.uid);
       var metadata = SettableMetadata(
         contentType: "image/jpeg",
       );
