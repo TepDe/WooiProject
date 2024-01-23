@@ -115,6 +115,7 @@ class GlobalController {
 
   Future<void> onCreatePackage(
       {price,
+        rielPrice,
       userName,
       generalInfo,
       bankName,
@@ -159,6 +160,7 @@ class GlobalController {
         "paidStatus": "",
         "status": 'request',
         "date": DateTime.now().toString(),
+        "rielPrice": rielPrice.toString(),
       };
 
       if (isFormDataValid(json) == true) {

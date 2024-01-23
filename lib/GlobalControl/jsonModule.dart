@@ -27,6 +27,7 @@ class JsonModule {
         "${data['senderName'] ?? "មិនមាន"} = senderName \n" +
         "${data['token'] ?? "មិនមាន"} = token \n" +
         "${data['chatid'] ?? "មិនមាន"} = chatid \n" +
-        "${data['ABACode'] ?? "មិនមាន"} = ABACode \n";
+        "${data['ABACode'] ?? "មិនមាន"} = ABACode \n"+
+        "${data['rielPrice'] ?? "មិនមាន"} = rielPrice \n";
   }
 }

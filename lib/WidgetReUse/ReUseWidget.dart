@@ -735,13 +735,14 @@ class ReUseWidget {
     );
   }
 
-  reuseTextField({mixLength, prefixIcon, prefixIconColor, label, controller, textIcon, inputType, require, formater}) {
+  reuseTextField({onChanged, mixLength, prefixIcon, prefixIconColor, label, controller, textIcon, inputType, require, formater}) {
     return TextFormField(
       controller: controller ?? dialogPhoneNum,
       // keyboardType: inputType,
       maxLength: mixLength,
       keyboardType: inputType,
       inputFormatters: formater,
+      onChanged: onChanged,
       // onChanged: (value) => doubleVar = double.parse(value),
       decoration: InputDecoration(
         prefixIcon: Icon(

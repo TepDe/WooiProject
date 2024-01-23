@@ -57,7 +57,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Future<void> onInitialize() async {
     generalInfo = await glb.onGetGeneralInfo();
-    await onGetQrCode();
     mainData = argumentData;
     firstName.text = mainData[fieldInfo.firstName] ?? '';
     lastName.text = mainData[fieldInfo.lastName] ?? '';
@@ -67,6 +66,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     bankCode.text = mainData[fieldInfo.bankCode] ?? '';
     bankName = mainData[fieldInfo.bankName] ?? '';
     selectedBank = glb.getBank(bankName: bankName);
+    await onGetQrCode();
     setState(() {});
   }
 
@@ -94,8 +94,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       // );
                       Get.back();
                     },
-                    icon: Icon(Icons.arrow_back_rounded, color: theme.black, size: 30),
-                    label: reUse.reUseText(content: "Back", size: 20.0, weight: FontWeight.w500),
+                    icon: Icon(Icons.arrow_back_rounded,
+                        color: theme.black, size: 30),
+                    label: reUse.reUseText(
+                        content: "Back", size: 20.0, weight: FontWeight.w500),
                   ),
                 ],
               ),
@@ -123,7 +125,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   controller: lastName,
                   hintText: ""),
               reUse.reUseColumnTextField(
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
                     FilteringTextInputFormatter.digitsOnly,
@@ -135,8 +138,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   controller: phoneBox,
                   hintText: ""),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: reUse.reUseText(content: clsLan.payWay, size: textSize, weight: FontWeight.w500),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: reUse.reUseText(
+                    content: clsLan.payWay,
+                    size: textSize,
+                    weight: FontWeight.w500),
               ),
               SizedBox(
                   height: 100,
@@ -152,23 +159,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             child: InkWell(
                               onTap: () async {
                                 selectedBank = index;
-                                bankName = await glb.selectPayWay(glb.payWay[index]['name']);
+                                bankName = await glb
+                                    .selectPayWay(glb.payWay[index]['name']);
                                 setState(() {});
                               },
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: [
-                                  Image(image: AssetImage(glb.payWay[index]["img"])),
+                                  Image(
+                                      image:
+                                          AssetImage(glb.payWay[index]["img"])),
                                   CircleAvatar(
                                     minRadius: 20,
                                     backgroundColor: index == selectedBank
-                                        ? Colors.white // Change the color of the selected item
+                                        ? Colors
+                                            .white // Change the color of the selected item
                                         : Colors.transparent,
                                     child: Icon(
                                       Icons.check_circle,
                                       size: 50,
                                       color: index == selectedBank
-                                          ? Colors.blue // Change the color of the selected item
+                                          ? Colors
+                                              .blue // Change the color of the selected item
                                           : Colors.transparent,
                                     ),
                                   )
@@ -179,7 +191,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         );
                       })),
               reUse.reUseColumnTextField(
-                  keyboardType: const TextInputType.numberWithOptions(decimal: false),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: false),
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
                     FilteringTextInputFormatter.digitsOnly,
@@ -210,8 +223,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               SizedBox(height: Get.height * 0.01),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child:
-                    reUse.reUseText(content: "Qr កូតរបស់អ្នក", size: 18.0, weight: FontWeight.w500, color: theme.black),
+                child: reUse.reUseText(
+                    content: "Qr កូតរបស់អ្នក",
+                    size: 18.0,
+                    weight: FontWeight.w500,
+                    color: theme.black),
               ),
               urlImage != ""
                   ? Center(
@@ -235,7 +251,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: ElevatedButton(
                   onPressed: _pickImage,
                   child: reUse.reUseText(
-                      content: "រើស Qr កូតរបស់អ្នក", size: 16.0, weight: FontWeight.w500, color: theme.black),
+                      content: "រើស Qr កូតរបស់អ្នក",
+                      size: 16.0,
+                      weight: FontWeight.w500,
+                      color: theme.black),
                 ),
               ),
               SizedBox(
@@ -267,7 +286,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       Navigator.pop(context);
                     }
                   },
-                  child: reUse.reUseText(content: "បង្ហោះ", size: 16.0, weight: FontWeight.w500, color: theme.black),
+                  child: reUse.reUseText(
+                      content: "បង្ហោះ",
+                      size: 16.0,
+                      weight: FontWeight.w500,
+                      color: theme.black),
                 ),
               ),
               Row(
@@ -320,19 +343,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     ),
                                   ));
                             } else {
-                              if (firstName.text == mainData[fieldInfo.firstName] &&
-                                  lastName.text == mainData[fieldInfo.lastName] &&
-                                  phoneBox.text == mainData[fieldInfo.phoneNumber] &&
-                                  telegramToken.text == mainData[fieldInfo.token] &&
+                              if (firstName.text ==
+                                      mainData[fieldInfo.firstName] &&
+                                  lastName.text ==
+                                      mainData[fieldInfo.lastName] &&
+                                  phoneBox.text ==
+                                      mainData[fieldInfo.phoneNumber] &&
+                                  telegramToken.text ==
+                                      mainData[fieldInfo.token] &&
                                   chatID.text == mainData[fieldInfo.chatid] &&
-                                  bankCode.text == mainData[fieldInfo.bankCode] &&
+                                  bankCode.text ==
+                                      mainData[fieldInfo.bankCode] &&
                                   bankName == mainData[fieldInfo.bankName] &&
                                   previewImg == null) {
                                 Get.back();
                               } else {
                                 await reUse.reUseYesNoDialog(
                                     icon: Icons.account_circle,
-                                    content: Center(child: Text(clsLan.emptyFill)),
+                                    content:
+                                        Center(child: Text(clsLan.emptyFill)),
                                     context: context,
                                     noText: clsLan.exit,
                                     yesText: clsLan.continues,
@@ -353,19 +382,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                           "\n${glb.formatDateTime(DateTime.now().toString())} : ពេលវេលាផ្លាស់ប្តូរ" +
                                           "\n\n||==========||";
                                       try {
-                                        await glb.editProfile(value: profile, context: context);
+                                        await glb.editProfile(
+                                            value: profile, context: context);
                                         await glb.onUserChangeInfo(
                                             token: generalInfo['userEditToken'],
-                                            chatid: generalInfo['pendingChatId'],
+                                            chatid:
+                                                generalInfo['pendingChatId'],
                                             data: userInfo);
                                         if (previewImg != null) {
                                           await _uploadImage(context);
                                         }
                                         Get.back();
-                                        reUse.reUseCircleDialog(icon: Icons.check_circle,content: Text("ជោគជ័យ"),title: "គណនីអាប់ដេតជោគជ័យ",onTap: () => Get.back());
+                                        reUse.reUseCircleDialog(
+                                            icon: Icons.check_circle,
+                                            content: Text("ជោគជ័យ"),
+                                            title: "គណនីអាប់ដេតជោគជ័យ",
+                                            onTap: () => Get.back());
                                       } catch (e) {
                                         Get.back();
-                                        reUse.reUseCircleDialog(icon: Icons.cancel);
+                                        reUse.reUseCircleDialog(
+                                            icon: Icons.cancel);
                                       }
                                     },
                                     title: clsLan.change);
@@ -377,7 +413,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             children: [
                               Text(
                                 'រក្សាទុក',
-                                style: TextStyle(fontSize: 16, color: theme.white, fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: theme.white,
+                                    fontWeight: FontWeight.bold),
                               )
                             ],
                           ),
@@ -441,7 +480,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
     try {
       FirebaseStorage storage = FirebaseStorage.instance;
-      final storageReference = storage.ref("QrCodeImage").child(glb.auth.currentUser!.uid);
+      final storageReference =
+          storage.ref("QrCodeImage").child(glb.auth.currentUser!.uid);
       var metadata = SettableMetadata(
         contentType: "image/jpeg",
       );
@@ -467,7 +507,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             backgroundColor: Colors.transparent,
             actions: [
               Center(
-                child: SizedBox(height: 40, width: 40, child: CircularProgressIndicator()),
+                child: SizedBox(
+                    height: 40, width: 40, child: CircularProgressIndicator()),
               )
             ],
           ),

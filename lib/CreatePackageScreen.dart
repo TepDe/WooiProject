@@ -24,6 +24,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
   final phoneBox = TextEditingController();
   final locationBox = TextEditingController();
   final priceBox = TextEditingController();
+  final rielBox = TextEditingController();
   final qtyBox = TextEditingController(text: "1");
   final noteBox = TextEditingController();
   double textSize = 14;
@@ -113,7 +114,11 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                         size: 16.0,
                         color: theme.grey,
                       ),
-                      reUse.reUseText(content: packageID, size: 26.0, color: theme.black, weight: FontWeight.bold),
+                      reUse.reUseText(
+                          content: packageID,
+                          size: 26.0,
+                          color: theme.black,
+                          weight: FontWeight.bold),
                     ],
                   ),
                 ),
@@ -122,9 +127,13 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   height: 25,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   child: reUse.reUseText(
-                      content: 'លេខទូរស័ព្ទអ្នកទទួល :', size: textSize, weight: FontWeight.w500, color: theme.black),
+                      content: 'លេខទូរស័ព្ទអ្នកទទួល :',
+                      size: textSize,
+                      weight: FontWeight.w500,
+                      color: theme.black),
                 ),
                 // Padding(
                 //   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -138,11 +147,13 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                 //       controller: phoneBox),
                 // ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   child: TextFormField(
                     controller: phoneBox,
                     // keyboardType: inputType,
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
                       FilteringTextInputFormatter.digitsOnly,
@@ -165,15 +176,18 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   height: 18,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   child: reUse.reUseText(
-                      content: 'ទីតាំងអ្នកទទួល : ( សូមបញ្ចូលទីតាំងអ្នកទទួលជាអក្សរខ្មែរ )',
+                      content:
+                          'ទីតាំងអ្នកទទួល : ( សូមបញ្ចូលទីតាំងអ្នកទទួលជាអក្សរខ្មែរ )',
                       size: textSize,
                       weight: FontWeight.w500,
                       color: theme.black),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   child: TextFormField(
                     controller: locationBox,
                     // keyboardType: inputType,
@@ -181,7 +195,8 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                     //inputFormatters: formater,
                     onChanged: (value) {
                       List results = clsDis.destination
-                          .where((user) => user.toLowerCase().contains(locationBox.text.toString().toLowerCase()))
+                          .where((user) => user.toLowerCase().contains(
+                              locationBox.text.toString().toLowerCase()))
                           .toList();
                       forDisplay = results;
                       setState(() {});
@@ -229,7 +244,10 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                             return SizedBox(
                               child: TextButton(
                                 onPressed: () {
-                                  locationBox.text = forDisplay[index].toString().trim().toLowerCase();
+                                  locationBox.text = forDisplay[index]
+                                      .toString()
+                                      .trim()
+                                      .toLowerCase();
                                 },
                                 child: Text(forDisplay[index]),
                               ),
@@ -241,15 +259,17 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   height: 18,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   child: reUse.reUseText(
-                      content: "${clsLan.price} : ( សូមបញ្ចូលតំលៃគិតជាដុល្លារ )",
+                      content: "${clsLan.price} : ( ជាប្រាក់ដុល្លារ )",
                       size: textSize,
                       weight: FontWeight.w500,
                       color: theme.black),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   child: reUse.reuseTextField(
                       controller: priceBox,
                       mixLength: 9,
@@ -258,15 +278,62 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                       formater: [
                         FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
                       ],
-                      inputType: const TextInputType.numberWithOptions(decimal: true),
+                      inputType:
+                          const TextInputType.numberWithOptions(decimal: true),
+                      label: ' ',
+                      onChanged: (val) {
+                        RegExp regex = RegExp(r"\n+|,+\n+"); // 1
+                        if (regex.hasMatch(val)) {
+                          // 2
+                          final newVal = val.replaceAll(regex, ",\n"); // 3
+                          rielBox.text = newVal; // 4
+                          rielBox.selection = TextSelection.fromPosition(
+                              TextPosition(offset: rielBox.text.length)); // 5
+                        }
+                      },
+                      textIcon: Icons.location_on),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  child: reUse.reUseText(
+                      content: "${clsLan.price} : ( ជាប្រាក់រៀល )",
+                      size: textSize,
+                      weight: FontWeight.w500,
+                      color: theme.black),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  child: reUse.reuseTextField(
+                      controller: rielBox,
+                      mixLength: 8,
+                      prefixIconColor: Colors.transparent,
+                      onChanged: (val) {
+                        RegExp regex = RegExp(r"\n+|,+\n+"); // 1
+                        if (regex.hasMatch(val)) {
+                          final newVal = val.replaceAll(regex, ",\n"); // 3
+                          rielBox.text = newVal;
+                          rielBox.selection = TextSelection.fromPosition(
+                              TextPosition(offset: rielBox.text.length));
+                        }
+                      },
+                      prefixIcon: Icons.attach_money,
+                      formater: [
+                        FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
+                      ],
+                      inputType:
+                          const TextInputType.numberWithOptions(decimal: true),
                       label: ' ',
                       textIcon: Icons.location_on),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10, top: 10),
                   child: reUse.reUseText(
-                      content: "${clsLan.qty} :", size: textSize, weight: FontWeight.w500, color: theme.black),
+                      content: "${clsLan.qty} :",
+                      size: textSize,
+                      weight: FontWeight.w500,
+                      color: theme.black),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -276,7 +343,10 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                       child: reUse.reuseTextField(
                           mixLength: 3,
                           controller: qtyBox,
-                          formater: [FilteringTextInputFormatter.allow(RegExp('[0-9.,]+'))],
+                          formater: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp('[0-9.,]+'))
+                          ],
                           inputType: TextInputType.number,
                           label: ' ',
                           textIcon: Icons.location_on),
@@ -292,7 +362,10 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      reUse.reUseText(content: 'ចំណាំ :', size: textSize, color: theme.black),
+                      reUse.reUseText(
+                          content: 'ចំណាំ :',
+                          size: textSize,
+                          color: theme.black),
                       Container(
                         alignment: Alignment.center,
                         child: TextFormField(
@@ -302,12 +375,14 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                           maxLines: 3,
                           decoration: InputDecoration(
                               border: const OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey, width: 0.0),
+                                borderSide:
+                                    BorderSide(color: Colors.grey, width: 0.0),
                               ),
 
                               // hintText: "Enter Remarks",
-                              focusedBorder:
-                                  OutlineInputBorder(borderSide: BorderSide(width: 1, color: theme.hiLiteBlue))),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 1, color: theme.hiLiteBlue))),
                         ),
                       ),
                     ],
@@ -353,7 +428,8 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                           ),
                                         ),
                                       ));
-                                } else if (locationBox.text.trim().toString() == '') {
+                                } else if (locationBox.text.trim().toString() ==
+                                    '') {
                                   await reUse.reUseCircleDialog(
                                       context: context,
                                       icon: Icons.location_on_rounded,
@@ -366,7 +442,8 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                           ),
                                         ),
                                       ));
-                                } else if (priceBox.text.trim().toString() == '') {
+                                } else if (priceBox.text.trim().toString() ==
+                                    '') {
                                   await reUse.reUseCircleDialog(
                                       context: context,
                                       icon: Icons.monetization_on,
@@ -408,24 +485,32 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                         ));
                                   } else {
                                     alertDialog(context);
-                                    String modPrice = glb.removeLeadingZeros(priceBox.text.trim());
+                                    String modPrice = glb.removeLeadingZeros(
+                                        priceBox.text.trim());
                                     await glb
                                         .onCreatePackage(
+                                      rielPrice: rielBox.text.trim(),
                                       generalInfo: userObject,
                                       genChatID: generalInfo['chatid'],
                                       genToken: generalInfo['token'],
                                       bankName: bankName.trim(),
                                       abaCode: bankCode.toString(),
                                       userName: userName.trim().toString(),
-                                      userPhoneNumber: phoneNumber.trim().toString(),
+                                      userPhoneNumber:
+                                          phoneNumber.trim().toString(),
                                       tokenKey: getToken.trim().toString(),
                                       chatid: chatid.trim().toString(),
                                       price: modPrice,
                                       note: noteBox.text.trim().toString(),
                                       packageID: packageID.toString(),
-                                      qty: qtyBox.text.replaceAll(RegExp('^0'), '').trim().toString(),
-                                      phoneNumber: phoneBox.text.trim().toString(),
-                                      location: locationBox.text.trim().toString(),
+                                      qty: qtyBox.text
+                                          .replaceAll(RegExp('^0'), '')
+                                          .trim()
+                                          .toString(),
+                                      phoneNumber:
+                                          phoneBox.text.trim().toString(),
+                                      location:
+                                          locationBox.text.trim().toString(),
                                     )
                                         .then((value) {
                                       phoneBox.clear();
@@ -466,7 +551,10 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
 
                                   Text(
                                     'OK',
-                                    style: TextStyle(fontSize: 16, color: theme.white, fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: theme.white,
+                                        fontWeight: FontWeight.bold),
                                   )
                                 ],
                               ),
@@ -500,7 +588,8 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
             backgroundColor: Colors.transparent,
             actions: [
               Center(
-                child: SizedBox(height: 40, width: 40, child: CircularProgressIndicator()),
+                child: SizedBox(
+                    height: 40, width: 40, child: CircularProgressIndicator()),
               )
             ],
           ),
