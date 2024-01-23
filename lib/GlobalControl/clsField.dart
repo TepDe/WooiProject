@@ -15,8 +15,8 @@ class FieldData {
   String price = 'price';
   String recLatitude = "recLatitude";
   String recLongitude = "recLongitude";
-  String dLastName = "dLastname";
-  String dFirstName = "dFirstname";
+  String dLastName = "dLastName";
+  String dFirstName = "dFirstName";
   String dPhoneNumber = "dPhoneNumber";
   String senderPhone = "senderPhone";
   String driverUID = "driverUID";
@@ -39,7 +39,6 @@ class FieldData {
   String uLatitude = "uLatitude";
   String uLongitude = "uLongitude";
 }
-
 
 class FieldInfo {
   String uid = 'uid';
@@ -70,4 +69,3 @@ class FieldInfo {
   String bankCode = "bankCode";
   String bankName = "bankName";
 }
-
