@@ -239,6 +239,32 @@ class _PendingDetailState extends State<PendingDetail> {
                           )
                         ],
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          reUse.reUseText(
+                              size: labelSize,
+                              weight: FontWeight.w500,
+                              color: theme.grey,
+                              content: clsLan.rielPrice),
+                          Container(
+                            margin: const EdgeInsets.symmetric(vertical: 3),
+                            decoration: BoxDecoration(
+                              color: theme.blue,
+                              borderRadius: BorderRadius.circular(3),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 4),
+                            child: Center(
+                                child: reUse.reUseText(
+                                    weight: FontWeight.bold,
+                                    size: 16.0,
+                                    color: theme.white,
+                                    content: "${forDisplay[field.rielPrice]??"មិនមាន"} រៀល")),
+                          )
+                        ],
+                      ),
                     ],
                   ),
                 )

@@ -38,6 +38,7 @@ class FieldData {
   String lastname = "lastname";
   String uLatitude = "uLatitude";
   String uLongitude = "uLongitude";
+  String rielPrice = "rielPrice";
 }
 
 class FieldInfo {
