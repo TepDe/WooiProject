@@ -232,8 +232,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               urlImage != ""
                   ? Center(
                       child: SizedBox(
-                        height: Get.height * 0.5,
-                        width: Get.width * 0.5,
+                        width: Get.width * 0.9,
                         child: Image.network(urlImage),
                       ),
                     )
@@ -241,8 +240,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ? const Center(child: Text("មិនមាន"))
                       : Center(
                           child: SizedBox(
-                            height: Get.height * 0.5,
-                            width: Get.width * 0.5,
+
+                            width: Get.width * 0.9,
                             child: Image.file(previewImg!),
                           ),
                         ),

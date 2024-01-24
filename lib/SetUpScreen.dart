@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
 import 'package:wooiproject/LoginScreen.dart';
@@ -38,7 +40,10 @@ class _SetUpScreenState extends State<SetUpScreen> {
   final fieldInfo = FieldInfo();
 
   fetchUserData() async {
-    fetch.doc(auth.currentUser!.uid.toString()).get().then((DocumentSnapshot documentSnapshot) async {
+    fetch
+        .doc(auth.currentUser!.uid.toString())
+        .get()
+        .then((DocumentSnapshot documentSnapshot) async {
       userData = documentSnapshot.data() as Map<String, dynamic>;
       lastName.text = userData['lastname'] ?? "";
       firstName.text = userData["firstname"] ?? "";
@@ -106,12 +111,18 @@ class _SetUpScreenState extends State<SetUpScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(top: Get.height * 0.15, left: Get.width * 0.05, right: Get.width * 0.05),
+                      padding: EdgeInsets.only(
+                          top: Get.height * 0.15,
+                          left: Get.width * 0.05,
+                          right: Get.width * 0.05),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           reUse.reUseText(
-                              content: clsLan.register, color: theme.black, size: 25.0, weight: FontWeight.bold),
+                              content: clsLan.register,
+                              color: theme.black,
+                              size: 25.0,
+                              weight: FontWeight.bold),
                           reUse.reUseText(
                             content: clsLan.fillRequirement,
                             size: 12.0,
@@ -168,7 +179,8 @@ class _SetUpScreenState extends State<SetUpScreen> {
                           ),
                           reUse.reUseTextBox(
                             inputFormatters: [
-                              FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[0-9.,]+')),
                               FilteringTextInputFormatter.digitsOnly,
                             ],
                             controller: phoneNumber,
@@ -179,38 +191,50 @@ class _SetUpScreenState extends State<SetUpScreen> {
                             height: Get.height * 0.03,
                           ),
                           reUse.reUseText(
-                              content: clsLan.payWay, size: textSize, weight: FontWeight.w500, color: theme.black),
+                              content: clsLan.payWay,
+                              size: textSize,
+                              weight: FontWeight.w500,
+                              color: theme.black),
                           SizedBox(
                               height: 100,
                               child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   padding: const EdgeInsets.all(8),
                                   itemCount: glb.payWay.length,
-                                  itemBuilder: (BuildContext context, int index) {
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
                                     return Padding(
-                                      padding: const EdgeInsets.only(right: 8.0),
+                                      padding:
+                                          const EdgeInsets.only(right: 8.0),
                                       child: SizedBox(
                                         height: 100,
                                         child: InkWell(
                                           onTap: () async {
                                             selectedItemIndex = index;
-                                            bankName = await glb.selectPayWay(glb.payWay[index]['name']);
+                                            bankName = await glb.selectPayWay(
+                                                glb.payWay[index]['name']);
                                             setState(() {});
                                           },
                                           child: Stack(
                                             alignment: Alignment.center,
                                             children: [
-                                              Image(image: AssetImage(glb.payWay[index]["img"])),
+                                              Image(
+                                                  image: AssetImage(glb
+                                                      .payWay[index]["img"])),
                                               CircleAvatar(
                                                 minRadius: 20,
-                                                backgroundColor: index == selectedItemIndex
-                                                    ? Colors.white // Change the color of the selected item
+                                                backgroundColor: index ==
+                                                        selectedItemIndex
+                                                    ? Colors
+                                                        .white // Change the color of the selected item
                                                     : Colors.transparent,
                                                 child: Icon(
                                                   Icons.check_circle,
                                                   size: 50,
-                                                  color: index == selectedItemIndex
-                                                      ? Colors.blue // Change the color of the selected item
+                                                  color: index ==
+                                                          selectedItemIndex
+                                                      ? Colors
+                                                          .blue // Change the color of the selected item
                                                       : Colors.transparent,
                                                 ),
                                               )
@@ -225,7 +249,8 @@ class _SetUpScreenState extends State<SetUpScreen> {
                           ),
                           reUse.reUseTextBox(
                             inputFormatters: [
-                              FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[0-9.,]+')),
                               FilteringTextInputFormatter.digitsOnly,
                             ],
                             controller: bankCode,
@@ -235,6 +260,65 @@ class _SetUpScreenState extends State<SetUpScreen> {
                           SizedBox(
                             height: Get.height * 0.03,
                           ),
+                          previewImg == null
+                              ? SizedBox(
+                                  width: Get.width * 1,
+                                  height: Get.width * 0.3,
+                                  child: const Center(
+                                      child: Text("បញ្ចូល QR កូត")))
+                              : Center(
+                                  child: SizedBox(
+                                    width: Get.width * 1,
+                                    child: Image.file(previewImg!),
+                                  ),
+                                ),
+                          SizedBox(
+                            width: Get.width * 1,
+                            child: ElevatedButton(
+                              onPressed: _pickImage,
+                              child: reUse.reUseText(
+                                  content: "រើស Qr កូតរបស់អ្នក",
+                                  size: 16.0,
+                                  weight: FontWeight.w500,
+                                  color: theme.black),
+                            ),
+                          ),
+                          // SizedBox(
+                          //   width: Get.width * 1,
+                          //   child: ElevatedButton(
+                          //     onPressed: () async {
+                          //       if (urlImageTwo != "") {
+                          //         reUse.reUseCircleDialog(
+                          //             context: context,
+                          //             icon: Icons.qr_code_scanner,
+                          //             title: 'ផ្លាស់ប្តូរលេខកូដ Qr',
+                          //             onTap: () async {
+                          //               reUse.reUseWaitingDialog(context);
+                          //               await _uploadImage(context);
+                          //               Navigator.pop(context);
+                          //               Navigator.pop(context);
+                          //             },
+                          //             content: Center(
+                          //               child: Text(
+                          //                 'តើអ្នកចង់ផ្លាស់ប្តូរកូដ Qr ចាស់របស់អ្នកមែនឬ?',
+                          //                 style: TextStyle(
+                          //                   color: theme.black,
+                          //                 ),
+                          //               ),
+                          //             ));
+                          //       } else {
+                          //         // reUse.reUseWaitingDialog(context);
+                          //         // await _uploadImage(context);
+                          //         // Navigator.pop(context);
+                          //       }
+                          //     },
+                          //     child: reUse.reUseText(
+                          //         content: "បង្ហោះ",
+                          //         size: 16.0,
+                          //         weight: FontWeight.w500,
+                          //         color: theme.black),
+                          //   ),
+                          // ),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -252,9 +336,11 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                       onPressed: () async {
                                         await FirebaseAuth.instance
                                             .signOut()
-                                            .then((value) => Get.to(() => const LogInScreen()));
+                                            .then((value) => Get.to(
+                                                () => const LogInScreen()));
                                       },
-                                      child: reUse.reUseText(content: "Log Out")),
+                                      child:
+                                          reUse.reUseText(content: "Log Out")),
                                 ),
                               ),
                               Flexible(
@@ -267,7 +353,8 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                     ),
                                   ),
                                   onPressed: () async {
-                                    if (firstName.text.trim().toString() == '') {
+                                    if (firstName.text.trim().toString() ==
+                                        '') {
                                       await reUse.reUseCircleDialog(
                                           context: context,
                                           icon: Icons.account_circle_rounded,
@@ -280,7 +367,10 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                               ),
                                             ),
                                           ));
-                                    } else if (lastName.text.trim().toString() == '') {
+                                    } else if (lastName.text
+                                            .trim()
+                                            .toString() ==
+                                        '') {
                                       await reUse.reUseCircleDialog(
                                           context: context,
                                           icon: Icons.account_circle_rounded,
@@ -293,7 +383,10 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                               ),
                                             ),
                                           ));
-                                    } else if (phoneNumber.text.trim().toString() == '') {
+                                    } else if (phoneNumber.text
+                                            .trim()
+                                            .toString() ==
+                                        '') {
                                       await reUse.reUseCircleDialog(
                                           context: context,
                                           icon: Icons.phone_rounded,
@@ -337,48 +430,29 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                             ),
                                           ));
                                     } else {
-                                      showDialog(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return WillPopScope(
-                                            onWillPop: () async => false,
-                                            child: const AlertDialog(
-                                              elevation: 0,
-                                              backgroundColor: Colors.transparent,
-                                              actions: [
-                                                Center(
-                                                  child: SizedBox(
-                                                      height: 40, width: 40, child: CircularProgressIndicator()),
-                                                )
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      );
-
-                                      glb.storeSetUpAccount(
-                                          bankCode: bankCode.text.trim(),
-                                          bankName: bankName.trim(),
-                                          phoneNumber: phoneNumber.text.trim(),
-                                          firstname: firstName.text.trim(),
-                                          lastname: lastName.text.trim());
+                                      reUse.reUseWaitingDialog(context);
+                                      try {
+                                        if (previewImg != null) {
+                                          await _uploadImage(context);
+                                        }
+                                        await glb.storeSetUpAccount(
+                                            bankCode: bankCode.text.trim(),
+                                            bankName: bankName.trim(),
+                                            phoneNumber:
+                                                phoneNumber.text.trim(),
+                                            firstname: firstName.text.trim(),
+                                            lastname: lastName.text.trim());
+                                      } catch (e) {}
                                     }
-
-                                    // await glb.setUpInfor(
-                                    //     phoneNumber: phoneNumber.text.trim(),
-                                    //     firstname: firstName.text.trim(),
-                                    //     lastname: lastName.text.trim());
-                                    // Get.to(const ViewScreen());
-
-                                    setState(() {});
                                   },
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
                                         clsLan.continues,
-                                        style: TextStyle(color: theme.white, fontWeight: FontWeight.w700),
+                                        style: TextStyle(
+                                            color: theme.white,
+                                            fontWeight: FontWeight.w700),
                                       ),
                                       const Icon(Icons.navigate_next_rounded),
                                     ],
@@ -401,5 +475,45 @@ class _SetUpScreenState extends State<SetUpScreen> {
         ),
       ),
     );
+  }
+
+  File? previewImg;
+
+  Future<void> _uploadImage(context) async {
+    if (previewImg == null) {
+      print('No image selected.');
+      return;
+    }
+    try {
+      FirebaseStorage storage = FirebaseStorage.instance;
+      final storageReference =
+          storage.ref("QrCodeImage").child(glb.auth.currentUser!.uid);
+      var metadata = SettableMetadata(
+        contentType: "image/jpeg",
+      );
+      final uploadTask = storageReference.putFile(previewImg!, metadata);
+      TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
+      String downloadURL = await taskSnapshot.ref.getDownloadURL();
+      print('Image uploaded successfully. Download URL: $downloadURL');
+    } catch (e) {
+      Navigator.pop(context);
+      print('Error uploading image: $e');
+    }
+  }
+
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (pickedFile != null) {
+        final fileBytes = File(pickedFile.path);
+        setState(() {
+          previewImg = fileBytes;
+        });
+      } else {
+        print('No image selected.');
+      }
+    });
   }
 }

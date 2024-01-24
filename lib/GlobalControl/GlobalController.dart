@@ -268,7 +268,7 @@ class GlobalController {
     await witchDataBase.child(data[field.driverUID]);
   }
 
-  storeSetUpAccount({bankName, phoneNumber, firstname, lastname, bankCode}) async {
+  Future<void> storeSetUpAccount({bankName, phoneNumber, firstname, lastname, bankCode}) async {
     position = await GeolocatorPlatform.instance.getCurrentPosition();
     try {
       userDB
