@@ -10,6 +10,7 @@ import 'package:wooiproject/Distination/clsDistin.dart';
 import 'package:wooiproject/Distination/language.dart';
 import 'package:wooiproject/GlobalControl/GlobalController.dart';
 import 'package:wooiproject/GlobalControl/clsField.dart';
+import 'package:wooiproject/ViewScreen.dart';
 import 'package:wooiproject/WidgetReUse/ReUseWidget.dart';
 import 'package:wooiproject/WidgetReUse/Themes.dart';
 
@@ -65,9 +66,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     chatID.text = mainData[fieldInfo.chatid] ?? '';
     bankCode.text = mainData[fieldInfo.bankCode] ?? '';
     bankName = mainData[fieldInfo.bankName] ?? '';
-    selectedBank = glb.getBank(bankName: bankName);
     await onGetQrCode();
-    setState(() {});
+    setState(() {
+      selectedBank = glb.getBank(bankName: bankName);
+    });
   }
 
   String bankName = "";
@@ -87,11 +89,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 children: [
                   TextButton.icon(
                     onPressed: () {
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const ViewScreen(),
-                      //   ),
-                      // );
                       Get.back();
                     },
                     icon: Icon(Icons.arrow_back_rounded,
@@ -240,56 +237,61 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ? const Center(child: Text("មិនមាន"))
                       : Center(
                           child: SizedBox(
-
                             width: Get.width * 0.9,
                             child: Image.file(previewImg!),
                           ),
                         ),
-              SizedBox(
-                width: Get.width * 1,
-                child: ElevatedButton(
-                  onPressed: _pickImage,
-                  child: reUse.reUseText(
-                      content: "រើស Qr កូតរបស់អ្នក",
-                      size: 16.0,
-                      weight: FontWeight.w500,
-                      color: theme.black),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: SizedBox(
+                  width: Get.width * 1,
+                  child: ElevatedButton(
+                    onPressed: _pickImage,
+                    child: reUse.reUseText(
+                        content: "រើស Qr កូតរបស់អ្នក",
+                        size: 16.0,
+                        weight: FontWeight.w500,
+                        color: theme.black),
+                  ),
                 ),
               ),
-              SizedBox(
-                width: Get.width * 1,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    if (urlImageTwo != "") {
-                      reUse.reUseCircleDialog(
-                          context: context,
-                          icon: Icons.qr_code_scanner,
-                          title: 'ផ្លាស់ប្តូរលេខកូដ Qr',
-                          onTap: () async {
-                            reUse.reUseWaitingDialog(context);
-                            await _uploadImage(context);
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          },
-                          content: Center(
-                            child: Text(
-                              'តើអ្នកចង់ផ្លាស់ប្តូរកូដ Qr ចាស់របស់អ្នកមែនឬ?',
-                              style: TextStyle(
-                                color: theme.black,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: SizedBox(
+                  width: Get.width * 1,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (urlImageTwo != "") {
+                        reUse.reUseCircleDialog(
+                            context: context,
+                            icon: Icons.qr_code_scanner,
+                            title: 'ផ្លាស់ប្តូរលេខកូដ Qr',
+                            onTap: () async {
+                              reUse.reUseWaitingDialog(context);
+                              await _uploadImage(context);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                            content: Center(
+                              child: Text(
+                                'តើអ្នកចង់ផ្លាស់ប្តូរកូដ Qr ចាស់របស់អ្នកមែនឬ?',
+                                style: TextStyle(
+                                  color: theme.black,
+                                ),
                               ),
-                            ),
-                          ));
-                    } else {
-                      reUse.reUseWaitingDialog(context);
-                      await _uploadImage(context);
-                      Navigator.pop(context);
-                    }
-                  },
-                  child: reUse.reUseText(
-                      content: "បង្ហោះ",
-                      size: 16.0,
-                      weight: FontWeight.w500,
-                      color: theme.black),
+                            ));
+                      } else {
+                        reUse.reUseWaitingDialog(context);
+                        await _uploadImage(context);
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: reUse.reUseText(
+                        content: "បង្ហោះ",
+                        size: 16.0,
+                        weight: FontWeight.w500,
+                        color: theme.black),
+                  ),
                 ),
               ),
               Row(
@@ -315,14 +317,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         color: Colors.transparent,
                         child: InkWell(
                           onTap: () async {
-                            final profile = UpdateProfile(
-                                firstName: firstName.text.trim().toString(),
-                                lastName: lastName.text.trim().toString(),
-                                phoneNumber: phoneBox.text.trim().toString(),
-                                token: telegramToken.text.trim().toString(),
-                                chatid: chatID.text.trim().toString(),
-                                bankName: bankName,
-                                bankCode: bankCode.text.trim().toString());
+                            final profileDaTa = {
+                              fieldData.firstname:
+                                  firstName.text.trim().toString(),
+                              fieldData.lastname:
+                                  lastName.text.trim().toString(),
+                              fieldData.phoneNumber:
+                                  phoneBox.text.trim().toString(),
+                              fieldData.token:
+                                  telegramToken.text.trim().toString(),
+                              fieldData.chatid: chatID.text.trim().toString(),
+                              fieldData.bankName: bankName,
+                              fieldData.bankCode:
+                                  bankCode.text.trim().toString()
+                            };
                             if (firstName.text == "" ||
                                 lastName.text == "" ||
                                 phoneBox.text == "" ||
@@ -382,7 +390,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                           "\n\n||==========||";
                                       try {
                                         await glb.editProfile(
-                                            value: profile, context: context);
+                                            objData: profileDaTa,
+                                            context: context);
                                         await glb.onUserChangeInfo(
                                             token: generalInfo['userEditToken'],
                                             chatid:
@@ -391,12 +400,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         if (previewImg != null) {
                                           await _uploadImage(context);
                                         }
-                                        Get.back();
-                                        reUse.reUseCircleDialog(
-                                            icon: Icons.check_circle,
-                                            content: const Text("ជោគជ័យ"),
-                                            title: "គណនីអាប់ដេតជោគជ័យ",
-                                            onTap: () => Get.back());
+                                        Get.to(() => const ViewScreen(),arguments: 1);
                                       } catch (e) {
                                         Get.back();
                                         reUse.reUseCircleDialog(
@@ -446,8 +450,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           previewImg = fileBytes;
           urlImage = '';
         });
-      } else {
-      }
+      } else {}
     });
   }
 
@@ -485,8 +488,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         contentType: "image/jpeg",
       );
       final uploadTask = storageReference.putFile(previewImg!, metadata);
-      TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
-      String downloadURL = await taskSnapshot.ref.getDownloadURL();
+      await uploadTask.whenComplete(() => null);
     } catch (e) {
       Navigator.pop(context);
       if (kDebugMode) {

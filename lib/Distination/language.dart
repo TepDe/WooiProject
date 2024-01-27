@@ -71,5 +71,5 @@ class ClsLanguage {
   String deliveryFee = 'តំលៃដឹកជញ្ជូន';
   String bankName = "ធនាគារ";
   String rielPrice = "ប្រាក់រៀល";
-
+  String success = "ជោគជ័យ";
 }

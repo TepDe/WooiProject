@@ -431,19 +431,35 @@ class GlobalController {
 
   final clsLan = ClsLanguage();
 
-  Future<void> editProfile({value, context}) async {
+  Future<void> editProfile({required Map objData, context}) async {
     final reUse = ReUseWidget();
     final theme = ThemesApp();
     try {
       await userDB.doc(auth.currentUser!.uid).update({
-        'firstname': value.firstName,
-        'lastname': value.lastName,
-        'phoneNumber': value.phoneNumber,
-        'token': value.token,
-        'chatid': value.chatid,
-        'bankCode': value.bankCode,
-        'bankName': value.bankName,
+        field.firstname: objData[field.firstname],
+        field.lastname: objData[field.lastname],
+        field.phoneNumber: objData[field.phoneNumber],
+        field.token: objData[field.token],
+        field.chatid: objData[field.chatid],
+        field.bankCode: objData[field.bankCode],
+        field.bankName: objData[field.bankName],
       });
+      reUse.reUseCircleDialog(
+          context: context,
+          icon: Icons.check_circle,
+          title: clsLan.success,
+          onTap: () {
+            Get.back();
+            Get.back();
+          },
+          content: Center(
+            child: Text(
+              clsLan.success,
+              style: TextStyle(
+                color: theme.black,
+              ),
+            ),
+          ));
     } catch (e) {
       reUse.reUseCircleDialog(
           context: context,
