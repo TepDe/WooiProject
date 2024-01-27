@@ -150,20 +150,14 @@ class _HomeScreenState extends State<HomeScreen> {
   DateTime today = DateTime.now();
 
   String currentTime() {
-    String greeting = '';
-    int hours = today.hour;
-    if (hours >= 1 && hours <= 12) {
-      greeting = "អរុណ សួស្តី";
-    } else if (hours >= 12 && hours <= 16) {
-      greeting = "ទិវា សួស្ដី";
-    } else if (hours >= 16 && hours <= 21) {
-      greeting = "សាយ័ណ សួរស្តី";
-    } else if (hours >= 21 && hours <= 24) {
-      greeting = "រាត្រី សួស្តី";
+    int hour = today.hour;
+    if (hour < 12) {
+      return 'អរុណសួស្តី';
+    } else if (hour < 18) {
+      return 'ទិវាសួស្ដី';
     } else {
-      greeting = "រាត្រី សួស្តី";
+      return 'រាត្រីសួស្តី';
     }
-    return greeting;
   }
 
   bool circleIndicator = false;
