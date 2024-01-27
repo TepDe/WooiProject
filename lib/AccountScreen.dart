@@ -117,7 +117,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
               ));
         }
-        imagePath = await glb.getBankImage(bankName: userData[fieldInfo.bankName]);
+        imagePath = glb.getBankImage(bankName: userData[fieldInfo.bankName]);
         setState(() {});
       });
     } catch (e) {

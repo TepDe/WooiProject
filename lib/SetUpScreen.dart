@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -442,7 +443,11 @@ class _SetUpScreenState extends State<SetUpScreen> {
                                                 phoneNumber.text.trim(),
                                             firstname: firstName.text.trim(),
                                             lastname: lastName.text.trim());
-                                      } catch (e) {}
+                                      } catch (e) {
+                                        if (kDebugMode) {
+                                          print(e);
+                                        }
+                                      }
                                     }
                                   },
                                   child: Row(
@@ -481,7 +486,6 @@ class _SetUpScreenState extends State<SetUpScreen> {
 
   Future<void> _uploadImage(context) async {
     if (previewImg == null) {
-      print('No image selected.');
       return;
     }
     try {
@@ -494,10 +498,8 @@ class _SetUpScreenState extends State<SetUpScreen> {
       final uploadTask = storageReference.putFile(previewImg!, metadata);
       TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
       String downloadURL = await taskSnapshot.ref.getDownloadURL();
-      print('Image uploaded successfully. Download URL: $downloadURL');
     } catch (e) {
       Navigator.pop(context);
-      print('Error uploading image: $e');
     }
   }
 
@@ -512,7 +514,9 @@ class _SetUpScreenState extends State<SetUpScreen> {
           previewImg = fileBytes;
         });
       } else {
-        print('No image selected.');
+        if (kDebugMode) {
+          print('No image selected.');
+        }
       }
     });
   }

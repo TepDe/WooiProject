@@ -29,7 +29,9 @@ class GlobalController {
   String currentVersion = "2";
 
   Future<Position> requestUserPermissionLocation() async {
-    await Geolocator.requestPermission().then((value) {}).onError((error, stackTrace) async {
+    await Geolocator.requestPermission()
+        .then((value) {})
+        .onError((error, stackTrace) async {
       await Geolocator.requestPermission();
     });
     return await Geolocator.getCurrentPosition();
@@ -84,7 +86,10 @@ class GlobalController {
   }
 
   Future<void> checkUserInformation() async {
-    await userDB.doc(auth.currentUser!.uid).get().then((DocumentSnapshot documentSnapshot) async {
+    await userDB
+        .doc(auth.currentUser!.uid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) async {
       Map data = documentSnapshot.data() as Map;
       if (data['userID'] == null) {
         Random random = Random();
@@ -107,7 +112,8 @@ class GlobalController {
     });
   }
 
-  DatabaseReference packageRequest = FirebaseDatabase.instance.ref("PackageRequest");
+  DatabaseReference packageRequest =
+      FirebaseDatabase.instance.ref("PackageRequest");
   DatabaseReference completeDB = FirebaseDatabase.instance.ref("Complete");
 
   final field = FieldData();
@@ -115,7 +121,7 @@ class GlobalController {
 
   Future<void> onCreatePackage(
       {price,
-        rielPrice,
+      rielPrice,
       userName,
       generalInfo,
       bankName,
@@ -181,10 +187,14 @@ class GlobalController {
           token: genToken,
           data: json,
         );
-        String groupChatId = '-4109393904'; // Replace with your group's username or ID
+        String groupChatId =
+            '-4109393904'; // Replace with your group's username or ID
         String botToken = '6682560929:AAGK8VhT_k1QyuvupI1X6aqGtQvucjsYarM';
         sentToGroup(json);
-        await sendMessageToGroup(groupChatId: groupChatId, message: sentToGroup(json), botToken: botToken);
+        await sendMessageToGroup(
+            groupChatId: groupChatId,
+            message: sentToGroup(json),
+            botToken: botToken);
       }
     } catch (e) {
       if (kDebugMode) {
@@ -194,14 +204,20 @@ class GlobalController {
   }
 
   String sentToGroup(objData) {
-    return "សួស្ដីអ្នកទាំងអស់គ្នា\n\n====================\n\nអតិថិជនឈ្មោះ : ${objData[field.senderName]}\nលេខទូរស័ព្ទរបស់អតិថិជន : ${objData[field.senderPhone]}"+
+    return "សួស្ដីអ្នកទាំងអស់គ្នា\n\n====================\n\nអតិថិជនឈ្មោះ : ${objData[field.senderName]}\nលេខទូរស័ព្ទរបស់អតិថិជន : ${objData[field.senderPhone]}" +
         "\nលេខកូដធនាគារ : ${objData[field.bankCode]}\nឈ្មោះរបស់ធនាគារ : ${objData[field.bankName].toString().toUpperCase()}\nពេលហៅ : ${formatDateTime(objData[field.date])}\n\n------------------------------\n\n" +
         "ទីតាំងទំនិញ : ${objData[field.location]}\nទូរស័ព្ទអ្នកទទួល : ${objData[field.phoneNumber]}\nតំលៃ : ${objData[field.price]} \$\nលេខសម្គាល់កញ្ចប់ : ${objData[field.packageID]}\nចំនួន : ${objData[field.qty]}\nចំណាំ : \n${objData[field.note]}" +
-        "\n\n------------------------------\n\nទីតាំង Map : ${"https://www.google.com/maps/place/11%C2%B035'34.5%22N+104%C2%B050'18.6%22E/@${objData[field.latitude]},${objData[field.longitude]},17z/data=!3m1!4b1!4m4!3m3!8m2!3d11.5929048!4d104.8385093?entry=ttu"}";
+        "\n\n------------------------------\n\n" +
+        "ទីតាំង Map : https://www.google.com/maps/place/11%C2%B032'06.0%22N+104%C2%B053'52.8%22E/@${objData[field.latitude].toString()},${objData[field.longitude].toString()},17z/data=!3m1!4b1!4m4!3m3!8m2!3d11.534998!4d104.898008?entry=ttu";
   }
 
+  ///11.534998, 104.898008
+  ///https://www.google.com/maps/@11.98483,104.98386,7z?entry=ttu
+  //https://www.google.com/maps/place/11%C2%B031'57.0%22N+104%C2%B050'27.6%22E/@11.5325009,104.8410043,17z/data=!3m1!4b1!4m4!3m3!8m2!3d11.5325009!4d104.8410043?entry=ttu
   Future<void> sendMessageToGroup(
-      {required String groupChatId, required String message, required String botToken}) async {
+      {required String groupChatId,
+      required String message,
+      required String botToken}) async {
     final url = 'https://api.telegram.org/bot$botToken/sendMessage';
     final response = await http.post(Uri.parse(url), body: {
       'chat_id': groupChatId,
@@ -209,11 +225,7 @@ class GlobalController {
     });
 
     if (response.statusCode == 200) {
-      print('Message sent successfully');
-    } else {
-      print('Failed to send message. Status code: ${response.statusCode}');
-      print('Response body: ${response.body}');
-    }
+    } else {}
   }
 
   // toqwerywef(){
@@ -241,12 +253,20 @@ class GlobalController {
   }
 
   deletePackage({witchDataBase, data, witchUID, witchPushKey}) async {
-    await witchDataBase.child(auth.currentUser!.uid).child('package').child(witchPushKey).remove();
+    await witchDataBase
+        .child(auth.currentUser!.uid)
+        .child('package')
+        .child(witchPushKey)
+        .remove();
   }
 
-  Future<void> deleteFromDriver({witchDataBase, data, witchUID, witchPushKey}) async {
+  Future<void> deleteFromDriver(
+      {witchDataBase, data, witchUID, witchPushKey}) async {
     try {
-      await witchDataBase.child(data[field.driverUID]).child(data[field.pushKey]).remove();
+      await witchDataBase
+          .child(data[field.driverUID])
+          .child(data[field.pushKey])
+          .remove();
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -254,9 +274,13 @@ class GlobalController {
     }
   }
 
-  Future<void> deleteFromReturn({witchDataBase, data, witchUID, witchPushKey}) async {
+  Future<void> deleteFromReturn(
+      {witchDataBase, data, witchUID, witchPushKey}) async {
     try {
-      await witchDataBase.child(data[field.uid]).child(data[field.pushKey]).remove();
+      await witchDataBase
+          .child(data[field.uid])
+          .child(data[field.pushKey])
+          .remove();
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -268,7 +292,8 @@ class GlobalController {
     await witchDataBase.child(data[field.driverUID]);
   }
 
-  Future<void> storeSetUpAccount({bankName, phoneNumber, firstname, lastname, bankCode}) async {
+  Future<void> storeSetUpAccount(
+      {bankName, phoneNumber, firstname, lastname, bankCode}) async {
     position = await GeolocatorPlatform.instance.getCurrentPosition();
     try {
       userDB
@@ -310,7 +335,11 @@ class GlobalController {
     position = await GeolocatorPlatform.instance.getCurrentPosition();
     latitude = position.latitude;
     longitude = position.longitude;
-    packageRequest.child(auth.currentUser!.uid).child('package').child(data[field.pushKey]).update({
+    packageRequest
+        .child(auth.currentUser!.uid)
+        .child('package')
+        .child(data[field.pushKey])
+        .update({
       field.uid: auth.currentUser!.uid.toString(),
       field.location: location.toString(),
       field.pushKey: data[field.pushKey].toString(),
@@ -328,16 +357,14 @@ class GlobalController {
       field.bankName: bankName,
       field.recLatitude: latitude.toString(),
       field.recLongitude: longitude.toString(),
-      field.senderName: "${userData[field.firstname]} ${userData[field.lastname]}"
+      field.senderName:
+          "${userData[field.firstname]} ${userData[field.lastname]}"
     });
   }
 
   updateStatus({uid, key, status}) async {
-    await packageRequest
-        .child(uid)
-        .child('package')
-        .child(key)
-        .update({'status': status, field.packageID: auth.currentUser!.uid.toString()});
+    await packageRequest.child(uid).child('package').child(key).update(
+        {'status': status, field.packageID: auth.currentUser!.uid.toString()});
   }
 
   Future<void> backToReturn({data}) async {
@@ -345,7 +372,11 @@ class GlobalController {
       position = await GeolocatorPlatform.instance.getCurrentPosition();
       latitude = position.latitude;
       longitude = position.longitude;
-      await packageRequest.child(auth.currentUser!.uid).child('package').child(data[field.pushKey]).update({
+      await packageRequest
+          .child(auth.currentUser!.uid)
+          .child('package')
+          .child(data[field.pushKey])
+          .update({
         field.uid: data[field.uid].toString(),
         field.location: data[field.location].toString(),
         field.pushKey: data[field.pushKey].toString(),
@@ -453,7 +484,10 @@ class GlobalController {
   List filteredList = [];
 
   Future<String> selectPayWay(data) async {
-    filteredList = payWay.where((item) => item['name'].toLowerCase().toString().trim().contains(data)).toList();
+    filteredList = payWay
+        .where((item) =>
+            item['name'].toLowerCase().toString().trim().contains(data))
+        .toList();
     return filteredList[0]['name'];
   }
 
@@ -463,7 +497,8 @@ class GlobalController {
   }
 
   getBankImage({bankName}) {
-    var object = payWay.where((item) => item['name'].contains(bankName)).toList();
+    var object =
+        payWay.where((item) => item['name'].contains(bankName)).toList();
     return object;
   }
 
@@ -510,7 +545,10 @@ class GlobalController {
       required bool allowDialog}) async {
     final reUse = ReUseWidget();
     bool isReady = false;
-    await FirebaseFirestore.instance.collection(firebaseFireStore).doc(data).update({
+    await FirebaseFirestore.instance
+        .collection(firebaseFireStore)
+        .doc(data)
+        .update({
       field: value,
     }).then((value) async {
       isReady = true;
@@ -521,7 +559,8 @@ class GlobalController {
             onTap: () => Get.back(),
             context: context,
             title: 'បរាជ័យ',
-            content: reUse.reUseText(content: "បរាជ័យ សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ"));
+            content: reUse.reUseText(
+                content: "បរាជ័យ សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ"));
       } else {}
     });
     return isReady;
@@ -567,7 +606,8 @@ class GlobalController {
     data,
   }) async {
     try {
-      final String sendMessageUrl = 'https://api.telegram.org/bot$token/sendMessage';
+      final String sendMessageUrl =
+          'https://api.telegram.org/bot$token/sendMessage';
       JsonModule jsonModule = JsonModule();
       var jsonConvert = jsonModule.toTelegramString(data);
       final response = await http.post(
@@ -591,7 +631,8 @@ class GlobalController {
     data,
   }) async {
     try {
-      final String sendMessageUrl = 'https://api.telegram.org/bot$token/sendMessage';
+      final String sendMessageUrl =
+          'https://api.telegram.org/bot$token/sendMessage';
       // JsonModule jsonModule = JsonModule();
       // var jsonConvert = jsonModule.toTelegramString(data);
       final response = await http.post(
@@ -623,9 +664,17 @@ class GlobalController {
     List result = [];
 
     // Define the list of keys to search for
-    List<String> keysToSearch = ["phoneNumber", "packageID", "location", "price"];
+    List<String> keysToSearch = [
+      "phoneNumber",
+      "packageID",
+      "location",
+      "price"
+    ];
     for (String key in keysToSearch) {
-      result = lstObject.where((food) => food.containsKey(key) && food[key].toString().contains(search)).toList();
+      result = lstObject
+          .where((food) =>
+              food.containsKey(key) && food[key].toString().contains(search))
+          .toList();
       if (result.isNotEmpty) {
         break; // Exit the loop if a match is found
       }
@@ -678,7 +727,11 @@ class GlobalController {
   Future<List> onGetRequestPackage() async {
     List result = [];
     try {
-      final isRequestDB = await packageRequest.child(auth.currentUser!.uid).child("package").onValue.first;
+      final isRequestDB = await packageRequest
+          .child(auth.currentUser!.uid)
+          .child("package")
+          .onValue
+          .first;
       DataSnapshot driver = isRequestDB.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, values) {
@@ -695,7 +748,8 @@ class GlobalController {
   Future<List> onGetCompletePackage() async {
     List result = [];
     try {
-      final isCompleteDb = await completeDB.child(auth.currentUser!.uid).onValue.first;
+      final isCompleteDb =
+          await completeDB.child(auth.currentUser!.uid).onValue.first;
       DataSnapshot driver = isCompleteDb.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, value) async {
@@ -714,7 +768,8 @@ class GlobalController {
   Future<List> onGetPendingPackage() async {
     List result = [];
     try {
-      final isPendingDB = await pendingDB.child(auth.currentUser!.uid).onValue.first;
+      final isPendingDB =
+          await pendingDB.child(auth.currentUser!.uid).onValue.first;
       DataSnapshot driver = isPendingDB.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, value) {
@@ -733,7 +788,8 @@ class GlobalController {
   Future<List> onGetReturnPackage() async {
     List result = [];
     try {
-      final isReturnDB = await returnDB.child(auth.currentUser!.uid).onValue.first;
+      final isReturnDB =
+          await returnDB.child(auth.currentUser!.uid).onValue.first;
       DataSnapshot driver = isReturnDB.snapshot;
       Map values = driver.value as Map;
       values.forEach((key, value) async {
@@ -752,9 +808,12 @@ class GlobalController {
     today = DateTime(today.year, today.month, today.day);
     objList = objList
         .where((obj) =>
-            DateTime.parse(obj["completeDate"] ?? obj["returnDate"]).year == today.year &&
-            DateTime.parse(obj["completeDate"] ?? obj["returnDate"]).month == today.month &&
-            DateTime.parse(obj["completeDate"] ?? obj["returnDate"]).day == today.day)
+            DateTime.parse(obj["completeDate"] ?? obj["returnDate"]).year ==
+                today.year &&
+            DateTime.parse(obj["completeDate"] ?? obj["returnDate"]).month ==
+                today.month &&
+            DateTime.parse(obj["completeDate"] ?? obj["returnDate"]).day ==
+                today.day)
         .toList();
     return objList;
   }

@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -394,7 +394,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         Get.back();
                                         reUse.reUseCircleDialog(
                                             icon: Icons.check_circle,
-                                            content: Text("ជោគជ័យ"),
+                                            content: const Text("ជោគជ័យ"),
                                             title: "គណនីអាប់ដេតជោគជ័យ",
                                             onTap: () => Get.back());
                                       } catch (e) {
@@ -447,7 +447,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           urlImage = '';
         });
       } else {
-        print('No image selected.');
       }
     });
   }
@@ -467,14 +466,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         urlImageTwo = downloadURL;
       });
     } catch (e) {
-      print('Error downloading image: $e');
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
   Future<void> _uploadImage(context) async {
     urlImage = "";
     if (previewImg == null) {
-      print('No image selected.');
       return;
     }
     try {
@@ -487,10 +487,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       final uploadTask = storageReference.putFile(previewImg!, metadata);
       TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
       String downloadURL = await taskSnapshot.ref.getDownloadURL();
-      print('Image uploaded successfully. Download URL: $downloadURL');
     } catch (e) {
       Navigator.pop(context);
-      print('Error uploading image: $e');
+      if (kDebugMode) {
+        print('Error uploading image: $e');
+      }
     }
   }
 

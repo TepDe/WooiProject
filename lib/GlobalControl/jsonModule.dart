@@ -27,7 +27,8 @@ class JsonModule {
         "${data['senderName'] ?? "មិនមាន"} = senderName \n" +
         "${data['token'] ?? "មិនមាន"} = token \n" +
         "${data['chatid'] ?? "មិនមាន"} = chatid \n" +
-        "${data['ABACode'] ?? "មិនមាន"} = ABACode \n"+
+        "${data['ABACode'] ?? "មិនមាន"} = ABACode \n" +
+        "ទីតាំង Map : https://www.google.com/maps/place/11%C2%B035'34.5%22N+104%C2%B050'18.6%22E/@${data["latitude"]},${data["longitude"]}}" +
         "${data['rielPrice'] ?? "មិនមាន"} = rielPrice \n";
   }
 }

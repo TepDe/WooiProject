@@ -516,6 +516,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
                                       phoneBox.clear();
                                       priceBox.clear();
                                       locationBox.clear();
+                                      rielBox.clear();
                                       qtyBox.text = '1';
                                       noteBox.clear();
                                       Get.back();

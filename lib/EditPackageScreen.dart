@@ -95,8 +95,7 @@ class _EditPackageScreenState extends State<EditPackageScreen> {
                           .child('package')
                           .child(argumentData[fieldData.pushKey])
                           .remove()
-                          .then((value) => {Get.back()})
-                          .catchError((onError) => {});
+                          .then((value) => {Get.back()});
                       setState(() {});
                     },
                     icon: Icon(Icons.delete_forever, color: theme.red),
