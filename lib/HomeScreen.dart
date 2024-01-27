@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -34,9 +32,11 @@ class _HomeScreenState extends State<HomeScreen> {
   final field = FieldData();
   int doubleClick = 0;
   final glb = GlobalController();
-  List distince = [];
-
   final str = StorageKey();
+  Map generalInfo = {};
+  Map userData = {};
+  List latPending = [];
+  DateTime today = DateTime.now();
 
   @override
   void initState() {
@@ -46,8 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
       onInitialize();
     });
   }
-
-  Map generalInfo = {};
 
   Future<void> onInitialize() async {
     await fetchImage();
@@ -87,15 +85,12 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Map userData = {};
-  var userInfo = FirebaseFirestore.instance.collection('Users');
-
   Future<void> onGetUserData(context) async {
     try {
       userData = await glb.onGetUserInfo();
       generalInfo = await glb.onGetGeneralInfo();
       if (userData.isEmpty) {
-        auth.signOut();
+        glb.auth.signOut();
         Get.to(() => const LogInScreen());
       } else {
         if (userData["accountType"] == "Users" &&
@@ -126,12 +121,10 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     } catch (e) {
       // Handle errors, e.g., sign out and navigate to the login screen
-      auth.signOut();
+      glb.auth.signOut();
       Get.to(() => const LogInScreen());
     }
   }
-
-  List latPending = [];
 
   List mergeList({List? comp, List? ret}) {
     List merge = comp! + ret!;
@@ -147,8 +140,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return merge;
   }
 
-  DateTime today = DateTime.now();
-
   String currentTime() {
     int hour = today.hour;
     if (hour < 12) {
@@ -160,7 +151,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  bool circleIndicator = false;
   bool isDispose = false;
   double paddings = 10.0;
   final clsLan = ClsLanguage();
@@ -211,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: qrSize,
                         child: QrImageView(
                           data:
-                              "${userData['phoneNumber']},${userData['email']},${userData['firstname']},${userData['lastname']},${auth.currentUser!.uid}",
+                              "${userData['phoneNumber']},${userData['email']},${userData['firstname']},${userData['lastname']},${glb.auth.currentUser!.uid}",
                           version: QrVersions.auto,
                           size: qrSize,
                         ),
@@ -369,5 +359,4 @@ class _HomeScreenState extends State<HomeScreen> {
   List retSort = [];
   List forSort = [];
   List compSort = [];
-  FirebaseAuth auth = FirebaseAuth.instance;
 }

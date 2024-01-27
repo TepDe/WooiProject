@@ -504,8 +504,6 @@ class ReUseWidget {
       onTap,
       value,
       weight}) {
-    final glb = GlobalController();
-
     return Container(
       height: 40,
       width: Get.width,

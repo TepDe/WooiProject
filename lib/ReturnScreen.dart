@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,7 +24,6 @@ class _ReturnScreenState extends State<ReturnScreen> {
   var argumentData = Get.arguments;
   List returnList = [];
   List forDisplay = [];
-  FirebaseAuth auth = FirebaseAuth.instance;
   bool isShow = false;
 
   @override
