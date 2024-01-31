@@ -261,7 +261,7 @@ class _CompleteScreenState extends State<CompleteScreen> {
                                                           weight: FontWeight.w400,
                                                           size: 12.0,
                                                           color: theme.grey,
-                                                          content: "${index + 1}./  " + clsLan.packageID),
+                                                          content: "${index + 1}./  ${clsLan.packageID}"),
                                                       Row(
                                                         children: [
                                                           reUse.reUseText(

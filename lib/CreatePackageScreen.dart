@@ -40,7 +40,7 @@ class _CreatePackageScreenState extends State<CreatePackageScreen> {
   String chatid = '';
   ModuleObject modObj = ModuleObject();
   var generalInfo = {};
-  List eng_distin = [];
+  List lstDestination = [];
   List forDisplay = [];
   final clsDis = ClsDestination();
 
